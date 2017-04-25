@@ -21,7 +21,7 @@
 		<repository>
 			<id>nexus</id>
 			<name>nexus</name>
-			<url>http://218.199.92.234:8081/nexus/content/groups/public/</url>
+			<url>http://218.199.92.27:8081/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 	<dependencies>
@@ -319,7 +319,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.hust</groupId>
-			<artifactId>DataMining</artifactId>
+			<artifactId>datamining</artifactId>
 			<version>1.0</version>
 		</dependency>
 		<dependency>
