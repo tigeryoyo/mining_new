@@ -3,3 +3,4 @@
 /.settings/*
 .classpath
 *.properties
+pom.xml
