@@ -226,6 +226,9 @@ function roleInforSearch(page){
 				roleInforShow()
 			}
 		},
+		complete:function(){
+            stop();
+        },
 		error: function(){
 			alert("请求失败");
 		}
