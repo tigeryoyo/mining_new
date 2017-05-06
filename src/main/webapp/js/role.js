@@ -30,7 +30,8 @@ function roleInforShow(page){
 				$('.infor_tab02 tr:not(:first)').html("");
 			}
 		},
-		complete:function(){
+		complete : function(){
+			console.log("all")
             stop();
         },
 		error: function(){
@@ -223,10 +224,11 @@ function roleInforSearch(page){
 			}else{
 				$('.infor_tab02 tr:not(:first)').html("");
 				alert("输入角色名有误，请重新输入");
-				roleInforShow()
+				//roleInforShow(1)
 			}
 		},
-		complete:function(){
+		complete : function(){
+			console.log("one")
             stop();
         },
 		error: function(){
