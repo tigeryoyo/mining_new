@@ -47,6 +47,7 @@ public class IssueDao {
             criteria.andIssueIdEqualTo(con.getIssueId());
         }
         if (!StringUtils.isBlank(con.getUser())) {
+        	System.out.println(con.getUser()+"----------");
             criteria.andCreatorEqualTo(con.getUser());
         }
         if (!StringUtils.isBlank(con.getIssueName())) {

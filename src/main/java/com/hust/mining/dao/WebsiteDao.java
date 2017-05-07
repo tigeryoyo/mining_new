@@ -82,7 +82,7 @@ public class WebsiteDao {
             criteria.andLevelLike(webSite.getLevel());
         }
         if (!StringUtils.isBlank(webSite.getName())) {
-            criteria.andNameLike(webSite.getName());
+            criteria.andNameLike("%"+webSite.getName()+"%");
         }
         if (!StringUtils.isBlank(webSite.getType())) {
             criteria.andTypeLike(webSite.getType());

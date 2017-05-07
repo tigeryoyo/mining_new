@@ -17,7 +17,7 @@ function websiteInforShow(page){
 			$('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
 				// alert("success");
-				var items = msg.result ;
+				var items = msg.result ;				
 				var cookie_value1;
 				var cookie_value2;
 				var cookie_value3;
@@ -30,7 +30,7 @@ function websiteInforShow(page){
 					cookie_value3="'"+item.type+"'";
 					cookie_value4="'"+item.url+"'";
 					cookie_value5="'"+item.level+"'";
-					row= '<tr><td width="42" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="238" height="30" align="center" bgcolor="#ffffff"><div class="tab_url">'+item.url+'</div></td><td width="83" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="76" height="30" align="center" bgcolor="#ffffff">'+item.level+'</td><td width="77" height="30" align="center" bgcolor="#ffffff">'+item.type+'</td><td width="150" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+')" />&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delWebsite" id="'+item.id+'" /></td></tr>'
+					row= '<tr><td width="42" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="238" height="30" align="center" bgcolor="#ffffff"><div class="tab_url">'+item.url+'</div></td><td width="83" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="76" height="30" align="center" bgcolor="#ffffff">'+item.level+'</td><td width="77" height="30" align="center" bgcolor="#ffffff">'+item.type+'</td><td width="150" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+')" />&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delWebsite" id="'+item.id+'" /></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -162,6 +162,8 @@ function changPageOne(action){
 	var page=now_page+action;
 	if(page>0){
 		updateAllStyleAndData(page,action);
+	}else{
+		alert("这是第一页！！");
 	}
 }
 /**
@@ -205,7 +207,7 @@ function updateNowPage(page){
 
 
 // 信息搜索
-function websiteInforSearch(page){
+function websiteInforSearch(page){	
 	search_click=true;
 	// var obj1 = $("#web_url").val();
 	var obj2 = $("#web_name").val();
@@ -228,10 +230,10 @@ function websiteInforSearch(page){
 		beforeSend : function(){
             begin();
         },
-		success: function(msg){
-			$('.infor_tab02 tr:not(:first)').html("");
+		success: function(msg){			
 			if( msg.status == "OK"){
 				// alert("success");
+				$('.infor_tab02 tr:not(:first)').html("");
 				var items = msg.result ;
 				var cookie_value1;
 				var cookie_value2;
@@ -245,11 +247,12 @@ function websiteInforSearch(page){
 					cookie_value3="'"+item.type+"'";
 					cookie_value4="'"+item.url+"'";
 					cookie_value5="'"+item.level+"'";
-					row= '<tr><td width="42" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="238" height="30" align="center" bgcolor="#ffffff"><div class="tab_url">'+item.url+'</div></td><td width="83" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="76" height="30" align="center" bgcolor="#ffffff">'+item.level+'</td><td width="77" height="30" align="center" bgcolor="#ffffff">'+item.type+'</td><td width="150" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+')" />&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delWebsite" id="'+item.id+'" /></td></tr>';
+					row= '<tr><td width="42" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="238" height="30" align="center" bgcolor="#ffffff"><div class="tab_url">'+item.url+'</div></td><td width="83" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="76" height="30" align="center" bgcolor="#ffffff">'+item.level+'</td><td width="77" height="30" align="center" bgcolor="#ffffff">'+item.type+'</td><td width="150" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+')" />&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delWebsite" id="'+item.id+'" /></td></tr>';
 					$('.infor_tab02').append(row);
 				});	
 			}else{
-				alert(mgs.result);
+				$('.infor_tab02 tr:not(:first)').html("");
+				alert(msg.result);
 			}
 			stop();
 		},
