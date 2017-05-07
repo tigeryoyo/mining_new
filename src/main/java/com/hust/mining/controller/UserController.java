@@ -206,7 +206,7 @@ public class UserController {
             return ResultUtil.errorWithMsg("select userInfo empty");
         }
         Map<Object, Object> map = new HashMap<>();
-        map.put("userQueryCondition", userInfo);
+        map.put("user", userInfo);
         map.put("role", roles);
         map.put("userRole", userRole);
         return ResultUtil.success(map);

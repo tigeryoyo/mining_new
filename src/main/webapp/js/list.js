@@ -268,7 +268,8 @@ function searchData(page){
                 });
 				
             }else{
-                alert("fail");
+            	$('.ht_cont tr:not(:first)').html("");
+                alert(msg.result);
             }
 
         } ,

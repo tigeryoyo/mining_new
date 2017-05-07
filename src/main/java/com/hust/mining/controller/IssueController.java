@@ -74,6 +74,9 @@ public class IssueController {
         String user = userService.getCurrentUser(request);
         con.setUser(user);
         List<Issue> list = issueService.queryIssue(con);
+        if(null == list || 0==list.size()){
+        	return ResultUtil.errorWithMsg("Issue not exist");
+        }
         long count = list.size();
         JSONObject result = new JSONObject();
         long pageTotal = count % 10 == 0 ? (count / 10) : (count / 10 + 1);
@@ -86,6 +89,9 @@ public class IssueController {
     @RequestMapping("/queryAllIssue")
     public Object queryAllIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
         List<Issue> list = issueService.queryIssue(con);
+        if(null == list || 0==list.size()){
+        	return ResultUtil.errorWithMsg("Issue not exist");
+        }
         long count = list.size();
         JSONObject result = new JSONObject();
         long pageTotal = count % 10 == 0 ? (count / 10) : (count / 10 + 1);

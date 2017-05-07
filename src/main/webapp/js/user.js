@@ -268,8 +268,8 @@ function userInforSearch(page){
 			roleName:obj3,
 			telphone:obj4,
 			email:obj5,
-			page:(parseInt(10*page-10)),
-			row:10
+			page:10,
+			row:(parseInt(10*page-10))
 		},
 		dataType:"json",
 		beforeSend : function(){
