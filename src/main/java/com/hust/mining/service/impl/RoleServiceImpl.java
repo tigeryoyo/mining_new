@@ -236,12 +236,16 @@ public class RoleServiceImpl implements RoleService {
 		List<Power> notIncludePower = new ArrayList<>();
 		List<Power> powers = powerDao.selectAllPowers();
 		for (Power powerInfo : powers) {
-			for (int powerId : powerIds) {
-				if (powerInfo.getPowerId() != powerId) {
-					notIncludePower.add(powerInfo);
-				}
+//			for (int powerId : powerIds) {
+//				if (powerInfo.getPowerId() != powerId) {
+//					notIncludePower.add(powerInfo);
+//				}
+//			}
+			if(!powerIds.contains(powerInfo.getPowerId())) {
+				notIncludePower.add(powerInfo);
 			}
 		}
+		
 		return notIncludePower;
 	}
 
