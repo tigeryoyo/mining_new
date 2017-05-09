@@ -10,8 +10,28 @@ public class StopwordExample {
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
+    
+    private int start;
+    
+    private int limit;
 
-    public StopwordExample() {
+    public int getStart() {
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	public int getLimit() {
+		return limit;
+	}
+
+	public void setLimit(int limit) {
+		this.limit = limit;
+	}
+
+	public StopwordExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -389,6 +409,10 @@ public class StopwordExample {
         private boolean listValue;
 
         private String typeHandler;
+        
+        public Criterion() {
+            super();
+        }
 
         public String getCondition() {
             return condition;

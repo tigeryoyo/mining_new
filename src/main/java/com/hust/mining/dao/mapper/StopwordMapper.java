@@ -13,6 +13,8 @@ public interface StopwordMapper {
     int deleteByPrimaryKey(Integer id);
 
     int insert(Stopword record);
+    
+    int insertBatch(List<Stopword> list);
 
     int insertSelective(Stopword record);
 

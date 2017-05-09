@@ -218,6 +218,30 @@ public class FileController {
         }
         return ResultUtil.errorWithMsg("获取列表题失败");
     }
+    /**
+     * 读取停用词文件，返回list集合
+     * @param file
+     * @return
+     * 5月8号
+     */
+    //读取停用词文件，返回list集合
+    @ResponseBody
+    @RequestMapping("/getStopword")
+    public Object getStopword(@RequestParam(value = "file", required = true) MultipartFile file){
+    	if(file.isEmpty()){
+    		return ResultUtil.errorWithMsg("file is empty");
+    	}
+    	try{
+    		List<String> list = ExcelUtil.read(file.getOriginalFilename(),file.getInputStream());
+    		if(null == list || 0 == list.size()){
+    			return ResultUtil.errorWithMsg("file is uncorrect!");
+    		}
+    		return ResultUtil.success(list);
+    	}catch (Exception e){
+    		logger.warn("read stopword file fail" + e.toString());
+    	}
+    	return ResultUtil.errorWithMsg("file preread error!");
+    }
 
     @ResponseBody
     @RequestMapping("/searchFileByCon")

@@ -79,6 +79,9 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
+    <if test="start != 0 or limit != 0" >
+    	limit #{start},#{limit}
+    </if>
     <if test="orderByClause != null">
       order by ${orderByClause}
     </if>
@@ -105,6 +108,17 @@
     values (#{id,jdbcType=INTEGER}, #{word,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
+  
+  <insert id="insertBatch" parameterType="java.util.List">
+    insert into stopword (Id, word, creator, 
+      create_time)
+    values 
+    <foreach collection="list" item="item" index="index" separator=",">
+    (#{id,jdbcType=INTEGER}, #{word,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+  
   <insert id="insertSelective" parameterType="com.hust.mining.model.Stopword">
     insert into stopword
     <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -252,44 +252,9 @@ function stopwordInforSearch(page){
     })
 }
 
-// 用户添加
+// 添加停用词页面跳转
 function stopwordInforAdd(){
     window.location.href = "stopword_add.html";
-}
-
-function addStopword(){
-    // console.log($("#urlWebsite").val())
-    //获取Json数据
-    /**
-     *
-     */
-    $.ajax({
-        type:"post",
-        url:"/website/insertWebsite",
-        data:{
-            url:$("#urlWebsite").val(),
-            name:$("#nameWibsite").val(),
-            // level:$("#levelWebsite").val(),
-            levle:$("#levelWebsite").val(),
-            type:$("#typeWebsite").val()
-        },
-        dataType:"json",
-        beforeSend : function(){
-            begin();
-        },
-        success: function(msg){
-            console.log(msg);
-            if( msg.status == "OK"){
-                window.location.href="/website_infor.html"
-            }else{
-                alert(msg.result);
-            }
-            stop();
-        },
-        error: function(){
-            alert("数据请求失败");
-        }
-    })
 }
 
 // 用户删除
@@ -303,7 +268,7 @@ $(function(){
                 type:"post",
                 url:"/stopword/deleteStopword",
                 data:{
-                    stopwordId:stopword_id,
+                    stopwordId:stopword_id
                 } ,
                 dataType:"json",
                 success:function(msg){
@@ -321,4 +286,3 @@ $(function(){
         }
     })
 })
-
