@@ -28,34 +28,45 @@ function addStopword() {
 	/**
 	 * 
 	 */
+	console.log("111122"+getWords());
 	$.ajax({
 		type : "post",
-		url : "/website/insertWebsite",
+		url : "/stopword/insertStopwords",
 		data : {
-			url : $("#urlWebsite").val(),
-			name : $("#nameWibsite").val(),
-			// level:$("#levelWebsite").val(),
-			levle : $("#levelWebsite").val(),
-			type : $("#typeWebsite").val()
+			words : getWords()
 		},
 		dataType : "json",
+        traditional:true,
 		beforeSend : function() {
 			begin();
 		},
 		success : function(msg) {
 			console.log(msg);
 			if (msg.status == "OK") {
-				window.location.href = "/website_infor.html"
+				window.location.href = "/stopword_infor.html"
 			} else {
 				alert(msg.result);
 			}
 			stop();
 		},
+		complete:function () {
+			stop();
+        },
 		error : function() {
 			alert("数据请求失败");
 		}
 	})
 }
+
+function getWords(){
+	var words = new Array();
+	$("input").each(function(index,element){
+		words.push($(this).val());
+	});
+	console.log(words);
+	return words;
+}
+
 $(function() {
 	// 阻止浏览器默认行。
 	$(document).on({

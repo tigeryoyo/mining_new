@@ -17,12 +17,17 @@ public class StopwordDao {
 	@Autowired
 	private StopwordMapper stopwordMapper;
 	
-	public List<Stopword> selectAllStopword(){
+	public List<String> selectAllStopword(){
 		StopwordExample example = new StopwordExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andIdIsNotNull();
+		example.setOrderByClause("create_time desc");
 		List<Stopword> list = stopwordMapper.selectByExample(example);
-		return list;
+		List<String> stopwords = new ArrayList<>();
+		for (Stopword stopword : list) {
+			stopwords.add(stopword.getWord());
+		}
+		return stopwords;
 	}
 	
 	public List<Stopword> selectAllStopword(int start, int limit){
@@ -32,6 +37,7 @@ public class StopwordDao {
 		criteria.andIdIsNotNull();
 		example.setStart(start);
 		example.setLimit(limit);
+		example.setOrderByClause("create_time desc");
 		list = stopwordMapper.selectByExample(example);
 		return list;
 	}
@@ -45,6 +51,7 @@ public class StopwordDao {
 		}
 		example.setStart(condition.getStart());
 		example.setLimit(condition.getLimit());
+		example.setOrderByClause("create_time desc");
 		list = stopwordMapper.selectByExample(example);
 		return list;
 	}

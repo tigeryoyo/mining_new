@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hust.mining.dao.StopwordMapper">
+<mapper namespace="com.hust.mining.dao.mapper.StopwordMapper">
   <resultMap id="BaseResultMap" type="com.hust.mining.model.Stopword">
     <id column="Id" jdbcType="INTEGER" property="id" />
     <result column="word" jdbcType="VARCHAR" property="word" />
@@ -78,12 +78,12 @@
     from stopword
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
+    </if>    
+    <if test="orderByClause != null">
+      order by ${orderByClause}
     </if>
     <if test="start != 0 or limit != 0" >
     	limit #{start},#{limit}
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -110,12 +110,12 @@
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List">
-    insert into stopword (Id, word, creator, 
+    insert into stopword (word, creator, 
       create_time)
     values 
     <foreach collection="list" item="item" index="index" separator=",">
-    (#{id,jdbcType=INTEGER}, #{word,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP})
+    (#{item.word,jdbcType=VARCHAR}, #{item.creator,jdbcType=VARCHAR}, 
+      #{item.createTime,jdbcType=TIMESTAMP})
     </foreach>
   </insert>
   

@@ -2,6 +2,8 @@ package com.hust.mining.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.hust.mining.model.Stopword;
 
 public interface StopwordService {
@@ -43,4 +45,10 @@ public interface StopwordService {
 	 * @return
 	 */
 	public boolean delStopwordById(Integer id);
+	 /**
+	  * 获取当前用户的username（帐号）
+	  * @param request
+	  * @return
+	  */
+	String getCurrentUser(HttpServletRequest request);
 }

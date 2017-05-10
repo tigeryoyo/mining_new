@@ -6,7 +6,7 @@ function stopwordInforShow(page){
     search_click=false;
     $.ajax({
         type:"post",
-        url:"/stopword/selectAllstopword",
+        url:"/stopword/selectAllStopword",
         data:{
             start:(parseInt(10*page-10)),
             limit:10
@@ -30,7 +30,7 @@ function stopwordInforShow(page){
                     cookie_value2="'"+item.word+"'";
                     cookie_value3="'"+item.creator+"'";
                     cookie_value4="'"+new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+"'";
-                    row= '<tr><td width="42" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="238" height="30" align="center" bgcolor="#ffffff"><div class="tab_url">'+item.url+'</div></td><td width="83" height="30" align="center" bgcolor="#ffffff">'+item.word+'</td><td width="76" height="30" align="center" bgcolor="#ffffff">'+item.creator+'</td><td width="77" height="30" align="center" bgcolor="#ffffff">'+cookie_value4+'</td><td width="150" height="30" align="center" bgcolor="#ffffff"><img src="images/user_del.png" class="delStopword" id="'+item.id+'" /></td></tr>'
+                    row= '<tr><td colspan="1" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td colspan="2" height="30" align="center" bgcolor="#ffffff">'+item.word+'</td><td colspan="3" height="30" align="center" bgcolor="#ffffff">'+new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+'</td><td colspan="2" height="30" align="center" bgcolor="#ffffff">'+item.creator+'</td><td colspan="1" height="30" align="center" bgcolor="#ffffff"><img src="images/user_del.png" class="delStopword" id="'+item.id+'" /></td></tr>'
                     $('.infor_tab02').append(row);
                 });
             }else{
@@ -212,7 +212,7 @@ function stopwordInforSearch(page){
     setFirstSelected();
     $.ajax({
         type:"post",
-        url:"/website/selectByCondition",
+        url:"/stopword/selectByCondition",
         data:{
             word:obj1,
             start:(parseInt(10*page-10)),
@@ -237,7 +237,7 @@ function stopwordInforSearch(page){
                     cookie_value2="'"+item.word+"'";
                     cookie_value3="'"+item.creator+"'";
                     cookie_value4="'"+new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+"'";
-                    row= '<tr><td width="42" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="238" height="30" align="center" bgcolor="#ffffff"><div class="tab_url">'+item.url+'</div></td><td width="83" height="30" align="center" bgcolor="#ffffff">'+item.word+'</td><td width="76" height="30" align="center" bgcolor="#ffffff">'+item.creator+'</td><td width="77" height="30" align="center" bgcolor="#ffffff">'+cookie_value4+'</td><td width="150" height="30" align="center" bgcolor="#ffffff"><img src="images/user_del.png" class="delStopword" id="'+item.id+'" /></td></tr>'
+                    row= '<tr><td colspan="1" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td colspan="2" height="30" align="center" bgcolor="#ffffff">'+item.word+'</td><td colspan="3" height="30" align="center" bgcolor="#ffffff">'+new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+'</td><td colspan="2" height="30" align="center" bgcolor="#ffffff">'+item.creator+'</td><td colspan="1" height="30" align="center" bgcolor="#ffffff"><img src="images/user_del.png" class="delStopword" id="'+item.id+'" /></td></tr>'
                     $('.infor_tab02').append(row);
                 });
             }else{
@@ -266,11 +266,14 @@ $(function(){
         function stopwordInforDel(stopword_id){
             $.ajax({
                 type:"post",
-                url:"/stopword/deleteStopword",
+                url:"/stopword/deleteStopwordById",
                 data:{
                     stopwordId:stopword_id
                 } ,
                 dataType:"json",
+                beforeSend : function(){
+                    begin();
+                },
                 success:function(msg){
                     // alert("lll");
                     if(msg.status=="OK"){
@@ -279,6 +282,9 @@ $(function(){
                         alert(msg.result);
                     }
                 } ,
+                complete:function () {
+                  stop();
+                },
                 error: function(){
                     alert("数据请求失败");
                 },
