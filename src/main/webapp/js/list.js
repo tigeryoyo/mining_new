@@ -35,15 +35,16 @@ function allData (page){
 				});
 				
             }else{
-                alert("fail");
+                console.log("fail");
             }
 
         },
         complete:function(){
 		    stop();
 		} ,
-        error:function(){
-            // ���������
+        error:function(msg){
+            //
+        	alert(msg.result);
         }
     });
 }
