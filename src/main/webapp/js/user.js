@@ -105,6 +105,8 @@ function setCookie(value1,value2,value3,value4,value5,value6,value7){
 	document.cookie = cookie_name7 +"="+ escape (value7) + ";expires=" + exp.toGMTString();
 	window.location.href = "user_change.html";
 }
+
+
 /**
  * 根据页码加载数据
  * 
