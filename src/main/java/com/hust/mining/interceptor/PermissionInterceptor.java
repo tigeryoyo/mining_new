@@ -61,7 +61,8 @@ public class PermissionInterceptor implements HandlerInterceptor {
                     List<String> userPowerUrl =
                             userService.selectUserPowerUrl(redisService.getString(KEY.USER_NAME, request));
                     redisService.setObject("userPowerUrl", userPowerUrl, request);
-                    if (userPowerUrl.contains(requestPath)) {
+                    System.out.println(userPowerUrl);
+                    if (userPowerUrl.contains(url) && userPowerUrl.contains(requestPath)) {
                         return true;
                     } else {
 //                    	return true;
