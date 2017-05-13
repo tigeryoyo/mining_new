@@ -14,19 +14,20 @@ $(function() {
 			e.preventDefault();
 		}
 	});
-	var box = document.getElementById('drop_area'); // 拖拽区域
+	box = document.getElementById('drop_area'); // 拖拽区域
 	box.addEventListener("drop", function(e) {
 		e.preventDefault(); // 取消默认浏览器拖拽效果
+		console.log("before");
+		console.log(e.dataTransfer.files);
 		var file = e.dataTransfer.files[0]; // 获取文件对象
-		console.log(file);
 		if (file.name.lastIndexOf("xls") !== -1
 				|| file.name.lastIndexOf("xlsx") !== -1) {
+			box.innerHTML=file.name;
 			var fd = new FormData();
 			fd.append("file", file);
-			$("#submitUpload").click(function() {
+			$("#submitUpload").one("click",function() {
 				submit(fd);
 			});
-			console.log("excel");
 		} else {
 			alert(file.name + " 不是Excel文件");
 		}
@@ -49,13 +50,15 @@ function submit(fd) {
 		},
 		success : function(msg) {
 			if (msg.status == 'OK') {
+				console.log("ok");
 				alert('导入成功！');
 			} else {
-				alert('导入失败！');
 				console.log("no ok");
+				alert('导入失败！');
 			}
 		},
 		complete : function() {
+			box.innerHTML="将文件拖拽到此处";
 			stop();
 		},
 		error : function() {
