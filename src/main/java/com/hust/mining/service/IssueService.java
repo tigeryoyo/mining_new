@@ -24,6 +24,6 @@ public interface IssueService {
 
     List<String[]> miningByTime(Date start, Date end,HttpServletRequest request);
 
-    List<String[]> miningByFileIds(List<String> fileIds,HttpServletRequest request);
+    List<String[]> miningByFileIds(List<String> fileIds,String granularityId,HttpServletRequest request);
 
 }

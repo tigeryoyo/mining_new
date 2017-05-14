@@ -37,7 +37,7 @@ function dataShow(){
 					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
 					'</td><td width="95" align="center" valign="middle">'+item.creator+
 					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
-					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="clusterSingleFile('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" id="'+item.fileId+'" onclick="bind()" /></td></tr>'
+					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="choiceType('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" id="'+item.fileId+'" onclick="bind()" /></td></tr>'
 					$('.up_list').append(row);
 				});				
             }else{
@@ -78,7 +78,7 @@ function localRefresh(){
 					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
 					'</td><td width="95" align="center" valign="middle">'+item.creator+
 					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
-					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="clusterSingleFile('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" id="'+item.fileId+'" onclick="bind()" /></td></tr>'
+					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="choiceType('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" id="'+item.fileId+'" onclick="bind()" /></td></tr>'
 					$('.files_list table').append(row);
 				});				
             }else{
@@ -95,6 +95,23 @@ function localRefresh(){
     });
 }
 
+function choiceType(id){
+	console.log("----------"+id);
+	$("#shade").css("display","block");
+    $("#choose_mining_type").css("display","block");
+    $("#choice_confirm").attr("data-id",id);
+}
+
+function buttonConfirm(){
+	console.log($("#choice_confirm").attr("data-id"))
+    $("#shade").css("display","none");
+    $("#choose_mining_type").css("display","none");
+    //点击确定按钮的业务逻辑处理
+    var id = $("#choice_confirm").attr("data-id");
+    var type =$("input[name='choice']:checked").val();
+    console.log("==="+type)
+    clusterSingleFile(id,type);
+}
 
 function setCookie(value1){
 	// alert(name+value);
@@ -115,13 +132,17 @@ function getCookie(name) {
 	return null;
 }
 
-function clusterSingleFile(id){
+
+
+function clusterSingleFile(id,type){
+	
 	console.log(id);
 	$.ajax({
 		type:"post",
 		url:"/issue/miningSingleFile",
 		data:{
-			fileId:id
+			fileId:id,
+			granularityId:type
 		},
 		dataType:"json",
 		beforeSend : function(){
