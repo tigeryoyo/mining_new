@@ -32,6 +32,12 @@
 							<td height="50">
 								<input type="text" id="web_level">
 							</td>
+							<td height="50" colspan="2"/>
+							<td height="50" colspan="2">
+							<form action="/file/downloadKnownUrl" method="POST">
+								<button type="submit">导出已知url</button>
+							</form>
+							</td>
 						</tr>
 						<tr>
 							<td width="85" height="50">网站名称：</td>
@@ -43,7 +49,9 @@
 								<input type="text" id="web_type">
 							</td>
 							<td height="50" colspan="2">
-								<button onclick="websiteInforSearch(1)">搜素</button>
+								<button onclick="websiteInforSearch(1)">搜索</button>
+							</td>
+							<td height="50" colspan="2">
 								<button onClick="websiteInforAdd()">添加映射表</button>
 							</td>
 						</tr>

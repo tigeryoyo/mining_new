@@ -239,7 +239,7 @@ function searchData(page){
     $.ajax({
         type:"post",
         // url:"http://1v5002132k.iask.in:13020/xinheng/issue/queryOwnIssue",
-        url:"/issue/queryOwnIssue",
+        url:"/issue/queryAllIssue",
         data:JSON.stringify(SearchJsonData(page)),
         dataType:"json",
         contentType:"application/json",
@@ -260,7 +260,8 @@ function searchData(page){
 				});
 				
             }else{
-                alert("fail");
+            	 $('.ht_cont tr:not(:first)').html("");
+                alert(msg.result);
             }
 
         } ,
@@ -333,5 +334,4 @@ $(function(){
 		}
 	})
 })
-
 

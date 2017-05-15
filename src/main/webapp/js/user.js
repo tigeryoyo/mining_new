@@ -105,6 +105,8 @@ function setCookie(value1,value2,value3,value4,value5,value6,value7){
 	document.cookie = cookie_name7 +"="+ escape (value7) + ";expires=" + exp.toGMTString();
 	window.location.href = "user_change.html";
 }
+
+
 /**
  * 根据页码加载数据
  * 
@@ -268,8 +270,8 @@ function userInforSearch(page){
 			roleName:obj3,
 			telphone:obj4,
 			email:obj5,
-			page:(parseInt(10*page-10)),
-			row:10
+			page:10,
+			row:(parseInt(10*page-10))
 		},
 		dataType:"json",
 		beforeSend : function(){

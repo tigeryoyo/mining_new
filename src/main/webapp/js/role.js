@@ -18,19 +18,20 @@ function roleInforShow(page){
 				var items=msg.result;
 				var cookie_value1;
 				var cookie_value2;
-				$('.infor_tab02 tr:not(:first)').html("");
+				$('#role_infor_tab tr:not(:first)').html("");
 				console.log(msg);
 				$.each(items,function(idx,item){
 					cookie_value1="'"+item.roleId+"'";
 					cookie_value2="'"+item.roleName+"'";
 					row = '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.roleName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delRole" id="'+item.roleId+'" /></td></tr>'
-					$('.infor_tab02').append(row);
+					$('#role_infor_tab').append(row);
 				});
 			}else{
-				$('.infor_tab02 tr:not(:first)').html("");
+				$('#role_infor_tab tr:not(:first)').html("");
 			}
 		},
-		complete:function(){
+		complete : function(){
+			console.log("all")
             stop();
         },
 		error: function(){
@@ -210,7 +211,7 @@ function roleInforSearch(page){
         },
 		success: function(msg){
 			if( msg.status == "OK"){
-				$('.infor_tab02 tr:not(:first)').html("");
+				$('#role_infor_tab tr:not(:first)').html("");
 				var items=msg.result;
 				var cookie_value1;
 				var cookie_value2;
@@ -218,14 +219,18 @@ function roleInforSearch(page){
 					cookie_value1="'"+item.roleId+"'";
 					cookie_value2="'"+item.roleName+"'";
 					row = '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.roleName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delRole" id="'+item.roleId+'" /></td></tr>'
-					$('.infor_tab02').append(row);
+					$('#role_infor_tab').append(row);
 				});
 			}else{
-				$('.infor_tab02 tr:not(:first)').html("");
+				$('#role_infor_tab tr:not(:first)').html("");
 				alert("输入角色名有误，请重新输入");
-				roleInforShow()
+				//roleInforShow(1)
 			}
 		},
+		complete : function(){
+			console.log("one")
+            stop();
+        },
 		error: function(){
 			alert("请求失败");
 		}
@@ -280,45 +285,11 @@ function getCookie(name) {
 }
 
 
-function changeRole(){
-	var newId=getCookie("id");
-	$.ajax({
-		type:"post",
-		url:"/role/updateRoleInfo",
-		data:{
-			roleId:newId,
-			roleName:$(".roleChange").val(),
-			powerName:''
-		},
-		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
-		success: function(msg){
-			console.log(msg);
-			if( msg.status == "OK"){
-				alert("添加成功");
-			}else{
-				alert("fail");
-			}
-		},
-		complete:function(){
-            stop();
-        },
-		error: function(){
-		    alert("请求失败");
-		}
-	})
-}
-function clearNewrole(){
-	$("#new_name_role").val('');
-}
-
 
 // 用户删除
 
 $(function(){
-	$(".infor_tab02").on("click",".delRole",function(){
+	$("#role_infor_tab").on("click",".delRole",function(){
 		var role_id = $(this).attr("id");
 		console.log(role_id);
 		roleInforDel(role_id);
