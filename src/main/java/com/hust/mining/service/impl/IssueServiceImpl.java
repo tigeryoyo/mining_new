@@ -1,6 +1,7 @@
 package com.hust.mining.service.impl;
 
 import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -42,13 +43,14 @@ public class IssueServiceImpl implements IssueService {
     private FileDao fileDao;
     @Autowired
     private UserService userService;
-    @Autowired
+    @Autowired  
     private MiningService miningService;
     @Autowired
     private ResultDao resultDao;
     @Autowired
     private RedisService redisService;
 
+    //创建任务
     @Override
     public int createIssue(String issueName, HttpServletRequest request) {
         // TODO Auto-generated method stub
@@ -61,6 +63,7 @@ public class IssueServiceImpl implements IssueService {
         issue.setLastOperator(user);
         issue.setLastUpdateTime(issue.getCreateTime());
         int insert = issueDao.insert(issue);
+        //如果插入成功，则
         if (insert > 0) {
             redisService.setString(KEY.ISSUE_ID, issue.getIssueId(), request);
         }
@@ -80,7 +83,9 @@ public class IssueServiceImpl implements IssueService {
     @Override
     public List<Issue> queryIssue(IssueQueryCondition con) {
         // TODO Auto-generated method stub
-        return issueDao.queryIssue(con);
+    	  List<Issue> list=issueDao.queryIssue(con);
+    	  System.out.println(list.size()+"service");
+    	  return list;
     }
 
     @Override
@@ -113,6 +118,7 @@ public class IssueServiceImpl implements IssueService {
         return issueDao.deleteIssueById(issueId, user);
     }
 
+    //把某个时间段的文件聚类
     @SuppressWarnings("unchecked")
     @Override
     public List<String[]> miningByTime(Date start, Date end, HttpServletRequest request) {
@@ -122,7 +128,7 @@ public class IssueServiceImpl implements IssueService {
         con.setIssueId(issueId);
         con.setStart(start);
         con.setEnd(end);
-        List<IssueFile> files = fileDao.queryFilesByCondition(con);
+        List<IssueFile> files = fileDao.queryFilesByCondition(con);  //待聚类文件list
         String[] filenames = new String[files.size()];
         for (int i = 0; i < files.size(); i++) {
             filenames[i] = DIRECTORY.FILE + files.get(i).getFileId();
@@ -131,7 +137,8 @@ public class IssueServiceImpl implements IssueService {
         if (null == content) {
             return null;
         }
-        Map<String, Object> res = mining(content, CONVERTERTYPE.DIGITAL, 1);
+        //选择了0-1模型
+        Map<String, Object> res = mining(content, CONVERTERTYPE.DIGITAL, 1, 1);
         if (null == res) {
             return null;
         }
@@ -140,6 +147,7 @@ public class IssueServiceImpl implements IssueService {
         content = (List<String[]>) res.get("content");
         List<int[]> count = (List<int[]>) res.get("countResult");
         List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
+        
         Result result = new Result();
         result.setRid(UUID.randomUUID().toString());
         result.setIssueId(issueId);
@@ -181,9 +189,10 @@ public class IssueServiceImpl implements IssueService {
         return list;
     }
 
+    //多文件去重并聚类
     @SuppressWarnings("unchecked")
     @Override
-    public List<String[]> miningByFileIds(List<String> fileIds, HttpServletRequest request) {
+    public List<String[]> miningByFileIds(List<String> fileIds, String granularityId, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String user = userService.getCurrentUser(request);
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
@@ -208,8 +217,9 @@ public class IssueServiceImpl implements IssueService {
                 exitUrls.add(row[Index.URL_INDEX]);
             }
         }
+        int granularity = Integer.parseInt(granularityId);
         // 去重结束
-        Map<String, Object> res = mining(filteredContent, CONVERTERTYPE.DIGITAL, 1);
+        Map<String, Object> res = mining(filteredContent, CONVERTERTYPE.DIGITAL, 1, granularity);
         if (null == res) {
             return null;
         }
@@ -267,13 +277,14 @@ public class IssueServiceImpl implements IssueService {
         return list;
     }
 
-    private Map<String, Object> mining(List<String[]> content, int converterType, int algorithmType) {
+    //标明 向量的装换方式，和算法。
+    private Map<String, Object> mining(List<String[]> content, int converterType, int algorithmType,int granularity) {
         if (content == null || content.size() == 0) {
             return null;
         }
         // 聚类
-        List<List<Integer>> clusterResult = miningService.cluster(content, converterType, algorithmType);
-        // 统计
+        List<List<Integer>> clusterResult = miningService.cluster(content, converterType, algorithmType,granularity);
+        // 每个String[]都是某个类簇的数据ID的集合。
         List<String[]> cluster = ConvertUtil.toStringListB(clusterResult);
         List<int[]> countResult = miningService.count(content, cluster);
         Map<String, Object> result = new HashMap<String, Object>();

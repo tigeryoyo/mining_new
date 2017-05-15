@@ -22,10 +22,12 @@ import com.hust.datamining.convertor.Convertor;
 import com.hust.datamining.convertor.DigitalConvertor;
 import com.hust.datamining.convertor.TFIDFConvertor;
 import com.hust.datamining.simcal.AcrossSimilarity;
+import com.hust.datamining.simcal.CosSimilarity;
 import com.hust.mining.constant.Config;
 import com.hust.mining.constant.Constant;
 import com.hust.mining.constant.Constant.ALGORIRHMTYPE;
 import com.hust.mining.constant.Constant.CONVERTERTYPE;
+import com.hust.mining.constant.Constant.GRANULARITY;
 import com.hust.mining.constant.Constant.Index;
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.WebsiteDao;
@@ -43,7 +45,7 @@ public class MiningServiceImpl implements MiningService {
     private SegmentService segmentService;
     @Autowired
     private WebsiteDao websiteDao;
-    @Autowired
+    @Autowired 
     private WeightDao weightDao;
 
     /**
@@ -51,11 +53,14 @@ public class MiningServiceImpl implements MiningService {
      */
     private static final Logger logger = LoggerFactory.getLogger(MiningServiceImpl.class);
 
+    //目的是聚类。第一个参数是原始文本，第二个为向量模型的选择，第三个为算法的选择（已经写死了，为canopy）。
     @Override
-    public List<List<Integer>> cluster(List<String[]> list, int converterType, int algorithmType) {
+    public List<List<Integer>> cluster(List<String[]> list, int converterType, int algorithmType,int granularity) {
         // TODO 进行聚类
+    	//对标题列进行分词。
         List<String[]> segmentList = segmentService.getSegresult(list, Index.TITLE_INDEX, 0);
         Convertor convertor = null;
+        //判断选择的向量模型的类型
         if (converterType == CONVERTERTYPE.DIGITAL) {
             convertor = new DigitalConvertor();
         } else if (converterType == CONVERTERTYPE.TFIDF) {
@@ -63,19 +68,32 @@ public class MiningServiceImpl implements MiningService {
         }
         convertor.setList(segmentList);
         List<double[]> vectors = convertor.getVector();
+        //向量转换完成
         Canopy canopy = new Canopy();
         canopy.setVectors(vectors);
-        canopy.setSimi(new AcrossSimilarity(vectors));
+        //相似度方式的选择
+        if (granularity == GRANULARITY.AcrossSimilarity) {
+        	  canopy.setSimi(new AcrossSimilarity(vectors)); 
+        	  System.out.println("选择的是粗粒度AcrossSimilarity");
+			
+		} else if(granularity == GRANULARITY.CosSimilarity){
+			  canopy.setSimi(new CosSimilarity(vectors));
+			  System.out.println("选择的是细粒度CosSimilarity");
+		}
+        //设置阀值
         canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
+        //开启线程池
         ExecutorService exec = Executors.newSingleThreadExecutor();
         Future<List<List<Integer>>> future = exec.submit(canopy);
         List<List<Integer>> resultIndexSetList = new ArrayList<List<Integer>>();
         try {
+        	//得到聚类结果
             resultIndexSetList = future.get();
         } catch (Exception e) {
             logger.error("error occur during clustering" + e.toString());
             return null;
         }
+        //重载排序的方法，按照降序。类中数量多的排在前面。
         Collections.sort(resultIndexSetList, new Comparator<List<Integer>>() {
 
             @Override
@@ -90,7 +108,9 @@ public class MiningServiceImpl implements MiningService {
                 @Override
                 public int compare(Integer o1, Integer o2) {
                     // TODO Auto-generated method stub
+                	//判断他们的标题是否相同
                     int compare = list.get(o1)[Index.TITLE_INDEX].compareTo(list.get(o2)[Index.TITLE_INDEX]);
+                    //若不相同，使用时间进行排序。
                     if (compare == 0) {
                         compare = list.get(o1)[Index.TIME_INDEX].compareTo(list.get(o2)[Index.TIME_INDEX]);
                     }
@@ -101,17 +121,18 @@ public class MiningServiceImpl implements MiningService {
         return resultIndexSetList;
     }
 
+    //用于得出orig_count的数据
     @Override
     public List<int[]> count(List<String[]> content, List<String[]> cluster) {
         // TODO Auto-generated method stub
-        List<int[]> clusterInt = ConvertUtil.toIntList(cluster);
+        List<int[]> clusterInt = ConvertUtil.toIntList(cluster); //变成 [2,5,45,89]为一个类簇
         List<int[]> reList = new ArrayList<int[]>();
         for (int i = 0; i < clusterInt.size(); i++) {
-            int[] tmpList = clusterInt.get(i);
+            int[] tmpList = clusterInt.get(i); //取第i条数组
             int origIndex = -1;
             String origTime = "9999-12-12 23:59:59";
             for (int j = 0; j < tmpList.length; j++) {
-                String[] row = content.get(tmpList[j]);
+                String[] row = content.get(tmpList[j]); //取它的真实内容
                 try {
                     if (origTime.compareTo(row[Index.TIME_INDEX]) > 0) {
                         origTime = row[Index.TIME_INDEX];
@@ -129,6 +150,7 @@ public class MiningServiceImpl implements MiningService {
             item[Index.COUNT_ITEM_AMOUNT] = tmpList.length;
             reList.add(item);
         }
+        //按照递减进行排序，如果数量相同，按照时间进行排序
         Collections.sort(reList, new Comparator<int[]>() {
 
             @Override
