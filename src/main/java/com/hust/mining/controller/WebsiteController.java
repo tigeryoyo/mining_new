@@ -59,15 +59,29 @@ public class WebsiteController {
     			return ResultUtil.errorWithMsg("file is uncorrect!");
     		}
     		
+    		WebsiteQueryCondition condition = new WebsiteQueryCondition();
+    		String prefixUrl = null;
     		for(String[] strs:list){
+    			prefixUrl = CommonUtil.getPrefixUrl(strs[0]);
+    			if(prefixUrl.trim().isEmpty()){
+    				continue;
+    			}
+    			condition.setUrl(prefixUrl);
     			Website website = new Website();
-    			website.setUrl(CommonUtil.getPrefixUrl(strs[0]));
+    			List<Website> list1 = websiteService.selectByCondition(condition);
+    			website.setUrl(prefixUrl);
         		website.setName(strs[1]);
         		website.setLevel(strs[2]);
         		website.setType(strs[3]);
-        		if (!websiteService.insertWebsite(website)) {
-        			return ResultUtil.errorWithMsg("insert website error");
-        		}
+    			if(list1.isEmpty()){
+            		if (!websiteService.insertWebsite(website)) {
+            			return ResultUtil.errorWithMsg("insert website error");
+            		}
+    			}else{
+    				Website web = list1.get(0);
+    				website.setId(web.getId());
+    				websiteService.updateWebsite(website);
+    			}
     		}
     		
     		return ResultUtil.success(list);

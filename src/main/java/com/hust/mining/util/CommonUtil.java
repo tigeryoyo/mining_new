@@ -46,9 +46,9 @@ public class CommonUtil {
 
 			int pure = url.indexOf("/", url.indexOf("://") + 3);
 			if (pure == -1) {
-				return url+"/";
+				return url;
 			} else {
-				String prefix = url.substring(0, pure+1);
+				String prefix = url.substring(0, pure);
 				return prefix;
 			}
 		} catch (Exception e) {
