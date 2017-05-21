@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -136,7 +137,15 @@ public class ExcelUtil {
         for(int i = 0; i <= rowNum ; i++){
         	String word = new String();
         	Cell cell = sheet.getRow(i).getCell(0);
+        	if(Cell.CELL_TYPE_NUMERIC == cell.getCellType()){
+        		word = cell.toString();
+        		String[] words = word.split("\\.");
+        		if(words.length>1&&Integer.parseInt(words[1])==0){
+        			word = words[0];
+        		}
+        	}else{
         	word = cell.toString();
+        	}
         	if(""==word||null == word){
         		continue;
         	}

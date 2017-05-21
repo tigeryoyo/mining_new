@@ -287,18 +287,18 @@ public class FileController {
     @RequestMapping("/getStopword")
     public Object getStopword(@RequestParam(value = "file", required = true) MultipartFile file){
     	if(file.isEmpty()){
-    		return ResultUtil.errorWithMsg("file is empty");
+    		return ResultUtil.errorWithMsg("文件为空");
     	}
     	try{
     		List<String> list = ExcelUtil.read(file.getOriginalFilename(),file.getInputStream());
     		if(null == list || 0 == list.size()){
-    			return ResultUtil.errorWithMsg("file is uncorrect!");
+    			return ResultUtil.errorWithMsg("文件读取错误！");
     		}
     		return ResultUtil.success(list);
     	}catch (Exception e){
     		logger.warn("read stopword file fail" + e.toString());
     	}
-    	return ResultUtil.errorWithMsg("file preread error!");
+    	return ResultUtil.errorWithMsg("文件预浏览失败!");
     }
 
     @ResponseBody
