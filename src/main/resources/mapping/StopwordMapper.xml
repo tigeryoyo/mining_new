@@ -103,14 +103,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.hust.mining.model.Stopword">
-    insert into stopword (Id, word, creator, 
+    insert ignore into stopword (Id, word, creator, 
       create_time)
     values (#{id,jdbcType=INTEGER}, #{word,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP})
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List">
-    insert into stopword (word, creator, 
+    insert ignore into stopword (word, creator, 
       create_time)
     values 
     <foreach collection="list" item="item" index="index" separator=",">
@@ -120,7 +120,7 @@
   </insert>
   
   <insert id="insertSelective" parameterType="com.hust.mining.model.Stopword">
-    insert into stopword
+    insert ignore into stopword
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         Id,
