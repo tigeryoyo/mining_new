@@ -54,6 +54,10 @@ public class PermissionInterceptor implements HandlerInterceptor {
             } else {
                 // 请求页面的时候会判断 用户是否登录了，假如登陆了就再去判断权限，否则直接跳转到登录界面
                 if (redisService.getString(KEY.USER_NAME, request) != null) {
+                	//判断请求是html则返回true
+                	if(url.endsWith(".html")){
+                		return true;
+                	}
                     if (redisService.getObject("userPowerUrl", request) != null) {
                         redisService.del("userPowerUrl", request);
                     }
@@ -62,7 +66,8 @@ public class PermissionInterceptor implements HandlerInterceptor {
                             userService.selectUserPowerUrl(redisService.getString(KEY.USER_NAME, request));
                     redisService.setObject("userPowerUrl", userPowerUrl, request);
                     System.out.println(userPowerUrl);
-                    if (userPowerUrl.contains(url) && userPowerUrl.contains(requestPath)) {
+                    //
+                    if (userPowerUrl.contains(requestPath)) {
                         return true;
                     } else {
 //                    	return true;
