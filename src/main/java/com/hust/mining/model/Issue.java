@@ -13,6 +13,8 @@ public class Issue implements Serializable{
 
     private String issueName;
 
+    private String issueType;
+
     private Date createTime;
 
     private String creator;
@@ -35,6 +37,14 @@ public class Issue implements Serializable{
 
     public void setIssueName(String issueName) {
         this.issueName = issueName == null ? null : issueName.trim();
+    }
+
+    public String getIssueType() {
+        return issueType;
+    }
+
+    public void setIssueType(String issueType) {
+        this.issueType = issueType == null ? null : issueType.trim();
     }
 
     public Date getCreateTime() {

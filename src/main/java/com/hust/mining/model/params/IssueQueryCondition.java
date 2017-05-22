@@ -6,6 +6,7 @@ public class IssueQueryCondition {
 
     private String issueId;
     private String issueName;
+    private String issueType;
     private Date createStartTime;
     private Date createEndTime;
     private String user;
@@ -85,5 +86,13 @@ public class IssueQueryCondition {
     public void setIssueId(String issueId) {
         this.issueId = issueId;
     }
+
+	public String getIssueType() {
+		return issueType;
+	}
+
+	public void setIssueType(String issueType) {
+		this.issueType = issueType;
+	}
 
 }

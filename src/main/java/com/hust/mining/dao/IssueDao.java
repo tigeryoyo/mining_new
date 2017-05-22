@@ -47,11 +47,15 @@ public class IssueDao {
             criteria.andIssueIdEqualTo(con.getIssueId());
         }
         if (!StringUtils.isBlank(con.getUser())) {
-        	System.out.println(con.getUser()+"----------");
             criteria.andCreatorEqualTo(con.getUser());
         }
         if (!StringUtils.isBlank(con.getIssueName())) {
             criteria.andIssueNameEqualTo(con.getIssueName());
+        }
+        if (!StringUtils.isBlank(con.getIssueType())) {
+        	System.out.println(con.getIssueType()+"*******************************");
+        	
+        	criteria.andIssueTypeEqualTo(con.getIssueType());
         }
         if (null != con.getCreateStartTime()) {
             criteria.andCreateTimeGreaterThanOrEqualTo(con.getCreateStartTime());
