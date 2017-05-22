@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -111,4 +112,47 @@ public class ExcelUtil {
         }
         return workbook;
     }
+    
+    //----------------------------------新增工具-------------------------------------------
+    //读取停用词文件（excel），只允许一列
+    public static List<String> read(String filename, InputStream inputStream)
+    		throws FileNotFoundException, IOException{
+    	if (inputStream == null) {
+            throw new IllegalArgumentException("inputStream is null");
+        }
+    	List<String> list = new ArrayList<String>();
+        Workbook workbook;
+        if (filename.endsWith("xls")) {
+            workbook = new HSSFWorkbook(inputStream);
+        } else {
+            workbook = new XSSFWorkbook(inputStream);
+        }
+        Sheet sheet = workbook.getSheetAt(0);
+        int rowNum = sheet.getLastRowNum();
+        int colNum = sheet.getRow(0).getLastCellNum();
+        if(colNum > 1){
+        	workbook.close();
+        	return null;
+        }
+        for(int i = 0; i <= rowNum ; i++){
+        	String word = new String();
+        	Cell cell = sheet.getRow(i).getCell(0);
+        	if(Cell.CELL_TYPE_NUMERIC == cell.getCellType()){
+        		word = cell.toString();
+        		String[] words = word.split("\\.");
+        		if(words.length>1&&Integer.parseInt(words[1])==0){
+        			word = words[0];
+        		}
+        	}else{
+        	word = cell.toString();
+        	}
+        	if(""==word||null == word){
+        		continue;
+        	}
+        	list.add(word);
+        }
+        workbook.close();
+    	return list;
+    }
+    
 }

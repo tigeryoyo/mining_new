@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface MiningService {
-    public List<List<Integer>> cluster(List<String[]> content, int converterType,int algorithmType);
+    public List<List<Integer>> cluster(List<String[]> content, int converterType,int algorithmType, int granularity);
 
     public List<int[]> count(List<String[]> content, List<String[]> cluster);
 

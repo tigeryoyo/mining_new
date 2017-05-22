@@ -89,22 +89,40 @@ function fileSearch() {
             });
 }
 
+
+function choiceType(){
+	$("#shade").css("display","block");
+    $("#choose_mining_type").css("display","block");
+   
+}
+
+function buttonConfirm(){
+
+    $("#shade").css("display","none");
+    $("#choose_mining_type").css("display","none");
+    //点击确定按钮的业务逻辑处理
+    var type =$("input[name='choice']:checked").val();
+    console.log("==="+type)
+    fileSummary(type);
+}
+
 // 汇总
 
-function fileSummary() {
+function fileSummary(type) {
     $('.summary_tab table tr:not(:first)').html('');
     var fileIds = [];
     $(".summary_up input:checked").each(function(i) {
         fileIds.push($(this).attr("class"));
     });
     console.log(fileIds);
+    
     $
             .ajax({
                 type : "post",
                 url : "/issue/miningByFile",
-                data : JSON.stringify(fileIds),
+                data : {fileIds:fileIds,granularityId:type},
                 dataType : "json",
-                contentType : "application/json",
+                traditional:true,
                 beforeSend : function() {
                     begin();
                 },

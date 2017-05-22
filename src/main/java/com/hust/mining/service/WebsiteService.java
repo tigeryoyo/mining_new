@@ -13,6 +13,10 @@ public interface WebsiteService {
 	
 	List<Website> selectAllWebsiteUnknow(int start, int limit);
 
+	List<String[]> exportKnownUrlService();
+	
+	List<String[]> exportUnKnownUrlService();
+	
 	boolean deleteWebsiteById(long id);
 
 	boolean updateWebsite(Website website);

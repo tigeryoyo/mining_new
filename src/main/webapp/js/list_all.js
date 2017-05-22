@@ -22,7 +22,7 @@ function allData (page){
 				$.each(items,function(idx,item) {
 					// alert(msg.tagName);
 					cookie_value1="'"+item.issueId+"'";
-					row= '<tr><td height="40" align="center">'+(idx+1)+
+					row= '<tr><td height="40" align="center">'+((page-1)*10+idx+1)+
 					'</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+cookie_value1+')">'+item.issueName+
 					'</a></td><td height="40" align="center">'+item.creator+
 					'</td><td height="40" align="center">'+ new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+
@@ -254,7 +254,7 @@ function searchData(page){
 				var items = msg.result.list ;
 				$.each(items,function(idx,item) {
 					// alert(obj.tagName);
-					row= '<tr><td height="40" align="center">'+(idx+1)+'</td><td height="40" align="center"><a href="#">'+item.issueName+'</a></td><td height="40" align="center">'+item.creator+'</td><td height="40" align="center">'+item.createTime.year+'-'+item.createTime.month+'-'+item.createTime.date+'&nbsp;'+item.createTime.hours+':'+item.createTime.seconds+'</td><td height="40" align="center">'+item.lastOperator+'</td><td height="40" align="center">'+item.lastUpdateTime.year+'-'+item.lastUpdateTime.month+'-'+item.lastUpdateTime.date+'&nbsp;'+item.lastUpdateTime.hours+':'+item.lastUpdateTime.seconds+'</td><td height="40" align="center"><img src="images/delete.png" class="'+item.issueId+'" /></td>'
+					row= '<tr><td height="40" align="center">'+((page-1)*10+idx+1)+'</td><td height="40" align="center"><a href="#">'+item.issueName+'</a></td><td height="40" align="center">'+item.creator+'</td><td height="40" align="center">'+new Date(item.lastUpdateTime.time).format('yyyy-MM-dd hh:mm:ss')+'</td><td height="40" align="center">'+item.lastOperator+'</td><td height="40" align="center">'+new Date(item.lastUpdateTime.time).format('yyyy-MM-dd hh:mm:ss')+'</td><td height="40" align="center"><img src="images/delete.png" class="'+item.issueId+'" /></td>'
 					$('.ht_cont').append(row);
 					
 				});

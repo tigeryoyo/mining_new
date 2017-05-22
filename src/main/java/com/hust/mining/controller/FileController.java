@@ -36,6 +36,7 @@ import com.hust.mining.service.IssueService;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.service.UserService;
+import com.hust.mining.service.WebsiteService;
 import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.ResultUtil;
 
@@ -57,6 +58,8 @@ public class FileController {
     private ResultService resultService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private WebsiteService websiteService;
     @Autowired
     private RedisService redisService;
 
@@ -163,6 +166,61 @@ public class FileController {
             }
         }
     }
+    
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/downloadKnownUrl")
+    public void downloadKnownUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        OutputStream outputStream = null;
+        try {
+            List<String[]> list = websiteService.exportKnownUrlService();
+            if (list == null) {
+                response.sendError(404, "导出错误");
+                return;
+            }
+            outputStream = response.getOutputStream();
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition", "attachment;fileName=KnownUrl.xls");
+            HSSFWorkbook workbook = ExcelUtil.exportToExcel(list);
+            workbook.write(outputStream);
+        } catch (Exception e) {
+            logger.info("excel 导出失败\t" + e.toString());
+        } finally {
+            try {
+                outputStream.close();
+            } catch (Exception e) {
+                logger.info("导出excel时，关闭outputstream失败");
+            }
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/downloadUnKnownUrl")
+    public void downloadUnKnownUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	 OutputStream outputStream = null;
+         try {
+             List<String[]> list = websiteService.exportUnKnownUrlService();
+             if (list == null) {
+                 response.sendError(404, "导出错误");
+                 return;
+             }
+             outputStream = response.getOutputStream();
+             response.setCharacterEncoding("utf-8");
+             response.setContentType("multipart/form-data");
+             response.setHeader("Content-Disposition", "attachment;fileName=UnKnownUrl.xls");
+             HSSFWorkbook workbook = ExcelUtil.exportToExcel(list);
+             workbook.write(outputStream);
+         } catch (Exception e) {
+             logger.info("excel 导出失败\t" + e.toString());
+         } finally {
+             try {
+                 outputStream.close();
+             } catch (Exception e) {
+                 logger.info("导出excel时，关闭outputstream失败");
+             }
+         }
+    }
+
 
     @ResponseBody
     @RequestMapping(value = "/queryIssueFiles")
@@ -217,6 +275,30 @@ public class FileController {
             logger.warn("read column title fail" + e.toString());
         }
         return ResultUtil.errorWithMsg("获取列表题失败");
+    }
+    /**
+     * 读取停用词文件，返回list集合
+     * @param file
+     * @return
+     * 5月8号
+     */
+    //读取停用词文件，返回list集合
+    @ResponseBody
+    @RequestMapping("/getStopword")
+    public Object getStopword(@RequestParam(value = "file", required = true) MultipartFile file){
+    	if(file.isEmpty()){
+    		return ResultUtil.errorWithMsg("文件为空");
+    	}
+    	try{
+    		List<String> list = ExcelUtil.read(file.getOriginalFilename(),file.getInputStream());
+    		if(null == list || 0 == list.size()){
+    			return ResultUtil.errorWithMsg("文件读取错误！");
+    		}
+    		return ResultUtil.success(list);
+    	}catch (Exception e){
+    		logger.warn("read stopword file fail" + e.toString());
+    	}
+    	return ResultUtil.errorWithMsg("文件预浏览失败!");
     }
 
     @ResponseBody
