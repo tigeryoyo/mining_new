@@ -31,7 +31,7 @@ public class UserRoleDao {
 	public int deleteUserRoleByUserId(int id) {
 		UserRoleExample example = new UserRoleExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andIdEqualTo(id);
+		criteria.andUserIdEqualTo(id);
 		int statue = userRoleMapper.deleteByExample(example);
 		return statue;
 	}

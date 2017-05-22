@@ -359,7 +359,7 @@ function addUser(){
 			password:$("#passWord").val(),
 			telphone:$("#userTel").val(),
 			email:$("#userEmail").val(),
-			roleName:$("#roleName option:selected").val()
+			roleName:$("#select_roleName option:selected").val()
 		},
 		dataType:"json",
 		beforeSend : function(){
@@ -387,7 +387,7 @@ function clearUserInfor(){
 	$("#passWord").val('');
 	$("#userTel").val('');
 	$("#userEmail").val('');
-	$("#roleName").val('');
+	$("#select_roleName option:selected").val('请选择角色');
 }
 
 // 用户编辑
@@ -427,7 +427,7 @@ function userInforChange(){
 			password:$("#new_user_type").val(),
 			telphone:$("#new_telphone_type").val(),
 			email:$("#new_email_type").val(),
-			roleName:newRole,
+			roleName:$("#select_roleName option:selected").val(),
 		},
 		dataType:"json",
 		beforeSend : function(){
@@ -437,6 +437,7 @@ function userInforChange(){
 			console.log(msg);
 			if( msg.status == "OK"){
 				// alert("更新成功");
+				alert(msg.result);
 			}else{
 				alert(msg.result);
 			}
@@ -444,8 +445,8 @@ function userInforChange(){
 		complete : function() {
             stop();
         },
-		error: function(){
-            alert("数据请求失败");
+		error: function(msg){
+            alert(msg.result);
         },
 	})	
 }
@@ -454,7 +455,7 @@ function clearChangeInfor(){
 	$("#new_true_type").val('');
 	$("#new_telphone_type").val('');
 	$("#new_email_type").val('');
-	$("#new_role_type").val('');
+	$("#select_roleName option:selected").val('请选择角色');
 }
 
 
