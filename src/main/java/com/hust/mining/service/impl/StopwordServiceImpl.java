@@ -110,4 +110,14 @@ public class StopwordServiceImpl implements StopwordService {
 		return redisService.getString(KEY.USER_NAME, request);
 	}
 
+	@Override
+	public long selectCountWord(String word) {
+		// TODO Auto-generated method stub
+		StopwordQueryCondition condition = new StopwordQueryCondition();
+		condition.setWord(word);
+		condition.setLimit(0);
+		condition.setStart(0);
+		return stopwordDao.selectCountOfStopword(condition);
+	}
+
 }

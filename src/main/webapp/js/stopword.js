@@ -2,7 +2,9 @@
  * Created by Jack on 2017/5/7.
  */
 //停用词信息展示
+
 function stopwordInforShow(page){
+    console.log(page+"--------------")
     search_click=false;
     $.ajax({
         type:"post",
@@ -43,10 +45,9 @@ function stopwordInforShow(page){
         },
         error: function(){
             alert("数据请求失败");
-        },
+        }
     })
 }
-stopwordInforShow(1)
 /*function setCookie(value1,value2,value3,value4){
     // alert(name+value);
     var cookie_name1="id";
@@ -62,6 +63,30 @@ stopwordInforShow(1)
     document.cookie = cookie_name4 +"="+ escape (value4) + ";expires=" + exp.toGMTString();
     window.location.href = "website_change.html";
 }*/
+
+function initShowPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/stopword/selectStopwordCount",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,stopwordInforShow);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+    }
+initShowPage(1)
 /**
  * 根据页码加载数据
  *
@@ -252,6 +277,31 @@ function stopwordInforSearch(page){
     })
 }
 
+function initSearchPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    var obj1 = $("#stopword_search").val();
+    $.ajax({
+        type: "post",
+        url: "/stopword/selectStopwordCount",
+        data:{word:obj1},
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,stopwordInforSearch);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+    }
+
 // 添加停用词页面跳转
 function stopwordInforAdd(){
     window.location.href = "stopword_add.html";
@@ -287,7 +337,7 @@ $(function(){
                 },
                 error: function(){
                     alert("数据请求失败");
-                },
+                }
             });
         }
     })

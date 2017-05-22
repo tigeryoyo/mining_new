@@ -64,6 +64,17 @@ public class StopwordDao {
 		return count;
 	}
 	
+	public long selectCountOfStopword(StopwordQueryCondition condition){
+		StopwordExample example = new StopwordExample();
+		Criteria criteria = example.createCriteria();
+		if(!StringUtils.isBlank(condition.getWord())){
+			criteria.andWordLike("%"+condition.getWord()+"%");
+		}
+		long count = stopwordMapper.countByExample(example);
+		return count;
+		
+	}
+	
 	public int deleteByExample(StopwordExample example){
 		return stopwordMapper.deleteByExample(example);
 	}
