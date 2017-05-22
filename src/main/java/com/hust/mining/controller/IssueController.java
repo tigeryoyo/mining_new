@@ -73,15 +73,6 @@ public class IssueController {
     public Object queryOwnIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
         String user = userService.getCurrentUser(request);
         con.setUser(user);
-        System.out.println(con.getIssueId());
-		  System.out.println(con.getIssueName());
-		  System.out.println(con.getPageNo());
-		  System.out.println(con.getPageSize());
-		  System.out.println(con.getUser());
-		  System.out.println("CreateEndTime"+con.getCreateEndTime());
-		  System.out.println("CreateStartTime"+con.getCreateStartTime());
-		  System.out.println("LastUpdateEndTime"+con.getLastUpdateEndTime());
-		  System.out.println("LastUpdateStartTime"+con.getLastUpdateStartTime());
         List<Issue> list = issueService.queryIssue(con);
         if(null == list || 0==list.size()){
         	return ResultUtil.errorWithMsg("Issue not exist");
@@ -126,16 +117,12 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/miningByFile")
-    public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds, @RequestParam(value = "granularityId", required = true) String granularityId, HttpServletRequest request) {
-        System.out.println("-------------"+granularityId);
-        for (String string : fileIds) {
-        	System.out.println("-------------"+string);
-		}
-    	String issueId = redisService.getString(KEY.ISSUE_ID, request);
+    public Object miningByFileIds(@RequestBody List<String> fileIds, HttpServletRequest request) {
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择任务");
         }
-        List<String[]> count = issueService.miningByFileIds(fileIds, granularityId, request);
+        List<String[]> count = issueService.miningByFileIds(fileIds, request);
         if (count == null) {
             return ResultUtil.unknowError();
         }
@@ -144,7 +131,7 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/miningSingleFile")
-    public Object miningSingleFile(@RequestParam(value = "fileId", required = true) String fileId, @RequestParam(value = "granularityId", required = true) String granularityId,
+    public Object miningSingleFile(@RequestParam(value = "fileId", required = true) String fileId,
             HttpServletRequest request) {
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
@@ -152,7 +139,7 @@ public class IssueController {
         }
         List<String> list = new ArrayList<String>();
         list.add(fileId);
-        List<String[]> count = issueService.miningByFileIds(list, granularityId, request);
+        List<String[]> count = issueService.miningByFileIds(list, request);
         if (count == null) {
             return ResultUtil.unknowError();
         }

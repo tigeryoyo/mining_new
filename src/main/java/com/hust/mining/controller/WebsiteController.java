@@ -1,6 +1,5 @@
 package com.hust.mining.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.mining.model.Website;
 import com.hust.mining.model.params.WebsiteQueryCondition;
 import com.hust.mining.service.WebsiteService;
-import com.hust.mining.util.CommonUtil;
-import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.ResultUtil;
 
 @Controller
@@ -44,51 +40,6 @@ public class WebsiteController {
             return ResultUtil.errorWithMsg("website is empty");
         }
         return ResultUtil.success(website);
-    }
-	
-    @ResponseBody
-	@RequestMapping("/importMapUrl")
-	public Object importMapUrl(@RequestParam(value = "file", required = true) MultipartFile file){
-    	if(file.isEmpty()){
-    		return ResultUtil.errorWithMsg("file is empty");
-    	}
-    	try{
-    		System.out.println(file.getOriginalFilename());
-    		List<String[]> list = ExcelUtil.read(file.getOriginalFilename(),file.getInputStream(),1);
-    		if(null == list || 0 == list.size()){
-    			return ResultUtil.errorWithMsg("file is uncorrect!");
-    		}
-    		
-    		WebsiteQueryCondition condition = new WebsiteQueryCondition();
-    		String prefixUrl = null;
-    		for(String[] strs:list){
-    			prefixUrl = CommonUtil.getPrefixUrl(strs[0]);
-    			if(prefixUrl.trim().isEmpty()){
-    				continue;
-    			}
-    			condition.setUrl(prefixUrl);
-    			Website website = new Website();
-    			List<Website> list1 = websiteService.selectByCondition(condition);
-    			website.setUrl(prefixUrl);
-        		website.setName(strs[1]);
-        		website.setLevel(strs[2]);
-        		website.setType(strs[3]);
-    			if(list1.isEmpty()){
-            		if (!websiteService.insertWebsite(website)) {
-            			return ResultUtil.errorWithMsg("insert website error");
-            		}
-    			}else{
-    				Website web = list1.get(0);
-    				website.setId(web.getId());
-    				websiteService.updateWebsite(website);
-    			}
-    		}
-    		
-    		return ResultUtil.success(list);
-    	}catch (Exception e){
-    		
-    	}
-    	return ResultUtil.errorWithMsg("file preread error!");
     }
 
 	@ResponseBody

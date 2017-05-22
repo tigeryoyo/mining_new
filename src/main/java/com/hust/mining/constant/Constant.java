@@ -101,11 +101,6 @@ public class Constant {
         public static final int DIGITAL = 1;
         public static final int TFIDF = 2;
     }
-    
-    public static class GRANULARITY{
-    	public static final int AcrossSimilarity = 1; //粗粒度
-    	public static final int CosSimilarity =2;   //细粒度
-    }
 
     public static class ALGORIRHMTYPE {
         public static final int CANOPY = 1;
@@ -113,8 +108,6 @@ public class Constant {
         public static final int DBSCAN = 3;
     }
 
-    
-    //把config.properties中的变量值，赋给当前的变量
     @Value("${upload_file}")
     private String dirFile;
     @Value("${orig_cluster}")

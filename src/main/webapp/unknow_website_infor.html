@@ -17,31 +17,33 @@
 			<iframe src="g_left.html" width="200px" height="740px"></iframe>
 			<div class="right float_r">
 				<div class="s_nav">
-					当前位置： <a href="#">映射表管理</a> >>信息显示
+					当前位置：
+					<a href="#">映射表管理</a>
+					>>信息显示
 				</div>
 				<div class="user_infor">
 					<table width="710" border="0" class="infor_tab01">
 						<tr>
 							<td width="85" height="50">网站URL：</td>
-							<td height="50"><input type="text" id="web_url"></td>
+							<td height="50">
+								<input type="text" id="web_url">
+							</td>
 							<td width="85" height="50">网站级别：</td>
-							<td height="50"><input type="text" id="web_level"></td>
-							<td height="50" colspan="2" />
-							<td height="50" colspan="2">
-								<form action="/file/downloadUnKnownUrl" method="POST">
-									<button type="submit">导出未知url</button>
-								</form>
+							<td height="50">
+								<input type="text" id="web_level">
 							</td>
 						</tr>
 						<tr>
 							<td width="85" height="50">网站名称：</td>
-							<td height="50"><input type="text" id="web_name"></td>
+							<td height="50">
+								<input type="text" id="web_name">
+							</td>
 							<td width="85" height="50">网站类型：</td>
-							<td height="50"><input type="text" id="web_type"></td>
-							<td height="50" colspan="2">
-								<button onclick="websiteInforSearch(1)">搜索</button>
+							<td height="50">
+								<input type="text" id="web_type">
 							</td>
 							<td height="50" colspan="2">
+								<button onclick="websiteInforSearch(1)">搜索</button>
 								<button onClick="websiteInforAdd()">添加映射表</button>
 							</td>
 						</tr>
@@ -60,15 +62,19 @@
 					</div>
 					<div class="user_num">
 						<input id="up_page" type="button" onclick="changPageOne(-1)"
-							value="上一页" /> <input type="button" id="p_1"
-							onclick="pageNumClick(this.id)" value="1" class="cur" /> <input
-							type="button" id="p_2" onclick="pageNumClick(this.id)" value="2" />
+							value="上一页" />
+						<input type="button" id="p_1" onclick="pageNumClick(this.id)"
+							value="1" class="cur" />
+						<input type="button" id="p_2" onclick="pageNumClick(this.id)"
+							value="2" />
 						<input type="button" id="p_3" onclick="pageNumClick(this.id)"
-							value="3" /> <input type="button" id="other" name="1"
-							onclick="setPageChangeView()" value="..." /> <input
-							id="down_page" type="button" onclick="changPageOne(1)"
-							value="下一页" name="1" /> <input type="text" class="go_num" /> <input
-							type="button" value="跳转" onclick="changePage()" />
+							value="3" />
+						<input type="button" id="other" name="1"
+							onclick="setPageChangeView()" value="..." />
+						<input id="down_page" type="button" onclick="changPageOne(1)"
+							value="下一页" name="1" />
+						<input type="text" class="go_num" />
+						<input type="button" value="跳转" onclick="changePage()" />
 					</div>
 				</div>
 			</div>
