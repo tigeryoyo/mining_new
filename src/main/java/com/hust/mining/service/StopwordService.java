@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import com.hust.mining.model.Stopword;
+import com.hust.mining.model.StopwordExample;
 
 public interface StopwordService {
 	/**
@@ -27,6 +28,12 @@ public interface StopwordService {
 	 * @return
 	 */
 	public long selectCount();
+	 /**
+	  * 根据word查询与之想关的停用词总数
+	  * @param word 模糊搜索词
+	  * @return 想关停用词总数
+	  */
+	public long selectCountWord(String word);
 	/**
 	 * 插入单个停用词
 	 * @param stopword

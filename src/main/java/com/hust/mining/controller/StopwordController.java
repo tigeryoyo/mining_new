@@ -42,9 +42,23 @@ public class StopwordController {
 			@RequestParam(value = "limit", required = true) int limit, HttpServletRequest request) {
 		List<Stopword> list = stopwordService.selectStopwordInforByWord(word, start, limit);
 		if (null == list || 0 == list.size()) {
-			return ResultUtil.errorWithMsg("select stopword empty");
+			return ResultUtil.errorWithMsg("无相关停用词！");
 		}
 		return ResultUtil.success(list);
+	}
+	@ResponseBody
+	@RequestMapping("/selectStopwordCount")
+	public Object selectStopwordCount(@RequestParam(value = "word",required = false)  String word){
+		long count = 0;
+		if(null == word){
+			count = stopwordService.selectCount();
+		}else{
+			count = stopwordService.selectCountWord(word);
+		}
+		if(count <= 0){
+			return ResultUtil.errorWithMsg("无停用词");
+		}
+		return ResultUtil.success(count);
 	}
 
 	@ResponseBody
