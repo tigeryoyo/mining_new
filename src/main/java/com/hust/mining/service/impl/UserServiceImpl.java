@@ -85,6 +85,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean updateUser(User user)
+    {
+    	int i=userDao.updateByPrimaryKeySelective(user);
+    	if (i==0) {
+    		
+    		logger.info("update algorithm and granularity is error");
+    		return false;
+			
+		}
+    	return true;
+    }
+    
+    @Override
     public boolean updateUserInfo(User user, List<String> roleName) {
         // 根据ID找出这个用户的用户名
         User userInfo = userDao.selectByPrimaryKey(user.getUserId());

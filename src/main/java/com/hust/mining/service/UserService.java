@@ -22,6 +22,8 @@ public interface UserService {
     boolean login(String userName, String password);
 
     void logout(HttpServletRequest request);
+    
+    boolean updateUser(User user);
 
     List<String> selectUserPowerUrl(String userName);
 

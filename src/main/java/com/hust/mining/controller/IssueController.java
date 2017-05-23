@@ -128,41 +128,40 @@ public class IssueController {
 		return ResultUtil.success(count);
 	}
 
-	@ResponseBody
-	@RequestMapping("/miningByFile")
-	public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,
-			@RequestParam(value = "granularityId", required = true) String granularityId, HttpServletRequest request) {
-		System.out.println("-------------" + granularityId);
-		for (String string : fileIds) {
-			System.out.println("-------------" + string);
+	 @ResponseBody
+    @RequestMapping("/miningByFile")
+    public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,  HttpServletRequest request) {
+      
+        for (String string : fileIds) {
+        	System.out.println("-------------"+string);
 		}
-		String issueId = redisService.getString(KEY.ISSUE_ID, request);
-		if (StringUtils.isEmpty(issueId)) {
-			return ResultUtil.errorWithMsg("请重新选择任务");
-		}
-		List<String[]> count = issueService.miningByFileIds(fileIds, granularityId, request);
-		if (count == null) {
-			return ResultUtil.unknowError();
-		}
-		return ResultUtil.success(count);
-	}
+    	String issueId = redisService.getString(KEY.ISSUE_ID, request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择任务");
+        }
+        List<String[]> count = issueService.miningByFileIds(fileIds, request);
+        if (count == null) {
+            return ResultUtil.unknowError();
+        }
+        return ResultUtil.success(count);
+    }
 
-	@ResponseBody
-	@RequestMapping("/miningSingleFile")
-	public Object miningSingleFile(@RequestParam(value = "fileId", required = true) String fileId,
-			@RequestParam(value = "granularityId", required = true) String granularityId, HttpServletRequest request) {
-		String issueId = redisService.getString(KEY.ISSUE_ID, request);
-		if (StringUtils.isEmpty(issueId)) {
-			return ResultUtil.errorWithMsg("请重新选择任务");
-		}
-		List<String> list = new ArrayList<String>();
-		list.add(fileId);
-		List<String[]> count = issueService.miningByFileIds(list, granularityId, request);
-		if (count == null) {
-			return ResultUtil.unknowError();
-		}
-		return ResultUtil.successWithoutMsg();
-	}
+    @ResponseBody
+    @RequestMapping("/miningSingleFile")
+    public Object miningSingleFile(@RequestParam(value = "fileId", required = true) String fileId, HttpServletRequest request) {
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择任务");
+        }
+        List<String> list = new ArrayList<String>();
+        list.add(fileId);
+        List<String[]> count = issueService.miningByFileIds(list, request);
+        if (count == null) {
+            return ResultUtil.unknowError();
+        }
+        return ResultUtil.successWithoutMsg();
+    }
+
 
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
@@ -170,5 +169,6 @@ public class IssueController {
 		CustomDateEditor editor = new CustomDateEditor(df, false);
 		binder.registerCustomEditor(Date.class, editor);
 	}
+
 
 }

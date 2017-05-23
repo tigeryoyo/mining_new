@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hust.datamining.algorithm.cluster.Canopy;
+import com.hust.datamining.algorithm.cluster.DBScan;
+import com.hust.datamining.algorithm.cluster.KMeans;
 import com.hust.datamining.convertor.Convertor;
 import com.hust.datamining.convertor.DigitalConvertor;
 import com.hust.datamining.convertor.TFIDFConvertor;
@@ -57,6 +59,8 @@ public class MiningServiceImpl implements MiningService {
     @Override
     public List<List<Integer>> cluster(List<String[]> list, int converterType, int algorithmType,int granularity) {
         // TODO 进行聚类
+    	//用于存放结果
+    	List<List<Integer>> resultIndexSetList = new ArrayList<List<Integer>>();
     	//对标题列进行分词。
         List<String[]> segmentList = segmentService.getSegresult(list, Index.TITLE_INDEX, 0);
         Convertor convertor = null;
@@ -69,30 +73,112 @@ public class MiningServiceImpl implements MiningService {
         convertor.setList(segmentList);
         List<double[]> vectors = convertor.getVector();
         //向量转换完成
-        Canopy canopy = new Canopy();
-        canopy.setVectors(vectors);
-        //相似度方式的选择
-        if (granularity == GRANULARITY.AcrossSimilarity) {
-        	  canopy.setSimi(new AcrossSimilarity(vectors)); 
-        	  System.out.println("选择的是粗粒度AcrossSimilarity");
-			
-		} else if(granularity == GRANULARITY.CosSimilarity){
-			  canopy.setSimi(new CosSimilarity(vectors));
-			  System.out.println("选择的是细粒度CosSimilarity");
+        
+        //如果选择的是canopy算法
+        if (algorithmType == ALGORIRHMTYPE.CANOPY) 
+        {
+        	 System.out.println("使用的是CANOPY");
+        	 Canopy canopy = new Canopy();
+             canopy.setVectors(vectors);
+             //相似度方式的选择
+             if (granularity == GRANULARITY.AcrossSimilarity) {
+           	  canopy.setSimi(new AcrossSimilarity(vectors)); 
+           	  System.out.println("选择的是粗粒度AcrossSimilarity");
+   			
+             } else if(granularity == GRANULARITY.CosSimilarity){
+   			  canopy.setSimi(new CosSimilarity(vectors));
+   			  System.out.println("选择的是细粒度CosSimilarity");
+             }
+             //设置阀值
+             canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
+             //开启线程池
+             ExecutorService exec = Executors.newSingleThreadExecutor();
+             Future<List<List<Integer>>> future = exec.submit(canopy);
+             try {
+             	//得到聚类结果
+                 resultIndexSetList = future.get();
+             } catch (Exception e) {
+                 logger.error("error occur during clustering by canopy" + e.toString());
+                 return null;
+             }
 		}
-        //设置阀值
-        canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
-        //开启线程池
-        ExecutorService exec = Executors.newSingleThreadExecutor();
-        Future<List<List<Integer>>> future = exec.submit(canopy);
-        List<List<Integer>> resultIndexSetList = new ArrayList<List<Integer>>();
-        try {
-        	//得到聚类结果
-            resultIndexSetList = future.get();
-        } catch (Exception e) {
-            logger.error("error occur during clustering" + e.toString());
-            return null;
-        }
+        else if (algorithmType == ALGORIRHMTYPE.KMEANS) 
+        {
+        	 System.out.println("使用的是KMEANS");
+        	 Canopy canopy = new Canopy();
+             canopy.setVectors(vectors);
+             //相似度方式的选择
+           	 canopy.setSimi(new AcrossSimilarity(vectors)); 
+             //设置阀值
+             canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
+             //开启线程池
+             ExecutorService exec = Executors.newSingleThreadExecutor();
+             Future<List<List<Integer>>> future = exec.submit(canopy);
+             try {
+             	//得到聚类结果
+                 resultIndexSetList = future.get();
+                 int k = resultIndexSetList.size();
+                 KMeans kmeans = new KMeans();
+                 kmeans.setVectors(vectors);
+                 kmeans.setIterationTimes(20);
+               //相似度方式的选择
+                 if (granularity == GRANULARITY.AcrossSimilarity) {
+                	 kmeans.setSimi(new AcrossSimilarity(vectors)); 
+               	  System.out.println("选择的是粗粒度AcrossSimilarity");
+       			
+                 } else if(granularity == GRANULARITY.CosSimilarity){
+                	 kmeans.setSimi(new CosSimilarity(vectors));
+       			  System.out.println("选择的是细粒度CosSimilarity");
+                 }
+                 kmeans.setK(k);
+                 
+                 ExecutorService exec1 = Executors.newSingleThreadExecutor();
+                 Future<List<List<Integer>>> future1 = exec.submit(kmeans);
+                 try {
+                 	//得到聚类结果
+                     resultIndexSetList = future1.get();
+                 } catch (Exception e) {
+                     logger.error("error occur during clustering by canopy" + e.toString());
+                     return null;
+                 }
+                 
+             } catch (Exception e) {
+                 logger.error("error occur during clustering by canopy" + e.toString());
+                 return null;
+             }
+		}
+        else if (algorithmType == ALGORIRHMTYPE.DBSCAN) 
+        {
+        	 System.out.println("使用的是DBSCAN");
+        	 DBScan dbscan = new DBScan();
+        	 dbscan.setVectors(vectors);
+             if (granularity == GRANULARITY.AcrossSimilarity) {
+            	  dbscan.setSimi(new AcrossSimilarity(vectors)); 
+              	  System.out.println("选择的是粗粒度AcrossSimilarity");
+      			
+                } else if(granularity == GRANULARITY.CosSimilarity){
+                  dbscan.setSimi(new CosSimilarity(vectors));
+      			  System.out.println("选择的是细粒度CosSimilarity");
+                }
+             //设置阀值
+             dbscan.setMinPts(Config.MinPts);
+             dbscan.setEps(Config.Eps);
+             //开启线程池
+             ExecutorService exec = Executors.newSingleThreadExecutor();
+             Future<List<List<Integer>>> future = exec.submit(dbscan);
+             try {
+             	//得到聚类结果
+                 resultIndexSetList = future.get();
+             } catch (Exception e) {
+                 logger.error("error occur during clustering by canopy" + e.toString());
+                 return null;
+             }
+		}
+        else {
+			logger.error("没有选择任何算法");
+			return null;
+		}
+       
         //重载排序的方法，按照降序。类中数量多的排在前面。
         Collections.sort(resultIndexSetList, new Comparator<List<Integer>>() {
 

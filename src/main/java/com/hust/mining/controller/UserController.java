@@ -99,6 +99,47 @@ public class UserController {
         }
         return ResultUtil.success("delete user success");
     }
+    
+    /**
+     * 设置算法和粒度选择
+     * @param algorithm
+     * @param granularity
+     * @param request
+     * @return
+     */
+    
+    @ResponseBody
+    @RequestMapping("/setAlgorithmAndGranularity")
+    public Object setAlgorithmAndgranularity(@RequestParam(value = "algorithm", required = true) int algorithm,
+    		@RequestParam(value = "granularity", required = true) int granularity,HttpServletRequest request) {
+       
+    	String username = userService.getCurrentUser(request);
+    	List<User> users =userService.selectSingleUserInfo(username, request);
+    	User user = users.get(0);
+    	user.setAlgorithm(algorithm);
+    	user.setGranularity(granularity);
+    	boolean statue = userService.updateUser(user);
+    	if (statue == false) {
+    		return ResultUtil.errorWithMsg("update user error");
+		}
+    	return ResultUtil.success("update user success");
+    }
+    
+    /**
+     * 获取当前用户的算法选择和粒度选择，显示到页面
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getAlgorithmAndGranularity")
+    public Object getAlgorithmAndgranularity(HttpServletRequest request) {
+       
+    	String username = userService.getCurrentUser(request);
+    	List<User> users =userService.selectSingleUserInfo(username, request);
+    	User user = users.get(0);
+    	return ResultUtil.success(user);
+    }
+
 
     /**
      * 
