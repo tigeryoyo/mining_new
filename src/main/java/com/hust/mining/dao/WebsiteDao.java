@@ -56,6 +56,46 @@ public class WebsiteDao {
         List<Website> website = websiteMapper.selectByExample(example);
         return website;
     }
+    
+    public long selectWebsiteCount(){
+    	WebsiteExample example = new WebsiteExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andIdIsNotNull();
+        criteria.andNameNotEqualTo("其他");
+        example.setStart(0);
+        example.setLimit(0);
+    	return websiteMapper.countByExample(example);
+    }
+    
+    public long selectUnknowWebsiteCount(){
+    	WebsiteExample example = new WebsiteExample();
+        Criteria criteria = example.createCriteria();
+        criteria.andIdIsNotNull();
+        criteria.andNameEqualTo("其他");
+        example.setStart(0);
+        example.setLimit(0);
+    	return websiteMapper.countByExample(example);
+    }
+    
+    public long selectWebsiteCount(WebsiteQueryCondition webSite){
+    	WebsiteExample example = new WebsiteExample();
+        Criteria criteria = example.createCriteria();
+        if (!StringUtils.isBlank(webSite.getUrl())) {
+            criteria.andUrlLike(webSite.getUrl());
+        }
+        if (!StringUtils.isBlank(webSite.getLevel())) {
+            criteria.andLevelLike(webSite.getLevel());
+        }
+        if (!StringUtils.isBlank(webSite.getName())) {
+            criteria.andNameLike("%"+webSite.getName()+"%");
+        }
+        if (!StringUtils.isBlank(webSite.getType())) {
+            criteria.andTypeLike(webSite.getType());
+        }
+        example.setStart(0);
+        example.setLimit(0);
+    	return websiteMapper.countByExample(example);
+    }
 
     public List<Website> selectAllWebsiteUnknow(int start, int limit) {
         WebsiteExample example = new WebsiteExample();

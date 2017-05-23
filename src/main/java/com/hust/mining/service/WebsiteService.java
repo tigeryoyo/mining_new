@@ -12,6 +12,12 @@ public interface WebsiteService {
 	List<Website> selectByCondition(WebsiteQueryCondition website);
 	
 	List<Website> selectAllWebsiteUnknow(int start, int limit);
+	
+	long selectWebsiteCount();
+	
+	long selectUnknowWebsiteCount();
+	
+	long selectWebsiteByCondition(WebsiteQueryCondition website);
 
 	List<String[]> exportKnownUrlService();
 	
