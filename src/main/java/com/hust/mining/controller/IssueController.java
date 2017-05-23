@@ -126,8 +126,8 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/miningByFile")
-    public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds, @RequestParam(value = "granularityId", required = true) String granularityId, HttpServletRequest request) {
-        System.out.println("-------------"+granularityId);
+    public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,  HttpServletRequest request) {
+      
         for (String string : fileIds) {
         	System.out.println("-------------"+string);
 		}
@@ -135,7 +135,7 @@ public class IssueController {
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择任务");
         }
-        List<String[]> count = issueService.miningByFileIds(fileIds, granularityId, request);
+        List<String[]> count = issueService.miningByFileIds(fileIds, request);
         if (count == null) {
             return ResultUtil.unknowError();
         }
@@ -144,15 +144,14 @@ public class IssueController {
 
     @ResponseBody
     @RequestMapping("/miningSingleFile")
-    public Object miningSingleFile(@RequestParam(value = "fileId", required = true) String fileId, @RequestParam(value = "granularityId", required = true) String granularityId,
-            HttpServletRequest request) {
+    public Object miningSingleFile(@RequestParam(value = "fileId", required = true) String fileId, HttpServletRequest request) {
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择任务");
         }
         List<String> list = new ArrayList<String>();
         list.add(fileId);
-        List<String[]> count = issueService.miningByFileIds(list, granularityId, request);
+        List<String[]> count = issueService.miningByFileIds(list, request);
         if (count == null) {
             return ResultUtil.unknowError();
         }

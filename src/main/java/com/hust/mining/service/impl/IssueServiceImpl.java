@@ -25,6 +25,7 @@ import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultWithContent;
+import com.hust.mining.model.User;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.model.params.QueryFileCondition;
 import com.hust.mining.service.IssueService;
@@ -137,13 +138,18 @@ public class IssueServiceImpl implements IssueService {
         if (null == content) {
             return null;
         }
+        String user = userService.getCurrentUser(request);
+        List<User> users = userService.selectSingleUserInfo(user, request);
+        User user2 = users.get(0);
+        int granularity = user2.getGranularity();
+        int algorithmType = user2.getAlgorithm();
         //选择了0-1模型
-        Map<String, Object> res = mining(content, CONVERTERTYPE.DIGITAL, 1, 1);
+        Map<String, Object> res = mining(content, CONVERTERTYPE.DIGITAL, algorithmType, granularity);
         if (null == res) {
             return null;
         }
         // 开始插入数据库
-        String user = userService.getCurrentUser(request);
+      
         content = (List<String[]>) res.get("content");
         List<int[]> count = (List<int[]>) res.get("countResult");
         List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
@@ -192,7 +198,7 @@ public class IssueServiceImpl implements IssueService {
     //多文件去重并聚类
     @SuppressWarnings("unchecked")
     @Override
-    public List<String[]> miningByFileIds(List<String> fileIds, String granularityId, HttpServletRequest request) {
+    public List<String[]> miningByFileIds(List<String> fileIds, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String user = userService.getCurrentUser(request);
         String issueId = redisService.getString(KEY.ISSUE_ID, request);
@@ -217,9 +223,14 @@ public class IssueServiceImpl implements IssueService {
                 exitUrls.add(row[Index.URL_INDEX]);
             }
         }
-        int granularity = Integer.parseInt(granularityId);
+        
+       List<User> users = userService.selectSingleUserInfo(user, request);
+       User user2 = users.get(0);
+       int granularity = user2.getGranularity();
+       int algorithmType = user2.getAlgorithm();
+       
         // 去重结束
-        Map<String, Object> res = mining(filteredContent, CONVERTERTYPE.DIGITAL, 1, granularity);
+        Map<String, Object> res = mining(filteredContent, CONVERTERTYPE.DIGITAL, algorithmType, granularity);
         if (null == res) {
             return null;
         }
