@@ -5,6 +5,7 @@
 	<resultMap id="BaseResultMap" type="com.hust.mining.model.Issue">
 		<id column="issue_id" jdbcType="VARCHAR" property="issueId" />
 		<result column="issue_name" jdbcType="VARCHAR" property="issueName" />
+		<result column="issue_type" jdbcType="VARCHAR" property="issueType" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="creator" jdbcType="VARCHAR" property="creator" />
 		<result column="last_operator" jdbcType="VARCHAR" property="lastOperator" />
@@ -75,7 +76,8 @@
 		</where>
 	</sql>
 	<sql id="Base_Column_List">
-		issue_id, issue_name, create_time, creator, last_operator, last_update_time
+		issue_id, issue_name, issue_type, create_time, creator, last_operator,
+		last_update_time
 	</sql>
 	<select id="selectByExample" parameterType="com.hust.mining.model.IssueExample"
 		resultMap="BaseResultMap">
@@ -90,9 +92,6 @@
 		</if>
 		<if test="orderByClause != null">
 			order by ${orderByClause}
-		</if>
-		<if test="start !=0 or limit!=0">
-			limit #{start},#{limit}
 		</if>
 	</select>
 	<select id="selectByPrimaryKey" parameterType="java.lang.String"
@@ -113,14 +112,13 @@
 		</if>
 	</delete>
 	<insert id="insert" parameterType="com.hust.mining.model.Issue">
-		insert into issue (issue_id, issue_name, create_time,
-		creator, last_operator, last_update_time
-		)
+		insert into issue (issue_id, issue_name, issue_type,
+		create_time, creator, last_operator,
+		last_update_time)
 		values (#{issueId,jdbcType=VARCHAR}, #{issueName,jdbcType=VARCHAR},
-		#{createTime,jdbcType=TIMESTAMP},
-		#{creator,jdbcType=VARCHAR}, #{lastOperator,jdbcType=VARCHAR},
-		#{lastUpdateTime,jdbcType=TIMESTAMP}
-		)
+		#{issueType,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{lastOperator,jdbcType=VARCHAR},
+		#{lastUpdateTime,jdbcType=TIMESTAMP})
 	</insert>
 	<insert id="insertSelective" parameterType="com.hust.mining.model.Issue">
 		insert into issue
@@ -130,6 +128,9 @@
 			</if>
 			<if test="issueName != null">
 				issue_name,
+			</if>
+			<if test="issueType != null">
+				issue_type,
 			</if>
 			<if test="createTime != null">
 				create_time,
@@ -150,6 +151,9 @@
 			</if>
 			<if test="issueName != null">
 				#{issueName,jdbcType=VARCHAR},
+			</if>
+			<if test="issueType != null">
+				#{issueType,jdbcType=VARCHAR},
 			</if>
 			<if test="createTime != null">
 				#{createTime,jdbcType=TIMESTAMP},
@@ -181,6 +185,9 @@
 			<if test="record.issueName != null">
 				issue_name = #{record.issueName,jdbcType=VARCHAR},
 			</if>
+			<if test="record.issueType != null">
+				issue_type = #{record.issueType,jdbcType=VARCHAR},
+			</if>
 			<if test="record.createTime != null">
 				create_time = #{record.createTime,jdbcType=TIMESTAMP},
 			</if>
@@ -202,6 +209,7 @@
 		update issue
 		set issue_id = #{record.issueId,jdbcType=VARCHAR},
 		issue_name = #{record.issueName,jdbcType=VARCHAR},
+		issue_type = #{record.issueType,jdbcType=VARCHAR},
 		create_time = #{record.createTime,jdbcType=TIMESTAMP},
 		creator = #{record.creator,jdbcType=VARCHAR},
 		last_operator = #{record.lastOperator,jdbcType=VARCHAR},
@@ -215,6 +223,9 @@
 		<set>
 			<if test="issueName != null">
 				issue_name = #{issueName,jdbcType=VARCHAR},
+			</if>
+			<if test="issueType != null">
+				issue_type = #{issueType,jdbcType=VARCHAR},
 			</if>
 			<if test="createTime != null">
 				create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -234,6 +245,7 @@
 	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.Issue">
 		update issue
 		set issue_name = #{issueName,jdbcType=VARCHAR},
+		issue_type = #{issueType,jdbcType=VARCHAR},
 		create_time = #{createTime,jdbcType=TIMESTAMP},
 		creator = #{creator,jdbcType=VARCHAR},
 		last_operator = #{lastOperator,jdbcType=VARCHAR},

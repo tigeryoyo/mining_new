@@ -53,12 +53,13 @@ public class IssueServiceImpl implements IssueService {
 
     //创建任务
     @Override
-    public int createIssue(String issueName, HttpServletRequest request) {
+    public int createIssue(String issueName, String issueType, HttpServletRequest request) {
         // TODO Auto-generated method stub
         String user = userService.getCurrentUser(request);
         Issue issue = new Issue();
         issue.setIssueId(UUID.randomUUID().toString());
         issue.setIssueName(issueName);
+        issue.setIssueType(issueType);
         issue.setCreator(user);
         issue.setCreateTime(new Date());
         issue.setLastOperator(user);

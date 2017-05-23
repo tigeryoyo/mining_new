@@ -63,18 +63,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteUserInfoById(int userId, HttpServletRequest request) {
-        List<UserRole> userRole = userRoleDao.selectUserRoleByUserId(userId);
-        List<Integer> id = new ArrayList<>();
-        for (UserRole userRoleInfo : userRole) {
-            id.add(userRoleInfo.getId());
-        }
-        for (int idInfo : id) {
-            int status = userRoleDao.deleteUserRoleByUserId(idInfo);
-            if (status == 0) {
-                logger.info("delete userRole id error");
-                return false;
-            }
-        }
+//        List<UserRole> userRole = userRoleDao.selectUserRoleByUserId(userId);
+//        List<Integer> id = new ArrayList<>();
+//        for (UserRole userRoleInfo : userRole) {
+//            id.add(userRoleInfo.getId());
+//        }
+//        for (int idInfo : id) {
+//            int status = userRoleDao.deleteUserRoleByUserId(idInfo);
+//            if (status == 0) {
+//                logger.info("delete userRole id error");
+//                return false;
+//            }
+//        }
+    	//用户ID为用户角色表的一个外键，删除用户，用户角色表中记录自动删除
         int statue = userDao.deleteByPrimaryKey(userId);
         if (statue == 0) {
             logger.info("delete userinfo error ");
@@ -200,6 +201,9 @@ public class UserServiceImpl implements UserService {
             return powerUrls;
         }
         rolePowers = rolePowerDao.selectRolePowerByRoleId(roleId.get(0));
+        if(rolePowers.isEmpty()){
+        	return powerUrls;
+        }
         // 获得权限ID
         for (RolePower rolePowerInfo : rolePowers) {
             powerId.add(rolePowerInfo.getPowerId());

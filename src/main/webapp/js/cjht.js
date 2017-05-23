@@ -1,8 +1,8 @@
 /**
  * Created by Administrator on 2016/12/18.
  */
-
 function creatInt() {
+	var issueType = $("input[name='issueType']:checked").val();
     var title = $("#chuangjian").val().replace(" ","");
     if(title===undefined || title ==''){
         alert("请输入任务名称");
@@ -13,6 +13,7 @@ function creatInt() {
         url : "/issue/create",
         data : {
             issueName : $("#chuangjian").val(),
+            issueType : issueType,
         },
         dataType : "json",
         beforeSend : function(){
@@ -21,7 +22,7 @@ function creatInt() {
         success : function(msg) {
             console.log(msg);
             if (msg.status == "OK") {
-                window.location.href = "topic_list.html";
+                window.location.href = "topic_list.html?issueType="+issueType;
             } else {
                 alert("fail");
             }

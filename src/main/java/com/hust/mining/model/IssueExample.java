@@ -10,11 +10,11 @@ public class IssueExample {
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
-
+	
     protected int start;
 
     protected int limit;
-
+	
     public IssueExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
@@ -246,6 +246,76 @@ public class IssueExample {
 
         public Criteria andIssueNameNotBetween(String value1, String value2) {
             addCriterion("issue_name not between", value1, value2, "issueName");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeIsNull() {
+            addCriterion("issue_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeIsNotNull() {
+            addCriterion("issue_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeEqualTo(String value) {
+            addCriterion("issue_type =", value, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeNotEqualTo(String value) {
+            addCriterion("issue_type <>", value, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeGreaterThan(String value) {
+            addCriterion("issue_type >", value, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("issue_type >=", value, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeLessThan(String value) {
+            addCriterion("issue_type <", value, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeLessThanOrEqualTo(String value) {
+            addCriterion("issue_type <=", value, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeLike(String value) {
+            addCriterion("issue_type like", value, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeNotLike(String value) {
+            addCriterion("issue_type not like", value, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeIn(List<String> values) {
+            addCriterion("issue_type in", values, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeNotIn(List<String> values) {
+            addCriterion("issue_type not in", values, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeBetween(String value1, String value2) {
+            addCriterion("issue_type between", value1, value2, "issueType");
+            return (Criteria) this;
+        }
+
+        public Criteria andIssueTypeNotBetween(String value1, String value2) {
+            addCriterion("issue_type not between", value1, value2, "issueType");
             return (Criteria) this;
         }
 
@@ -565,8 +635,8 @@ public class IssueExample {
         public String getTypeHandler() {
             return typeHandler;
         }
-
-        protected Criterion() {
+		
+		protected Criterion() {
             super();
             // TODO Auto-generated constructor stub
         }
@@ -607,7 +677,7 @@ public class IssueExample {
             this(condition, value, secondValue, null);
         }
     }
-
+	
     public int getStart() {
         return start;
     }

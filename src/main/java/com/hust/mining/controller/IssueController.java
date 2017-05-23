@@ -35,96 +35,100 @@ import net.sf.json.JSONObject;
 @Controller
 @RequestMapping("/issue")
 public class IssueController {
-    /**
-     * Logger for this class
-     */
-    private static final Logger logger = LoggerFactory.getLogger(IssueController.class);
+	/**
+	 * Logger for this class
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(IssueController.class);
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private IssueService issueService;
-    @Autowired
-    private RedisService redisService;
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private IssueService issueService;
+	@Autowired
+	private RedisService redisService;
 
-    @ResponseBody
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public Object createIssue(@RequestParam(value = "issueName", required = true) String issueName,
-            HttpServletRequest request) {
-        if (issueService.createIssue(issueName, request) == 0) {
-            logger.info("create issue fail");
-            return ResultUtil.errorWithMsg("创建任务失败");
-        }
-        return ResultUtil.success("创建任务成功");
-    }
+	@ResponseBody
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public Object createIssue(@RequestParam(value = "issueName", required = true) String issueName,
+			@RequestParam(value = "issueType", required = true) String issueType, HttpServletRequest request) {
+		if (issueService.createIssue(issueName, issueType, request) == 0) {
+			logger.info("create issue fail");
+			return ResultUtil.errorWithMsg("创建任务失败");
+		}
+		return ResultUtil.success("创建任务成功");
+	}
 
-    @ResponseBody
-    @RequestMapping("/delete")
-    public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId,
-            HttpServletRequest request) {
-        if (issueService.deleteIssueById(issueId, request) > 0) {
-            return ResultUtil.success("删除任务成功");
-        }
-        return ResultUtil.errorWithMsg("删除任务失败");
-    }
+	@ResponseBody
+	@RequestMapping("/delete")
+	public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId,
+			HttpServletRequest request) {
+		if (issueService.deleteIssueById(issueId, request) > 0) {
+			return ResultUtil.success("删除任务成功");
+		}
+		return ResultUtil.errorWithMsg("删除任务失败");
+	}
 
-    @ResponseBody
-    @RequestMapping("/queryOwnIssue")
-    public Object queryOwnIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
-        String user = userService.getCurrentUser(request);
-        con.setUser(user);
-        System.out.println(con.getIssueId());
-		  System.out.println(con.getIssueName());
-		  System.out.println(con.getPageNo());
-		  System.out.println(con.getPageSize());
-		  System.out.println(con.getUser());
-		  System.out.println("CreateEndTime"+con.getCreateEndTime());
-		  System.out.println("CreateStartTime"+con.getCreateStartTime());
-		  System.out.println("LastUpdateEndTime"+con.getLastUpdateEndTime());
-		  System.out.println("LastUpdateStartTime"+con.getLastUpdateStartTime());
-        List<Issue> list = issueService.queryIssue(con);
-        if(null == list || 0==list.size()){
-        	return ResultUtil.errorWithMsg("Issue not exist");
-        }
-        long count = list.size();
-        JSONObject result = new JSONObject();
-        long pageTotal = count % 10 == 0 ? (count / 10) : (count / 10 + 1);
-        result.put("pageTotal", pageTotal);
-        result.put("list", list);
-        return ResultUtil.success(result);
-    }
+	@ResponseBody
+	@RequestMapping("/queryOwnIssue")
+	public Object queryOwnIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
+		String user = userService.getCurrentUser(request);
+		con.setUser(user);
+		System.out.println(con.getIssueId());
+		System.out.println(con.getIssueName());
+		System.out.println(con.getIssueType());
+		if(null == con.getIssueType()){
+			return ResultUtil.successWithoutMsg();
+		}
+		System.out.println(con.getPageNo());
+		System.out.println(con.getPageSize());
+		System.out.println(con.getUser());
+		System.out.println("CreateEndTime" + con.getCreateEndTime());
+		System.out.println("CreateStartTime" + con.getCreateStartTime());
+		System.out.println("LastUpdateEndTime" + con.getLastUpdateEndTime());
+		System.out.println("LastUpdateStartTime" + con.getLastUpdateStartTime());
+		List<Issue> list = issueService.queryIssue(con);
+		if (null == list || 0 == list.size()) {
+			return ResultUtil.errorWithMsg("Issue not exist");
+		}
+		long count = list.size();
+		JSONObject result = new JSONObject();
+		long pageTotal = count % 10 == 0 ? (count / 10) : (count / 10 + 1);
+		result.put("pageTotal", pageTotal);
+		result.put("list", list);
+		return ResultUtil.success(result);
+	}
 
-    @ResponseBody
-    @RequestMapping("/queryAllIssue")
-    public Object queryAllIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
-        List<Issue> list = issueService.queryIssue(con);
-        if(null == list || 0==list.size()){
-        	return ResultUtil.errorWithMsg("Issue not exist");
-        }
-        long count = list.size();
-        JSONObject result = new JSONObject();
-        long pageTotal = count % 10 == 0 ? (count / 10) : (count / 10 + 1);
-        result.put("pageTotal", pageTotal);
-        result.put("list", list);
-        return ResultUtil.success(result);
-    }
+	@ResponseBody
+	@RequestMapping("/queryAllIssue")
+	public Object queryAllIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
+		List<Issue> list = issueService.queryIssue(con);
+		if (null == list || 0 == list.size()) {
+			return ResultUtil.errorWithMsg("Issue not exist");
+		}
+		long count = list.size();
+		JSONObject result = new JSONObject();
+		long pageTotal = count % 10 == 0 ? (count / 10) : (count / 10 + 1);
+		result.put("pageTotal", pageTotal);
+		result.put("list", list);
+		return ResultUtil.success(result);
+	}
 
-    @ResponseBody
-    @RequestMapping("/miningByTime")
-    public Object miningByTime(@RequestParam(value = "startTime", required = true) Date startTime,
-            @RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
-        String issueId = redisService.getString(KEY.ISSUE_ID, request);
-        if (StringUtils.isEmpty(issueId)) {
-            return ResultUtil.errorWithMsg("请重新选择任务");
-        }
-        List<String[]> count = issueService.miningByTime(startTime, endTime, request);
-        if (count == null) {
-            return ResultUtil.unknowError();
-        }
-        return ResultUtil.success(count);
-    }
+	@ResponseBody
+	@RequestMapping("/miningByTime")
+	public Object miningByTime(@RequestParam(value = "startTime", required = true) Date startTime,
+			@RequestParam(value = "endTime", required = true) Date endTime, HttpServletRequest request) {
+		String issueId = redisService.getString(KEY.ISSUE_ID, request);
+		if (StringUtils.isEmpty(issueId)) {
+			return ResultUtil.errorWithMsg("请重新选择任务");
+		}
+		List<String[]> count = issueService.miningByTime(startTime, endTime, request);
+		if (count == null) {
+			return ResultUtil.unknowError();
+		}
+		return ResultUtil.success(count);
+	}
 
-    @ResponseBody
+	 @ResponseBody
     @RequestMapping("/miningByFile")
     public Object miningByFileIds(@RequestParam(value = "fileIds", required = true) List<String> fileIds,  HttpServletRequest request) {
       
@@ -158,11 +162,13 @@ public class IssueController {
         return ResultUtil.successWithoutMsg();
     }
 
-    @InitBinder
-    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        CustomDateEditor editor = new CustomDateEditor(df, false);
-        binder.registerCustomEditor(Date.class, editor);
-    }
+
+	@InitBinder
+	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		CustomDateEditor editor = new CustomDateEditor(df, false);
+		binder.registerCustomEditor(Date.class, editor);
+	}
+
 
 }
