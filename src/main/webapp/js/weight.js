@@ -41,7 +41,56 @@ function weightInforShow(page){
         },
 	})	
 }
-weightInforShow(1)
+function initShowPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/weight/selectWeightCount",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,weightInforShow);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
+initShowPage(1)
+
+function initSearchPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    var obj1 = $("#stopword_search").val();
+    $.ajax({
+        type: "post",
+        url: "/weight/selectWeightCount",
+        data:{
+        	name:$("#name").val(),
+            weight:$("#weight").val()},
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,weightInforSearch);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
 function setCookie(value1,value2,value3){
 	// alert(name+value);
 	var cookie_name1="id";
