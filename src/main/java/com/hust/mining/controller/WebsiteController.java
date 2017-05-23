@@ -30,9 +30,59 @@ public class WebsiteController {
 			@RequestParam(value = "limit", required = true) int limit) {
 		List<Website> website = websiteService.selectAllWebsite(start, limit);
 		if (website.isEmpty()) {
-			return ResultUtil.errorWithMsg("website is empty");
+			return ResultUtil.errorWithMsg("暂无网站信息被录入！");
 		}
 		return ResultUtil.success(website);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectWebsiteCount")
+	public Object selectWebsiteCount(@RequestParam(value = "url", required = false) String url,
+			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "levle", required = false) String level,
+			@RequestParam(value = "type", required = false) String type){
+		long count = 0;
+		if(null == url && null == name && null == level && null == type){
+			//查询所有
+			count = websiteService.selectWebsiteCount();
+		}else{
+			//根据条件查询
+			WebsiteQueryCondition website = new WebsiteQueryCondition();
+			website.setUrl(url);
+			website.setName(name);
+			website.setLevel(level);
+			website.setType(type);
+			count = websiteService.selectWebsiteByCondition(website);
+		}
+		if(count<=0){
+		return ResultUtil.errorWithMsg("暂无网站信息被录入！");
+		}
+		return ResultUtil.success(count);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectUnknowWebsiteCount")
+	public Object selectUnknowWebsiteCount(@RequestParam(value = "url", required = false) String url,
+			@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "levle", required = false) String level,
+			@RequestParam(value = "type", required = false) String type){
+		long count = 0;
+		if(null == url && null == name && null == level && null == type){
+			//查询所有
+			count = websiteService.selectUnknowWebsiteCount();
+		}else{
+			//根据条件查询
+			WebsiteQueryCondition website = new WebsiteQueryCondition();
+			website.setUrl(url);
+			website.setName(name);
+			website.setLevel(level);
+			website.setType(type);
+			count = websiteService.selectWebsiteByCondition(website);
+		}
+		if(count<=0){
+		return ResultUtil.errorWithMsg("暂无网站信息被录入！");
+		}
+		return ResultUtil.success(count);
 	}
 	
 	@ResponseBody
@@ -41,7 +91,7 @@ public class WebsiteController {
             @RequestParam(value = "limit", required = true) int limit) {
         List<Website> website = websiteService.selectAllWebsiteUnknow(start, limit);
         if (website.isEmpty()) {
-            return ResultUtil.errorWithMsg("website is empty");
+            return ResultUtil.errorWithMsg("暂无未知网站信息");
         }
         return ResultUtil.success(website);
     }

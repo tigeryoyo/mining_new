@@ -8,11 +8,11 @@
 }
 .page .pageItem{
     border: solid thin #DDDDDD;
-    margin: 5px;
+    margin: 5px 2px;
 }
 .page .pageItemActive{
     border: solid thin #0099FF;
-    margin: 5px;
+    margin: 5px 2px;
     background-color: #0099FF;
     color:white;
 }
@@ -23,13 +23,13 @@
 }
 .page .pageItemDisable{
     border: solid thin #DDDDDD;
-    margin: 5px;
+    margin: 5px 2px;
     background-color: #DDDDDD;
 }
 
 .page .turnPage{
 	border: solid thin #DDDDDD;
-    margin: 5px;
+    margin: 5px 2px;
 }
 
 .page .turnPage:hover{
@@ -40,13 +40,13 @@
 
 .page .turnPageDisable{
 	border: solid thin #DDDDDD;
-    margin: 5px;
+    margin: 5px 2px;
     background-color: #DDDDDD;
 }
 
 .page .turnPageNum{
     width:28px;
     height:26px;
-    margin: 5px;
+    margin: 5px 2px;
     border-radius:5px;
 }

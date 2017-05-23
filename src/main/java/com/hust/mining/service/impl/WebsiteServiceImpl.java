@@ -116,4 +116,22 @@ public class WebsiteServiceImpl implements WebsiteService {
 		return list;
 	}
 
+	@Override
+	public long selectWebsiteCount() {
+		// TODO Auto-generated method stub
+		return websiteDao.selectWebsiteCount();
+	}
+
+	@Override
+	public long selectUnknowWebsiteCount() {
+		// TODO Auto-generated method stub
+		return websiteDao.selectUnknowWebsiteCount();
+	}
+
+	@Override
+	public long selectWebsiteByCondition(WebsiteQueryCondition website) {
+		// TODO Auto-generated method stub
+		return websiteDao.selectWebsiteCount(website);
+	}
+
 }
