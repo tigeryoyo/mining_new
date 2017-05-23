@@ -97,7 +97,7 @@ function fileSummary() {
     $(".summary_up input:checked").each(function(i) {
         fileIds.push($(this).attr("class"));
     });
-    console.log(fileIds);
+    console.log(fileIds+"id++++");
     $
             .ajax({
                 type : "post",
