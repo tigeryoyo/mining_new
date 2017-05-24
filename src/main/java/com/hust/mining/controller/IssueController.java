@@ -130,7 +130,7 @@ public class IssueController {
 
 	 @ResponseBody
     @RequestMapping("/miningByFile")
-    public Object miningByFileIds(@RequestParam(value = "fileIds", required = false) List<String> fileIds,  HttpServletRequest request) {
+    public Object miningByFileIds(@RequestBody List<String> fileIds,  HttpServletRequest request) {
       
 		 System.out.println("-------------");
 		 System.out.println("-------------"+fileIds.size());
