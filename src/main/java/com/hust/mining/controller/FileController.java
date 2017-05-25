@@ -143,18 +143,17 @@ public class FileController {
         }
         OutputStream outputStream = null;
         try {
-            Map<String, List<String[]>> map = resultService.exportService(issueId, resultId, request);
-            if (map == null) {
+            List<String[]> cluster = resultService.exportService(issueId, resultId, request);
+            if (cluster == null) {
                 response.sendError(404, "导出错误");
                 return;
             }
-            List<String[]> cluster = map.get("cluster");
-            List<String[]> count = map.get("count");
             outputStream = response.getOutputStream();
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
-            response.setHeader("Content-Disposition", "attachment;fileName=result.xls");
-            HSSFWorkbook workbook = ExcelUtil.exportToExcel(cluster, count);
+            String issue_name = new String(issueService.queryIssueById(issueId).getIssueName().getBytes(),"ISO8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename="+issue_name+".xls");
+            HSSFWorkbook workbook = ExcelUtil.exportToExcel(cluster);
             workbook.write(outputStream);
         } catch (Exception e) {
             logger.info("excel 导出失败\t" + e.toString());
@@ -313,6 +312,7 @@ public class FileController {
         return ResultUtil.success(list);
     }
 
+    //生成核心数据，TODO
     @RequestMapping("/exportAbstract")
     public void exportAbstract(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String issueId = issueService.getCurrentIssueId(request);
@@ -329,12 +329,8 @@ public class FileController {
         }
         OutputStream outputStream = null;
         try {
-            Map<String, List<String[]>> map = resultService.exportService(issueId, resultId, request);
-            if (map == null) {
-                response.sendError(404, "导出错误");
-                return;
-            }
-            List<String[]> count = map.get("count");
+        	//这里有错，因为我修改了exportService的返回类型。
+            List<String[]> count = resultService.exportService(issueId, resultId, request);
             outputStream = response.getOutputStream();
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");

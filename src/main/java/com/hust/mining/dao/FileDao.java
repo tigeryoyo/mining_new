@@ -48,7 +48,7 @@ public class FileDao {
     }
 
     public List<String[]> getFileContent(String...filenames) {
-        List<String[]> content = FileUtil.read(filenames);
+        List<String[]> content = FileUtil.readForUnificating(filenames);
         return content;
     }
 

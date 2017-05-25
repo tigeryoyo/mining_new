@@ -32,6 +32,7 @@ import com.hust.mining.service.IssueService;
 import com.hust.mining.service.MiningService;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.UserService;
+import com.hust.mining.util.AttrUtil;
 import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.FileUtil;
 
@@ -195,7 +196,7 @@ public class IssueServiceImpl implements IssueService {
         redisService.setObject(KEY.REDIS_COUNT_RESULT, rc.getOrigCount(), request);
         return list;
     }
-
+    
     //多文件去重并聚类
     @SuppressWarnings("unchecked")
     @Override
@@ -211,19 +212,24 @@ public class IssueServiceImpl implements IssueService {
         for (int i = 0; i < files.size(); i++) {
             filenames[i] = DIRECTORY.FILE + files.get(i).getFileId();
         }
-        List<String[]> content = fileDao.getFileContent(filenames);
-        if (null == content) {
+        List<String[]> contentWithAttr = fileDao.getFileContent(filenames);
+        
+        if (null == contentWithAttr) {
             return null;
         }
         // 开始去重
+        String[] attrs = contentWithAttr.get(0);
+        int indexOfUrl = AttrUtil.findIndexOfUrl(attrs);
         List<String> exitUrls = new ArrayList<String>();
         List<String[]> filteredContent = new ArrayList<String[]>();
-        for (String[] row : content) {
-            if (exitUrls.indexOf(row[Index.URL_INDEX]) == -1) {
+        for (int i=1; i<contentWithAttr.size(); i++) {
+        	String[] row = contentWithAttr.get(i);
+            if (exitUrls.indexOf(row[indexOfUrl]) == -1) {
                 filteredContent.add(row);
-                exitUrls.add(row[Index.URL_INDEX]);
+                exitUrls.add(row[indexOfUrl]);
             }
         }
+        filteredContent.add(0, attrs);
         
        List<User> users = userService.selectSingleUserInfo(user, request);
        User user2 = users.get(0);
@@ -236,7 +242,7 @@ public class IssueServiceImpl implements IssueService {
             return null;
         }
         // 开始插入数据库
-        content = (List<String[]>) res.get("content");
+        contentWithAttr = (List<String[]>) res.get("content");
         List<int[]> count = (List<int[]>) res.get("countResult");
         List<List<Integer>> cluster = (List<List<Integer>>) res.get("clusterResult");
         String comment = "";
@@ -255,7 +261,7 @@ public class IssueServiceImpl implements IssueService {
         result.setComment(comment);
         ResultWithContent rc = new ResultWithContent();
         rc.setResult(result);
-        rc.setContent(content);
+        rc.setContent(contentWithAttr);
         rc.setOrigCluster(ConvertUtil.toStringListB(cluster));
         rc.setOrigCount(ConvertUtil.toStringList(count));
         int update = resultDao.insert(rc);
@@ -276,16 +282,17 @@ public class IssueServiceImpl implements IssueService {
         // 开始根据统计结果映射源数据
         List<String[]> list = new ArrayList<String[]>();
         for (int[] array : count) {
-            String[] old = content.get(array[Index.COUNT_ITEM_INDEX]);
+            String[] old = contentWithAttr.get(array[Index.COUNT_ITEM_INDEX]);
             String[] row = new String[old.length + 1];
             System.arraycopy(old, 0, row, 1, old.length);
             row[0] = array[Index.COUNT_ITEM_AMOUNT] + "";
             list.add(row);
         }
         // 映射完成
-        redisService.setObject(KEY.REDIS_CONTENT, content, request);
+        redisService.setObject(KEY.REDIS_CONTENT, contentWithAttr, request);
         redisService.setObject(KEY.REDIS_CLUSTER_RESULT, rc.getOrigCluster(), request);
         redisService.setObject(KEY.REDIS_COUNT_RESULT, rc.getOrigCount(), request);
+        list.add(0, AttrUtil.findEssentialIndex(attrs));
         return list;
     }
 
@@ -294,6 +301,8 @@ public class IssueServiceImpl implements IssueService {
         if (content == null || content.size() == 0) {
             return null;
         }
+        //将属性存储起来，因为下面cluster会删除属性
+        String[] attrs = content.get(0);
         // 聚类
         List<List<Integer>> clusterResult = miningService.cluster(content, converterType, algorithmType,granularity);
         // 每个String[]都是某个类簇的数据ID的集合。
@@ -302,8 +311,10 @@ public class IssueServiceImpl implements IssueService {
         Map<String, Object> result = new HashMap<String, Object>();
         result.put("clusterResult", clusterResult);
         result.put("countResult", countResult);
+        content.add(0, attrs);
         result.put("content", content);
         return result;
     }
+
 
 }
