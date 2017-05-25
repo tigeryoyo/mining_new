@@ -34,6 +34,7 @@ import com.hust.mining.service.MiningService;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.service.UserService;
+import com.hust.mining.util.AttrUtil;
 import com.hust.mining.util.CommonUtil;
 import com.hust.mining.util.ConvertUtil;
 
@@ -81,16 +82,18 @@ public class ResultServiceImpl implements ResultService {
             redisService.setObject(KEY.REDIS_CONTENT, content, request);
             redisService.setObject(KEY.REDIS_COUNT_RESULT, modiCount, request);
             for (int[] item : count) {
-                String[] old = content.get(item[Index.COUNT_ITEM_INDEX]);
+                String[] old = content.get(item[Index.COUNT_ITEM_INDEX]+1);
                 String[] ne = new String[old.length + 1];
                 System.arraycopy(old, 0, ne, 1, old.length);
                 ne[0] = item[Index.COUNT_ITEM_AMOUNT] + "";
                 list.add(ne);
             }
+            list.add(0, AttrUtil.findEssentialIndex(content.get(0)));
         } catch (Exception e) {
             logger.error("get count result failed:{}", e.toString());
             return null;
         }
+        
         return list;
     }
 
@@ -264,13 +267,16 @@ public class ResultServiceImpl implements ResultService {
 
     @SuppressWarnings("unchecked")
     @Override
-    public Map<String, List<String[]>> exportService(String issueId, String resultId, HttpServletRequest request) {
+    public List<String[]> exportService(String issueId, String resultId, HttpServletRequest request) {
         // TODO Auto-generated method stub
         try {
             List<String[]> content = (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
             List<String[]> cluster = new ArrayList<String[]>();
             List<int[]> clusterIndex =
                     ConvertUtil.toIntList((List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request));
+            //保存第一行属性
+            String[] attrs = content.get(0);
+            content.remove(0);
             for (int[] set : clusterIndex) {
                 for (int index : set) {
                     String[] row = content.get(index);
@@ -278,20 +284,20 @@ public class ResultServiceImpl implements ResultService {
                 }
                 cluster.add(new String[1]);
             }
-            List<String[]> count = new ArrayList<String[]>();
-            List<int[]> countResult =
-                    ConvertUtil.toIntList((List<String[]>) redisService.getObject(KEY.REDIS_COUNT_RESULT, request));
-            for (int[] row : countResult) {
-                String[] oldRow = content.get(row[Index.COUNT_ITEM_INDEX]);
-                String[] nRow = new String[oldRow.length + 1];
-                System.arraycopy(oldRow, 0, nRow, 1, oldRow.length);
-                nRow[0] = row[Index.COUNT_ITEM_AMOUNT] + "";
-                count.add(nRow);
-            }
-            Map<String, List<String[]>> map = Maps.newHashMap();
-            map.put("cluster", cluster);
-            map.put("count", count);
-            return map;
+            //统计类的数量，目前不需要，注释先。
+//            List<String[]> count = new ArrayList<String[]>();
+//            List<int[]> countResult =
+//                    ConvertUtil.toIntList((List<String[]>) redisService.getObject(KEY.REDIS_COUNT_RESULT, request));
+//            for (int[] row : countResult) {
+//                String[] oldRow = content.get(row[Index.COUNT_ITEM_INDEX]);
+//                String[] nRow = new String[oldRow.length + 1];
+//                System.arraycopy(oldRow, 0, nRow, 1, oldRow.length);
+//                nRow[0] = row[Index.COUNT_ITEM_AMOUNT] + "";
+//                count.add(nRow);
+//            }
+//            Map<String, List<String[]>> map = Maps.newHashMap();
+            cluster.add(0, attrs);
+            return cluster;
         } catch (Exception e) {
             logger.error("exception occur when get export result:{}", e.toString());
             return null;
@@ -303,23 +309,7 @@ public class ResultServiceImpl implements ResultService {
         // TODO Auto-generated method stub
         if (null == count || count.size() == 0) {
             return null;
-        }
-/*        String[] firstData = count.get(0);
-        Website firstSite = websiteDao.queryByUrl(CommonUtil.getPrefixUrl(firstData[1]));
-        String line = "本次信息挖掘结果中，总共涉及 " + count.size() + " 个话题。";
-        line += "其中，\"" + firstData[2] + "\" 话题的数量最多，总计 " + firstData[0] + "条,最早发布于 " + firstData[3] + ",来自 "
-                + firstSite.getName() + " ,属于 " + firstSite.getType() + " 类型。\n";
-        line += "其余排名前五的话题信息分别是：\n";
-        for (int i = 1; i < count.size() && i < 5; i++) {
-            String[] data = count.get(i);
-            Website website = websiteDao.queryByUrl(CommonUtil.getPrefixUrl(data[1]));
-            line += "话题名称：" + data[2] + "\n";
-            line += "信息数量：" + data[0] + "\n";
-            line += "最早发布时间：" + data[3] + "\n";
-            line += "最早发布网站：" + website.getName() + "\n";
-            line += "信息类型为:" + website.getLevel() + "\n\n\n";
-        }
- */       
+        }    
         String[] firstData = count.get(0);
         Website firstSite = websiteDao.queryByUrl(CommonUtil.getPrefixUrl(firstData[1]));
         String line = "本次信息挖掘结果中，总共涉及 " + count.size() + " 个话题。\n\n";

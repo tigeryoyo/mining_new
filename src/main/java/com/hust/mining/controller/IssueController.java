@@ -155,15 +155,14 @@ public class IssueController {
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择任务");
         }
-        List<String> list = new ArrayList<String>();
-        list.add(fileId);
-        List<String[]> count = issueService.miningByFileIds(list, request);
+        List<String> fileIds = new ArrayList<String>();
+        fileIds.add(fileId);
+        List<String[]> count = issueService.miningByFileIds(fileIds, request);
         if (count == null) {
             return ResultUtil.unknowError();
         }
         return ResultUtil.successWithoutMsg();
     }
-
 
 	@InitBinder
 	protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws Exception {

@@ -37,6 +37,7 @@ import com.hust.mining.dao.WeightDao;
 import com.hust.mining.model.Website;
 import com.hust.mining.service.MiningService;
 import com.hust.mining.service.SegmentService;
+import com.hust.mining.util.AttrUtil;
 import com.hust.mining.util.CommonUtil;
 import com.hust.mining.util.ConvertUtil;
 
@@ -61,8 +62,11 @@ public class MiningServiceImpl implements MiningService {
         // TODO 进行聚类
     	//用于存放结果
     	List<List<Integer>> resultIndexSetList = new ArrayList<List<Integer>>();
-    	//对标题列进行分词。
-        List<String[]> segmentList = segmentService.getSegresult(list, Index.TITLE_INDEX, 0);
+    	//移除属性行
+    	String[] attrs = list.remove(0);
+    	int indexOfTitle = AttrUtil.findIndexOfTitle(attrs);
+    	int indexOfTime = AttrUtil.findIndexOfTime(attrs);
+        List<String[]> segmentList = segmentService.getSegresult(list,indexOfTitle, 0);
         Convertor convertor = null;
         //判断选择的向量模型的类型
         if (converterType == CONVERTERTYPE.DIGITAL) {
@@ -195,10 +199,10 @@ public class MiningServiceImpl implements MiningService {
                 public int compare(Integer o1, Integer o2) {
                     // TODO Auto-generated method stub
                 	//判断他们的标题是否相同
-                    int compare = list.get(o1)[Index.TITLE_INDEX].compareTo(list.get(o2)[Index.TITLE_INDEX]);
+                    int compare = list.get(o1)[indexOfTitle].compareTo(list.get(o2)[indexOfTitle]);
                     //若不相同，使用时间进行排序。
                     if (compare == 0) {
-                        compare = list.get(o1)[Index.TIME_INDEX].compareTo(list.get(o2)[Index.TIME_INDEX]);
+                        compare = list.get(o1)[indexOfTime].compareTo(list.get(o2)[indexOfTime]);
                     }
                     return compare;
                 }
