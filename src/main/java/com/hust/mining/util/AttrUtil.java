@@ -52,6 +52,16 @@ public class AttrUtil {
 		
 		return -1;
 	}
+
+	public static int findIndexOfTime(List<String> attrs){
+		for(int i=0; i<attrs.size(); i++){
+			if(Pattern.matches("发布时间|发贴时间|时间", attrs.get(i))){
+				return i;
+			}
+		}
+		
+		return -1;
+	}
 	
 	public static void main(String[] args) {
 		System.out.println(AttrUtil.findIndexOfTime(new String[]{
