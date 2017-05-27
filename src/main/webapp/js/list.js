@@ -8,10 +8,23 @@ $(document).ready(function(){
     var r = window.location.search.substr(1).match(reg);
     if(r!=null){
     	issueType=unescape(r[2]);
-   	 	$("input[name='issueType'][value="+issueType+"]").attr("checked",true);
+    	var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
+    	choosenLabel.parent().css("color","red");
+    	choosenLabel.parent().siblings('label').css("color","black");
+    	choosenLabel.attr("checked",true);
     }
     allData (1);
 });
+
+//给radio绑定点击变红事件
+$(document).ready(function() {
+	$(':radio').click(function() {
+		if (this.checked) {
+            $(this).parent().css("color","red");
+            $(this).parent().siblings('label').css("color","black");
+        }
+	});
+})
 
 //radio选中事件
 $(function(){
