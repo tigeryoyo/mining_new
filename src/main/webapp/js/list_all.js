@@ -13,6 +13,10 @@ $(function(){
 		//清空数据显示
 		$('.ht_cont tr:not(:first)').html("");
 		issueType=$(this).val()
+		var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
+    	choosenLabel.parent().css("color","red");
+    	choosenLabel.parent().siblings('label').css("color","black");
+    	choosenLabel.attr("checked",true);
 		//显示数据
 		allData(1);
 	});
