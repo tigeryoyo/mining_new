@@ -106,6 +106,14 @@ function historyData(rid) {
 			})
 }
 
+function buildStandardData(){
+	$.ajax({
+		type : "post",
+		url: "/issue/create"
+	});
+}
+
+
 /* 删除 */
 function historyDel() {
 	$(".summary_up table tr").unbind('click').on("click", "img", function() {
