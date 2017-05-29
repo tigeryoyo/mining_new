@@ -53,8 +53,6 @@ public class IssueDao {
             criteria.andIssueNameEqualTo(con.getIssueName());
         }
         if (!StringUtils.isBlank(con.getIssueType())) {
-        	System.out.println(con.getIssueType()+"*******************************");
-        	
         	criteria.andIssueTypeEqualTo(con.getIssueType());
         }
         if (null != con.getCreateStartTime()) {

@@ -57,15 +57,33 @@ public class IssueController {
 		}
 		return ResultUtil.success("创建任务成功");
 	}
-
+	
 	@ResponseBody
 	@RequestMapping("/delete")
-	public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId,
+	public Object deleteIssue(@RequestParam(value = "issueId", required = true) String issueId,@RequestParam(value = "issueType", required = true) String issueType,
 			HttpServletRequest request) {
-		if (issueService.deleteIssueById(issueId, request) > 0) {
+		if (issueService.deleteIssueById(issueId,issueType,request) > 0) {
 			return ResultUtil.success("删除任务成功");
 		}
 		return ResultUtil.errorWithMsg("删除任务失败");
+	}
+
+	@ResponseBody
+	@RequestMapping("/createIssueWithLink")
+	public Object createIssueWithLink(@RequestParam(value = "issueType", required = true) String issueType,HttpServletRequest request){
+		String linkedIssueId = redisService.getString(KEY.ISSUE_ID, request);
+		if (StringUtils.isEmpty(linkedIssueId)) {
+			return ResultUtil.errorWithMsg("请重新选择任务");
+		}
+		int exists = issueService.createIssueWithLink(linkedIssueId, issueType, request);
+		if (exists == 0) {
+			logger.error("create Issue with link fail.");
+			return ResultUtil.errorWithMsg("创建准数据失败.");
+		} else if(exists == -1){
+			logger.error("current Result Id is null.");
+			return ResultUtil.errorWithMsg("result为空，请点击“重置”。");
+		}
+		return ResultUtil.success("创建任务成功");
 	}
 
 	@ResponseBody
@@ -76,6 +94,7 @@ public class IssueController {
 		System.out.println(con.getIssueId());
 		System.out.println(con.getIssueName());
 		System.out.println(con.getIssueType());
+		System.out.println(con.getIssueHold()+"***************");
 		if(null == con.getIssueType()){
 			return ResultUtil.successWithoutMsg();
 		}

@@ -91,6 +91,8 @@ function GetJsonData(page) {
 		"issueId":"",
 		"issueName":"" ,
 		"issueType":issueType ,
+		"issueHold":"",
+		"issueBelongTo":"",
 		"createStartTime":start,
 		"createEndTime":end,
 		"user":"",
@@ -248,12 +250,11 @@ function updateNowPage(page){
 
 
 function setCookie(value1){
-	// alert(name+value);
-	var cookie_name1="id";
+	var cookie_issueId="issueId";
 	var Days = 1; // 此 cookie 将被保存 1 天
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
-	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
+	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
 	window.location.href = "topic_details.html";
 }
 
@@ -355,6 +356,7 @@ function deleteData(issueId){
 		url:"/issue/delete",
 		data:{
 			issueId:issueId,
+			issueType:issueType,
 		} ,
 		dataType:"json",
 		success:function(msg){

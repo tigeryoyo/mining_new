@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 public class Constant {
 
     private void init() {
-        DIRECTORY.init(dirFile, dirOrigCluster, dirOrigCount, dirModiCluster, dirModiCount, dirContent);
+        DIRECTORY.init(dirFile, dirOrigCluster, dirOrigCount, dirModiCluster, dirModiCount, dirContent, dirStdResCluster, dirStdResCount);
     }
 
     public final static String INVALID_TIME = "1970-01-01";
@@ -35,7 +35,13 @@ public class Constant {
     public final static String ORIG_COUNT_10ROW_EN = "origAndCount10row";
     public final static String TYPE_ORIG = "orig";
     public final static String TYPE_MODIFIED = "modified";
-
+    public final static String ISSUETYPE_EXTENSIVE = "extensive";
+    public final static String ISSUETYPE_STANDARD = "standard";
+    public final static String ISSUETYPE_CORE = "core";
+    public final static String ISSUE_EXTENSIVE = "泛数据";
+    public final static String ISSUE_STANDARD = "准数据";
+    public final static String ISSUE_CORE = "核心数据";
+    
     public static class KEY {
         public final static String SESSION_ID = "JSESSIONID";
         public final static String ISSUE_ID = "issueId";
@@ -127,7 +133,11 @@ public class Constant {
     private String dirModiCount;
     @Value("${content}")
     private String dirContent;
-
+    @Value("${standard_cluster}")
+    private String dirStdResCluster;
+    @Value("${standard_count}")
+    private String dirStdResCount;
+    
     public static class DIRECTORY {
 
         public static String FILE;
@@ -136,15 +146,19 @@ public class Constant {
         public static String MODIFY_CLUSTER;
         public static String MODIFY_COUNT;
         public static String CONTENT;
-
+        public static String STDRES_CLUSTER;
+        public static String STDRES_COUNT;
+        
         public static void init(String dirFile, String dirOrigCluster, String dirOrigCount, String dirModiCluster,
-                String dirModiCount, String dirContent) {
+                String dirModiCount, String dirContent, String dirStdResCluster, String dirStdResCount) {
             FILE = dirFile;
             ORIG_CLUSTER = dirOrigCluster;
             ORIG_COUNT = dirOrigCount;
             MODIFY_CLUSTER = dirModiCluster;
             MODIFY_COUNT = dirModiCount;
             CONTENT = dirContent;
+            STDRES_CLUSTER = dirStdResCluster;
+            STDRES_COUNT = dirStdResCount;
         }
     }
 

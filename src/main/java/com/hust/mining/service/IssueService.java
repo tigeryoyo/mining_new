@@ -11,8 +11,10 @@ import com.hust.mining.model.params.IssueQueryCondition;
 public interface IssueService {
 
     int createIssue(String issueName, String issueType, HttpServletRequest request);
+   
+    int createIssueWithLink(String linkedIssueId, String issueType, HttpServletRequest request);
 
-    int deleteIssueById(String issueId,HttpServletRequest request);
+    int deleteIssueById(String issueId,String issueType,HttpServletRequest request);
 
     String getCurrentIssueId(HttpServletRequest request);
 

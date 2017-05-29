@@ -330,6 +330,7 @@ function deleteData(issueId){
 		url:"/issue/delete",
 		data:{
 			issueId:issueId,
+			issueType:issueType,
 		} ,
 		dataType:"json",
 		success:function(msg){

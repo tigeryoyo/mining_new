@@ -242,6 +242,7 @@ public class FileController {
         redisService.setString(KEY.ISSUE_ID, issueId, request);
         JSONObject json = new JSONObject();
         json.put("issue", issues.get(0));
+        json.put("issueType", issues.get(0).getIssueType());
         json.put("list", list);
         return ResultUtil.success(json);
     }

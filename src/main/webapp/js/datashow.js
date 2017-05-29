@@ -1,8 +1,7 @@
 // JavaScript Document
 //3.1任务详情展示
 function dataShow(){
-	var newId=getCookie("id");
-	console.log(newId);
+	var newId=getCookie("issueId");
     $.ajax({
         type:"post",
         url:"/file/queryIssueFiles",
@@ -14,9 +13,18 @@ function dataShow(){
 		    begin();
 		},
         success:function(msg){
-            console.log(msg);
             if(msg.status=="OK"){
 				var items = msg.result.issue;
+				var issueType = msg.result.issueType;
+				if(issueType=="extensive"){
+					$("span#issueType").text("(泛数据)");
+				}else if(issueType=="standard"){
+					$("span#issueType").text("(准数据)");
+				}else if(issueType=="core"){
+					$("span#issueType").text("(核心数据)");
+				}else{
+					$("span#issueType").text("error");
+				}
 				$(function() {
 					name = '<span>'+items.issueName+'</span>',
 					admin = '<span>'+items.creator+'</span>',
@@ -95,20 +103,7 @@ function localRefresh(){
     });
 }
 
-
-function setCookie(value1){
-	// alert(name+value);
-	var cookie_name1="id";
-	var Days = 1; // 此 cookie 将被保存 1 天
-	var exp　= new Date();
-	exp.setTime(exp.getTime() +Days*24*60*60*1000);
-	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	// window.location.href = "summary.html";
-}
-
 function getCookie(name) {
-	
-	console.log(document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
 		return unescape(arr[2]); 
