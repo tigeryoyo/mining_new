@@ -7,7 +7,7 @@ $(document).ready(function(){
     var reg = new RegExp("(^|&)issueType=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
     if(r!=null){
-    	issueType=unescape(r[2]);
+    	issueType=analysisUrl("issueType");
     	var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
     	choosenLabel.parent().css("color","red");
     	choosenLabel.parent().siblings('label').css("color","black");
@@ -15,6 +15,12 @@ $(document).ready(function(){
     }
     allData (1);
 });
+
+function analysisUrl(parm){
+	 var reg = new RegExp("(^|&)"+parm+"=([^&]*)(&|$)");
+	 var r = window.location.search.substr(1).match(reg);
+	 return unescape(r[2]);
+}
 
 //给radio绑定点击变红事件
 $(document).ready(function() {
@@ -51,14 +57,13 @@ function allData (page){
             if(msg.status=="OK"){
                 // alert("success") ;
 				var items = msg.result.list ;
-				var cookie_value1;
 				$('.ht_cont tr:not(:first)').html("");
 				var count=0;
 				$.each(items,function(idx,item) {
 						count++;
-						cookie_value1="'"+item.issueId+"'";
+						var item_issueId="'"+item.issueId+"'";
 						row= '<tr><td height="40" align="center">'+((page-1)*10+count)+
-						'</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+cookie_value1+')">'+item.issueName+
+						'</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+item_issueId+')">'+item.issueName+
 						'</a></td><td height="40" align="center">'+item.creator+
 						'</td><td height="40" align="center">'+ new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+
 						'</td><td height="40" align="center">'+item.lastOperator+
@@ -247,15 +252,13 @@ function updateNowPage(page){
 	$("#down_page").attr('name',page);
 }
 
-
-
 function setCookie(value1){
 	var cookie_issueId="issueId";
 	var Days = 1; // 此 cookie 将被保存 1 天
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	window.location.href = "topic_details.html";
+	window.location.href = "topic_details.html?issueType="+issueType;
 }
 
 function getCookie(name) {
@@ -285,12 +288,11 @@ function searchData(page){
             if(msg.status=="OK"){
                 // alert("success") ;
                 var items = msg.result.list ;
-                var cookie_value1;
                 $('.ht_cont tr:not(:first)').html("");
                 $.each(items,function(idx,item) {
-                    cookie_value1="'"+item.issueId+"'";
+                    var item_issueId="'"+item.issueId+"'";
                     row= '<tr><td height="40" align="center">'+((page-1)*10+idx+1)+
-                    '</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+cookie_value1+')">'+item.issueName+
+                    '</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+item_issueId+')">'+item.issueName+
                     '</a></td><td height="40" align="center">'+item.creator+
                     '</td><td height="40" align="center">'+ new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+
                     '</td><td height="40" align="center">'+item.lastOperator+

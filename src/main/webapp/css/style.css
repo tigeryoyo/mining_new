@@ -50,17 +50,17 @@ a:hover { color:#000000; }
 .left ul li.current a{ background:#86c6ea; color:#ffffff; }
 
 
-.right{ width:750px; min-height:720px; background: #f7f7f7; padding:0 20px; }
+.right{ width:750px; min-height:760px; background: #f7f7f7; padding:0 20px; }
 .s_nav{ line-height:50px; font-size: 16px; border-bottom:1px solid #999;}
 
 /* 查看任务*/
-.ckht{ width:750px; margin-top:30px; position: relative;} 
-.sur_result{position: absolute; right:50px; top:120px;}
-.his_result{position: absolute; right:160px; top:120px;}
-.ckht_list{ width:700px; margin-left:50px;  }
+.ckht{ width:750px; margin-top:5px; position: relative;} 
+.sur_result{position: absolute; right:20px; top:10px;}
+.his_result{position: absolute; right:125px; top:10px;}
+.ckht_list{ width:700px; margin-left:0px;  margin-top:0px;}
 .ckht_list li{ line-height: 30px; font-size: 16px; }
-.up_list_wrap{width:700px; height:290px; overflow-y:scroll}
-.files_list table{ margin:20px auto;}
+.up_list_wrap{width:750px; height:350px; overflow-y:scroll}
+.files_list table{ margin:5px auto;}
 .files_list table td{ border:1px solid #999999; font-size:14px; background:#ffffff;}
 .files_list table .d_blue{ background:#86c6ea;}
 .btn_sc{ display:inline-block;margin-right:10px; margin-top:10px;}
