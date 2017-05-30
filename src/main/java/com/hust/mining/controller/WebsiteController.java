@@ -1,8 +1,15 @@
 package com.hust.mining.controller;
 
-import java.util.ArrayList;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +27,7 @@ import com.hust.mining.util.ResultUtil;
 @Controller
 @RequestMapping("/website")
 public class WebsiteController {
+    private static final Logger logger = LoggerFactory.getLogger(WebsiteController.class);
 
 	@Autowired
 	private WebsiteService websiteService;
@@ -96,6 +104,60 @@ public class WebsiteController {
         return ResultUtil.success(website);
     }
 	
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/downloadKnownUrl")
+    public void downloadKnownUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        OutputStream outputStream = null;
+        try {
+            List<String[]> list = websiteService.exportKnownUrlService();
+            if (list == null) {
+                response.sendError(404, "导出错误");
+                return;
+            }
+            outputStream = response.getOutputStream();
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition", "attachment;fileName=KnownUrl.xls");
+            HSSFWorkbook workbook = ExcelUtil.exportToExcel(list);
+            workbook.write(outputStream);
+        } catch (Exception e) {
+            logger.info("excel 导出失败\t" + e.toString());
+        } finally {
+            try {
+                outputStream.close();
+            } catch (Exception e) {
+                logger.info("导出excel时，关闭outputstream失败");
+            }
+        }
+    }
+    
+    @SuppressWarnings("unchecked")
+    @RequestMapping("/downloadUnKnownUrl")
+    public void downloadUnKnownUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	 OutputStream outputStream = null;
+         try {
+             List<String[]> list = websiteService.exportUnKnownUrlService();
+             if (list == null) {
+                 response.sendError(404, "导出错误");
+                 return;
+             }
+             outputStream = response.getOutputStream();
+             response.setCharacterEncoding("utf-8");
+             response.setContentType("multipart/form-data");
+             response.setHeader("Content-Disposition", "attachment;fileName=UnKnownUrl.xls");
+             HSSFWorkbook workbook = ExcelUtil.exportToExcel(list);
+             workbook.write(outputStream);
+         } catch (Exception e) {
+             logger.info("excel 导出失败\t" + e.toString());
+         } finally {
+             try {
+                 outputStream.close();
+             } catch (Exception e) {
+                 logger.info("导出excel时，关闭outputstream失败");
+             }
+         }
+    }
+
     @ResponseBody
 	@RequestMapping("/importMapUrl")
 	public Object importMapUrl(@RequestParam(value = "file", required = true) MultipartFile file){

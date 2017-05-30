@@ -63,7 +63,6 @@ function historyData(rid) {
 					if (msg.status == "OK") {
 						// alert("删除成功");
 						var items = msg.result;
-						console.log(items);
 
 						var indexOfTitle = parseInt(items[0][0]) + 1;
 						var indexOfUrl = parseInt(items[0][1]) + 1;
@@ -71,7 +70,6 @@ function historyData(rid) {
 						for (var i = 0; i < items.length - 1; i++) {
 							// items第一行存储index，故从i+1读起
 							item = items[i + 1];
-							console.log(item);
 							rows = '<tr><td height="32" align="center"><input type="checkbox" class="'
 									+ i
 									+ '"/></td><td height="32" align="center"><a href="'

@@ -6,7 +6,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,13 +29,11 @@ import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.params.Condition;
-import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.service.UserService;
-import com.hust.mining.service.WebsiteService;
 import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.ResultUtil;
 
@@ -58,8 +55,6 @@ public class FileController {
     private ResultService resultService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private WebsiteService websiteService;
     @Autowired
     private RedisService redisService;
 
@@ -91,41 +86,6 @@ public class FileController {
         return ResultUtil.success("上传成功");
     }
 
-    // @SuppressWarnings("unchecked")
-    // @RequestMapping("/download")
-    // public void download(HttpServletRequest request, HttpServletResponse
-    // response) throws IOException {
-    // Object uuidObj = request.getSession().getAttribute(KEY.ISSUE_ID);
-    // String uuid = uuidObj == null ? StringUtils.EMPTY : uuidObj.toString();
-    // if (StringUtils.isBlank(uuid)) {
-    // response.sendError(404, "未找到当前处理事件，请先创建或者选择某一事件");
-    // logger.info("从session中无法获得文件uuid");
-    // return;
-    // }
-    // OutputStream outputStream = null;
-    // try {
-    // Issue issue = issueService.queryIssueWithBLOBsById(uuid);
-    // List<String[]> relist = (List<String[]>)
-    // ConvertUtil.convertBytesToObject(issue.getClusterResult());
-    // List<String[]> origlist = (List<String[]>)
-    // ConvertUtil.convertBytesToObject(issue.getOrigCountResult());
-    // outputStream = response.getOutputStream();
-    // response.setCharacterEncoding("utf-8");
-    // response.setContentType("multipart/form-data");
-    // response.setHeader("Content-Disposition",
-    // "attachment;fileName=result.xls");
-    // HSSFWorkbook workbook = ExcelUtil.exportToExcel(relist, origlist);
-    // workbook.write(outputStream);
-    // } catch (Exception e) {
-    // logger.info("excel 导出失败\t" + e.toString());
-    // } finally {
-    // try {
-    // outputStream.close();
-    // } catch (IOException e) {
-    // logger.info("导出excel时，关闭outputstream失败");
-    // }
-    // }
-    // }
     @SuppressWarnings("unchecked")
     @RequestMapping("/download")
     public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -165,84 +125,26 @@ public class FileController {
             }
         }
     }
-    
-    @SuppressWarnings("unchecked")
-    @RequestMapping("/downloadKnownUrl")
-    public void downloadKnownUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        OutputStream outputStream = null;
-        try {
-            List<String[]> list = websiteService.exportKnownUrlService();
-            if (list == null) {
-                response.sendError(404, "导出错误");
-                return;
-            }
-            outputStream = response.getOutputStream();
-            response.setCharacterEncoding("utf-8");
-            response.setContentType("multipart/form-data");
-            response.setHeader("Content-Disposition", "attachment;fileName=KnownUrl.xls");
-            HSSFWorkbook workbook = ExcelUtil.exportToExcel(list);
-            workbook.write(outputStream);
-        } catch (Exception e) {
-            logger.info("excel 导出失败\t" + e.toString());
-        } finally {
-            try {
-                outputStream.close();
-            } catch (Exception e) {
-                logger.info("导出excel时，关闭outputstream失败");
-            }
-        }
-    }
-    
-    @SuppressWarnings("unchecked")
-    @RequestMapping("/downloadUnKnownUrl")
-    public void downloadUnKnownUrl(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    	 OutputStream outputStream = null;
-         try {
-             List<String[]> list = websiteService.exportUnKnownUrlService();
-             if (list == null) {
-                 response.sendError(404, "导出错误");
-                 return;
-             }
-             outputStream = response.getOutputStream();
-             response.setCharacterEncoding("utf-8");
-             response.setContentType("multipart/form-data");
-             response.setHeader("Content-Disposition", "attachment;fileName=UnKnownUrl.xls");
-             HSSFWorkbook workbook = ExcelUtil.exportToExcel(list);
-             workbook.write(outputStream);
-         } catch (Exception e) {
-             logger.info("excel 导出失败\t" + e.toString());
-         } finally {
-             try {
-                 outputStream.close();
-             } catch (Exception e) {
-                 logger.info("导出excel时，关闭outputstream失败");
-             }
-         }
-    }
-
-
+  
     @ResponseBody
     @RequestMapping(value = "/queryIssueFiles")
     public Object queryIssueFiles(@RequestParam(value = "issueId", required = false) String issueId,
             HttpServletRequest request) {
         String user = userService.getCurrentUser(request);
-        IssueQueryCondition con = new IssueQueryCondition();
         if (StringUtils.isBlank(issueId)) {
             issueId = redisService.getString(KEY.ISSUE_ID, request);
         }
         if (StringUtils.isBlank(issueId)) {
             return ResultUtil.errorWithMsg("查询任务文件失败");
         }
-        con.setIssueId(issueId);
-        List<Issue> issues = issueService.queryIssue(con);
-        if (issues.isEmpty()) {
+        Issue issue = issueService.queryIssueById(issueId);
+        if (issue == null) {
             return ResultUtil.errorWithMsg("查询任务文件失败");
         }
         List<IssueFile> list = fileService.queryFilesByIssueId(issueId);
         redisService.setString(KEY.ISSUE_ID, issueId, request);
         JSONObject json = new JSONObject();
-        json.put("issue", issues.get(0));
-        json.put("issueType", issues.get(0).getIssueType());
+        json.put("issue", issue);
         json.put("list", list);
         return ResultUtil.success(json);
     }
