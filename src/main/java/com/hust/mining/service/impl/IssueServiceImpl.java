@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -123,12 +124,12 @@ public class IssueServiceImpl implements IssueService {
 		standardResultQueryCondition.setIssueId(issue.getIssueId());
 		standardResultQueryCondition.setStdResName(issueName);
 		String currentResultId = resultService.getCurrentResultId(request);
-		if(StringUtils.isBlank(currentResultId)){
+		if (StringUtils.isBlank(currentResultId)) {
 			return -1;
 		}
 		standardResultQueryCondition.setResId(currentResultId);
 		insert = standardResultService.insert(standardResultQueryCondition, request);
-		if(insert > 0){
+		if (insert > 0) {
 			redisService.setString(KEY.ISSUE_ID, issue.getIssueId(), request);
 		}
 		return insert;
@@ -168,56 +169,99 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public int deleteIssueById(String issueId,String issueType,HttpServletRequest request) {
-		// TODO Auto-generated method stub
+	public int deleteIssueById(String issueId, String issueType, HttpServletRequest request) {
 		String user = userService.getCurrentUser(request);
-		List<Result> results = resultDao.queryResultsByIssueId(issueId);
+
+		Issue issue = queryIssueById(issueId);
+		if (issueType.equals(Constant.ISSUETYPE_EXTENSIVE)) {
+			deleteExtensiveIssue(issueId, issue.getIssueHold());
+		} else if (issueType.equals(Constant.ISSUETYPE_STANDARD)) {
+			deleteStandardIssue(issueId, issue.getIssueBelongTo());
+		} else {
+
+		}
+
+		return issueDao.deleteIssueById(issueId, user);
+	}
+
+	private void deleteExtensiveIssue(String issueId, String holdIssueId) {
+		List<Result> resList = resultService.queryResultsByIssueId(issueId);
+
+		// 若该泛数据不存在对应的准数据则返回false
+		boolean holdExists = !StringUtils.isBlank(holdIssueId);
+
 		List<String> delList = new ArrayList<String>();
-		for (Result result : results) {
-			//保留content,为准数据所用
-			delList.add(result.getRid());
+		for (Result result : resList) {
+			if (holdExists) {
+				// 保留content,若该泛数据对应的准数据还需要的话则不删除
+				delList.add(result.getRid());
+			} else {
+				FileUtil.delete(DIRECTORY.CONTENT + result.getRid());
+			}
 			FileUtil.delete(DIRECTORY.MODIFY_CLUSTER + result.getRid());
 			FileUtil.delete(DIRECTORY.MODIFY_COUNT + result.getRid());
 			FileUtil.delete(DIRECTORY.ORIG_CLUSTER + result.getRid());
 			FileUtil.delete(DIRECTORY.ORIG_COUNT + result.getRid());
 		}
+		// 删除上传文件 upload
 		List<IssueFile> files = fileDao.queryFilesByIssueId(issueId);
 		for (IssueFile file : files) {
 			FileUtil.delete(DIRECTORY.FILE + file.getFileId());
 		}
-		
-		if(issueType.equals(Constant.ISSUETYPE_EXTENSIVE)){
-			String holdIssueId = this.queryIssueById(issueId).getIssueHold();
-			if(!StringUtils.isBlank(holdIssueId)){
-				List<StandardResult> remainList = standardResultService.queryStdRessByIssueId(holdIssueId);
-				Set<String> set = new HashSet<String>();
-				for(StandardResult remain : remainList){
-					set.add(remain.getContentName());
-				}
-				//删除content目录中不为准数据所用的文件。
-				for(String del : delList){
-					if(!set.contains(del)){
-						FileUtil.delete(DIRECTORY.CONTENT + del);
-					}
+
+		if (holdExists) {
+			List<StandardResult> stdResList = standardResultService.queryStdRessByIssueId(holdIssueId);
+			Set<String> remainSet = new HashSet<String>();
+			for (StandardResult result : stdResList) {
+				remainSet.add(result.getContentName());
+			}
+
+			for (String del : delList) {
+				if (!remainSet.contains(del)) {
+					FileUtil.delete(DIRECTORY.CONTENT + del);
 				}
 			}
-		} else if(issueType.equals(Constant.ISSUETYPE_STANDARD)){
-			List<StandardResult> list = standardResultService.queryStdRessByIssueId(issueId);
-			for(StandardResult standardResult : list){
-				FileUtil.delete(DIRECTORY.STDRES_CLUSTER+standardResult.getStdRid());
-				FileUtil.delete(DIRECTORY.STDRES_COUNT+standardResult.getStdRid());
-				FileUtil.delete(DIRECTORY.CONTENT+standardResult.getContentName());
+
+			// 更新与之相连的准数据的issue_belong_to值
+			Issue holdIssue = queryIssueById(holdIssueId);
+			holdIssue.setIssueBelongTo(StringUtils.EMPTY);
+			issueDao.updateIssueInfo(holdIssue);
+		}
+	}
+
+	private void deleteStandardIssue(String issueId, String belongToIssueId) {
+		List<StandardResult> stdResList = standardResultService.queryStdRessByIssueId(issueId);
+
+		boolean belongToExists = !StringUtils.isBlank(belongToIssueId);
+		List<String> delList = new ArrayList<String>();
+		for (StandardResult standardResult : stdResList) {
+			if (belongToExists) {
+				delList.add(standardResult.getContentName());
+			} else {
+				FileUtil.delete(DIRECTORY.CONTENT + standardResult.getContentName());
 			}
+			FileUtil.delete(DIRECTORY.STDRES_CLUSTER + standardResult.getStdRid());
+			FileUtil.delete(DIRECTORY.STDRES_COUNT + standardResult.getStdRid());
 		}
-		// 获取issue_belong_to,将linedIssue的Hold赋值为null
-		Issue issue = this.queryIssueById(issueId);
-		Issue linkedIssue = this.queryIssueById(issue.getIssueBelongTo());
-		if (null != linkedIssue && !StringUtils.isBlank(linkedIssue.getIssueHold())) {
-			// 修改mapper.xml文件里的此参数里的<if ...!= null>
-			linkedIssue.setIssueHold(StringUtils.EMPTY);
-			issueDao.updateIssueInfo(linkedIssue);
+
+		if (belongToExists) {
+			List<Result> resList = resultService.queryResultsByIssueId(belongToIssueId);
+			Set<String> remainSet = new HashSet<String>();
+			for (Result result : resList) {
+				remainSet.add(result.getRid());
+			}
+
+			for (String del : delList) {
+				if (!remainSet.contains(del)) {
+					FileUtil.delete(DIRECTORY.CONTENT + del);
+				}
+			}
+
+			// 更新与之相连的准数据的issue_hold值
+			Issue belongToIssue = queryIssueById(belongToIssueId);
+			belongToIssue.setIssueHold(StringUtils.EMPTY);
+			issueDao.updateIssueInfo(belongToIssue);
 		}
-		return issueDao.deleteIssueById(issueId, user);
 	}
 
 	// 把某个时间段的文件聚类
