@@ -131,7 +131,7 @@ a:hover { color:#000000; }
 .summary_time li.file_summary{margin-top:3px; cursor: pointer;}
 .summary_wrap{ width:750px;/* display:none;*/ }
 .summary_show{ display:block; }
-.summary_up{ width:750px; margin-top:20px; height:200px; border:1px solid #0e63ab; overflow-y:scroll; }
+.summary_up{ width:750px; margin-top:5px; height:200px; border:1px solid #0e63ab; overflow-y:scroll; }
 .summary_up table td{ border-right:1px solid #999999; border-bottom:1px solid #999999;}
 .summary_cont{ width:748px; height:525px;  margin-top:20px; /* border:1px solid #0e63ab;*/ /*display:none; */}
 .summary_tab{width:750px; height:415px;;overflow-y:scroll; border:1px solid #0e63ab;  }

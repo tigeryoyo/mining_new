@@ -70,7 +70,7 @@ function historyData(rid) {
 						for (var i = 0; i < items.length - 1; i++) {
 							// items第一行存储index，故从i+1读起
 							item = items[i + 1];
-							rows = '<tr><td height="32" align="center"><input type="checkbox" class="'
+							rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="'
 									+ i
 									+ '"/></td><td height="32" align="center"><a href="'
 									+ item[indexOfUrl]
