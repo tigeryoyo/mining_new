@@ -86,4 +86,9 @@ public class FileDao {
         example.setOrderByClause("upload_time desc");
         return issueFileMapper.selectByExample(example);
     }
+    
+    public List<String[]> getContentById(String path, String name) {
+		// TODO Auto-generated method stub
+		return FileUtil.read(path+name);
+	}
 }

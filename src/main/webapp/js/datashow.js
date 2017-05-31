@@ -48,11 +48,16 @@ function showExtensiveIssueDetails(issueId) {
 				var tabs = msg.result.list;
 				$('.up_list tr:not(:first)').html("");
 				$.each(tabs, function(i, item) {
-					cookie_value1 = "'" + item.fileId + "'";
 					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.fileName + '</td><td align="center" valign="middle">'
 						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')
-						+ '</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="clusterSingleFile(' + cookie_value1
-						+ ')" /><img src="images/xiazai.png" class="btn_sc" onclick=alert("待续") /><img class="btn_jl" src="images/delete.png" id="' + item.fileId + '" onclick="bind()" /></td></tr>'
+						+ '</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick=clusterSingleFile("' 
+						+ item.fileId
+						+ '") />'
+						+'<img src="images/xiazai.png" class="btn_sc" onclick=downloadExtFile("'
+						+ item.fileId
+						+ '","'
+						+ item.fileName
+						+'") /><img class="btn_jl" src="images/delete.png" id="' + item.fileId + '" onclick="bind()" /></td></tr>'
 					$('.up_list').append(row);
 				});
 			} else {
@@ -120,6 +125,15 @@ function showStandardIssueDetails(issueId) {
 			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
 		}
 	});
+}
+
+
+function downloadExtFile(fileId,fileName){
+	var form = $('<form method="POST" action="/file/downloadExtFile">');
+	form.append($('<input type="hidden" name="fileId" value="'+fileId+'"/>'));
+	form.append($('<input type="hidden" name="fileName" value="'+fileName+'"/>'));
+	$('body').append(form);
+	form.submit(); // 自动提交
 }
 
 function downloadStdRes(stdResId) {
