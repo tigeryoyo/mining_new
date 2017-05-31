@@ -55,10 +55,19 @@ public class StandardResultDao {
 		return standardResultMapper.deleteByPrimaryKey(stdResId);
 	}
 	
+
+	public StandardResult queryStdResById(String stdResId) {
+		return standardResultMapper.selectByPrimaryKey(stdResId);
+	}
+	
 	public List<StandardResult> queryStdRessByIssueId(String issueId) {
 		StandardResultExample example = new StandardResultExample();
 		example.createCriteria().andIssueIdEqualTo(issueId);
 		example.setOrderByClause("create_time desc");
         return standardResultMapper.selectByExample(example);
+	}
+	
+	public List<String[]> getContentById(String path, String name){
+		return FileUtil.read(path+name);
 	}
 }

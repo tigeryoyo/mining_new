@@ -13,7 +13,13 @@ public interface StandardResultService {
 
     int deleteById(String stdResId);
 
+    StandardResult queryStdResById(String stdResId);
+    
     List<StandardResult> queryStdRessByIssueId(String issueId);
 
     List<StandardResult> searchstdRessByTime(String issueId, Date start, Date end);
+
+    List<String[]> getStdResCountById(String stdResId);
+    
+	List<String[]> getStdResContentById(String stdResId);
 }
