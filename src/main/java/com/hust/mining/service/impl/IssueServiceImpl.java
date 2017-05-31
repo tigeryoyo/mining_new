@@ -98,7 +98,7 @@ public class IssueServiceImpl implements IssueService {
 		}
 
 		Issue linkedIssue = this.queryIssueById(linkedIssueId);
-		String issueName = linkedIssue.getIssueName().replace(target, replacement);
+		String issueName = replacement+"_"+linkedIssue.getIssueName().replace(target, replacement);
 		Issue issue = null;
 		int insert = 0;
 		if (StringUtils.isBlank(linkedIssue.getIssueHold())) {
