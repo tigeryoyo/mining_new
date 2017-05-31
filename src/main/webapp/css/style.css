@@ -112,7 +112,7 @@ a:hover { color:#000000; }
 .yema a.cur{background:#0e63ab; color:#fff; }
 
 /*数据汇总*/
-.data_summary{ width:750px; overflow:hidden; padding:10px 0; }
+.data_summary{ width:750px; overflow:hidden; padding:0px 0; }
 .summary_l{ width:500px; height: 40px; }
 .summary_l ul{ width:300px; margin-left:200px; }
 .summary_l li{ float: left; width:130px; line-height: 40px; font-size: 18px; background:url(../images/huizong.png) no-repeat center left; padding-left: 20px; cursor: pointer;}
@@ -131,9 +131,9 @@ a:hover { color:#000000; }
 .summary_time li.file_summary{margin-top:3px; cursor: pointer;}
 .summary_wrap{ width:750px;/* display:none;*/ }
 .summary_show{ display:block; }
-.summary_up{ width:750px; margin-top:20px; height:200px; border:1px solid #0e63ab; overflow-y:scroll; }
+.summary_up{ width:750px; margin-top:5px; height:200px; border:1px solid #0e63ab; overflow-y:scroll; }
 .summary_up table td{ border-right:1px solid #999999; border-bottom:1px solid #999999;}
-.summary_cont{ width:748px; height:525px;  margin-top:20px; /* border:1px solid #0e63ab;*/ /*display:none; */}
+.summary_cont{ width:748px; margin-top:20px; /* border:1px solid #0e63ab;*/ /*display:none; */}
 .summary_tab{width:750px; height:415px;;overflow-y:scroll; border:1px solid #0e63ab;  }
 .summary_tab tr{ border-bottom:1px solid #999999;}
 .summary_tab table td{ border-right:1px solid #999999; border-bottom:1px solid #999999;}
@@ -141,11 +141,10 @@ a:hover { color:#000000; }
 .summary_tab .tab_tit{ width:265px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .summary_tab .tab_from{ width:115px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .choose{ margin-right:10px;}
-.table_clear{ width:700px; margin-left:100px;}
-.clear_choose{ float:left; font-size:16px; margin-top:34px;}
-.table_clear img{ float:left; margin-top:30px;}
-.xzjb{ margin:30px 20px 0 50px;}
-.heibing{ margin:30px 20px 20px 100px;}
+.table_clear{ width:730px; margin-left:0px;}
+.clear_choose{ float:left; margin-top:23px;font-size:18px;}
+.table_clear img{ float:left; margin-top:16px; margin-left:20px;}
+
 
 /*数据详情*/
 .data_xq{ width:750px;;}
