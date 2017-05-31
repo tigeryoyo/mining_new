@@ -23,6 +23,7 @@ import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ExcelUtil;
+import com.hust.mining.util.FileUtil;
 import com.hust.mining.util.WeiboUtil;
 
 @Service
@@ -118,6 +119,12 @@ public class FileServiceImpl implements FileService {
         return fileDao.deleteById(fileId);
     }
 
+	@Override
+	public List<String[]> getContentById(String path, String name) {
+		// TODO Auto-generated method stub
+		return fileDao.getContentById(path, name);
+	}
+    
     @Override
     public List<IssueFile> queryFilesByIssueId(String issueId) {
         // TODO Auto-generated method stub

@@ -115,10 +115,12 @@ public class IssueServiceImpl implements IssueService {
 			insert = issueDao.insert(issue);
 			// 更新linkedIssue信息：添加IssueHold
 			linkedIssue.setIssueHold(issue.getIssueId());
+			//不更新对应泛数据的last operate time。如果需要，则改为 issueService.
 			issueDao.updateIssueInfo(linkedIssue);
 		} else {
-			issue = new Issue();
-			issue.setIssueId(linkedIssue.getIssueHold());
+			issue = queryIssueById(linkedIssue.getIssueHold());
+			//主要为了更新插入新的standardResult此时的issue last operate time。
+			this.updateIssueInfo(issue, request);
 		}
 		StandardResultQueryCondition standardResultQueryCondition = new StandardResultQueryCondition();
 		standardResultQueryCondition.setIssueId(issue.getIssueId());
