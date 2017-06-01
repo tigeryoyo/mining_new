@@ -4,7 +4,7 @@
 issueType="extensive";
 //选中全局任务时的数据类型
 $(document).ready(function(){
-    allData (1);
+	initShowPage (1);
 });
 
 // radio选中事件
@@ -18,7 +18,7 @@ $(function(){
     	choosenLabel.parent().siblings('label').css("color","black");
     	choosenLabel.attr("checked",true);
 		//显示数据
-		allData(1);
+    	initShowPage(1);
 	});
 });
 
@@ -65,7 +65,57 @@ function allData (page){
         }
     });
 }
-allData (1, issueType)
+function initShowPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/issue/queryAllIssueCount",
+        data:JSON.stringify(GetJsonData(currenPage)),
+		dataType:"json",
+		contentType:"application/json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,allData);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
+
+function initSearchPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/issue/queryAllIssueCount",
+        data:JSON.stringify(SearchJsonData(currenPage)),
+        dataType: "json",
+		contentType:"application/json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,searchData);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
+
+
 function GetJsonData(page) {
     var myDate=new Date();
     end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + (myDate.getDate()+1);
