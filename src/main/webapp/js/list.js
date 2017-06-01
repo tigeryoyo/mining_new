@@ -13,7 +13,7 @@ $(document).ready(function(){
     	choosenLabel.parent().siblings('label').css("color","black");
     	choosenLabel.attr("checked",true);
     }
-    allData (1);
+    initShowPage(1)
 });
 
 function analysisUrl(parm){
@@ -37,7 +37,7 @@ $(function(){
 	$(":radio").click(function(){
 		$('.ht_cont tr:not(:first)').html("");
 		issueType=$(this).val()
-		allData(1);
+		initShowPage(1);
 	});
 });
 
@@ -84,6 +84,58 @@ function allData (page){
         }
     });
 }
+
+function initShowPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/issue/queryOwnIssueCount",
+        data:JSON.stringify(GetJsonData(currenPage)),
+		dataType:"json",
+		contentType:"application/json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,allData);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
+
+function initSearchPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    var obj1 = $("#stopword_search").val();
+    $.ajax({
+        type: "post",
+        url: "/issue/queryOwnIssueCount",
+        data:JSON.stringify(SearchJsonData(currenPage)),
+        dataType: "json",
+		contentType:"application/json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,searchData);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
+
 
 function GetJsonData(page) {
 	var myDate=new Date();

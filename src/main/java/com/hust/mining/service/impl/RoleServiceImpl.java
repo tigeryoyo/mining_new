@@ -301,4 +301,12 @@ public class RoleServiceImpl implements RoleService {
 		}
 		return includePower;
 	}
+
+	@Override
+	public long selectRoleCount(String roleName) {
+		// TODO Auto-generated method stub
+		RoleQueryCondition role = new RoleQueryCondition();
+		role.setRoleName(roleName);
+		return roleDao.selectRoleCount(role);
+	}
 }

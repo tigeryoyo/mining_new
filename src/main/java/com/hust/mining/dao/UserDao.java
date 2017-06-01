@@ -35,6 +35,30 @@ public class UserDao {
 		return users;
 	}
 
+	public long selectUserCount(UserQueryCondition userQueryCondition){
+		UserExample example = new UserExample();
+		Criteria criteria = example.createCriteria();
+		if (!StringUtils.isBlank(userQueryCondition.getUserName())) {
+			criteria.andUserNameEqualTo(userQueryCondition.getUserName());
+		}
+		if (!StringUtils.isBlank(userQueryCondition.getEmail())) {
+			criteria.andEmailEqualTo(userQueryCondition.getEmail());
+		}
+		if (!StringUtils.isBlank(userQueryCondition.getTelphone())) {
+			criteria.andTelphoneEqualTo(userQueryCondition.getTelphone());
+		}
+		if (!StringUtils.isBlank(userQueryCondition.getTrueName())) {
+			criteria.andTrueNameEqualTo(userQueryCondition.getTrueName());
+		}
+		if (userQueryCondition.getPage() != 0) {
+			example.setPage(userQueryCondition.getPage());
+		}
+		if (userQueryCondition.getRow() != 0) {
+			example.setRow(userQueryCondition.getRow());
+		}
+		return userMapper.countByExample(example);
+	}
+	
 	public List<User> selectByUserName(String userName) {
 		UserExample example = new UserExample();
 		Criteria criteria = example.createCriteria();

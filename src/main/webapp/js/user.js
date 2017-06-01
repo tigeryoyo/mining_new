@@ -36,7 +36,7 @@ function userInforShow(page){
 					cookie_value5="'"+getRoleName(item.userId,array_userRole,array_role)+"'";
 					cookie_value6="'"+item.userId+"'";
 					cookie_value7="'"+item.password+"'";
-					row= '<tr><td width="66" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="64" height="30" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="30" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="30" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="30" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="30" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')" />&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delUser"  id="'+item.userId+'"  /></td></tr>'
+					row= '<tr><td width="66" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="64" height="30" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="30" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="30" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="30" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="30" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')" />&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delUser"  id="'+item.userId+'"  /></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -51,7 +51,65 @@ function userInforShow(page){
         },
 	})	
 }
-userInforShow(1);
+function initShowPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/user/selectUserInfoCount",
+		dataType:"json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,userInforShow);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
+
+initShowPage(1)
+
+function initSearchPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    var obj1 = $('#user_uname').val();
+	var obj2 = $('#user_tname').val();
+	var obj3 = $('#user_role').val();
+	var obj4 = $('#user_tel').val();
+	var obj5 = $('#user_email').val();
+    $.ajax({
+        type: "post",
+        url: "/user/selectUserInfoCount",
+        data:{
+			userName:obj1,
+			trueName:obj2,
+			roleName:obj3,
+			telphone:obj4,
+			email:obj5
+		},
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,userInforSearch);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
 function getRoleName(userId,array_userRole,array_role){
 	var name=null;
 	try{
@@ -299,7 +357,7 @@ function userInforSearch(page){
 					cookie_value5="'"+getRoleName(item.userId,array_userRole,array_role)+"'";
 					cookie_value6="'"+item.userId+"'";
 					cookie_value7="'"+item.password+"'";
-					row= '<tr><td width="66" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="64" height="30" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="30" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="30" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="30" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="30" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')" />&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delUser"  id="'+item.userId+'" /></td></tr>'
+					row= '<tr><td width="66" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="64" height="30" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="30" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="30" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="30" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="30" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')" />&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delUser"  id="'+item.userId+'" /></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
