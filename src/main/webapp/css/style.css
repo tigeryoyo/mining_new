@@ -122,7 +122,7 @@ a:hover { color:#000000; }
 .summary_r{ width:65px;margin-left:100px; margin-top:5px; display:none;}
 .summary_r img{ cursor:pointer;}
 .btn_hz{ display:block;}
-.summary_time{ width:750px; margin-top:20px; }
+.summary_time{ width:750px; margin-top:5px; }
 .summary_time li{ float:left;  line-height: 38px; margin-right:5px; }
 .summary_time li input{ width:15px; height:15px; background:#dddddd;  }
 .summary_time li input.lol_begin{ width:105px; height:30px; line-height:30px; font-size:12px;}

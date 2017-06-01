@@ -20,45 +20,27 @@
 			<iframe src="g_left.html" width="200px" height="760px"></iframe>
 			<div class="right float_r">
 				<div class="s_nav">
-					当前位置：
-					<a href="/topic_list.html">任务管理</a>
-					>>
-					<a href="/topic_details.html">任务详情</a>
-					>>数据汇总
+					当前位置： <a href="/topic_list.html">任务管理</a> >> <a
+						href="/topic_details.html">任务详情</a> >>数据汇总
 				</div>
 				<div class="data_summary">
 					<div class="summary_time">
 						<ul>
-							<li>
-								<input type="radio" name="timeradio" value="1" />
-								最近一周
+							<li><input type="radio" name="timeradio" value="1" /> 最近一周
 							</li>
-							<li>
-								<input type="radio" name="timeradio" value="2" />
-								最近一月
+							<li><input type="radio" name="timeradio" value="2" /> 最近一月
 							</li>
-							<li>
-								<input type="radio" name="timeradio" value="3" />
-								最近一季度
+							<li><input type="radio" name="timeradio" value="3" /> 最近一季度
 							</li>
-							<li>
-								<input type="radio" name="timeradio" value="4" />
-								自定义
+							<li><input type="radio" name="timeradio" value="4" /> 自定义</li>
+							<li>起： <input type="date" class="lol_begin" />
 							</li>
-							<li>
-								起：
-								<input type="date" class="lol_begin" />
+							<li>止： <input type="date" class="lol_end" />
 							</li>
-							<li>
-								止：
-								<input type="date" class="lol_end" />
-							</li>
-							<li class="file_search">
-								<img src="images/ss.png" onclick="fileSearch()" />
-							</li>
-							<li class="file_summary">
-								<img src="images/hz.png" onclick="fileSummary()" />
-							</li>
+							<li class="file_search"><img src="images/ss.png"
+								onclick="fileSearch()" /></li>
+							<li class="file_summary"><img src="images/hz.png"
+								onclick="fileSummary()" /></li>
 							<div class="clear"></div>
 						</ul>
 					</div>
@@ -85,19 +67,17 @@
 								</table>
 							</div>
 							<div class="table_clear">
-								<label class="clear_choose">
-									<input type="checkbox" id="chooseAll" />
-									&nbsp;&nbsp;&nbsp;全选
-								</label>
-								<a href="javascript:void(0);" onclick="sczsj()">
-									<img src="images/sczsj.png" class="xzjb" />
-								</a>
-								<a href="javascript:void(0);">
-									<img src="images/schxsj.png" />
-								</a>
+								<label class="clear_choose"> <input type="checkbox"
+									id="chooseAll"
+									style="width: 20px; height: 20px; float: left; margin-left: 24px;" />
+									<span>全选</span>
+								</label> 
 								<img onclick="addLayData()" src="images/tab_btn03.png"
-									class="heibing" />
-								<img onclick="deleteLayData()" src="images/tab_btn04.png" />
+									class="heibing" /> 
+								<img onclick="deleteLayData()" src="images/tab_btn04.png" /> 
+								<a href="javascript:void(0);" onclick="sczsj()"> 
+									<img src="images/sczsj.png" class="xzjb" style="float:right; margin-right:0px;" />
+								</a>
 								<div class="clear"></div>
 							</div>
 						</div>
