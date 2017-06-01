@@ -252,4 +252,31 @@ public class UserController {
         map.put("userRole", userRole);
         return ResultUtil.success(map);
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "/selectUserInfoCount", method = RequestMethod.POST)
+    public Object selectUserInfoCount(@RequestParam(value = "userName", required = false) String userName,
+            @RequestParam(value = "email", required = false) String email,
+            @RequestParam(value = "telphone", required = false) String telphone,
+            @RequestParam(value = "trueName", required = false) String trueName,
+            @RequestParam(value = "roleName", required = false) String roleName,
+            HttpServletRequest request) {
+    /*	if(null == userName && null == email && null == telphone && null == trueName && null == roleName){
+    		
+    	}else{*/
+        UserQueryCondition userQueryCondition = new UserQueryCondition();
+        userQueryCondition.setUserName(userName);
+        userQueryCondition.setEmail(email);
+        userQueryCondition.setTelphone(telphone);
+        userQueryCondition.setTrueName(trueName);
+        userQueryCondition.setRoleName(roleName);
+        long count = 0;
+        count = userService.selectUserCount(userQueryCondition);
+        if(count<=0){
+        	return ResultUtil.errorWithMsg("无用户信息！");
+        }
+        return ResultUtil.success(count);
+    }
+    
 }
+

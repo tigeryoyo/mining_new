@@ -274,4 +274,9 @@ public class UserServiceImpl implements UserService {
 
     }
 
+	@Override
+	public long selectUserCount(UserQueryCondition userQueryCondition) {
+		return  userDao.selectUserCount(userQueryCondition);
+	}
+
 }

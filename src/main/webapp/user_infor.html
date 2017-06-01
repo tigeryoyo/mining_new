@@ -4,11 +4,8 @@
 <meta charset="UTF-8">
 <title>用户管理——信息显示</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/page.css">
 <link rel="stylesheet" href="css/loading.css">
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/loading.js"></script>
-<script type="text/javascript" src="js/waiting.js"></script>
-<script type="text/javascript" src="js/user.js"></script>
 </head>
 <body>
 	<div class="main">
@@ -47,7 +44,7 @@
 								<input type="text" id="user_email">
 							</td>
 							<td height="50" colspan="2">
-								<button onclick="userInforSearch(1)">搜索</button>
+								<button onclick="initSearchPage(1)">搜索</button>
 								<button onClick="userInforAdd()">添加用户</button>
 							</td>
 						</tr>
@@ -69,22 +66,7 @@
 							</tr>
 						</table>
 					</div>
-					<div class="user_num">
-						<input id="up_page" type="button" onclick="changPageOne(-1)"
-							value="上一页" />
-						<input type="button" id="p_1" onclick="pageNumClick(this.id)"
-							value="1" class="cur" />
-						<input type="button" id="p_2" onclick="pageNumClick(this.id)"
-							value="2" />
-						<input type="button" id="p_3" onclick="pageNumClick(this.id)"
-							value="3" />
-						<input type="button" id="other" name="1"
-							onclick="setPageChangeView()" value="..." />
-						<input id="down_page" type="button" onclick="changPageOne(1)"
-							value="下一页" name="1" />
-						<input type="text" class="go_num" />
-						<input type="button" value="跳转" onclick="changePage()" />
-					</div>
+					<div class="user_num"><ul class="page" maxshowpageitem="5" pagelistcount="10"  id="page"></ul></div>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -92,4 +74,9 @@
 		<iframe src="g_footer.html" width="1000px" height="80px"></iframe>
 	</div>
 </body>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/loading.js"></script>
+<script type="text/javascript" src="js/waiting.js"></script>
+<script type="text/javascript" src="js/page.js"></script>
+<script type="text/javascript" src="js/user.js"></script>
 </html>

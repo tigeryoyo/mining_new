@@ -26,6 +26,8 @@ public interface UserService {
     boolean updateUser(User user);
 
     List<String> selectUserPowerUrl(String userName);
+    
+    long selectUserCount(UserQueryCondition userQueryCondition);
 
     long countOfUser();
 
