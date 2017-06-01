@@ -37,7 +37,54 @@ function typeInforShow(page){
 		}
 	})	
 }
-typeInforShow(1)
+function initShowPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/sourceType/selectSourceTypeCount",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,typeInforShow);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
+initShowPage(1)
+
+function initSearchPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/sourceType/selectSourceTypeCount",
+        data:{
+        	name:$("#type_search").val()},
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,typeInforSearch);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
 
 function setCookie(value1,value2){
 	// alert(name+value);
