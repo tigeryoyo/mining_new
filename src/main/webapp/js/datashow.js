@@ -1,191 +1,233 @@
 // JavaScript Document
 //3.1任务详情展示
-function dataShow(){
-	var newId=getCookie("id");
-	console.log(newId);
-    $.ajax({
-        type:"post",
-        url:"/file/queryIssueFiles",
-        data:{
-            issueId:newId
-        },
-        dataType:"json",
-        beforeSend : function(){
-		    begin();
+function analysisUrl(parm) {
+	var reg = new RegExp("(^|&)" + parm + "=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	return unescape(r[2]);
+}
+
+function dataShow() {
+	var issueId = getCookie("issueId");
+	var issueType = analysisUrl("issueType");
+	if (issueType == "extensive") {
+		showExtensiveIssueDetails(issueId);
+	} else if (issueType == "standard") {
+		showStandardIssueDetails(issueId);
+	} else if (issueType == "core") {
+
+	} else {
+		alert("error:dataShow.js-->dataShow()")
+	}
+}
+dataShow();
+
+function showExtensiveIssueDetails(issueId) {
+	$.ajax({
+		type : "post",
+		url : "/file/queryIssueFiles",
+		data : {
+			issueId : issueId
 		},
-        success:function(msg){
-            console.log(msg);
-            if(msg.status=="OK"){
+		dataType : "json",
+		beforeSend : function() {
+			begin();
+		},
+		success : function(msg) {
+			if (msg.status == "OK") {
 				var items = msg.result.issue;
-				$(function() {
-					name = '<span>'+items.issueName+'</span>',
-					admin = '<span>'+items.creator+'</span>',
-					ct = '<span>'+new Date(items.createTime.time).format('yyyy-MM-dd hh:mm:ss')+'</span>',
-					lo = '<span>'+items.lastOperator+'</span>',
-					lut ='<span>'+new Date(items.lastUpdateTime.time).format('yyyy-MM-dd hh:mm:ss')+'</span>'
-
-					$('.ckht_list li').eq(0).append( name ),
-					$('.ckht_list li').eq(1).append( admin ),
-					$('.ckht_list li').eq(2).append( ct ),
-					$('.ckht_list li').eq(3).append( lo ),
-					$('.ckht_list li').eq(4).append( lut );
-				});
-				var tabs = msg.result.list; 
+				$('.issueName').text("任务名称：" + items.issueName);
+				if (issueType == "extensive") {
+					$("span#issueType").text("(泛数据)");
+				} else if (issueType == "standard") {
+					$("span#issueType").text("(准数据)");
+				} else if (issueType == "core") {
+					$("span#issueType").text("(核心数据)");
+				} else {
+					$("span#issueType").text("error");
+				}
+				var tabs = msg.result.list;
 				$('.up_list tr:not(:first)').html("");
-				$.each(tabs,function(i,item){
-					cookie_value1="'"+item.fileId+"'";
-					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
-					'</td><td width="95" align="center" valign="middle">'+item.creator+
-					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
-					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="choiceType('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" id="'+item.fileId+'" onclick="bind()" /></td></tr>'
+				$.each(tabs, function(i, item) {
+					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.fileName + '</td><td align="center" valign="middle">'
+						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')
+						+ '</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick=clusterSingleFile("' 
+						+ item.fileId
+						+ '") />'
+						+'<img src="images/xiazai.png" class="btn_sc" onclick=downloadExtFile("'
+						+ item.fileId
+						+ '","'
+						+ item.fileName
+						+'") /><img class="btn_jl" src="images/delete.png" id="' + item.fileId + '" onclick="bind()" /></td></tr>'
 					$('.up_list').append(row);
-				});				
-            }else{
-                alert("查询失败");
-            }
+				});
+			} else {
+				alert(msg.result);
+			}
 
-        } ,
-        complete:function(){
-		    stop();
 		},
-        error:function(){
-            // ���������
-        }
-    });
+		complete : function() {
+			stop();
+		},
+		error : function() {
+			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
+		}
+	});
 }
-dataShow()
 
-function localRefresh(){
-	var newId=getCookie("id");
-	console.log(newId);
-    $.ajax({
-        type:"post",
-        url:"/file/queryIssueFiles",
-        data:{
-            issueId:newId
-        },
-        dataType:"json",
-        beforeSend : function(){
-		    begin();
+function showStandardIssueDetails(issueId) {
+	changeStyle();
+	$.ajax({
+		type : "post",
+		url : "/standardResult/queryStandardResults",
+		data : {
+			issueId : issueId
 		},
-        success:function(msg){
-            console.log(msg);
-            if(msg.status=="OK"){
-				var tabs = msg.result.list; 
+		dataType : "json",
+		beforeSend : function() {
+			begin();
+		},
+		success : function(msg) {
+			changeStyle();
+			if (msg.status == "OK") {
+				var items = msg.result.issue;
+				$('.issueName').text("任务名称：" + items.issueName);
+				if (issueType == "extensive") {
+					$("span#issueType").text("(泛数据)");
+				} else if (issueType == "standard") {
+					$("span#issueType").text("(准数据)");
+				} else if (issueType == "core") {
+					$("span#issueType").text("(核心数据)");
+				} else {
+					$("span#issueType").text("error");
+				}
+				var stdResList = msg.result.stdResList;
 				$('.up_list tr:not(:first)').html("");
-				$.each(tabs,function(i,item){
-					cookie_value1="'"+item.fileId+"'";
-					row ='<tr><td width="257" align="center" valign="middle">'+item.fileName+
-					'</td><td width="95" align="center" valign="middle">'+item.creator+
-					'</td><td width="173" align="center" valign="middle">'+new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')+
-					'</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick="choiceType('+cookie_value1+')" /><img class="btn_jl" src="images/delete.png" id="'+item.fileId+'" onclick="bind()" /></td></tr>'
-					$('.files_list table').append(row);
-				});				
-            }else{
-                alert("查询失败");
-            }
+				$.each(stdResList, function(i, item) {
+					var stdResId = "'" + item.stdRid + "'";
+					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.resName + '</td><td align="center" valign="middle">'
+						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')
+						+ '</td><td align="center" valign="middle"><img src="images/xiazai.png" class="btn_sc" onclick=downloadStdRes(' + stdResId
+						+ ') /><img class="btn_sc" src="images/chakan.png" onclick=alert("待续") /><img class="btn_sc" src="images/delete.png" onclick=alert("待续") /></td></tr>'
+					$('.up_list').append(row);
+				});
 
-        } ,
-        complete:function(){
-		    stop();
+			} else {
+				changeStyle();
+				alert("查询失败");
+			}
+
 		},
-        error:function(){
-            // ���������
-        }
-    });
+		complete : function() {
+			stop();
+		},
+		error : function() {
+			changeStyle();
+			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
+		}
+	});
 }
 
-function choiceType(id){
-	console.log("----------"+id);
-	$("#shade").css("display","block");
-    $("#choose_mining_type").css("display","block");
-    $("#choice_confirm").attr("data-id",id);
+
+function downloadExtFile(fileId,fileName){
+	var form = $('<form method="POST" action="/file/downloadExtFile">');
+	form.append($('<input type="hidden" name="fileId" value="'+fileId+'"/>'));
+	form.append($('<input type="hidden" name="fileName" value="'+fileName+'"/>'));
+	$('body').append(form);
+	form.submit(); // 自动提交
 }
 
-function buttonConfirm(){
-	console.log($("#choice_confirm").attr("data-id"))
-    $("#shade").css("display","none");
-    $("#choose_mining_type").css("display","none");
-    //点击确定按钮的业务逻辑处理
-    var id = $("#choice_confirm").attr("data-id");
-    var type =$("input[name='choice']:checked").val();
-    console.log("==="+type)
-    clusterSingleFile(id,type);
+function downloadStdRes(stdResId) {
+	var form = $('<form method="POST" action="/standardResult/download">');
+	form.append($('<input type="hidden" name="stdResId" value="' + stdResId + '"/>'));
+	$('body').append(form);
+	form.submit(); // 自动提交
 }
 
-function setCookie(value1){
-	// alert(name+value);
-	var cookie_name1="id";
-	var Days = 1; // 此 cookie 将被保存 1 天
-	var exp　= new Date();
-	exp.setTime(exp.getTime() +Days*24*60*60*1000);
-	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	// window.location.href = "summary.html";
+function changeStyle() {
+	$('.his_result').hide();
+	$('.sur_result').hide();
+	$('.up_del').hide();
+	// 隐藏上传文件框框
+	$('.ckht_list li:eq(2)').hide();
+	$('.up_list_wrap').height(200);
+	var titleTr = $('.up_list tr:eq(0)');
+	var titleTds = titleTr.children();
+	titleTds.eq(0).text("序号");
+	titleTds.eq(1).text("准数据结果名");
+	titleTds.eq(1).css("color", "white");
+	titleTds.eq(2).text("创建人");
+	titleTds.eq(3).text("创建时间");
+	titleTds.eq(4).text("操作");
+}
+
+function localRefresh() {
+	var newId = getCookie("issueId");
+	if (issueType == "extensive") {
+		showExtensiveIssueDetails(newId);
+	} else if (issueType == "standard") {
+		showStandardIssueDetails(newId);
+	} else if (issueType == "core") {
+
+	} else {
+		alert("error:datashow.js-->localRefresh()")
+	}
 }
 
 function getCookie(name) {
-	
-	console.log(document.cookie);
-	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
-	if(arr !=null) 
-		return unescape(arr[2]); 
+	var arr = document.cookie.match(new RegExp("(^|)" + name + "=([^;]*)(;|$)"));
+	if (arr != null)
+		return unescape(arr[2]);
 	return null;
 }
 
-
-
-function clusterSingleFile(id,type){
-	
-	console.log(id);
+function clusterSingleFile(id) {
 	$.ajax({
-		type:"post",
-		url:"/issue/miningSingleFile",
-		data:{
-			fileId:id,
-			granularityId:type
+		type : "post",
+		url : "/issue/miningSingleFile",
+		data : {
+			fileId : id
 		},
-		dataType:"json",
-		beforeSend : function(){
-		    begin();
+		dataType : "json",
+		beforeSend : function() {
+			begin();
 		},
-		success: function(msg){
+		success : function(msg) {
 			console.log(msg);
-			if( msg.status == "OK"){
+			if (msg.status == "OK") {
 				window.location.href = "history.html";
-			}else{
+			} else {
 				alert(msg.result);
 			}
 		},
-		error: function(){
+		error : function() {
 			alert("请求失败");
 		},
-		complete : function(){
-		  stop();  
+		complete : function() {
+			stop();
 		}
-	})	
+	})
 }
 
-function bind(){
-	$(".up_list tr").unbind('click').on("click",".btn_jl",function(){
+function bind() {
+	$(".up_list tr").unbind('click').on("click", ".btn_jl", function() {
 		var file_id = $(this).attr("id");
-		console.log(file_id);
 		$.ajax({
-		        type:"post",
-		        url:"/file/deleteFileById",
-		        data:{
-		            fileid:file_id
-		        },
-		        dataType:"json",
-		        success: function(msg){
-		            if( msg.status == "OK"){
-		                localRefresh();
-		            }else{
-		                alert("fail");
-		            }
-		        },
-		        error: function(){
-		            alert("数据请求失败");
-		        }
-		    })  
+			type : "post",
+			url : "/file/deleteFileById",
+			data : {
+				fileid : file_id
+			},
+			dataType : "json",
+			success : function(msg) {
+				if (msg.status == "OK") {
+					localRefresh();
+				} else {
+					alert(msg.result);
+				}
+			},
+			error : function() {
+				alert("数据请求失败");
+			}
+		})
 	})
 }

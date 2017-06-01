@@ -44,7 +44,61 @@ function websiteInforShow(page){
         },
 	})	
 }
-websiteInforShow(1)
+function initShowPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/website/selectWebsiteCount",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,websiteInforShow);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
+initShowPage(1)
+
+function initSearchPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    var obj2 = $("#web_name").val();
+    var obj3 = $("#web_level").val();
+    var obj4 = $("#web_type").val();
+    $.ajax({
+        type: "post",
+        url: "/website/selectWebsiteCount",
+        data:{
+            url:$("#web_url").val(),
+            name:obj2,
+            // level:obj3,
+            levle:obj3,
+            type:obj4},
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,websiteInforSearch);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
 function setCookie(value1,value2,value3,value4,value5){
 	// alert(name+value);
 	var cookie_name1="id";

@@ -154,5 +154,63 @@ public class ExcelUtil {
         workbook.close();
     	return list;
     }
+  
+    //----------------------------------新增工具-------------------------------------------
+    //读取并去重返回所有属性的excel文件
+    public static List<String[]> readAll(String filename, InputStream inputStream, int urlIndex)
+            throws FileNotFoundException, IOException {
+
+        List<String[]> list = new ArrayList<String[]>();
+        Workbook workbook;
+        if (filename.endsWith("xls")) {
+            workbook = new HSSFWorkbook(inputStream);
+        } else {
+            workbook = new XSSFWorkbook(inputStream);
+        }
+        Sheet sheet = workbook.getSheetAt(0);
+        int rowNum = sheet.getLastRowNum();
+        int colNum = sheet.getRow(0).getLastCellNum();
+        List<String> exitUrls = new ArrayList<String>();
+        for (int i = 0; i <= rowNum; i++) {
+        	String[] rowStr = new String[colNum];
+            for (int j = 0; j < colNum; j++) {
+                try {
+                    Cell cell = sheet.getRow(i).getCell(j);
+                    
+                    if (cell.getCellType() == 0) {
+                        rowStr[j] = TimeUtil.convert(cell);
+                    } else {
+                        rowStr[j] = cell.toString();
+                    }
+                } catch (Exception e) {
+                    rowStr[j] = "";
+                }
+                rowStr[j] = rowStr[j].replaceAll("\n", "");
+                rowStr[j] = rowStr[j].replaceAll("\t", "");
+                rowStr[j] = rowStr[j].replaceAll("\r", "");
+                rowStr[j] = rowStr[j].replaceAll("\b", "");
+                rowStr[j] = rowStr[j].replaceAll("\f", "");
+            }
+            if (CommonUtil.isEmptyArray(rowStr)) {
+                continue;
+            }
+            int exitIndex = exitUrls.indexOf(rowStr[urlIndex]);
+            if (exitIndex == -1) {
+                exitUrls.add(rowStr[urlIndex]);
+                list.add(rowStr);
+            }
+        }
+        workbook.close();
+        return list;
+    }
+    
+    private static void exchangePos(String[] rowStr, int source, int des){
+    	if(source == des){
+    		return;
+    	}
+    	String tmp = rowStr[source];
+    	rowStr[source] = rowStr[des];
+    	rowStr[des] = tmp;
+    }
     
 }

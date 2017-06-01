@@ -11,12 +11,13 @@
 <script type="text/javascript" src="js/history.js"></script>
 <script type="text/javascript" src="js/dateformat.js"></script>
 <script type="text/javascript" src="js/cookie.js"></script>
+<script type="text/javascript" src="js/scxsj.js"></script>
 </head>
 <body>
 	<div class="main">
-		<iframe src="g_header.html" width=1000px " height="177px"></iframe>
+		<iframe src="g_header.html" width="1000px " height="177px"></iframe>
 		<div class="content">
-			<iframe src="g_left.html" width=200px " height="740px"></iframe>
+			<iframe src="g_left.html" width="200px " height="760px"></iframe>
 			<div class="right float_r">
 				<div class="s_nav">
 					当前位置：
@@ -50,18 +51,15 @@
 							</div>
 							<div class="table_clear">
 								<label class="clear_choose">
-									<input type="checkbox" id="historyAll" />
-									&nbsp;&nbsp;&nbsp;全选
+									<input type="checkbox" style="width:20px;height:20px;float:left; margin-left:24px;" id="historyAll" />
+									<span>全选</span>
 								</label>
-								<a href="/file/download">
-									<img src="images/tab_btn01.png" class="xzjb" />
-								</a>
-								<a href="/file/exportAbstract">
-									<img src="images/tab_btn02.png" />
-								</a>
 								<img onclick="addLayData()" src="images/tab_btn03.png"
 									class="heibing" />
 								<img onclick="deleteLayData()" src="images/tab_btn04.png" />
+								<a href="javascript:void(0);" onclick="sczsj()">
+									<img src="images/sczsj.png" style="float:right; margin-right:0px;" />
+								</a>
 								<div class="clear"></div>
 							</div>
 						</div>

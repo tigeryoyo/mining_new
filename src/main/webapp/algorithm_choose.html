@@ -10,11 +10,11 @@
 <script type="text/javascript" src="js/waiting.js"></script>
 <script type="text/javascript" src="js/algorithm.js"></script>
 </head>
-<body>
+<body onload="algorithm_Show()">
 	<div class="main">
 		<iframe src="g_header.html" width="1000px" height="177px"></iframe>
 		<div class="content">
-			<iframe src="g_left.html" width="200px" height="740px"></iframe>
+			<iframe src="g_left.html" width="200px" height="760px"></iframe>
 			<div class="right float_r">
 				<div class="s_nav">
 					当前位置：
@@ -30,16 +30,15 @@
 					<tr >
 						<td colspan="1" style="width:50%">
 						<ul  style="height: 240px;font-size: 18px;">
-							<li style="margin:38px 40px;display: block;height: 35px;"><input name="algorithm_choose" type="radio" value="1" checked="checked">kmeans</li>
-							<li style="margin:38px 40px;display: block;height: 35px;"><input name="algorithm_choose" type="radio" value="2">kmeanssssss</li>
-							<li style="margin:38px 40px;display: block;height: 35px;"><input name="algorithm_choose" type="radio" value="3">kmeans</li>
+							<li style="margin:38px 40px;display: block;height: 35px;"><input name="algorithm_choose" type="radio" value="1" checked="checked">Canopy</li>
+							<li style="margin:38px 40px;display: block;height: 35px;"><input name="algorithm_choose" type="radio" value="2">kmeans和Canopy</li>
+							<li style="margin:38px 40px;display: block;height: 35px;"><input name="algorithm_choose" type="radio" value="3">DBScan</li>
 						</ul>
 						</td>
 						<td colspan="1" style="width:50%">
 						<ul  style="height: 240px;font-size: 18px;">
-							<li style="margin:38px 40px;display: block;height: 35px;"><input name="grain_size_choose" type="radio" value="1" checked="checked">kmeans</li>
-							<li style="margin:38px 40px;display: block;height: 35px;"><input name="grain_size_choose" type="radio" value="2">kmeansssssss</li>
-							<li style="margin:38px 40px;display: block;height: 35px;"><input name="grain_size_choose" type="radio" value="3">kmeans</li>
+							<li style="margin:38px 40px;display: block;height: 35px;"><input name="grain_size_choose" type="radio" value="1" checked="checked">粗粒度</li>
+							<li style="margin:38px 40px;display: block;height: 35px;"><input name="grain_size_choose" type="radio" value="2">细粒度</li>
 						</ul>
 						</td>
 					</tr>
