@@ -50,7 +50,8 @@ public class IssueDao {
             criteria.andCreatorEqualTo(con.getUser());
         }
         if (!StringUtils.isBlank(con.getIssueName())) {
-            criteria.andIssueNameEqualTo(con.getIssueName());
+          //  criteria.andIssueNameEqualTo(con.getIssueName());
+        	criteria.andIssueNameLike("%"+con.getIssueName()+"%");
         }
         if (!StringUtils.isBlank(con.getIssueType())) {
         	criteria.andIssueTypeEqualTo(con.getIssueType());
@@ -83,7 +84,7 @@ public class IssueDao {
             criteria.andCreatorEqualTo(con.getUser());
         }
         if (!StringUtils.isBlank(con.getIssueName())) {
-            criteria.andIssueNameEqualTo(con.getIssueName());
+            criteria.andIssueNameLike("%"+con.getIssueName()+"%");
         }
         if (!StringUtils.isBlank(con.getIssueType())) {
         	criteria.andIssueTypeEqualTo(con.getIssueType());
