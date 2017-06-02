@@ -137,7 +137,7 @@ function up_del() {
                 /* cookie_value1="'"+item.fileId+"'"; */
                 upFile(fileArray[parseInt(arrary)], urlIndex, titleIndex, time,
                         sourceType);
-                localRefresh();
+                /*       localRefresh(); */
                 $(this).parent("li").remove();
                 border();
             })
@@ -173,7 +173,7 @@ function all_up() {
             console.log(sourceType);
             upFile(file, urlIndex, titleIndex, time, sourceType);
         }
-        localRefresh();
+    //    localRefresh();
         allDel();
     });
 }
@@ -184,12 +184,12 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     form.append("titleIndex", titleIndex);
     form.append("timeIndex", time);
     form.append("sourceType", sourceType);
-    console.log("(((((");
+    console.log("(((((((((");
     console.log(form);
     $.ajax({
         async : false,
         crossDomain : true,
-        url : "/file/upload",
+        url : "/Al/upload",
         method : "POST",
         processData : false,
         contentType : false,
