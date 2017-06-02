@@ -108,7 +108,8 @@ public class UserServiceImpl implements UserService {
                 return false;
             }
         }
-        int statue = userDao.updateByPrimaryKey(user);
+        //更新用户信息
+        int statue = userDao.updateByPrimaryKeySelective(user);
         userRoleDao.deleteUserRoleByUserId(user.getUserId());
         List<Integer> roleIds = new ArrayList<Integer>();
         for (String roleNameInfo : roleName) {
@@ -144,7 +145,8 @@ public class UserServiceImpl implements UserService {
             logger.info("user table has same as userName");
             return false;
         }
-        int statue = userDao.insert(user);
+        //添加用户，有选择添加（如有字段为空该字段为默认）
+        int statue = userDao.insertSelective(user);
         if (statue == 0) {
             logger.info("insert user error ");
             return false;
