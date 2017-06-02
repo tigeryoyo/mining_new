@@ -49,13 +49,7 @@ function submit(fd) {
 			begin();
 		},
 		success : function(msg) {
-			if (msg.status == 'OK') {
-				console.log("ok");
-				alert('导入成功！');
-			} else {
-				console.log("no ok");
-				alert('导入失败！');
-			}
+			alert(msg.result);
 		},
 		complete : function() {
 			box.innerHTML="将文件拖拽到此处";
