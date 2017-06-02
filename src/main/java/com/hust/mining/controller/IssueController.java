@@ -107,7 +107,7 @@ public class IssueController {
 		System.out.println("LastUpdateStartTime" + con.getLastUpdateStartTime());
 		List<Issue> list = issueService.queryIssue(con);
 		if (null == list || 0 == list.size()) {
-			return ResultUtil.errorWithMsg("Issue not exist");
+			return ResultUtil.errorWithMsg("没有任务被创建！");
 		}
 		long count = list.size();
 		JSONObject result = new JSONObject();
@@ -122,7 +122,7 @@ public class IssueController {
 	public Object queryAllIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
 		List<Issue> list = issueService.queryIssue(con);
 		if (null == list || 0 == list.size()) {
-			return ResultUtil.errorWithMsg("Issue not exist");
+			return ResultUtil.errorWithMsg("没有任务被创建！");
 		}
 		long count = list.size();
 		JSONObject result = new JSONObject();
@@ -131,7 +131,30 @@ public class IssueController {
 		result.put("list", list);
 		return ResultUtil.success(result);
 	}
+	
+	@ResponseBody
+	@RequestMapping("/queryOwnIssueCount")
+	public Object queryOwnIssueCount(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
+		long count = 0;
+		count = issueService.queryIssueCount(con);
+		if(count<=0){
+			return ResultUtil.errorWithMsg("没有任务被创建！");
+		}
+		System.out.println(count+"-----------------------------");
+		return ResultUtil.success(count);
+	}
 
+	@ResponseBody
+	@RequestMapping("/queryAllIssueCount")
+	public Object queryAllIssueCount(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
+		long count = 0;
+		count = issueService.queryIssueCount(con);
+		if(count<=0){
+			return ResultUtil.errorWithMsg("没有任务被创建！");
+		}
+		return ResultUtil.success(count);
+	}
+	
 	@ResponseBody
 	@RequestMapping("/miningByTime")
 	public Object miningByTime(@RequestParam(value = "startTime", required = true) Date startTime,

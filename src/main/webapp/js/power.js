@@ -27,7 +27,7 @@ function powerInforShow(page){
 					cookie_value1="'"+item.powerId+"'";
 					cookie_value2="'"+item.powerName+"'";
 					cookie_value3="'"+item.powerUrl+"'";
-					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.powerName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><a href="javascript:;"><img src="images/user_bj.png"  onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;"><img src="images/user_del.png" class="delPower" id="'+item.powerId+'" /></a></td></tr>'
+					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.powerName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><a href="javascript:;"><img src="images/user_bj.png"  onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;"><img src="images/user_del.png" class="delPower" id="'+item.powerId+'" /></a></td></tr>'
 					$('.infor_tab02').append(row);
 					
 				});
@@ -44,7 +44,57 @@ function powerInforShow(page){
 		}
 	})	
 }
-powerInforShow(1);
+function initShowPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/power/selectPowerCount",
+		dataType:"json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,powerInforShow);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
+
+initShowPage(1)
+
+function initSearchPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    var powerInfor=$("#power_Search").val();
+    $.ajax({
+        type: "post",
+        url: "/power/selectPowerCount",
+        data:{
+        	powerName:powerInfor
+		},
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,powerInforSearch);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
 
 function setCookie(value1,value2,value3){
 	// alert(name+value);
@@ -231,7 +281,7 @@ function powerInforSearch(page){
 					cookie_value1="'"+item.powerId+"'";
 					cookie_value2="'"+item.powerName+"'";
 					cookie_value3="'"+item.powerUrl+"'";
-					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.powerName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><a href="javascript:;"><img src="images/user_bj.png"  onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;"><img src="images/user_del.png" class="delPower" id="'+item.powerId+'" /></a></td></tr>'
+					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.powerName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><a href="javascript:;"><img src="images/user_bj.png"  onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;"><img src="images/user_del.png" class="delPower" id="'+item.powerId+'" /></a></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{

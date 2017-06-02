@@ -62,8 +62,6 @@ public class WebsiteDao {
         Criteria criteria = example.createCriteria();
         criteria.andIdIsNotNull();
         criteria.andNameNotEqualTo("其他");
-        example.setStart(0);
-        example.setLimit(0);
     	return websiteMapper.countByExample(example);
     }
     
@@ -72,8 +70,6 @@ public class WebsiteDao {
         Criteria criteria = example.createCriteria();
         criteria.andIdIsNotNull();
         criteria.andNameEqualTo("其他");
-        example.setStart(0);
-        example.setLimit(0);
     	return websiteMapper.countByExample(example);
     }
     

@@ -26,7 +26,7 @@ function weightInforShow(page){
 					cookie_value1="'"+item.id+"'";
 					cookie_value2="'"+item.name+"'";
 					cookie_value3="'"+item.weight+"'";
-					row= '<tr><td width="88" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="162" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="181" height="30" align="center" bgcolor="#ffffff">'+item.weight+'</td><td colspan="2" width="243" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delWeight" id="'+item.id+'" /></td></tr>'
+					row= '<tr><td width="88" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="162" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="181" height="30" align="center" bgcolor="#ffffff">'+item.weight+'</td><td colspan="2" width="243" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delWeight" id="'+item.id+'" /></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -278,7 +278,7 @@ function weightInforSearch(page){
 					cookie_value1="'"+item.id+"'";
 					cookie_value2="'"+item.name+"'";
 					cookie_value3="'"+item.weight+"'";
-					row= '<tr><td width="88" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="162" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="181" height="30" align="center" bgcolor="#ffffff">'+item.weight+'</td><td colspan="2" width="243" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delWeight" id="'+item.id+'" /></td></tr>'
+					row= '<tr><td width="88" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="162" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="181" height="30" align="center" bgcolor="#ffffff">'+item.weight+'</td><td colspan="2" width="243" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delWeight" id="'+item.id+'" /></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{

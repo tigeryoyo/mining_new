@@ -22,7 +22,7 @@ function typeInforShow(page){
 				$.each(items,function(idx,item) {
 					cookie_value1="'"+item.id+"'";
 					cookie_value2="'"+item.name+"'";
-					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascripy:;"><img src="images/user_del.png" class="delType" id="'+item.id+'" /></a></td></tr>'
+					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascripy:;"><img src="images/user_del.png" class="delType" id="'+item.id+'" /></a></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -37,7 +37,54 @@ function typeInforShow(page){
 		}
 	})	
 }
-typeInforShow(1)
+function initShowPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/sourceType/selectSourceTypeCount",
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,typeInforShow);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
+initShowPage(1)
+
+function initSearchPage(currenPage){
+    var listCount = 0;
+    if("undefined" == typeof(currenPage) || null == currenPage){
+        currenPage = 1;
+    }
+    $.ajax({
+        type: "post",
+        url: "/sourceType/selectSourceTypeCount",
+        data:{
+        	name:$("#type_search").val()},
+        dataType: "json",
+        success: function (msg) {
+            if (msg.status == "OK") {
+                // alert("success");
+                listCount = msg.result;
+                $("#page").initPage(listCount,currenPage,typeInforSearch);
+            } else {
+                alert(msg.result);
+            }
+        },
+        error: function () {
+            alert("数据请求失败");
+        }})
+}
 
 function setCookie(value1,value2){
 	// alert(name+value);
@@ -221,7 +268,7 @@ function typeInforSearch(page){
 				$.each(items,function(idx,item) {
 					cookie_value1="'"+item.id+"'";
 					cookie_value2="'"+item.name+"'";
-					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+(idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascripy:;"><img src="images/user_del.png" class="delType" id="'+item.id+'" /></a></td></tr>'
+					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascripy:;"><img src="images/user_del.png" class="delType" id="'+item.id+'" /></a></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{

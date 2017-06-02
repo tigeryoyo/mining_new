@@ -4,10 +4,8 @@
 <meta charset="UTF-8">
 <title>类型管理——信息显示</title>
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/page.css">
 <link rel="stylesheet" href="css/loading.css">
-<script type="text/javascript" src="js/jquery.js"></script>
-<script type="text/javascript" src="js/loading.js"></script>
-<script type="text/javascript" src="js/waiting.js"></script>
 </head>
 <body>
 	<div class="main">
@@ -26,7 +24,7 @@
 							<input type="search" placeholder="请输入类型名称" id="type_search" />
 							<img src="images/icon_search.png" class="icon_search" />
 						</div>
-						<img src="images/btn_role_search.png" onClick="typeInforSearch(1)"
+						<img src="images/btn_role_search.png" onClick="initSearchPage(1)"
 							class="btn_role" />
 						<img src="images/btn_type_add.png" onClick="typeInforAdd()"
 							class="btn_role" />
@@ -40,22 +38,7 @@
 							</tr>
 						</table>
 					</div>
-					<div class="user_num">
-						<input id="up_page" type="button" onclick="changPageOne(-1)"
-							value="上一页" />
-						<input type="button" id="p_1" onclick="pageNumClick(this.id)"
-							value="1" class="cur" />
-						<input type="button" id="p_2" onclick="pageNumClick(this.id)"
-							value="2" />
-						<input type="button" id="p_3" onclick="pageNumClick(this.id)"
-							value="3" />
-						<input type="button" id="other" name="1"
-							onclick="setPageChangeView()" value="..." />
-						<input id="down_page" type="button" onclick="changPageOne(1)"
-							value="下一页" name="1" />
-						<input type="text" class="go_num" />
-						<input type="button" value="跳转" onclick="changePage()" />
-					</div>
+					<div class="user_num"><ul class="page" maxshowpageitem="5" pagelistcount="10"  id="page"></ul></div>
 				</div>
 			</div>
 			<div class="clear"></div>
@@ -64,5 +47,8 @@
 	</div>
 </body>
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/loading.js"></script>
+<script type="text/javascript" src="js/waiting.js"></script>
+<script type="text/javascript" src="js/page.js"></script>
 <script type="text/javascript" src="js/type.js"></script>
 </html>

@@ -19,6 +19,8 @@ public interface IssueService {
     String getCurrentIssueId(HttpServletRequest request);
 
     List<Issue> queryIssue(IssueQueryCondition con);
+    
+    long queryIssueCount(IssueQueryCondition con);
 
     Issue queryIssueById(String issueId);
 

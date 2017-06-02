@@ -461,4 +461,9 @@ public class IssueServiceImpl implements IssueService {
 		return result;
 	}
 
+	@Override
+	public long queryIssueCount(IssueQueryCondition con) {
+		return issueDao.queryIssueCount(con);
+	}
+
 }
