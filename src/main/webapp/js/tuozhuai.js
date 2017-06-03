@@ -155,6 +155,7 @@ function all_up() {
 	});
 }
 function upFile(filex, urlIndex, titleIndex, time, sourceType) {
+<<<<<<< HEAD
 	var form = new FormData();
 	form.append("file", filex);
 	form.append("urlIndex", urlIndex);
@@ -177,6 +178,33 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
 		success : function(response) {
 			var msg = JSON.parse(response);
 			if (msg.status == "OK") {
+=======
+    var form = new FormData();
+    form.append("file", filex);
+    form.append("urlIndex", urlIndex);
+    form.append("titleIndex", titleIndex);
+    form.append("timeIndex", time);
+    form.append("sourceType", sourceType);
+    console.log("(((((");
+    console.log(form);
+    $.ajax({
+        async : false,
+        crossDomain : true,
+        url : "/file/upload",
+        method : "POST",
+        processData : false,
+        contentType : false,
+        mimeType : "multipart/form-data",
+        data : form,
+        beforeSend : function() {
+            begin();
+        },
+        success : function(response) {
+            var msg = JSON.parse(response);
+            if (msg.status == "OK") {
+                // alert(msg.tagName);
+                // cookie_value1="'"+item.fileId+"'";
+>>>>>>> branch 'nn' of https://github.com/tigeryoyo/mining_new.git
 
 			} else {
 				alert("上传失败");
