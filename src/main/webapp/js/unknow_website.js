@@ -104,7 +104,7 @@ function initSearchPage(currenPage){
 function setCookie(value1,value2,value3,value4,value5){
 	// alert(name+value);
 	var cookie_name1="id";
-	var cookie_name2="name";
+	var cookie_name2="websiteName";
 	var cookie_name3="type";
 	var cookie_name4="url";
 	var cookie_name5="level";

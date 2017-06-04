@@ -7,6 +7,8 @@ import com.hust.mining.model.params.WebsiteQueryCondition;
 
 public interface WebsiteService {
 
+	Website queryByUrl(String url);
+	
 	List<Website> selectAllWebsite(int start, int limit);
 
 	List<Website> selectByCondition(WebsiteQueryCondition website);

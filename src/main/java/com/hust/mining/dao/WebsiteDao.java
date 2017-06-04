@@ -143,4 +143,11 @@ public class WebsiteDao {
     public int updateWebsite(Website website) {
         return websiteMapper.updateByPrimaryKeySelective(website);
     }
+    
+    public int updateWebsiteInfo(Website website){
+    	WebsiteExample example = new WebsiteExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUrlEqualTo(website.getUrl());
+    	return websiteMapper.updateByExampleSelective(website, example);
+    }
 }

@@ -91,19 +91,20 @@ function reSetView(response, filename, index) {
     all_up();
 }
 function getSpinner(array, regex) {
-	var patt = new RegExp(regex); // 注意是非全局匹配
-	var item = "";
-	var alreay = false;
-	for (var i = 0; i < array.length; i++) {
-		if (patt.test(array[i]) && alreay == false) {
-			item += '<option value= ' + i + ' selected = true>' + array[i] + '</option>';
-			alreay = true;
-		} else {
-			item += '<option value= ' + i + '>' + array[i] + '</option>';
-		}
-	}
-	item += "";
-	return item;
+    var patt = new RegExp(regex); // 注意是非全局匹配
+    var item = "";
+    var alreay = false;
+    for (var i = 0; i < array.length; i++) {
+        if (patt.test(array[i]) && alreay == false) {
+            item += '<option value= ' + i + ' selected = true>' + array[i]
+                    + '</option>';
+            alreay = true;
+        } else {
+            item += '<option value= ' + i + '>' + array[i] + '</option>';
+        }
+    }
+    item += "";
+    return item;
 }
 
 var data12 = {
@@ -136,7 +137,7 @@ function up_del() {
                 /* cookie_value1="'"+item.fileId+"'"; */
                 upFile(fileArray[parseInt(arrary)], urlIndex, titleIndex, time,
                         sourceType);
-                localRefresh();
+                /*       localRefresh(); */
                 $(this).parent("li").remove();
                 border();
             })
@@ -172,7 +173,7 @@ function all_up() {
             console.log(sourceType);
             upFile(file, urlIndex, titleIndex, time, sourceType);
         }
-        localRefresh();
+    //    localRefresh();
         allDel();
     });
 }
@@ -183,12 +184,12 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     form.append("titleIndex", titleIndex);
     form.append("timeIndex", time);
     form.append("sourceType", sourceType);
-    console.log("(((((");
+    console.log("(((((((((");
     console.log(form);
     $.ajax({
         async : false,
         crossDomain : true,
-        url : "/file/upload",
+        url : "/Al/upload",
         method : "POST",
         processData : false,
         contentType : false,
