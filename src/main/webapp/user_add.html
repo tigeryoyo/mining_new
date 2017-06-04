@@ -123,6 +123,7 @@ function showRole(){
 		},
 		complete : function(){
 			console.log("all")
+			$("#select_roleName option:contains('请选择角色')").next().attr("selected", true);
             stop();
         },
 		error: function(msg){

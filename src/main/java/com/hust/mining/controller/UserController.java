@@ -271,7 +271,11 @@ public class UserController {
         userQueryCondition.setTrueName(trueName);
         userQueryCondition.setRoleName(roleName);
         long count = 0;
-        count = userService.selectUserCount(userQueryCondition);
+        if(null == roleName){
+        	count = userService.selectUserByPageLimit(userQueryCondition).size();
+        }else{
+        	count = userService.selectUserCount(userQueryCondition);
+        }
         if(count<=0){
         	return ResultUtil.errorWithMsg("无用户信息！");
         }

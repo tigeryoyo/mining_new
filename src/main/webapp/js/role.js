@@ -23,7 +23,7 @@ function roleInforShow(page){
 				$.each(items,function(idx,item){
 					cookie_value1="'"+item.roleId+"'";
 					cookie_value2="'"+item.roleName+"'";
-					row = '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.roleName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delRole" id="'+item.roleId+'" /></td></tr>'
+					row = '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.roleName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delRole" name="'+item.roleName+'" id="'+item.roleId+'" /></td></tr>'
 					$('#role_infor_tab').append(row);
 				});
 			}else{
@@ -336,12 +336,16 @@ function getCookie(name) {
 
 
 
-// 用户删除
-
+// 删除角色
 $(function(){
 	$("#role_infor_tab").on("click",".delRole",function(){
 		var role_id = $(this).attr("id");
-		console.log(role_id);
+		var role_name = $(this).attr("name");
+		console.log(role_id+role_name);
+		if(role_name == "超级管理员"){
+			alert('对不起，超级管理员角色不能被删除！');
+			return;
+		}
 		roleInforDel(role_id);
 		function roleInforDel(role_id){
 			$.ajax({

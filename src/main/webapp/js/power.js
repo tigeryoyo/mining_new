@@ -363,7 +363,8 @@ function powerInforChange(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("修改成功");	
+				alert("修改成功");
+				window.location.href = "/power_infor.html";
 			}else{
 				alert(msg.result);
 			}

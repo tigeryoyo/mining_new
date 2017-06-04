@@ -2,13 +2,17 @@ package com.hust.mining.dao;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.hust.mining.dao.mapper.UserRoleMapper;
+import com.hust.mining.model.User;
+import com.hust.mining.model.UserExample;
 import com.hust.mining.model.UserRole;
 import com.hust.mining.model.UserRoleExample;
 import com.hust.mining.model.UserRoleExample.Criteria;
+import com.hust.mining.model.params.UserQueryCondition;
 @Repository
 public class UserRoleDao {
 
@@ -64,5 +68,4 @@ public class UserRoleDao {
 		int statue = userRoleMapper.deleteByExample(example);
 		return statue;
 	}
-
 }
