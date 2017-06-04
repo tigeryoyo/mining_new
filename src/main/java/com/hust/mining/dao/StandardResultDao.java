@@ -49,8 +49,8 @@ public class StandardResultDao {
 	}
 	
 	public int deleteById(String stdResId){
-		if(!FileUtil.delete(DIRECTORY.STDRES_CLUSTER+stdResId) && !FileUtil.delete(DIRECTORY.STDRES_COUNT+stdResId)){
-			logger.error("delete standard cluster && count fail.");
+		if(!FileUtil.delete(DIRECTORY.STDRES_CLUSTER+stdResId) || !FileUtil.delete(DIRECTORY.STDRES_COUNT+stdResId)){
+			logger.error("delete standard cluster or count fail.");
 		}
 		return standardResultMapper.deleteByPrimaryKey(stdResId);
 	}

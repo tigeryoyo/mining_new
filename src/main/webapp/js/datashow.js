@@ -5,10 +5,10 @@ function analysisUrl(parm) {
 	var r = window.location.search.substr(1).match(reg);
 	return unescape(r[2]);
 }
-
+issueType = "";
 function dataShow() {
 	var issueId = getCookie("issueId");
-	var issueType = analysisUrl("issueType");
+	issueType = analysisUrl("issueType");
 	if (issueType == "extensive") {
 		showExtensiveIssueDetails(issueId);
 	} else if (issueType == "standard") {
@@ -36,28 +36,15 @@ function showExtensiveIssueDetails(issueId) {
 			if (msg.status == "OK") {
 				var items = msg.result.issue;
 				$('.issueName').text("任务名称：" + items.issueName);
-				if (issueType == "extensive") {
-					$("span#issueType").text("(泛数据)");
-				} else if (issueType == "standard") {
-					$("span#issueType").text("(准数据)");
-				} else if (issueType == "core") {
-					$("span#issueType").text("(核心数据)");
-				} else {
-					$("span#issueType").text("error");
-				}
+				showIssueType();
 				var tabs = msg.result.list;
 				$('.up_list tr:not(:first)').html("");
 				$.each(tabs, function(i, item) {
 					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.fileName + '</td><td align="center" valign="middle">'
 						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')
-						+ '</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick=clusterSingleFile("' 
-						+ item.fileId
-						+ '") />'
-						+'<img src="images/xiazai.png" class="btn_sc" onclick=downloadExtFile("'
-						+ item.fileId
-						+ '","'
-						+ item.fileName
-						+'") /><img class="btn_jl" src="images/delete.png" id="' + item.fileId + '" onclick="bind()" /></td></tr>'
+						+ '</td><td align="center" valign="middle"><img src="images/julei.png" class="btn_sc" onClick=clusterSingleFile("' + item.fileId + '") />'
+						+ '<img src="images/xiazai.png" class="btn_sc" onclick=downloadExtFile("' + item.fileId + '","' + item.fileName + '") /><img class="btn_jl" src="images/delete.png" id="'
+						+ item.fileId + '" onclick="bind()" /></td></tr>'
 					$('.up_list').append(row);
 				});
 			} else {
@@ -91,15 +78,7 @@ function showStandardIssueDetails(issueId) {
 			if (msg.status == "OK") {
 				var items = msg.result.issue;
 				$('.issueName').text("任务名称：" + items.issueName);
-				if (issueType == "extensive") {
-					$("span#issueType").text("(泛数据)");
-				} else if (issueType == "standard") {
-					$("span#issueType").text("(准数据)");
-				} else if (issueType == "core") {
-					$("span#issueType").text("(核心数据)");
-				} else {
-					$("span#issueType").text("error");
-				}
+				showIssueType();
 				var stdResList = msg.result.stdResList;
 				$('.up_list tr:not(:first)').html("");
 				$.each(stdResList, function(i, item) {
@@ -107,7 +86,8 @@ function showStandardIssueDetails(issueId) {
 					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.resName + '</td><td align="center" valign="middle">'
 						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')
 						+ '</td><td align="center" valign="middle"><img src="images/xiazai.png" class="btn_sc" onclick=downloadStdRes(' + stdResId
-						+ ') /><img class="btn_sc" src="images/chakan.png" onclick=alert("待续") /><img class="btn_sc" src="images/delete.png" onclick=alert("待续") /></td></tr>'
+						+ ') /><img class="btn_sc" src="images/schxsj.png" onclick=alert("待续") /><img class="btn_sc" src="images/delete.png" onclick=deleteStandardResult(' + stdResId
+						+ ') /></td></tr>'
 					$('.up_list').append(row);
 				});
 
@@ -127,13 +107,36 @@ function showStandardIssueDetails(issueId) {
 	});
 }
 
-
-function downloadExtFile(fileId,fileName){
+function downloadExtFile(fileId, fileName) {
 	var form = $('<form method="POST" action="/file/downloadExtFile">');
-	form.append($('<input type="hidden" name="fileId" value="'+fileId+'"/>'));
-	form.append($('<input type="hidden" name="fileName" value="'+fileName+'"/>'));
+	form.append($('<input type="hidden" name="fileId" value="' + fileId + '"/>'));
+	form.append($('<input type="hidden" name="fileName" value="' + fileName + '"/>'));
 	$('body').append(form);
 	form.submit(); // 自动提交
+}
+
+function deleteStandardResult(stdResId) {
+	$.ajax({
+		type : "post",
+		url : "/standardResult/delete",
+		data : {
+			stdResId : stdResId
+		},
+		dataType : "json",
+		success : function(msg) {
+			if (msg.status == "OK") {
+				showStandardIssueDetails(msg.result.issueId);
+			} else {
+				alert(msg.result);
+			}
+		},
+		complete : function() {
+			stop();
+		},
+		error : function() {
+			alert("数据请求失败");
+		}
+	})
 }
 
 function downloadStdRes(stdResId) {
@@ -158,6 +161,18 @@ function changeStyle() {
 	titleTds.eq(2).text("创建人");
 	titleTds.eq(3).text("创建时间");
 	titleTds.eq(4).text("操作");
+}
+
+function showIssueType() {
+	if (issueType == "extensive") {
+		$("span#issueType").text("(泛数据)");
+	} else if (issueType == "standard") {
+		$("span#issueType").text("(准数据)");
+	} else if (issueType == "core") {
+		$("span#issueType").text("(核心数据)");
+	} else {
+		$("span#issueType").text("error");
+	}
 }
 
 function localRefresh() {
