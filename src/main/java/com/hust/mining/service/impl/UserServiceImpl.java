@@ -22,6 +22,7 @@ import com.hust.mining.model.Role;
 import com.hust.mining.model.RolePower;
 import com.hust.mining.model.User;
 import com.hust.mining.model.UserRole;
+import com.hust.mining.model.params.RoleQueryCondition;
 import com.hust.mining.model.params.UserQueryCondition;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.UserService;
@@ -233,15 +234,28 @@ public class UserServiceImpl implements UserService {
         long numbers = userDao.selectCountOfUser();
         return numbers;
     }
-
+    
+    /**
+     * 条件查询User
+     * 模糊查询
+     */
     @Override
     public List<User> selectUserByPageLimit(UserQueryCondition userQueryCondition) {
         List<User> users = userDao.selectByExample(userQueryCondition);
         List<User> user = new ArrayList<User>();
         // 对查询出来的信息进行筛选 首先需要根据条件 查出roleId，再根据ID 查出所有的用户ID，然后去判断
-        if (!userQueryCondition.getRoleName().isEmpty()) {
-            List<Role> roles = roleDao.selectRoleByName(userQueryCondition.getRoleName());
-            List<UserRole> userRoles = userRoleDao.selectUserRoleByRoleId(roles.get(0).getRoleId());
+        
+        if (userQueryCondition.getRoleName() !=null && !userQueryCondition.getRoleName().isEmpty()) {
+        	RoleQueryCondition role = new RoleQueryCondition();
+        	role.setRoleName(userQueryCondition.getRoleName());
+        	//此处role查询为模糊查询
+        	List<Role> roles = roleDao.selectByLikeRoleName(role);
+//            List<UserRole> userRoles = userRoleDao.selectUserRoleByRoleId(roles.get(0).getRoleId());
+        	List<UserRole> userRoles = new ArrayList<>();
+            for(Role r : roles){
+            	userRoles.addAll(userRoleDao.selectUserRoleByRoleId(r.getRoleId()));
+            }
+            //
             for (User userInfo : users) {
                 for (UserRole userRoleInfo : userRoles) {
                     if (userInfo.getUserId().equals(userRoleInfo.getUserId())) {
@@ -252,7 +266,7 @@ public class UserServiceImpl implements UserService {
         } else {
             user = users;
         }
-        return users;
+        return user;
     }
 
     @Override
