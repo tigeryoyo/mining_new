@@ -101,4 +101,17 @@ public class StandardResultController {
             }
         }
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "/delete")
+    public Object delete(@RequestParam(value = "stdResId", required = false) String stdResId,
+            HttpServletRequest request){
+    	String issueId = issueService.getCurrentIssueId(request);
+    	if(standardResultService.deleteById(stdResId) <= 0){
+    		return ResultUtil.errorWithMsg("删除失败！");
+    	}
+    	JSONObject json = new JSONObject();
+        json.put("issueId", issueId);
+        return ResultUtil.success(json);
+    }
 }

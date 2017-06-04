@@ -44,7 +44,7 @@ public class ResultDao {
     }
 
     public int delResultById(String resultId) {
-        FileUtil.delete(DIRECTORY.CONTENT + resultId);
+//        FileUtil.delete(DIRECTORY.CONTENT + resultId);
         FileUtil.delete(DIRECTORY.MODIFY_CLUSTER + resultId);
         FileUtil.delete(DIRECTORY.MODIFY_COUNT + resultId);
         FileUtil.delete(DIRECTORY.ORIG_CLUSTER + resultId);
