@@ -40,53 +40,41 @@ function fileSearch() {
 
 	}
 	// console.log(value);
-	$
-			.ajax({
-				type : "post",
-				url : "/file/searchFileByCon",
-				data : {
-					startTime : strStart,
-					endTime : strEnd
-				},
-				dataType : "json",
-				beforeSend : function() {
-					begin();
-				},
-				success : function(msg) {
-					// console.log(msg);
-					if (msg.status == "OK") {
-						// alert("success") ;
-						var items = msg.result;
-						// console.log(msg)
-						$('.summary_up table tr:not(:first)').html('');
-						$
-								.each(
-										items,
-										function(i, item) {
-											rows = '<tr><td height="32" align="center"><input type="checkbox" style="width: 20px; height: 20px;" name="groupIds"  class="'
-													+ item.fileId
-													+ '" /></td><td height="32" align="center">'
-													+ item.fileName
-													+ '</td><td height="32" align="center">'
-													+ item.creator
-													+ '</td><td height="32" align="center">'
-													+ new Date(
-															item.uploadTime.time)
-															.format('yyyy-MM-dd hh:mm:ss')
-													+ '</td></tr>'
-											$('.summary_up table').append(rows);
-										})
-					} else {
-						alert(msg.result);
-					}
-				},
-				complete : function() {
-					stop();
-				},
-				error : function() {
-					alert("数据请求失败");
-				}
-			});
+	$.ajax({
+		type : "post",
+		url : "/file/searchFileByCon",
+		data : {
+			startTime : strStart,
+			endTime : strEnd
+		},
+		dataType : "json",
+		beforeSend : function() {
+			begin();
+		},
+		success : function(msg) {
+			// console.log(msg);
+			if (msg.status == "OK") {
+				// alert("success") ;
+				var items = msg.result;
+				// console.log(msg)
+				$('.summary_up table tr:not(:first)').html('');
+				$.each(items, function(i, item) {
+					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width: 20px; height: 20px;" name="groupIds"  class="' + item.fileId
+						+ '" /></td><td height="32" align="center">' + item.fileName + '</td><td height="32" align="center">' + item.creator + '</td><td height="32" align="center">'
+						+ new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss') + '</td></tr>'
+					$('.summary_up table').append(rows);
+				})
+			} else {
+				alert(msg.result);
+			}
+		},
+		complete : function() {
+			stop();
+		},
+		error : function() {
+			alert("数据请求失败");
+		}
+	});
 }
 
 // 汇总
@@ -99,63 +87,49 @@ function fileSummary() {
 	});
 	if (fileIds.length != 0) {
 		$.ajax({
-					type : "post",
-					url : "/issue/miningByFile",
-					data : JSON.stringify(fileIds),
-					dataType : "json",
-					contentType : "application/json",
-					beforeSend : function() {
-						begin();
-					},
-					success : function(msg) {
-						// console.log(msg);
-						if (msg.status == "OK") {
-							var items = msg.result;
-							console.log(items);
+			type : "post",
+			url : "/issue/miningByFile",
+			data : JSON.stringify(fileIds),
+			dataType : "json",
+			contentType : "application/json",
+			beforeSend : function() {
+				begin();
+			},
+			success : function(msg) {
+				// console.log(msg);
+				if (msg.status == "OK") {
+					var items = msg.result;
+					console.log(items);
 
-							var indexOfTitle = parseInt(items[0][0]) + 1;
-							var indexOfUrl = parseInt(items[0][1]) + 1;
-							var indexOfTime = parseInt(items[0][2]) + 1;
-							console.log(indexOfTitle);
-							console.log(indexOfUrl);
-							console.log(indexOfTime);
-							for (var i = 0; i < items.length - 1; i++) {
-								// items第一行存储index，故从i+1读起
-								item = items[i + 1];
-								console.log(item);
-								rows = '<tr><td height="32" align="center"><input type="checkbox" style="width: 20px; height: 20px;" class="'
-										+ i
-										+ '"/></td><td height="32" align="center"><a href="'
-										+ item[indexOfUrl]
-										+ '" target="_blank">'
-										+ item[indexOfTitle]
-										+ '</a></td><td height="32" align="center">'
-										+ item[indexOfTime]
-										+ '</td><td height="32" align="center">'
-										+ '<a href="javascript:;" onclick="toPaint('
-										+ i
-										+ ',\''
-										+ item[indexOfTitle]
-												.replace(/\"/g, " ").replace(
-														/\'/g, " ")
-										+ '\')">'
-										+ item[0] + '</a>' + '</td></tr>';
-								$('.summary_tab table').append(rows);
-							}
-						} else {
-							alert(msg.result);
-						}
-
-					},
-					complete : function() {
-						stop();
-					},
-					error : function() {
-						console.log("失败了");
-						alert("数据请求失败");
+					var indexOfTitle = parseInt(items[0][0]) + 1;
+					var indexOfUrl = parseInt(items[0][1]) + 1;
+					var indexOfTime = parseInt(items[0][2]) + 1;
+					console.log(indexOfTitle);
+					console.log(indexOfUrl);
+					console.log(indexOfTime);
+					for (var i = 0; i < items.length - 1; i++) {
+						// items第一行存储index，故从i+1读起
+						item = items[i + 1];
+						console.log(item);
+						rows = '<tr><td height="32" align="center"><input type="checkbox" style="width: 20px; height: 20px;" class="' + i + '"/></td><td height="32" align="center"><a href="'
+							+ item[indexOfUrl] + '" target="_blank">' + item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">'
+							+ '<a href="javascript:;" onclick="toPaint(' + i + ',\'' + item[indexOfTitle].replace(/\"/g, " ").replace(/\'/g, " ") + '\')">' + item[0] + '</a>' + '</td></tr>';
+						$('.summary_tab table').append(rows);
 					}
-				});
-	}else{
+				} else {
+					alert(msg.result);
+				}
+
+			},
+			complete : function() {
+				stop();
+			},
+			error : function() {
+				console.log("失败了");
+				alert("数据请求失败");
+			}
+		});
+	} else {
 		alert("请先按搜索按钮！");
 	}
 }
@@ -192,53 +166,43 @@ function addLayData() {
 }
 
 function freshData() {
-	$
-			.ajax({
-				type : "post",
-				url : "/result/getCountResult",
-				beforeSend : function() {
-					begin();
-				},
-				success : function(msg) {
-					if (msg.status == 'OK') {
-						var items = msg.result;
-						$('.summary_tab table tr:not(:first)').html('');
-						$
-								.each(
-										items,
-										function(i, item) {
-											rows = '<tr><td height="32" align="center"><input type="checkbox" class="'
-													+ i
-													+ '"/></td><td height="32" align="center"><a href="'
-													+ item[1]
-													+ '" target="_blank">'
-													+ item[2]
-													+ '</a></td><td height="32" align="center">'
-													+ item[3]
-													+ '</td><td height="32" align="center"><a href="javascript:;" onclick="toPaint('
-													+ i
-													+ ',\''
-													+ item[2].replace(/\"/g,
-															" ").replace(/\'/g,
-															" ")
-													+ '\')">'
-													+ item[0]
-													+ '</a></td></tr>';
-											$('.summary_tab table')
-													.append(rows);
-										})
+	$.ajax({
+		type : "post",
+		url : "/result/getCountResult",
+		beforeSend : function() {
+			begin();
+		},
+		success : function(msg) {
+			$('.summary_tab table tr:not(:first)').html('');
+			if (msg.status == "OK") {
+				// alert("删除成功");
+				var items = msg.result;
+				console.log(items);
 
-					} else {
-						alert(msg.result);
-					}
-				},
-				complete : function() {
-					stop();
-				},
-				error : function() {
-					alert("数据请求失败");
+				var indexOfTitle = parseInt(items[0][0]) + 1;
+				var indexOfUrl = parseInt(items[0][1]) + 1;
+				var indexOfTime = parseInt(items[0][2]) + 1;
+				for (var i = 0; i < items.length - 1; i++) {
+					// items第一行存储index，故从i+1读起
+					item = items[i + 1];
+					console.log(item);
+					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i + '"/></td><td height="32" align="center"><a href="'
+						+ item[indexOfUrl] + '" target="_blank">' + item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">'
+						+ '<a href="javascript:;" onclick="toPaint(' + i + ',\'' + item[indexOfTitle].replace(/\"/g, " ").replace(/\'/g, " ") + '\')">' + item[0] + '</a>' + '</td></tr>';
+					$('.summary_tab table').append(rows);
+
 				}
-			});
+			} else {
+				alert(msg.result);
+			}
+		},
+		complete : function() {
+			stop();
+		},
+		error : function() {
+			alert("数据请求失败");
+		}
+	});
 }
 
 /* 删除 */
