@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.tools.ant.taskdefs.optional.jlink.jlink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,11 @@ import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.params.Condition;
 import com.hust.mining.service.AlgorithmContainerService;
+import com.hust.mining.service.MiningService;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.SegmentService;
+import com.hust.mining.util.AttrUtil;
+import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.FileUtil;
 import com.hust.mining.util.WeiboUtil;
@@ -52,6 +56,9 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
 	 
 	 @Autowired
 	 private RedisService redisService;
+	 
+	 @Autowired
+	 private MiningService miningService;
 	 /**
      * Logger for this class
      */
@@ -73,24 +80,71 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
         try {
             is = file.getInputStream();
             // 此处index传入的顺序必须与constants中定义的value值保持一致
-            list = ExcelUtil.read(file.getOriginalFilename(), is, 1, -1, con.getUrlIndex(), con.getTitleIndex(),
+            list = ExcelUtil.read(file.getOriginalFilename(), is, 0, -1, con.getUrlIndex(), con.getTitleIndex(),
                     con.getTimeIndex());
-            String[] tString = list.get(0);
-            for (String string : tString) {
-				System.out.println("111"+string);
-			}
             redisService.setObject(KEY.REDIS_CONTENT, list, request);
             List<String[]> list1= (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
-            String[] String = list1.get(0);
-            for (String string2 : String) {
-            	System.out.println("2222"+string2);
-			}
             return 1;
         } catch (IOException e) {
             logger.error("读取文件出现异常\t" + e.toString());
             return 0;
         }
       
+    }
+    /**
+     * 第一个参数为：去除属性后的文本
+     * 聚类的结果
+     * 属性列
+     */
+    @Override
+    public void storeResult(List<String[]> list,List<List<Integer>> result1, String[] attrs,HttpServletRequest request) 
+    {
+    	List<String[]> cluster = ConvertUtil.toStringListB(result1);
+		List<int[]> countResult = miningService.count(list, cluster);
+		list.add(0, attrs);
+		redisService.setObject(KEY.REDIS_CONTENT, list, request);
+		redisService.setObject(KEY.REDIS_CLUSTER_RESULT, cluster, request);
+		redisService.setObject(KEY.REDIS_COUNT_RESULT, countResult, request);
+		List<String[]> list2 = getResult(request);
+		System.out.println("结果是：");
+		for (String[] strings : list2) {
+			for (String string : strings) {
+				System.out.print(string+"   ");
+			}
+			System.out.println();
+		}
+		System.out.println("结果完");
+    }
+    
+    @Override
+    public List<String[]> getResult(HttpServletRequest request) {
+        // TODO Auto-generated method stub
+    	List<String[]> list = new ArrayList<String[]>();
+        try {
+            List<String[]> content =  (List<String[]>)redisService.getObject(KEY.REDIS_CONTENT, request);
+            List<int[]> count = (List<int[]>) redisService.getObject(KEY.REDIS_COUNT_RESULT, request);
+            List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
+            System.out.println("cluster为:");
+            for (String[] strings : cluster) {
+			   for (String string : strings) {
+				System.out.print(string+ "");
+			}
+			   System.out.println();
+           }
+            System.out.println("cluster完:");
+            for (int[] item : count) {
+                String[] old = content.get(item[Index.COUNT_ITEM_INDEX]+1);
+                String[] ne = new String[old.length + 1];
+                System.arraycopy(old, 0, ne, 1, old.length);
+                ne[0] = item[Index.COUNT_ITEM_AMOUNT] + "";
+                list.add(ne);
+            }
+            list.add(0, AttrUtil.findEssentialIndex(content.get(0)));
+        } catch (Exception e) {
+            logger.error("get count result failed:{}", e.toString());
+            return null;
+        }
+        return list;
     }
 
     
@@ -123,7 +177,7 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
      * @return
      */
 	@Override
-	public List<List<Integer>> Sort(List<String[]> list, List<List<Integer>> resultIndexSetList) {
+	public List<List<Integer>> Sort(List<String[]> list, List<List<Integer>> resultIndexSetList, int indexOfTitle, int indexOfTime) {
 		Collections.sort(resultIndexSetList, new Comparator<List<Integer>>() {
 
             @Override
@@ -139,10 +193,10 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
                 public int compare(Integer o1, Integer o2) {
                     // TODO Auto-generated method stub
                 	//判断他们的标题是否相同
-                    int compare = list.get(o1)[Index.TITLE_INDEX].compareTo(list.get(o2)[Index.TITLE_INDEX]);
+                    int compare = list.get(o1)[indexOfTitle].compareTo(list.get(o2)[indexOfTitle]);
                     //若不相同，使用时间进行排序。
                     if (compare == 0) {
-                        compare = list.get(o1)[Index.TIME_INDEX].compareTo(list.get(o2)[Index.TIME_INDEX]);
+                        compare = list.get(o1)[indexOfTime].compareTo(list.get(o2)[indexOfTime]);
                     }
                     return compare;
                 }
@@ -159,9 +213,14 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
      * @return
      */
 	@Override
-	public List<List<Integer>> UseKmeans(List<String[]> list, int k, int granularity) {
+	public String UseKmeans(List<String[]> list, int k, int granularity ,HttpServletRequest request) {
 		//用于存放结果
     	List<List<Integer>> resultIndexSetList = new ArrayList<List<Integer>>();
+    	//移除属性行
+    	String[] attrs = list.remove(0);
+    	
+    	int indexOfTitle = AttrUtil.findIndexOfTitle(attrs);
+    	int indexOfTime = AttrUtil.findIndexOfTime(attrs);
     	//向量转换完成
         List<double[]> vectors = Converter(list, 1);
         System.out.println("使用的是KMEANS");
@@ -173,8 +232,8 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
         kmeans.setSimi(new AcrossSimilarity(vectors)); 
       	  System.out.println("选择的是粗粒度AcrossSimilarity");
 		
-        } else if(granularity == GRANULARITY.CosSimilarity){
-       	 kmeans.setSimi(new CosSimilarity(vectors));
+        }if(granularity == GRANULARITY.CosSimilarity){
+       	  kmeans.setSimi(new CosSimilarity(vectors));
 		  System.out.println("选择的是细粒度CosSimilarity");
         }
         kmeans.setK(k);
@@ -185,19 +244,69 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
             resultIndexSetList = future1.get();
         } catch (Exception e) {
             logger.error("error occur during clustering by canopy" + e.toString());
-            return null;
+            return "聚类失败";
         }
-        List<List<Integer>> result= Sort(list, resultIndexSetList);
-    	return result;
+        
+       List<List<Integer>> result= Sort(list, resultIndexSetList,indexOfTitle,indexOfTime);
+       System.out.println("去掉前");
+       for(int i = 0; i < result.size();i++)
+       {
+     	  List<Integer> list2 = result.get(i);
+     	  for (Integer integer : list2) {
+ 			System.out.print(integer+"  ");
+ 		} 
+     	  System.out.println();
+       }
+      //去除长度为0 的类簇
+      int start = 0;
+       
+      for(int i = 0; i < result.size();i++)
+      {
+    	  List<Integer> list2 = result.get(i);
+    	  if (list2.size()==0) {
+    		start = i;
+    		break;
+		 } 	  
+      }
+  	  List<List<Integer>> result1 = new ArrayList<List<Integer>>();
+  	  if (start==0) 
+  	  {
+  		 storeResult(list, result, attrs, request);
+	  }
+  	  else{
+  		  
+  		 for(int i = 0; i < start; i++)
+  	      {
+  	    	 result1.add(result.get(i));
+  	      }
+  		 storeResult(list, result1, attrs, request);
+  		  
+  	  }
+  	  
+      System.out.println("去掉后");
+      for(int i = 0; i < result1.size();i++)
+      {
+    	  List<Integer> list2 = result1.get(i);
+    	  for (Integer integer : list2) {
+			System.out.print(integer+"  ");
+		} 
+    	  System.out.println();
+      }
+      return "聚类成功";
 	}
 
 	/**
 	 * 使用Canopy聚类，阈值可设置
 	 */
 	@Override
-	public List<List<Integer>> UseCanopy(List<String[]> list, float Threshold, int granularity) {
+	public String UseCanopy(List<String[]> list, float Threshold, int granularity, HttpServletRequest request) {
 		//用于存放结果
     	List<List<Integer>> resultIndexSetList = new ArrayList<List<Integer>>();
+    	//移除属性行
+    	String[] attrs = list.remove(0);
+    	
+    	int indexOfTitle = AttrUtil.findIndexOfTitle(attrs);
+    	int indexOfTime = AttrUtil.findIndexOfTime(attrs);
     	//向量转换完成
         List<double[]> vectors = Converter(list, 1);
         System.out.println("使用的是CANOPY");
@@ -222,10 +331,11 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
             resultIndexSetList = future.get();
         } catch (Exception e) {
             logger.error("error occur during clustering by canopy" + e.toString());
-            return null;
+            return "聚类失败";
         }
-        List<List<Integer>> result= Sort(list, resultIndexSetList);
-    	return result;
+        List<List<Integer>> result= Sort(list, resultIndexSetList,indexOfTitle,indexOfTime);
+        storeResult(list, result, attrs, request);
+        return "聚类成功";
 	}
 
 	/**
@@ -237,9 +347,14 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
      * @return
      */
 	@Override
-	public List<List<Integer>> UseDBScan(List<String[]> list, float Eps, int MinPts, int granularity) {
+	public String UseDBScan(List<String[]> list, float Eps, int MinPts, int granularity,HttpServletRequest request) {
 		//用于存放结果
     	List<List<Integer>> resultIndexSetList = new ArrayList<List<Integer>>();
+    	//移除属性行
+    	String[] attrs = list.remove(0);
+    	
+    	int indexOfTitle = AttrUtil.findIndexOfTitle(attrs);
+    	int indexOfTime = AttrUtil.findIndexOfTime(attrs);
     	//向量转换完成
         List<double[]> vectors = Converter(list, 1);
         System.out.println("使用的是DBSCAN");
@@ -264,10 +379,11 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
             resultIndexSetList = future.get();
         } catch (Exception e) {
             logger.error("error occur during clustering by canopy" + e.toString());
-            return null;
+            return "聚类失败";
         }
-        List<List<Integer>> result= Sort(list, resultIndexSetList);
-    	return result;
+        List<List<Integer>> result= Sort(list, resultIndexSetList,indexOfTitle,indexOfTime);
+        storeResult(list, result, attrs, request);
+        	return "聚类成功";
 	}
 
 

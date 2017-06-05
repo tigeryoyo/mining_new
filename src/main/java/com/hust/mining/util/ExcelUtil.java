@@ -51,8 +51,8 @@ public class ExcelUtil {
             workbook = new XSSFWorkbook(inputStream);
         }
         Sheet sheet = workbook.getSheetAt(0);
-        int rowNum = sheet.getLastRowNum();
-        int colNum = sheet.getRow(0).getLastCellNum();
+        int rowNum = sheet.getLastRowNum(); //行数
+        int colNum = sheet.getRow(0).getLastCellNum(); //列数
         if (null == indexes || indexes.length == 0) {
             indexes = new Integer[colNum];
             for (int i = 0; i < colNum; i++) {

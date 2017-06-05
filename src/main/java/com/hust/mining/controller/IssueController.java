@@ -199,7 +199,9 @@ public class IssueController {
         }
         List<String> fileIds = new ArrayList<String>();
         fileIds.add(fileId);
+        System.out.println("hahahah");
         List<String[]> count = issueService.miningByFileIds(fileIds, request);
+      
         if (count == null) {
             return ResultUtil.unknowError();
         }

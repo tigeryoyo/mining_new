@@ -189,7 +189,7 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     $.ajax({
         async : false,
         crossDomain : true,
-        url : "/Al/upload",
+        url : "/AlgorithmContainer/upload",
         method : "POST",
         processData : false,
         contentType : false,
