@@ -50,6 +50,7 @@ public class FileUtil {
 	}
 
 	// 不同文件第一行属性不同，作并集处理
+	@SuppressWarnings("unchecked")
 	public static List<String[]> readForUnificating(String... filenames) {
 		if (CommonUtil.hasEmptyArray(filenames)) {
 			return null;
@@ -100,6 +101,11 @@ public class FileUtil {
 
 			String[] subAttrs = line.split("\t");
 			for (int i = 0; i < subAttrs.length; i++) {
+				if(subAttrs[i].equals("微博链接")){
+					allAttrs.add("链接");
+					pos_i.add(i);
+					continue;
+				}
 				allAttrs.add(subAttrs[i]);
 				pos_i.add(i);
 			}
