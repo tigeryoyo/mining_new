@@ -375,6 +375,13 @@ public class IssueServiceImpl implements IssueService {
 			}
 		}
 		filteredContent.add(0, attrs);
+		System.out.println("待聚类");
+		for (String[] strings : filteredContent) {
+			for (String string : strings) {
+				System.out.print(string);
+			}
+			System.out.println();
+		}
 
 		List<User> users = userService.selectSingleUserInfo(user, request);
 		User user2 = users.get(0);
@@ -450,6 +457,12 @@ public class IssueServiceImpl implements IssueService {
 		String[] attrs = content.get(0);
 		// 聚类
 		List<List<Integer>> clusterResult = miningService.cluster(content, converterType, algorithmType, granularity);
+		for (List<Integer> list : clusterResult) {
+			for (Integer integer : list) {
+				System.out.print(integer +"  ");
+			}
+			System.out.println();
+		}
 		// 每个String[]都是某个类簇的数据ID的集合。
 		List<String[]> cluster = ConvertUtil.toStringListB(clusterResult);
 		List<int[]> countResult = miningService.count(content, cluster);
