@@ -29,6 +29,12 @@ public class ResultController {
     @Autowired
     private RedisService redisService;
 
+    /**
+     * 得到聚类结果、类簇第一个标题、时间、数量等
+     * @param resultId
+     * @param request
+     * @return
+     */
     @ResponseBody
     @RequestMapping("/getCountResult")
     public Object getCountResult(@RequestParam(value = "resultId", required = false) String resultId,
@@ -51,6 +57,37 @@ public class ResultController {
         return ResultUtil.success(list);
     }
 
+    /**
+     * 得到某个类全部的元素的信息
+     * @param clusterIndex 类中第一个元素在源数据对应的下标
+     * @param resultId 聚类结果id--文件名
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getClusterResult")
+    public Object getClusterResult(@RequestParam(value = "clusterIndex", required = false) String clusterIndex,
+    		@RequestParam(value = "resultId", required = false) String resultId,
+            HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择任务");
+        }
+        if (StringUtils.isBlank(resultId)) {
+            resultId = resultService.getCurrentResultId(request);
+        }
+        if (StringUtils.isBlank(resultId)) {
+            return ResultUtil.errorWithMsg("不存在记录");
+        }
+        //得到类中每个元素的信息
+        List<String[]> list = resultService.getClusterResultById(clusterIndex,resultId, issueId, request);
+        if (null == list || list.size() == 0) {
+            return ResultUtil.errorWithMsg("不存在记录");
+        }
+        redisService.setString(KEY.RESULT_ID, resultId, request);
+        return ResultUtil.success(list);
+    }
+    
     @ResponseBody
     @RequestMapping("/deleteSets")
     public Object delSets(@RequestBody int[] sets, HttpServletRequest request) {

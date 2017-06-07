@@ -5,6 +5,7 @@
 <title>文件汇总</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/loading.css">
+<link rel="stylesheet" href="css/history_clusterdetails.css">
 <script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
 <script type="text/javascript" src="js/loading.js"></script>
 <script type="text/javascript" src="js/waiting.js"></script>
@@ -20,11 +21,8 @@
 			<iframe src="g_left.html" width="200px " height="760px"></iframe>
 			<div class="right float_r">
 				<div class="s_nav">
-					当前位置：
-					<a href="/topic_list.html">任务管理</a>
-					>>
-					<a href="/topic_details.html">任务详情</a>
-					>>历史记录
+					当前位置： <a href="/topic_list.html">任务管理</a> >> <a
+						href="/topic_details.html">任务详情</a> >>历史记录
 				</div>
 				<div class="data_summary">
 					<div class="summary_wrap ">
@@ -50,15 +48,14 @@
 								</table>
 							</div>
 							<div class="table_clear">
-								<label class="clear_choose">
-									<input type="checkbox" style="width:20px;height:20px;float:left; margin-left:24px;" id="historyAll" />
-									<span>全选</span>
-								</label>
-								<img onclick="addLayData()" src="images/tab_btn03.png"
-									class="heibing" />
-								<img onclick="deleteLayData()" src="images/tab_btn04.png" />
-								<a href="javascript:void(0);" onclick="sczsj()">
-									<img src="images/sczsj.png" style="float:right; margin-right:0px;" />
+								<label class="clear_choose"> <input type="checkbox"
+									style="width: 20px; height: 20px; float: left; margin-left: 24px;"
+									id="historyAll" /> <span>全选</span>
+								</label> <img onclick="addLayData()" src="images/tab_btn03.png"
+									class="heibing" /> <img onclick="deleteLayData()"
+									src="images/tab_btn04.png" /> <a href="javascript:void(0);"
+									onclick="sczsj()"> <img src="images/sczsj.png"
+									style="float: right; margin-right: 0px;" />
 								</a>
 								<div class="clear"></div>
 							</div>
@@ -68,7 +65,40 @@
 			</div>
 			<div class="clear"></div>
 		</div>
+
+		<!-- 遮罩div -->
+		<div id="goodcover"></div>
+		<div id="code">
+			<div class="close1">
+				<a href="javascript:void(0)" id="closebt"><img
+					src="images/close.gif"></a>
+			</div>
+			<div class="clusterInfoList">
+				<div class="resetButton">
+					<input type="checkbox">&nbsp;全选</input>&nbsp;&nbsp;
+					<button>重置</button>
+					&nbsp;&nbsp;&nbsp;
+					<button>删除</button>
+				</div>
+				<div class="details_tab">
+					<table width="780" border="0">
+						<tr class="fixedHead">
+							<th width="60" height="36" align="center" bgcolor="#86c6ea">选择</th>
+							<th width="450" height="36" align="center" bgcolor="#86c6ea">标题</th>
+							<th width="200" height="36" align="center" bgcolor="#86c6ea">时间</th>
+							<th width="70" height="36" align="center" bgcolor="#86c6ea">操作</th>
+						</tr>
+						
+					</table>
+
+				</div>
+
+			</div>
+
+		</div>
+
 		<iframe src="g_footer.html" width=1000px " height="80px"></iframe>
 	</div>
+
 </body>
 </html>

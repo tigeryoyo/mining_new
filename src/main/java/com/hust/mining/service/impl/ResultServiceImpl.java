@@ -327,4 +327,49 @@ public class ResultServiceImpl implements ResultService {
         return line;
     }
 
+	@Override
+	public List<String[]> getClusterResultById( String clusterIndex, String resultId, String issueId, HttpServletRequest request) {
+        List<String[]> list = new ArrayList<String[]>();
+        String[] indexList = null;
+        try {
+//            List<String[]> content = resultDao.getResultConentById(resultId, issueId, DIRECTORY.CONTENT);
+//            List<String[]> cluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
+//            redisService.setObject(KEY.REDIS_CLUSTER_RESULT, cluster, request);
+//            redisService.setObject(KEY.REDIS_CONTENT, content, request);
+        	List<String[]> content = (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
+        	List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
+        	if(content == null || content.size() == 0){
+        		content = resultDao.getResultConentById(resultId, issueId, DIRECTORY.CONTENT);
+        	}
+        	if(cluster == null || cluster.size() == 0 ){
+        		cluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
+        	}
+            for (String[] item : cluster) {
+            	//clusterIndex是源数据中序号，有标题行所以clusterIndex = 真实index + 1
+                if(Integer.valueOf(item[0]) == Integer.valueOf(clusterIndex) - 1){
+                	indexList = item;
+                	break;
+                }
+            }
+            if(indexList == null || indexList.length == 0){
+            	return null;
+            }
+            for(String[] item : content){
+            	for(String index : indexList){
+            		//item[Index.?] 未定义全局常量
+                	if(index.equals(item[0])){
+                		list.add(item);
+                	}
+                }
+            }
+            list.add(0, AttrUtil.findEssentialIndex(content.get(0)));
+        } catch (Exception e) {
+            logger.error("get count result failed:{}", e.toString());
+            e.printStackTrace();
+            return null;
+        }
+        
+        return list;
+	}
+
 }
