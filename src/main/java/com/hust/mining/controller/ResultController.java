@@ -106,6 +106,30 @@ public class ResultController {
         return ResultUtil.errorWithMsg("删除失败");
     }
 
+    /**
+     * 
+     * @param sets
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/deleteClusterBySets")
+    public Object delClusterBySets(@RequestBody int[] sets, HttpServletRequest request) {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择任务");
+        }
+        String resultId = resultService.getCurrentResultId(request);
+        if (StringUtils.isEmpty(resultId)) {
+            return ResultUtil.errorWithMsg("请重新选择一条挖掘记录");
+        }
+        boolean result = resultService.deleteSets(sets, request);
+        if (result) {
+            return ResultUtil.success("删除成功");
+        }
+        return ResultUtil.errorWithMsg("删除失败");
+    }
+
     @ResponseBody
     @RequestMapping("/combineSets")
     public Object combineSets(@RequestBody int[] sets, HttpServletRequest request) {

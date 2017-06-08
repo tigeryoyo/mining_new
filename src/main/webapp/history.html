@@ -75,10 +75,12 @@
 			</div>
 			<div class="clusterInfoList">
 				<div class="resetButton">
-					<input type="checkbox">&nbsp;全选</input>&nbsp;&nbsp;
-					<button>重置</button>
+					<input type="checkbox" style="width: 20px; height: 20px; float: left; font-size: 2px;"
+					 id="clusterItemAll">&nbsp;<span style="font-size:18px; margin-bottom: 10px;">全选</span></input>&nbsp;&nbsp;
+					<img src="images/reset.png" id="" onclick="historyReset()" />
 					&nbsp;&nbsp;&nbsp;
-					<button>删除</button>
+					<img onclick="deleteClusterItem()"
+									src="images/delete.png" />
 				</div>
 				<div class="details_tab">
 					<table width="780" border="0">

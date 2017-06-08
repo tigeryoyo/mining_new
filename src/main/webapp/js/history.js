@@ -170,6 +170,7 @@ function showClusterDetails(index,rid,count){
 			alert(msg.result);
 		}
 	});
+	//类中只有一个元素直接打开url
 	if(url != '' && count == 1){
 		window.open(url);
 	}else{
@@ -356,6 +357,43 @@ function deleteLayData() {
 	});
 }
 
+/* 删除 类中某些元素*/
+function deleteClusterItem() {
+	var sets = [];
+	$(".details_tab input:checked").each(function(i) {
+		sets.push($(this).attr('class'));
+	});
+	console.log(sets);
+	$.ajax({
+		type : "post",
+		url : "/result/deleteClusterBySets",
+		data : JSON.stringify(sets),
+		dataType : "json",
+		contentType : "application/json",
+		success : function(msg) {
+			if (msg.status == "OK") {
+				freshData();
+			} else {
+				alert(msg.result);
+			}
+		},
+		error : function(msg) {
+			alert(msg.result);
+		}
+	});
+}
+//全选类中所有元素
+$(function() {
+	$("#clusterItemAll").click(function() {
+		if (this.checked) {
+			$(".details_tab tr :checkbox").prop("checked", true);
+		} else {
+			$(".details_tab tr :checkbox").prop("checked", false);
+		}
+	})
+})
+
+//全选所有聚类历史结果
 $(function() {
 	$("#historyAll").click(function() {
 		if (this.checked) {
