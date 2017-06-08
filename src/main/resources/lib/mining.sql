@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50633
 File Encoding         : 65001
 
-Date: 2017-06-08 18:16:41
+Date: 2017-06-08 21:53:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -22,7 +22,6 @@ DROP TABLE IF EXISTS `core_result`;
 CREATE TABLE `core_result` (
   `core_rid` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `res_name` varchar(512) NOT NULL,
-  `std_rid` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '准数据任务的结果id',
   `issue_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `create_time` datetime NOT NULL,
   `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
