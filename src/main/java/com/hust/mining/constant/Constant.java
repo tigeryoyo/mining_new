@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 public class Constant {
 
     private void init() {
-        DIRECTORY.init(dirFile, dirOrigCluster, dirOrigCount, dirModiCluster, dirModiCount, dirContent, dirStdResCluster, dirStdResCount);
+        DIRECTORY.init(dirFile, dirOrigCluster, dirOrigCount, dirModiCluster, dirModiCount, dirContent, dirStdResCluster, dirStdResCount, dirCoreRes);
     }
 
     public final static String INVALID_TIME = "1970-01-01";
@@ -137,6 +137,9 @@ public class Constant {
     private String dirStdResCluster;
     @Value("${standard_count}")
     private String dirStdResCount;
+    @Value("${coreRes}")
+    private String dirCoreRes;
+    
     
     public static class DIRECTORY {
 
@@ -148,9 +151,10 @@ public class Constant {
         public static String CONTENT;
         public static String STDRES_CLUSTER;
         public static String STDRES_COUNT;
+        public static String CORERES;
         
         public static void init(String dirFile, String dirOrigCluster, String dirOrigCount, String dirModiCluster,
-                String dirModiCount, String dirContent, String dirStdResCluster, String dirStdResCount) {
+                String dirModiCount, String dirContent, String dirStdResCluster, String dirStdResCount, String dirCoreRes) {
             FILE = dirFile;
             ORIG_CLUSTER = dirOrigCluster;
             ORIG_COUNT = dirOrigCount;
@@ -159,6 +163,7 @@ public class Constant {
             CONTENT = dirContent;
             STDRES_CLUSTER = dirStdResCluster;
             STDRES_COUNT = dirStdResCount;
+            CORERES = dirCoreRes;
         }
     }
 

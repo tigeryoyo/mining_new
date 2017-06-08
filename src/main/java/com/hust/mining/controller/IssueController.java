@@ -70,12 +70,14 @@ public class IssueController {
 
 	@ResponseBody
 	@RequestMapping("/createIssueWithLink")
-	public Object createIssueWithLink(@RequestParam(value = "issueType", required = true) String issueType,HttpServletRequest request){
+	public Object createIssueWithLink(@RequestParam(value = "issueType", required = true) String issueType,
+			@RequestParam(value = "stdResId", required = false) String stdResId,
+			HttpServletRequest request){
 		String linkedIssueId = redisService.getString(KEY.ISSUE_ID, request);
 		if (StringUtils.isEmpty(linkedIssueId)) {
 			return ResultUtil.errorWithMsg("请重新选择任务");
 		}
-		int exists = issueService.createIssueWithLink(linkedIssueId, issueType, request);
+		int exists = issueService.createIssueWithLink(linkedIssueId, issueType, stdResId, request);
 		if (exists == 0) {
 			logger.error("create Issue with link fail.");
 			return ResultUtil.errorWithMsg("创建准数据失败.");

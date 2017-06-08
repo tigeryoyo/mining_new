@@ -2,6 +2,7 @@ package com.hust.mining.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,92 +20,70 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.mining.constant.Constant.KEY;
-import com.hust.mining.dao.StandardResultDao;
+import com.hust.mining.model.CoreResult;
 import com.hust.mining.model.Issue;
-import com.hust.mining.model.StandardResult;
+import com.hust.mining.service.CoreResultService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.RedisService;
-import com.hust.mining.service.StandardResultService;
-import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.ResultUtil;
 
 import net.sf.json.JSONObject;
 
 @Controller
-@RequestMapping("/standardResult")
-public class StandardResultController {
-    private static final Logger logger = LoggerFactory.getLogger(StandardResultController.class);
+@RequestMapping("/coreResult")
+public class CoreResultController {
+	private static final Logger logger = LoggerFactory.getLogger(CoreResultController.class);
     @Autowired
     private IssueService issueService;
     @Autowired
-    private StandardResultService standardResultService;
+    private CoreResultService coreResultService;
     @Autowired
     private RedisService redisService;
     
-    @ResponseBody
-    @RequestMapping(value = "/queryStandardResults")
+	@ResponseBody
+    @RequestMapping(value = "/queryCoreResults")
     public Object queryStandardResults(@RequestParam(value = "issueId", required = false) String issueId,
             HttpServletRequest request){
     	Issue issue = issueService.queryIssueById(issueId);
     	if (issue == null) {
             return ResultUtil.errorWithMsg("查询任务文件失败");
         }
-    	List<StandardResult> stdResList = standardResultService.queryStdRessByIssueId(issueId);
+    	List<CoreResult> coreResList = coreResultService.queryCoreRessByIssueId(issueId);
     	redisService.setString(KEY.ISSUE_ID, issueId, request);
     	JSONObject json = new JSONObject();
         json.put("issue", issue);
-        json.put("stdResList", stdResList);
+        json.put("coreResList", coreResList);
         return ResultUtil.success(json);
     }
-    
-    @SuppressWarnings("unchecked")
+	
+	@SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value = "/download", method = RequestMethod.POST)
-    public void download(@RequestParam(value = "stdResId", required = true) String stdResId,HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void download(@RequestParam(value = "coreResId", required = true) String coreResId,HttpServletRequest request, HttpServletResponse response) throws IOException {
     	String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isBlank(issueId)) {
             response.sendError(404, "未找到当前处理事件，请先创建或者选择某一事件");
             logger.error("issueId为空");
             return;
         }
-        StandardResult standardResult = standardResultService.queryStdResById(stdResId);
+        CoreResult coreResult = coreResultService.queryCoreResById(coreResId);
         
-        if (null == standardResult) {
+        if (null == coreResult) {
             response.sendError(404, "未找到当前处理记录，请先创建或者选择某一记录");
-            logger.error("standardResult为空");
+            logger.error("coreResult为空");
             return;
         }
         OutputStream outputStream = null;
         try {
-            List<String[]> cluster = standardResultService.getStdResContentById(stdResId);
-            if (cluster == null) {
-                return;
-            }
-            
-            String dateCount = "";
-            String srcCount = "";
-            
-            if(StringUtils.isBlank(standardResult.getDateCount())){
-            	dateCount = standardResultService.getDateCount(cluster);
-            	srcCount = standardResultService.getSourceCount(cluster);
-            	standardResult.setDateCount(dateCount);
-            	standardResult.setSourceCount(srcCount);
-            	standardResultService.updateByPrimaryKey(standardResult);
-            } else {
-            	dateCount = standardResult.getDateCount();
-            	srcCount = standardResult.getSourceCount();
-            }
-            
-            List<String[]> dateCountList = ConvertUtil.strConvertToList(dateCount, "日期");
-            List<String[]> srcCountList = ConvertUtil.strConvertToList(srcCount, "来源");
+            List<String[]> cluster = new ArrayList<String[]>();
             
             outputStream = response.getOutputStream();
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
-            String stdResName = new String(standardResult.getResName().getBytes(),"ISO8859-1");
-            response.setHeader("Content-Disposition", "attachment;filename="+stdResName+".xls");
-            HSSFWorkbook workbook = ExcelUtil.exportToExcel(cluster,dateCountList,srcCountList);
+            String coreResName = new String(coreResult.getResName().getBytes(),"ISO8859-1");
+            response.setHeader("Content-Disposition", "attachment;filename="+coreResName+".xls");
+            HSSFWorkbook workbook = ExcelUtil.exportToExcel(cluster);
             workbook.write(outputStream);
         } catch (Exception e) {
             logger.info("excel 导出失败\t" + e.toString());
@@ -117,13 +96,13 @@ public class StandardResultController {
             }
         }
     }
-    
-    @ResponseBody
+	
+	@ResponseBody
     @RequestMapping(value = "/delete")
-    public Object delete(@RequestParam(value = "stdResId", required = false) String stdResId,
+    public Object delete(@RequestParam(value = "coreResId", required = false) String coreResId,
             HttpServletRequest request){
     	String issueId = issueService.getCurrentIssueId(request);
-    	if(standardResultService.deleteById(stdResId) <= 0){
+    	if(coreResultService.deleteById(coreResId) <= 0){
     		return ResultUtil.errorWithMsg("删除失败！");
     	}
     	JSONObject json = new JSONObject();

@@ -6,13 +6,20 @@ function sczsj() {
 	scxsj(issueType);
 }
 
+//生成核心数据
+function schxsj(stdResId){
+	var issueType = "core";
+	scxsj(issueType,stdResId);
+}
+
 //生成x数据
-function scxsj(issueType){
+function scxsj(issueType,stdResId){
 	$.ajax({
 		type : "post",
 		url : "/issue/createIssueWithLink",
 		data : {
-			issueType : issueType
+			issueType : issueType,
+			stdResId : stdResId
 		},
 		dataType : "json",
 		beforeSend : function() {
@@ -37,10 +44,17 @@ function scxsj(issueType){
 	});
 }
 
-function getCookie(name) {
-	var arr = document.cookie
-			.match(new RegExp("(^|)" + name + "=([^;]*)(;|$)"));
-	if (arr != null)
-		return unescape(arr[2]);
-	return null;
+function ckfsj(issueId){
+	alert("查看泛数据");
+}
+
+function ckzsj(issueId){
+	alert("查看准数据");
+}
+
+function ckhxsj(issueId){
+	alert("查看核心数据");
+}
+
+function ckxsj(issueId){
 }

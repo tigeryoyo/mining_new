@@ -5,64 +5,84 @@ import java.util.Date;
 
 public class StandardResult implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	private String stdRid;
-
-	private String resName;
-
-	private String contentName;
 	
-	private String issueId;
+    private String stdRid;
 
-	private Date createTime;
+    private String resName;
 
-	private String creator;
+    private String dateCount;
 
-	public String getStdRid() {
-		return stdRid;
-	}
+    private String sourceCount;
 
-	public void setStdRid(String stdRid) {
-		this.stdRid = stdRid == null ? null : stdRid.trim();
-	}
+    private String contentName;
 
-	public String getResName() {
-		return resName;
-	}
+    private String issueId;
 
-	public void setResName(String resName) {
-		this.resName = resName == null ? null : resName.trim();
-	}
+    private Date createTime;
 
-	public String getContentName() {
-		return contentName;
-	}
+    private String creator;
 
-	public void setContentName(String contentName) {
-		this.contentName = contentName;
-	}
+    public String getStdRid() {
+        return stdRid;
+    }
 
-	public String getIssueId() {
-		return issueId;
-	}
+    public void setStdRid(String stdRid) {
+        this.stdRid = stdRid == null ? null : stdRid.trim();
+    }
 
-	public void setIssueId(String issueId) {
-		this.issueId = issueId == null ? null : issueId.trim();
-	}
+    public String getResName() {
+        return resName;
+    }
 
-	public Date getCreateTime() {
-		return createTime;
-	}
+    public void setResName(String resName) {
+        this.resName = resName == null ? null : resName.trim();
+    }
 
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
+    public String getDateCount() {
+        return dateCount;
+    }
 
-	public String getCreator() {
-		return creator;
-	}
+    public void setDateCount(String dateCount) {
+        this.dateCount = dateCount == null ? null : dateCount.trim();
+    }
 
-	public void setCreator(String creator) {
-		this.creator = creator == null ? null : creator.trim();
-	}
+    public String getSourceCount() {
+        return sourceCount;
+    }
+
+    public void setSourceCount(String sourceCount) {
+        this.sourceCount = sourceCount == null ? null : sourceCount.trim();
+    }
+
+    public String getContentName() {
+        return contentName;
+    }
+
+    public void setContentName(String contentName) {
+        this.contentName = contentName == null ? null : contentName.trim();
+    }
+
+    public String getIssueId() {
+        return issueId;
+    }
+
+    public void setIssueId(String issueId) {
+        this.issueId = issueId == null ? null : issueId.trim();
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator == null ? null : creator.trim();
+    }
 }

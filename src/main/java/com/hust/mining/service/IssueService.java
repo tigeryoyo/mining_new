@@ -12,7 +12,7 @@ public interface IssueService {
 
     int createIssue(String issueName, String issueType, HttpServletRequest request);
    
-    int createIssueWithLink(String linkedIssueId, String issueType, HttpServletRequest request);
+    int createIssueWithLink(String linkedIssueId, String issueType, String stdResId, HttpServletRequest request);
 
     int deleteIssueById(String issueId,String issueType,HttpServletRequest request);
 

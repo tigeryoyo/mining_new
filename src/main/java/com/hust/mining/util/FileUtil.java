@@ -105,6 +105,10 @@ public class FileUtil {
 					allAttrs.add("链接");
 					pos_i.add(i);
 					continue;
+				} else if(subAttrs[i].equals("内容")){
+					allAttrs.add("标题");
+					pos_i.add(i);
+					continue;
 				}
 				allAttrs.add(subAttrs[i]);
 				pos_i.add(i);
@@ -124,12 +128,16 @@ public class FileUtil {
 				for (int j = 0; j < subAttrs_i.length; j++) {
 					int index = allAttrs.indexOf(subAttrs_i[j]);
 					if (index == -1) {
-						if (Pattern.matches("链接|网址|[Uu][Rr][Ll]", subAttrs_i[j])) {
+						if (Pattern.matches("链接|网址|微博链接|[Uu][Rr][Ll]", subAttrs_i[j])) {
 							pos_i.add(AttrUtil.findIndexOfUrl(allAttrs));
 							continue;
 						}
 						if (Pattern.matches("发布时间|发贴时间|时间", subAttrs_i[j])) {
 							pos_i.add(AttrUtil.findIndexOfTime(allAttrs));
+							continue;
+						}
+						if (Pattern.matches("标题|内容", subAttrs_i[j])) {
+							pos_i.add(AttrUtil.findIndexOfTitle(allAttrs));
 							continue;
 						}
 						pos_i.add(allAttrs.size());
