@@ -12,7 +12,6 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +29,11 @@ import com.hust.mining.model.Result;
 import com.hust.mining.model.ResultWithContent;
 import com.hust.mining.model.StandardResult;
 import com.hust.mining.model.User;
+import com.hust.mining.model.params.CoreResultQueryCondition;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.model.params.QueryFileCondition;
 import com.hust.mining.model.params.StandardResultQueryCondition;
+import com.hust.mining.service.CoreResultService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.MiningService;
 import com.hust.mining.service.RedisService;
@@ -55,6 +56,8 @@ public class IssueServiceImpl implements IssueService {
 	private MiningService miningService;
 	@Autowired
 	private StandardResultService standardResultService;
+	@Autowired
+	private CoreResultService coreResultService;
 	@Autowired
 	private ResultService resultService;
 	@Autowired
@@ -84,7 +87,7 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public int createIssueWithLink(String linkedIssueId, String issueType, HttpServletRequest request) {
+	public int createIssueWithLink(String linkedIssueId, String issueType, String stdResId, HttpServletRequest request) {
 		String target = null;
 		String replacement = null;
 		if (issueType.equals(Constant.ISSUETYPE_STANDARD)) {
@@ -98,9 +101,8 @@ public class IssueServiceImpl implements IssueService {
 		}
 
 		Issue linkedIssue = this.queryIssueById(linkedIssueId);
-		String issueName = replacement+"_"+linkedIssue.getIssueName().replace(target, replacement);
+		String issueName = linkedIssue.getIssueName().replace(target, replacement);
 		Issue issue = null;
-		int insert = 0;
 		if (StringUtils.isBlank(linkedIssue.getIssueHold())) {
 			String user = userService.getCurrentUser(request);
 			issue = new Issue();
@@ -112,7 +114,7 @@ public class IssueServiceImpl implements IssueService {
 			issue.setCreateTime(new Date());
 			issue.setLastOperator(user);
 			issue.setLastUpdateTime(issue.getCreateTime());
-			insert = issueDao.insert(issue);
+			issueDao.insert(issue);
 			// 更新linkedIssue信息：添加IssueHold
 			linkedIssue.setIssueHold(issue.getIssueId());
 			//不更新对应泛数据的last operate time。如果需要，则改为 issueService.
@@ -122,21 +124,57 @@ public class IssueServiceImpl implements IssueService {
 			//主要为了更新插入新的standardResult此时的issue last operate time。
 			this.updateIssueInfo(issue, request);
 		}
+		
+		if (issueType.equals(Constant.ISSUETYPE_STANDARD)) {
+			return insertStdRes(issue,request);
+		} else {
+			return insertCoreRes(issue,stdResId,request);
+		}
+	}
+
+	private int insertStdRes(Issue issue, HttpServletRequest request){
 		StandardResultQueryCondition standardResultQueryCondition = new StandardResultQueryCondition();
 		standardResultQueryCondition.setIssueId(issue.getIssueId());
-		standardResultQueryCondition.setStdResName(issueName);
+		//给该准数据结果取名，等谈凯修改完result再改名
+		standardResultQueryCondition.setStdResName(issue.getIssueName());
 		String currentResultId = resultService.getCurrentResultId(request);
 		if (StringUtils.isBlank(currentResultId)) {
 			return -1;
 		}
+		//setResId为设置standard_result的content_name属性所用
 		standardResultQueryCondition.setResId(currentResultId);
-		insert = standardResultService.insert(standardResultQueryCondition, request);
+		int insert = standardResultService.insert(standardResultQueryCondition, request);
 		if (insert > 0) {
 			redisService.setString(KEY.ISSUE_ID, issue.getIssueId(), request);
 		}
 		return insert;
 	}
-
+	
+	private int insertCoreRes(Issue issue, String stdResId, HttpServletRequest request){
+        StandardResult standardResult = standardResultService.queryStdResById(stdResId);
+        if(StringUtils.isBlank(standardResult.getDateCount())){
+        	List<String[]> cluster = standardResultService.getStdResContentById(stdResId);
+        	if (cluster == null) {
+        		return 0;
+        	}
+        	String dateCount = standardResultService.getDateCount(cluster);
+        	String srcCount = standardResultService.getSourceCount(cluster);
+        	standardResult.setDateCount(dateCount);
+        	standardResult.setSourceCount(srcCount);
+        	standardResultService.updateByPrimaryKey(standardResult);
+        } 
+		
+		CoreResultQueryCondition coreResultQueryCondition = new CoreResultQueryCondition();
+		coreResultQueryCondition.setIssueId(issue.getIssueId());
+		//给改核心数据结果取名
+		coreResultQueryCondition.setCoreResName(standardResult.getResName());
+		int insert = coreResultService.insert(coreResultQueryCondition, request);
+		if (insert > 0) {
+			redisService.setString(KEY.ISSUE_ID, issue.getIssueId(), request);
+		}
+		return insert;
+	}
+	
 	@Override
 	public String getCurrentIssueId(HttpServletRequest request) {
 		// TODO Auto-generated method stub
@@ -178,9 +216,9 @@ public class IssueServiceImpl implements IssueService {
 		if (issueType.equals(Constant.ISSUETYPE_EXTENSIVE)) {
 			deleteExtensiveIssue(issueId, issue.getIssueHold());
 		} else if (issueType.equals(Constant.ISSUETYPE_STANDARD)) {
-			deleteStandardIssue(issueId, issue.getIssueBelongTo());
+			deleteStandardIssue(issueId, issue.getIssueBelongTo(), issue.getIssueHold());
 		} else {
-
+			deleteCoreIssue(issueId, issue.getIssueBelongTo());
 		}
 
 		return issueDao.deleteIssueById(issueId, user);
@@ -231,7 +269,7 @@ public class IssueServiceImpl implements IssueService {
 		}
 	}
 
-	private void deleteStandardIssue(String issueId, String belongToIssueId) {
+	private void deleteStandardIssue(String issueId, String belongToIssueId, String holdIssueId) {
 		List<StandardResult> stdResList = standardResultService.queryStdRessByIssueId(issueId);
 
 		boolean belongToExists = !StringUtils.isBlank(belongToIssueId);
@@ -264,8 +302,23 @@ public class IssueServiceImpl implements IssueService {
 			belongToIssue.setIssueHold(StringUtils.EMPTY);
 			issueDao.updateIssueInfo(belongToIssue);
 		}
+		
+		if(!StringUtils.isBlank(holdIssueId)){
+			Issue holdIssue = queryIssueById(holdIssueId);
+			holdIssue.setIssueBelongTo(StringUtils.EMPTY);
+			issueDao.updateIssueInfo(holdIssue);
+		}
 	}
 
+	private void deleteCoreIssue(String issueId, String belongToIssueId) {
+		if(!StringUtils.isBlank(belongToIssueId)){
+			Issue belongToIssue = queryIssueById(belongToIssueId);
+			if(belongToIssue != null){
+				belongToIssue.setIssueHold(StringUtils.EMPTY);
+				issueDao.updateIssueInfo(belongToIssue);
+			}
+		}
+	}
 	// 把某个时间段的文件聚类
 	@SuppressWarnings("unchecked")
 	@Override

@@ -23,8 +23,6 @@ import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.ExcelUtil;
-import com.hust.mining.util.FileUtil;
-import com.hust.mining.util.WeiboUtil;
 
 @Service
 public class FileServiceImpl implements FileService {
@@ -54,9 +52,9 @@ public class FileServiceImpl implements FileService {
             logger.error("读取文件出现异常\t" + e.toString());
             return 0;
         }
-        if(con.getSourceType().equals("微博")){
-            WeiboUtil.filter(list);
-        }
+//        if(con.getSourceType().equals("微博")){
+//            WeiboUtil.filter(list);
+//        }
         String user = userService.getCurrentUser(request);
         String issueId = issueService.getCurrentIssueId(request);
         Issue issue = new Issue();
@@ -73,45 +71,6 @@ public class FileServiceImpl implements FileService {
         issueFile.setSourceType(con.getSourceType());
         return fileDao.insert(issueFile, list);
     }
-    
-//    @Override
-//    public int insert(Condition con, HttpServletRequest request) {
-//        // TODO Auto-generated method stub
-//        MultipartFile file = con.getFile();
-//        List<String[]> list = new ArrayList<String[]>();
-//        InputStream is = null;
-//        try {
-//            is = file.getInputStream();
-//            // 此处index传入的顺序必须与constants中定义的value值保持一致
-////            list = ExcelUtil.read(file.getOriginalFilename(), is, 1, -1, con.getUrlIndex(), con.getTitleIndex(),
-////                    con.getTimeIndex());
-//            list = ExcelUtil.read(file.getOriginalFilename(), is, 0);
-//            
-////            list = ExcelUtil.readAll(file.getOriginalFilename(), is, 1, con.getUrlIndex(), con.getTitleIndex(),
-////            		con.getTimeIndex());
-//        } catch (IOException e) {
-//            logger.error("读取文件出现异常\t" + e.toString());
-//            return 0;
-//        }
-//        if(con.getSourceType().equals("微博")){
-//            WeiboUtil.filter(list);
-//        }
-//        String user = userService.getCurrentUser(request);
-//        String issueId = issueService.getCurrentIssueId(request);
-//        Issue issue = new Issue();
-//        issue.setIssueId(issueId);
-//        issueService.updateIssueInfo(issue, request);
-//        IssueFile issueFile = new IssueFile();
-//        issueFile.setFileId(UUID.randomUUID().toString());
-//        issueFile.setFileName(file.getOriginalFilename());
-//        issueFile.setCreator(user);
-//        issueFile.setIssueId(issueId);
-//        issueFile.setLineNumber(list.size());
-//        issueFile.setUploadTime(new Date());
-//        issueFile.setSize((int) (file.getSize() / 1024));
-//        issueFile.setSourceType(con.getSourceType());
-//        return fileDao.insert(issueFile, list);
-//    }
 
     @Override
     public int deleteById(String fileId) {

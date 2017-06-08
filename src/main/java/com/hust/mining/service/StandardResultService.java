@@ -15,6 +15,8 @@ public interface StandardResultService {
 
     StandardResult queryStdResById(String stdResId);
     
+    int updateByPrimaryKey(StandardResult record);
+    
     List<StandardResult> queryStdRessByIssueId(String issueId);
 
     List<StandardResult> searchstdRessByTime(String issueId, Date start, Date end);
@@ -22,4 +24,8 @@ public interface StandardResultService {
     List<String[]> getStdResCountById(String stdResId);
     
 	List<String[]> getStdResContentById(String stdResId);
+
+    String getDateCount(List<String[]> cluster);
+    
+    String getSourceCount(List<String[]> cluster);
 }

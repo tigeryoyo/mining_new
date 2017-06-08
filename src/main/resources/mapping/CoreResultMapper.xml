@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hust.mining.dao.mapper.StandardResultMapper">
+<mapper namespace="com.hust.mining.dao.mapper.CoreResultMapper">
 	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
-	<resultMap id="BaseResultMap" type="com.hust.mining.model.StandardResult">
-		<id column="std_rid" jdbcType="VARCHAR" property="stdRid" />
+	<resultMap id="BaseResultMap" type="com.hust.mining.model.CoreResult">
+		<id column="core_rid" jdbcType="VARCHAR" property="coreRid" />
 		<result column="res_name" jdbcType="VARCHAR" property="resName" />
-		<result column="date_count" jdbcType="VARCHAR" property="dateCount" />
-		<result column="source_count" jdbcType="VARCHAR" property="sourceCount" />
-		<result column="content_name" jdbcType="VARCHAR" property="contentName" />
 		<result column="issue_id" jdbcType="VARCHAR" property="issueId" />
 		<result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
 		<result column="creator" jdbcType="VARCHAR" property="creator" />
@@ -76,18 +73,16 @@
 		</where>
 	</sql>
 	<sql id="Base_Column_List">
-		std_rid, res_name, date_count, source_count, content_name, issue_id,
-		create_time,
-		creator
+		core_rid, res_name, issue_id, create_time, creator
 	</sql>
-	<select id="selectByExample" parameterType="com.hust.mining.model.StandardResultExample"
+	<select id="selectByExample" parameterType="com.hust.mining.model.CoreResultExample"
 		resultMap="BaseResultMap">
 		select
 		<if test="distinct">
 			distinct
 		</if>
 		<include refid="Base_Column_List" />
-		from standard_result
+		from core_result
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
@@ -99,45 +94,34 @@
 		resultMap="BaseResultMap">
 		select 'true' as QUERYID,
 		<include refid="Base_Column_List" />
-		from standard_result
-		where std_rid = #{stdRid,jdbcType=VARCHAR}
+		from core_result
+		where core_rid = #{coreRid,jdbcType=VARCHAR}
 	</select>
 	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-		delete from standard_result
-		where std_rid = #{stdRid,jdbcType=VARCHAR}
+		delete from core_result
+		where core_rid = #{coreRid,jdbcType=VARCHAR}
 	</delete>
-	<delete id="deleteByExample" parameterType="com.hust.mining.model.StandardResultExample">
-		delete from standard_result
+	<delete id="deleteByExample" parameterType="com.hust.mining.model.CoreResultExample">
+		delete from core_result
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
 	</delete>
-	<insert id="insert" parameterType="com.hust.mining.model.StandardResult">
-		insert into standard_result (std_rid, res_name, date_count,
-		source_count, content_name, issue_id,
+	<insert id="insert" parameterType="com.hust.mining.model.CoreResult">
+		insert into core_result (core_rid, res_name, issue_id,
 		create_time, creator)
-		values (#{stdRid,jdbcType=VARCHAR}, #{resName,jdbcType=VARCHAR},
-		#{dateCount,jdbcType=VARCHAR},
-		#{sourceCount,jdbcType=VARCHAR}, #{contentName,jdbcType=VARCHAR}, #{issueId,jdbcType=VARCHAR},
+		values (#{coreRid,jdbcType=VARCHAR}, #{resName,jdbcType=VARCHAR},
+		#{issueId,jdbcType=VARCHAR},
 		#{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR})
 	</insert>
-	<insert id="insertSelective" parameterType="com.hust.mining.model.StandardResult">
-		insert into standard_result
+	<insert id="insertSelective" parameterType="com.hust.mining.model.CoreResult">
+		insert into core_result
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="stdRid != null">
-				std_rid,
+			<if test="coreRid != null">
+				core_rid,
 			</if>
 			<if test="resName != null">
 				res_name,
-			</if>
-			<if test="dateCount != null">
-				date_count,
-			</if>
-			<if test="sourceCount != null">
-				source_count,
-			</if>
-			<if test="contentName != null">
-				content_name,
 			</if>
 			<if test="issueId != null">
 				issue_id,
@@ -150,20 +134,11 @@
 			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="stdRid != null">
-				#{stdRid,jdbcType=VARCHAR},
+			<if test="coreRid != null">
+				#{coreRid,jdbcType=VARCHAR},
 			</if>
 			<if test="resName != null">
 				#{resName,jdbcType=VARCHAR},
-			</if>
-			<if test="dateCount != null">
-				#{dateCount,jdbcType=VARCHAR},
-			</if>
-			<if test="sourceCount != null">
-				#{sourceCount,jdbcType=VARCHAR},
-			</if>
-			<if test="contentName != null">
-				#{contentName,jdbcType=VARCHAR},
 			</if>
 			<if test="issueId != null">
 				#{issueId,jdbcType=VARCHAR},
@@ -176,30 +151,21 @@
 			</if>
 		</trim>
 	</insert>
-	<select id="countByExample" parameterType="com.hust.mining.model.StandardResultExample"
+	<select id="countByExample" parameterType="com.hust.mining.model.CoreResultExample"
 		resultType="java.lang.Long">
-		select count(*) from standard_result
+		select count(*) from core_result
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>
 	</select>
 	<update id="updateByExampleSelective" parameterType="map">
-		update standard_result
+		update core_result
 		<set>
-			<if test="record.stdRid != null">
-				std_rid = #{record.stdRid,jdbcType=VARCHAR},
+			<if test="record.coreRid != null">
+				core_rid = #{record.coreRid,jdbcType=VARCHAR},
 			</if>
 			<if test="record.resName != null">
 				res_name = #{record.resName,jdbcType=VARCHAR},
-			</if>
-			<if test="record.dateCount != null">
-				date_count = #{record.dateCount,jdbcType=VARCHAR},
-			</if>
-			<if test="record.sourceCount != null">
-				source_count = #{record.sourceCount,jdbcType=VARCHAR},
-			</if>
-			<if test="record.contentName != null">
-				content_name = #{record.contentName,jdbcType=VARCHAR},
 			</if>
 			<if test="record.issueId != null">
 				issue_id = #{record.issueId,jdbcType=VARCHAR},
@@ -216,12 +182,9 @@
 		</if>
 	</update>
 	<update id="updateByExample" parameterType="map">
-		update standard_result
-		set std_rid = #{record.stdRid,jdbcType=VARCHAR},
+		update core_result
+		set core_rid = #{record.coreRid,jdbcType=VARCHAR},
 		res_name = #{record.resName,jdbcType=VARCHAR},
-		date_count = #{record.dateCount,jdbcType=VARCHAR},
-		source_count = #{record.sourceCount,jdbcType=VARCHAR},
-		content_name = #{record.contentName,jdbcType=VARCHAR},
 		issue_id = #{record.issueId,jdbcType=VARCHAR},
 		create_time = #{record.createTime,jdbcType=TIMESTAMP},
 		creator = #{record.creator,jdbcType=VARCHAR}
@@ -229,20 +192,11 @@
 			<include refid="Update_By_Example_Where_Clause" />
 		</if>
 	</update>
-	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.StandardResult">
-		update standard_result
+	<update id="updateByPrimaryKeySelective" parameterType="com.hust.mining.model.CoreResult">
+		update core_result
 		<set>
 			<if test="resName != null">
 				res_name = #{resName,jdbcType=VARCHAR},
-			</if>
-			<if test="dateCount != null">
-				date_count = #{dateCount,jdbcType=VARCHAR},
-			</if>
-			<if test="sourceCount != null">
-				source_count = #{sourceCount,jdbcType=VARCHAR},
-			</if>
-			<if test="contentName != null">
-				content_name = #{contentName,jdbcType=VARCHAR},
 			</if>
 			<if test="issueId != null">
 				issue_id = #{issueId,jdbcType=VARCHAR},
@@ -254,17 +208,14 @@
 				creator = #{creator,jdbcType=VARCHAR},
 			</if>
 		</set>
-		where std_rid = #{stdRid,jdbcType=VARCHAR}
+		where core_rid = #{coreRid,jdbcType=VARCHAR}
 	</update>
-	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.StandardResult">
-		update standard_result
+	<update id="updateByPrimaryKey" parameterType="com.hust.mining.model.CoreResult">
+		update core_result
 		set res_name = #{resName,jdbcType=VARCHAR},
-		date_count = #{dateCount,jdbcType=VARCHAR},
-		source_count = #{sourceCount,jdbcType=VARCHAR},
-		content_name = #{contentName,jdbcType=VARCHAR},
 		issue_id = #{issueId,jdbcType=VARCHAR},
 		create_time = #{createTime,jdbcType=TIMESTAMP},
 		creator = #{creator,jdbcType=VARCHAR}
-		where std_rid = #{stdRid,jdbcType=VARCHAR}
+		where core_rid = #{coreRid,jdbcType=VARCHAR}
 	</update>
 </mapper>

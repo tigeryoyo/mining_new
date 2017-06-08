@@ -10,10 +10,30 @@ Target Server Type    : MYSQL
 Target Server Version : 50633
 File Encoding         : 65001
 
-Date: 2017-05-29 23:41:36
+Date: 2017-06-08 18:16:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for core_result
+-- ----------------------------
+DROP TABLE IF EXISTS `core_result`;
+CREATE TABLE `core_result` (
+  `core_rid` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `res_name` varchar(512) NOT NULL,
+  `std_rid` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '准数据任务的结果id',
+  `issue_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `create_time` datetime NOT NULL,
+  `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`core_rid`),
+  KEY `core_fk_issue_id` (`issue_id`) USING BTREE,
+  CONSTRAINT `core_fk_issue_id` FOREIGN KEY (`issue_id`) REFERENCES `issue` (`issue_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of core_result
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for file
@@ -381,9 +401,11 @@ INSERT INTO `source_type` VALUES ('7', '新闻');
 -- ----------------------------
 DROP TABLE IF EXISTS `standard_result`;
 CREATE TABLE `standard_result` (
-  `std_rid` varchar(64) NOT NULL COMMENT '准数据任务的结果id',
-  `res_name` varchar(128) NOT NULL,
-  `content_name` varchar(64) NOT NULL,
+  `std_rid` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '准数据任务的结果id',
+  `res_name` varchar(512) NOT NULL,
+  `date_count` varchar(1024) DEFAULT NULL,
+  `source_count` varchar(1024) DEFAULT NULL,
+  `content_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `issue_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL COMMENT '事件的id',
   `create_time` datetime NOT NULL COMMENT '生成该准数据的时间',
   `creator` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '上传人',
@@ -407,11 +429,12 @@ CREATE TABLE `stopword` (
   `create_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`Id`),
   UNIQUE KEY `word` (`word`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of stopword
 -- ----------------------------
+INSERT INTO `stopword` VALUES ('1', '.', 'chenghu', '2017-06-02 14:40:37');
 
 -- ----------------------------
 -- Table structure for user
@@ -429,7 +452,7 @@ CREATE TABLE `user` (
   `granularity` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `unique_username` (`user_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
@@ -450,7 +473,7 @@ CREATE TABLE `user_role` (
   KEY `index_role_id` (`role_id`),
   CONSTRAINT `ur_fk_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ur_fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_role
@@ -469,12 +492,16 @@ CREATE TABLE `website` (
   `level` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '网站级别',
   `type` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '网站类型',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `index_url` (`url`) USING HASH,
   KEY `index_name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='网站信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='网站信息表';
 
 -- ----------------------------
 -- Records of website
 -- ----------------------------
+INSERT INTO `website` VALUES ('82', 'www.sina.com.cn', '新浪', '其他', '其他');
+INSERT INTO `website` VALUES ('84', 'www.nab.com.cn', 'nba中文网', '其他', '省级');
+INSERT INTO `website` VALUES ('87', 'www.baidu.com', '其他', '其他', '其他');
 
 -- ----------------------------
 -- Table structure for weight

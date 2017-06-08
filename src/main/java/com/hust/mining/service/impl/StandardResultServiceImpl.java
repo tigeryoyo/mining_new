@@ -1,6 +1,7 @@
 package com.hust.mining.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -14,11 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.hust.mining.constant.Constant.DIRECTORY;
 import com.hust.mining.constant.Constant.Index;
-import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.StandardResultDao;
 import com.hust.mining.model.StandardResult;
 import com.hust.mining.model.params.StandardResultQueryCondition;
-import com.hust.mining.service.IssueService;
 import com.hust.mining.service.StandardResultService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.AttrUtil;
@@ -61,6 +60,11 @@ public class StandardResultServiceImpl implements StandardResultService {
 		return standardResultDao.queryStdRessByIssueId(issueId);
 	}
 
+	@Override
+	public int updateByPrimaryKey(StandardResult record){
+		return standardResultDao.updateByPrimaryKey(record);
+	}
+	
 	@Override
 	public List<StandardResult> searchstdRessByTime(String issueId, Date start, Date end) {
 		return null;
@@ -108,6 +112,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 			for (int[] set : clusterIndex) {
 				for (int index : set) {
 					String[] row = content.get(index);
+					row = Arrays.copyOf(row, attrs.length);
 					cluster.add(row);
 				}
 				cluster.add(new String[1]);
@@ -118,6 +123,16 @@ public class StandardResultServiceImpl implements StandardResultService {
 			return null;
 		}
 		return cluster;
+	}
+
+	@Override
+	public String getDateCount(List<String[]> cluster) {
+		return standardResultDao.dateCount(cluster);
+	}
+
+	@Override
+	public String getSourceCount(List<String[]> cluster) {
+		return standardResultDao.sourceCount(cluster);
 	}
 
 }
