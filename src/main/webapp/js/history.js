@@ -74,7 +74,7 @@ function historyData(rid) {
 							+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
 							// + item[indexOfUrl]
 							// + '
-							+ item[1]
+							+ i
 							+ ',\''
 							// + item[indexOfUrl]
 							+ rid
@@ -158,6 +158,8 @@ function showClusterDetails(index,rid,count){
 						+item[0]
 						+'"  /></td></tr>';
 				$('.details_tab table').append(rows);
+				//将类的id作为table的id
+				$('.details_tab table').attr('id',index);
 				}
 			}else{
 				alert(msg.result);
@@ -366,8 +368,11 @@ function deleteClusterItem() {
 	console.log(sets);
 	$.ajax({
 		type : "post",
-		url : "/result/deleteClusterBySets",
-		data : JSON.stringify(sets),
+		url : "/result/deleteClusterItems",
+		data : {
+			clusterIndex: $('.details_tab table').attr('id'),
+			ItemIdSets: JSON.stringify(sets),
+		},
 		dataType : "json",
 		contentType : "application/json",
 		success : function(msg) {
@@ -455,7 +460,7 @@ $(function() {
         } else {
             obj.stop();
             obj.css({
-                'position': 'absolute'
+                'position': 'fixed'
             });
             obj.animate({
                 'top': top_position

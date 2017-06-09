@@ -59,7 +59,7 @@ public class ResultController {
 
     /**
      * 得到某个类全部的元素的信息
-     * @param clusterIndex 类中第一个元素在源数据对应的下标
+     * @param clusterIndex 类的下标
      * @param resultId 聚类结果id--文件名
      * @param request
      * @return
@@ -107,14 +107,15 @@ public class ResultController {
     }
 
     /**
-     * 
+     * 删除类中的一些元素
      * @param sets
      * @param request
      * @return
      */
     @ResponseBody
-    @RequestMapping("/deleteClusterBySets")
-    public Object delClusterBySets(@RequestBody int[] sets, HttpServletRequest request) {
+    @RequestMapping("/deleteClusterItems")
+    public Object delClusterItems(@RequestParam(value = "clusterIndex", required = false) String clusterIndex,
+    		@RequestParam(value = "ItemIdSets", required = false) int[] sets, HttpServletRequest request) {
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择任务");
@@ -123,7 +124,7 @@ public class ResultController {
         if (StringUtils.isEmpty(resultId)) {
             return ResultUtil.errorWithMsg("请重新选择一条挖掘记录");
         }
-        boolean result = resultService.deleteSets(sets, request);
+        boolean result = resultService.deleteClusterItems(clusterIndex, sets, request);
         if (result) {
             return ResultUtil.success("删除成功");
         }

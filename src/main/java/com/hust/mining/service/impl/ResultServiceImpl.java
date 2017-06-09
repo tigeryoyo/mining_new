@@ -344,13 +344,9 @@ public class ResultServiceImpl implements ResultService {
         	if(cluster == null || cluster.size() == 0 ){
         		cluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
         	}
-            for (String[] item : cluster) {
-            	//clusterIndex是源数据中序号，有标题行所以clusterIndex = 真实index + 1
-                if(Integer.valueOf(item[0]) == Integer.valueOf(clusterIndex) - 1){
-                	indexList = item;
-                	break;
-                }
-            }
+            
+        	//clusterIndex是类的Index
+            indexList = cluster.get(Integer.valueOf(clusterIndex));
             if(indexList == null || indexList.length == 0){
             	return null;
             }
@@ -370,6 +366,68 @@ public class ResultServiceImpl implements ResultService {
         }
         
         return list;
+	}
+
+	/**
+	 * 删除类中元素
+	 * sets id集合
+	 */
+	@Override
+	public boolean deleteClusterItems(String clusterIndex, int[] sets, HttpServletRequest request) {
+		String resultId = redisService.getString(KEY.RESULT_ID, request);
+        String issueId = issueService.getCurrentIssueId(request);
+        try {
+            // 从redis获取数据
+            List<String[]> count = (List<String[]>) redisService.getObject(KEY.REDIS_COUNT_RESULT, request);
+            List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
+            // 删除集合中指定的一些元素
+            Arrays.sort(sets);
+            int n = sets.length;
+            String[] items = cluster.get(Integer.valueOf(clusterIndex));
+            String[] clusterCount = count.get(Integer.valueOf(clusterIndex));
+            String[] newItems = new String[items.length - n];
+            if(items != null && items.length != 0 ){
+            	int k = 0;
+            	for (int i = sets.length - 1, j = items.length - 1; j >= 0; i--,j--) {
+                   if(sets[i] != j){
+                	   newItems[k++] = items[j];
+                   }
+                }
+            	if(newItems == null || newItems.length == 0){
+            		cluster.remove(items);
+            	}else{
+            		cluster.set(Integer.valueOf(clusterIndex), newItems);
+            	}
+            }
+            if(clusterCount != null && clusterCount.length != 0){
+            	clusterCount[1] = String.valueOf(items.length - n);
+            }
+            // 更新redis数据
+            redisService.setObject(KEY.REDIS_CLUSTER_RESULT, cluster, request);
+            redisService.setObject(KEY.REDIS_COUNT_RESULT, count, request);
+            // 写回数据库
+            Result result = new Result();
+            result.setRid(resultId);
+            result.setIssueId(issueId);
+            ResultWithContent rc = new ResultWithContent();
+            rc.setResult(result);
+            rc.setModiCluster(cluster);
+            rc.setModiCount(count);
+            int update = resultDao.updateResult(rc);
+            if (update <= 0) {
+                return false;
+            }
+            String user = userService.getCurrentUser(request);
+            Issue issue = new Issue();
+            issue.setIssueId(issueId);
+            issue.setLastOperator(user);
+            issue.setLastUpdateTime(new Date());
+            issueDao.updateIssueInfo(issue);
+        } catch (Exception e) {
+            logger.error("sth failed when delete sets:{}" + e.toString());
+            return false;
+        }
+        return true;
 	}
 
 }

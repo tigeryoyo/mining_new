@@ -31,4 +31,6 @@ public interface ResultService {
     public String exportAbstract(List<String[]> count);
 
 	public List<String[]> getClusterResultById( String clusterIndex,String resultId, String issueId, HttpServletRequest request);
+
+	public boolean deleteClusterItems(String clusterIndex, int[] sets, HttpServletRequest request);
 }
