@@ -2,5 +2,4 @@
 /logs/
 /.settings/*
 .classpath
-pom.xml
 /bin/

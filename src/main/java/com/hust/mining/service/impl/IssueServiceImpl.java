@@ -23,6 +23,7 @@ import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.FileDao;
 import com.hust.mining.dao.IssueDao;
 import com.hust.mining.dao.ResultDao;
+import com.hust.mining.model.CoreResult;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.Result;
@@ -87,7 +88,8 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	@Override
-	public int createIssueWithLink(String linkedIssueId, String issueType, String stdResId, HttpServletRequest request) {
+	public int createIssueWithLink(String linkedIssueId, String issueType, String stdResId,
+			HttpServletRequest request) {
 		String target = null;
 		String replacement = null;
 		if (issueType.equals(Constant.ISSUETYPE_STANDARD)) {
@@ -117,31 +119,31 @@ public class IssueServiceImpl implements IssueService {
 			issueDao.insert(issue);
 			// 更新linkedIssue信息：添加IssueHold
 			linkedIssue.setIssueHold(issue.getIssueId());
-			//不更新对应泛数据的last operate time。如果需要，则改为 issueService.
+			// 不更新对应泛数据的last operate time。如果需要，则改为 issueService.
 			issueDao.updateIssueInfo(linkedIssue);
 		} else {
 			issue = queryIssueById(linkedIssue.getIssueHold());
-			//主要为了更新插入新的standardResult此时的issue last operate time。
+			// 主要为了更新插入新的standardResult此时的issue last operate time。
 			this.updateIssueInfo(issue, request);
 		}
-		
+
 		if (issueType.equals(Constant.ISSUETYPE_STANDARD)) {
-			return insertStdRes(issue,request);
+			return insertStdRes(issue, request);
 		} else {
-			return insertCoreRes(issue,stdResId,request);
+			return insertCoreRes(issue, stdResId, request);
 		}
 	}
 
-	private int insertStdRes(Issue issue, HttpServletRequest request){
+	private int insertStdRes(Issue issue, HttpServletRequest request) {
 		StandardResultQueryCondition standardResultQueryCondition = new StandardResultQueryCondition();
 		standardResultQueryCondition.setIssueId(issue.getIssueId());
-		//给该准数据结果取名，等谈凯修改完result再改名
+		// 给该准数据结果取名，等谈凯修改完result再改名
 		standardResultQueryCondition.setStdResName(issue.getIssueName());
 		String currentResultId = resultService.getCurrentResultId(request);
 		if (StringUtils.isBlank(currentResultId)) {
 			return -1;
 		}
-		//setResId为设置standard_result的content_name属性所用
+		// setResId为设置standard_result的content_name属性所用
 		standardResultQueryCondition.setResId(currentResultId);
 		int insert = standardResultService.insert(standardResultQueryCondition, request);
 		if (insert > 0) {
@@ -149,32 +151,35 @@ public class IssueServiceImpl implements IssueService {
 		}
 		return insert;
 	}
-	
-	private int insertCoreRes(Issue issue, String stdResId, HttpServletRequest request){
-        StandardResult standardResult = standardResultService.queryStdResById(stdResId);
-        if(StringUtils.isBlank(standardResult.getDateCount())){
-        	List<String[]> cluster = standardResultService.getStdResContentById(stdResId);
-        	if (cluster == null) {
-        		return 0;
-        	}
-        	String dateCount = standardResultService.getDateCount(cluster);
-        	String srcCount = standardResultService.getSourceCount(cluster);
-        	standardResult.setDateCount(dateCount);
-        	standardResult.setSourceCount(srcCount);
-        	standardResultService.updateByPrimaryKey(standardResult);
-        } 
-		
+
+	private int insertCoreRes(Issue issue, String stdResId, HttpServletRequest request) {
+		StandardResult standardResult = standardResultService.queryStdResById(stdResId);
+		if (StringUtils.isBlank(standardResult.getDateCount())) {
+			List<String[]> cluster = standardResultService.getStdResContentById(stdResId);
+			if (cluster == null) {
+				return 0;
+			}
+			String dateCount = standardResultService.getDateCount(cluster);
+			String srcCount = standardResultService.getSourceCount(cluster);
+			standardResult.setDateCount(dateCount);
+			standardResult.setSourceCount(srcCount);
+			standardResultService.updateByPrimaryKey(standardResult);
+		}
+
 		CoreResultQueryCondition coreResultQueryCondition = new CoreResultQueryCondition();
 		coreResultQueryCondition.setIssueId(issue.getIssueId());
-		//给改核心数据结果取名
+		// 给改核心数据结果取名
 		coreResultQueryCondition.setCoreResName(standardResult.getResName());
+		coreResultQueryCondition.setCoreResName(issue.getIssueName());
+		// 这个属性不在core_result字段里。但是为了生成核心数据需要
+		coreResultQueryCondition.setStdResId(stdResId);
 		int insert = coreResultService.insert(coreResultQueryCondition, request);
 		if (insert > 0) {
 			redisService.setString(KEY.ISSUE_ID, issue.getIssueId(), request);
 		}
 		return insert;
 	}
-	
+
 	@Override
 	public String getCurrentIssueId(HttpServletRequest request) {
 		// TODO Auto-generated method stub
@@ -302,8 +307,8 @@ public class IssueServiceImpl implements IssueService {
 			belongToIssue.setIssueHold(StringUtils.EMPTY);
 			issueDao.updateIssueInfo(belongToIssue);
 		}
-		
-		if(!StringUtils.isBlank(holdIssueId)){
+
+		if (!StringUtils.isBlank(holdIssueId)) {
 			Issue holdIssue = queryIssueById(holdIssueId);
 			holdIssue.setIssueBelongTo(StringUtils.EMPTY);
 			issueDao.updateIssueInfo(holdIssue);
@@ -311,14 +316,21 @@ public class IssueServiceImpl implements IssueService {
 	}
 
 	private void deleteCoreIssue(String issueId, String belongToIssueId) {
-		if(!StringUtils.isBlank(belongToIssueId)){
+		if (!StringUtils.isBlank(belongToIssueId)) {
 			Issue belongToIssue = queryIssueById(belongToIssueId);
-			if(belongToIssue != null){
+			if (belongToIssue != null) {
 				belongToIssue.setIssueHold(StringUtils.EMPTY);
 				issueDao.updateIssueInfo(belongToIssue);
 			}
+
+			// 删除该核心issue下的所有核心数据
+			List<CoreResult> coreResList = coreResultService.queryCoreRessByIssueId(issueId);
+			for (CoreResult coreResult : coreResList) {
+				FileUtil.delete(DIRECTORY.CORERES + coreResult.getCoreRid());
+			}
 		}
 	}
+
 	// 把某个时间段的文件聚类
 	@SuppressWarnings("unchecked")
 	@Override
@@ -512,7 +524,7 @@ public class IssueServiceImpl implements IssueService {
 		List<List<Integer>> clusterResult = miningService.cluster(content, converterType, algorithmType, granularity);
 		for (List<Integer> list : clusterResult) {
 			for (Integer integer : list) {
-				System.out.print(integer +"  ");
+				System.out.print(integer + "  ");
 			}
 			System.out.println();
 		}

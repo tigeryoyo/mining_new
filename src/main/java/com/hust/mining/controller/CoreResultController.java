@@ -2,14 +2,12 @@ package com.hust.mining.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,6 @@ import com.hust.mining.model.Issue;
 import com.hust.mining.service.CoreResultService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.RedisService;
-import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.ResultUtil;
 
 import net.sf.json.JSONObject;
@@ -57,7 +54,6 @@ public class CoreResultController {
         return ResultUtil.success(json);
     }
 	
-	@SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value = "/download", method = RequestMethod.POST)
     public void download(@RequestParam(value = "coreResId", required = true) String coreResId,HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -68,7 +64,6 @@ public class CoreResultController {
             return;
         }
         CoreResult coreResult = coreResultService.queryCoreResById(coreResId);
-        
         if (null == coreResult) {
             response.sendError(404, "未找到当前处理记录，请先创建或者选择某一记录");
             logger.error("coreResult为空");
@@ -76,22 +71,21 @@ public class CoreResultController {
         }
         OutputStream outputStream = null;
         try {
-            List<String[]> cluster = new ArrayList<String[]>();
-            
             outputStream = response.getOutputStream();
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
             String coreResName = new String(coreResult.getResName().getBytes(),"ISO8859-1");
-            response.setHeader("Content-Disposition", "attachment;filename="+coreResName+".xls");
-            HSSFWorkbook workbook = ExcelUtil.exportToExcel(cluster);
-            workbook.write(outputStream);
+            response.setHeader("Content-Disposition", "attachment;filename="+coreResName+".txt");
+            if(!coreResultService.export(coreResId, outputStream)){
+            	throw new Exception();
+            }
         } catch (Exception e) {
-            logger.info("excel 导出失败\t" + e.toString());
+            logger.error("核心数据 导出失败\t" + e.toString());
         } finally {
             try {
                 outputStream.close();
             } catch (Exception e) {
-                logger.info("导出excel时，关闭outputstream失败");
+                logger.error("导出核心数据时，关闭outputstream失败");
                 return;
             }
         }

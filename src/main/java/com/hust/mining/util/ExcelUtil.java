@@ -92,7 +92,7 @@ public class ExcelUtil {
 				exitUrls.add(rowStr[Index.URL_INDEX]);
 			}
 		}
-		workbook.close();
+		inputStream.close();
 		return list;
 	}
 
@@ -131,7 +131,7 @@ public class ExcelUtil {
 		int rowNum = sheet.getLastRowNum();
 		int colNum = sheet.getRow(0).getLastCellNum();
 		if (colNum > 1) {
-			workbook.close();
+			inputStream.close();
 			return null;
 		}
 		for (int i = 0; i <= rowNum; i++) {
@@ -151,7 +151,7 @@ public class ExcelUtil {
 			}
 			list.add(word);
 		}
-		workbook.close();
+		inputStream.close();
 		return list;
 	}
 
@@ -200,7 +200,7 @@ public class ExcelUtil {
 				list.add(rowStr);
 			}
 		}
-		workbook.close();
+		inputStream.close();
 		return list;
 	}
 	
@@ -244,7 +244,7 @@ public class ExcelUtil {
 			}
 			list.add(rowStr);
 		}
-		workbook.close();
+		inputStream.close();
 		return list;
 	}
 

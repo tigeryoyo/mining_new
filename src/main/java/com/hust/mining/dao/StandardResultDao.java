@@ -2,12 +2,13 @@ package com.hust.mining.dao;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +80,7 @@ public class StandardResultDao {
 		return standardResultMapper.selectByExample(example);
 	}
 
-	public int updateByPrimaryKey(StandardResult record){
+	public int updateByPrimaryKey(StandardResult record) {
 		return standardResultMapper.updateByPrimaryKey(record);
 	}
 
@@ -110,7 +111,7 @@ public class StandardResultDao {
 			if (CommonUtil.isEmptyArray(tmp)) {
 				continue;
 			}
-			String currentTime = tmp[indexOfTime].substring(0, 10);
+			String currentTime = tmp[indexOfTime].trim().substring(0, 10);
 			Integer oldValue = map.get(currentTime);
 			if (oldValue != null) {
 				map.replace(currentTime, oldValue, oldValue + 1);
@@ -171,6 +172,8 @@ public class StandardResultDao {
 					} else {
 						currentSource = "其他";
 					}
+				} else if(currentSource.equals("资讯")){
+					currentSource = "新闻";
 				}
 
 				Integer oldValue = map.get(currentSource);
@@ -181,11 +184,11 @@ public class StandardResultDao {
 				}
 			}
 		} catch (Exception e) {
-			System.out.println("*******" + i);
-			e.printStackTrace();
+			logger.error("统计准数据里的来源数量出错！");
 		}
 
 		String res = map.toString();
 		return res.substring(1, res.length() - 1);
 	}
+
 }

@@ -6,6 +6,7 @@ import java.util.List;
 public class CoreResultQueryCondition {
 	private String issueId;
 	private String coreResName;
+	private String stdResId;
 	private Date start;
 	private Date end;
 	private String coreResId;
@@ -25,6 +26,14 @@ public class CoreResultQueryCondition {
 
 	public void setCoreResName(String coreResName) {
 		this.coreResName = coreResName;
+	}
+
+	public String getStdResId() {
+		return stdResId;
+	}
+
+	public void setStdResId(String stdResId) {
+		this.stdResId = stdResId;
 	}
 
 	public Date getStart() {
