@@ -27,6 +27,7 @@ import com.hust.mining.service.RedisService;
 import com.hust.mining.service.StandardResultService;
 import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.ExcelUtil;
+import com.hust.mining.util.FileUtil;
 import com.hust.mining.util.ResultUtil;
 
 import net.sf.json.JSONObject;
@@ -96,8 +97,8 @@ public class StandardResultController {
             	srcCount = standardResult.getSourceCount();
             }
             
-            List<String[]> dateCountList = ConvertUtil.strConvertToList(dateCount, "日期");
-            List<String[]> srcCountList = ConvertUtil.strConvertToList(srcCount, "来源");
+            List<String[]> dateCountList = FileUtil.calcPOfCount(ConvertUtil.strConvertToList(dateCount, "日期"));
+            List<String[]> srcCountList = FileUtil.calcPOfCount(ConvertUtil.strConvertToList(srcCount, "来源"));
             
             outputStream = response.getOutputStream();
             response.setCharacterEncoding("utf-8");

@@ -1,12 +1,16 @@
 package com.hust.mining.util;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -101,11 +105,11 @@ public class FileUtil {
 
 			String[] subAttrs = line.split("\t");
 			for (int i = 0; i < subAttrs.length; i++) {
-				if(subAttrs[i].equals("微博链接")){
+				if (subAttrs[i].equals("微博链接")) {
 					allAttrs.add("链接");
 					pos_i.add(i);
 					continue;
-				} else if(subAttrs[i].equals("内容")){
+				} else if (subAttrs[i].equals("内容")) {
 					allAttrs.add("标题");
 					pos_i.add(i);
 					continue;
@@ -178,6 +182,37 @@ public class FileUtil {
 		return false;
 	}
 
+	public static boolean writeSBList(String filename, List<StringBuilder> sbList) {
+		try {
+			BufferedWriter bw = new BufferedWriter(new FileWriter(filename));
+			for (StringBuilder sb : sbList) {
+				bw.write(sb.toString());
+			}
+			bw.close();
+		} catch (Exception e) {
+			logger.error("write {} failed, because:{}", filename, e.toString());
+			return false;
+		}
+
+		return true;
+	}
+
+	public static boolean write(String filename, OutputStream outputStream) {
+		try {
+			InputStream is = new BufferedInputStream(new FileInputStream(filename));
+			byte[] buffer = new byte[4096];
+			int len = 0;
+			while ((len = is.read(buffer)) != -1) {
+				outputStream.write(buffer, 0, len);
+			}
+			is.close();
+		} catch (Exception e) {
+			logger.error("export {} failed, because:{}", filename, e.toString());
+			return false;
+		}
+		return true;
+	}
+
 	public static boolean delete(String filename) {
 		File file = new File(filename);
 		if (file.exists() && file.isFile()) {
@@ -185,6 +220,31 @@ public class FileUtil {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * 计算数量
+	 */
+	public static List<String[]> calcPOfCount(List<String[]> list) {
+		List<String[]> res = new ArrayList<String[]>();
+		res.add(new String[] { list.get(0)[0], list.get(0)[1], "占比" });
+		int total = 0;
+		for (int i = 1; i < list.size(); i++) {
+			total += Integer.parseInt(list.get(i)[1].trim());
+		}
+
+		for (int i = 1; i < list.size(); i++) {
+			String[] row = list.get(i);
+			String[] insert = new String[3];
+			insert[0] = row[0].trim();
+			insert[1] = row[1].trim();
+			int count = Integer.parseInt(insert[1]);
+			insert[2] = String.valueOf(Math.round((float)count/total*100))+"%";
+			res.add(insert);
+		}
+		res.add(new String[1]);
+		res.add(new String[]{"总共",String.valueOf(total)});
+		return res;
 	}
 
 	class ReadThread implements Callable<List<String[]>> {

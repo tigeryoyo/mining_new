@@ -1,5 +1,6 @@
 package com.hust.mining.service;
 
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,6 +14,8 @@ public interface CoreResultService {
     int deleteById(String coreResId);
     
     CoreResult queryCoreResById(String coreResId);
+    
+    boolean export(String coreResId,OutputStream outputStream);
     
     List<CoreResult> queryCoreRessByIssueId(String issueId);
 }

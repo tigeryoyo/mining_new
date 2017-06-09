@@ -1,5 +1,6 @@
 package com.hust.mining.service.impl;
 
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -42,6 +43,11 @@ public class CoreResultImpl implements CoreResultService {
 	@Override
 	public CoreResult queryCoreResById(String coreResId) {
 		return coreResultDao.queryCoreResById(coreResId);
+	}
+
+	@Override
+	public boolean export(String coreResId, OutputStream outputStream) {
+		return coreResultDao.export(coreResId, outputStream);
 	}
 
 	@Override
