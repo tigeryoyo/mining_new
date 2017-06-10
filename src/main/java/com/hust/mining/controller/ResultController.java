@@ -6,9 +6,11 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.junit.runner.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -65,7 +67,7 @@ public class ResultController {
      * @return
      */
     @ResponseBody
-    @RequestMapping("/getClusterResult")
+    @RequestMapping(value="/getClusterResult",method=RequestMethod.POST)
     public Object getClusterResult(@RequestParam(value = "clusterIndex", required = false) String clusterIndex,
     		@RequestParam(value = "resultId", required = false) String resultId,
             HttpServletRequest request) {
@@ -112,10 +114,14 @@ public class ResultController {
      * @param request
      * @return
      */
-    @ResponseBody
+    //@ResponseBody
     @RequestMapping("/deleteClusterItems")
     public Object delClusterItems(@RequestParam(value = "clusterIndex", required = false) String clusterIndex,
     		@RequestParam(value = "ItemIdSets", required = false) int[] sets, HttpServletRequest request) {
+    	System.out.println(sets+":"+sets.length);
+    	if(clusterIndex == null || Integer.valueOf(clusterIndex) < 0 || sets == null){
+    		return ResultUtil.errorWithMsg("对不起，删除失败！");
+    	}
         String issueId = issueService.getCurrentIssueId(request);
         if (StringUtils.isEmpty(issueId)) {
             return ResultUtil.errorWithMsg("请重新选择任务");

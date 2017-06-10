@@ -17,7 +17,7 @@ function getIncludePowers(roleId){
 		data:{roleId:roleId},
 		dataType:"json",
 		beforeSend : function(){
-            begin();
+//            begin();
         },
         success : function(msg){
         	if(msg.status=="OK"){
@@ -34,11 +34,12 @@ function getIncludePowers(roleId){
         	}
         },
         complete : function(){
+//        	stop();
         	getNotIncludePowers(roleId,count);
-            stop();
+//        	stop();            
         },
-		error: function(){
-			alert("请求失败");
+		error: function(msg){
+			alert(msg.result);
 		}
 	})
 }
@@ -50,7 +51,7 @@ function getNotIncludePowers(roleId,index){
 		data:{roleId:roleId},
 		dataType:"json",
 		beforeSend : function(){
-            begin();
+//            begin();
         },
         success : function(msg){
         	if(msg.status=="OK"){
@@ -65,11 +66,11 @@ function getNotIncludePowers(roleId,index){
         	}
         },
         complete : function(){
-			console.log("all")
-            stop();
+//        	stop();
+			console.log("all");            
         },
-		error: function(){
-			alert("请求失败");
+		error: function(msg){
+			alert(msg.result);
 		}
 	})
 }

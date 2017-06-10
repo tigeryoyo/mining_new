@@ -332,18 +332,16 @@ public class ResultServiceImpl implements ResultService {
         List<String[]> list = new ArrayList<String[]>();
         String[] indexList = null;
         try {
-//            List<String[]> content = resultDao.getResultConentById(resultId, issueId, DIRECTORY.CONTENT);
-//            List<String[]> cluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
-//            redisService.setObject(KEY.REDIS_CLUSTER_RESULT, cluster, request);
-//            redisService.setObject(KEY.REDIS_CONTENT, content, request);
-        	List<String[]> content = (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
-        	List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
-        	if(content == null || content.size() == 0){
-        		content = resultDao.getResultConentById(resultId, issueId, DIRECTORY.CONTENT);
-        	}
-        	if(cluster == null || cluster.size() == 0 ){
-        		cluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
-        	}
+            List<String[]> content = resultDao.getResultConentById(resultId, issueId, DIRECTORY.CONTENT);
+            List<String[]> cluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
+//        	List<String[]> content = (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
+//        	List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
+//        	if(content == null || content.size() == 0){
+//        		content = resultDao.getResultConentById(resultId, issueId, DIRECTORY.CONTENT);
+//        	}
+//        	if(cluster == null || cluster.size() == 0 ){
+//        		cluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
+//        	}
             
         	//clusterIndex是类的Index
             indexList = cluster.get(Integer.valueOf(clusterIndex));
@@ -385,14 +383,24 @@ public class ResultServiceImpl implements ResultService {
             int n = sets.length;
             String[] items = cluster.get(Integer.valueOf(clusterIndex));
             String[] clusterCount = count.get(Integer.valueOf(clusterIndex));
-            String[] newItems = new String[items.length - n];
+            String[] newItems = new String[items.length - n ];
+            //
             if(items != null && items.length != 0 ){
-            	int k = 0;
-            	for (int i = sets.length - 1, j = items.length - 1; j >= 0; i--,j--) {
-                   if(sets[i] != j){
+            	int i, j , k = 0;
+            	for (i = 0 , j = 0; i < n && j < items.length ; ) {
+                   if(sets[i] < j){
                 	   newItems[k++] = items[j];
+                   }else if(sets[i] > j){
+                	   newItems[k++] = items[j];
+                	   j++;
+                   }else{
+                	   i++;
+                	   j++;
                    }
                 }
+            	while(j < items.length){
+            		newItems[k++] = items[j++];
+            	}
             	if(newItems == null || newItems.length == 0){
             		cluster.remove(items);
             	}else{
@@ -425,6 +433,7 @@ public class ResultServiceImpl implements ResultService {
             issueDao.updateIssueInfo(issue);
         } catch (Exception e) {
             logger.error("sth failed when delete sets:{}" + e.toString());
+            e.printStackTrace();
             return false;
         }
         return true;
