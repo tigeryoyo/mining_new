@@ -119,6 +119,16 @@ public class Constant {
         public static final int DBSCAN = 3;
     }
 
+    public static class FONT {
+    	public static final String  HEITI = "黑体"; 
+    	public static final String  XINSONGTI = "新宋体"; 
+    	public static final String  KAITI = "楷体_GB2312"; 
+    	public static final String  SONGTI = "宋体"; 
+    	public static final String  FANGSONG = "华文仿宋"; 
+    	
+    	public static final String RED = "FF0000";
+    	public static final String GREEN = "008B00";
+    }
     
     //把config.properties中的变量值，赋给当前的变量
     @Value("${upload_file}")
