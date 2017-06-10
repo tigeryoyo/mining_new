@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.hust.mining.constant.Constant.DIRECTORY;
+import com.hust.mining.constant.Constant.FONT;
 import com.hust.mining.constant.Constant.Index;
 import com.hust.mining.dao.mapper.CoreResultMapper;
 import com.hust.mining.dao.mapper.StandardResultMapper;
@@ -24,6 +25,8 @@ import com.hust.mining.model.params.CoreResultQueryCondition;
 import com.hust.mining.util.AttrUtil;
 import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.FileUtil;
+import com.hust.mining.util.WordUtil;
+import com.hust.mining.util.WordUtil.Env;
 
 @Repository
 public class CoreResultDao {
@@ -53,9 +56,8 @@ public class CoreResultDao {
 
 		List<String[]> cluster = FileUtil.read(DIRECTORY.STDRES_CLUSTER + con.getStdResId());
 		List<int[]> clusterCount = ConvertUtil.toIntList(cluster);
-		List<StringBuilder> sbList = generateCoreReport(con.getCoreResName(), con.getStdResId(), staticsInfo, content,
-				clusterCount);
-		FileUtil.writeSBList(DIRECTORY.CORERES + coreResult.getCoreRid(), sbList);
+		generateWordCoreReport(DIRECTORY.CORERES + coreResult.getCoreRid(), con.getCoreResName(), con.getStdResId(),
+				staticsInfo, content, clusterCount);
 
 		return coreResultMapper.insert(coreResult);
 	}
@@ -78,16 +80,13 @@ public class CoreResultDao {
 	}
 
 	/**
-	 * 产生核心报告
+	 * 产生核心报告txt版本
 	 * 
-	 * @param clusterCount
-	 * @param content
 	 */
-	public List<StringBuilder> generateCoreReport(String reportName, String stdResId, List<String[]> staticsInfo,
+	public List<StringBuilder> generateTxtCoreReport(String reportName, String stdResId, List<String[]> staticsInfo,
 			List<String[]> content, List<int[]> clusterCount) {
 		List<StringBuilder> sbList = new ArrayList<StringBuilder>();
 		try {
-
 			StandardResult standardResult = standardResultMapper.selectByPrimaryKey(stdResId);
 			String dateCount = standardResult.getDateCount();
 			String sourceCount = standardResult.getSourceCount();
@@ -166,6 +165,112 @@ public class CoreResultDao {
 			return null;
 		}
 		return sbList;
+	}
+
+	/**
+	 * 产生核心报告word版本
+	 * 
+	 */
+	public void generateWordCoreReport(String filename, String reportName, String stdResId, List<String[]> staticsInfo,
+			List<String[]> content, List<int[]> clusterCount) {
+		List<StringBuilder> sbList = new ArrayList<StringBuilder>();
+		try {
+			WordUtil wu = new WordUtil();
+			wu.addParaText("(四川省戒毒管理局专供)", new Env().bold(true).fontType(FONT.KAITI));
+			wu.addParaText("舆 情 参 阅", new Env().fontSize(52).bold(true).fontType(FONT.XINSONGTI).fontColor(FONT.GREEN)
+					.alignment("center"));
+
+			Env titleEnv = new Env().fontSize(22).bold(true).fontType(FONT.SONGTI);
+			Env mainEnv = new Env().fontType(FONT.FANGSONG);
+			Env mainBEnv = new Env(mainEnv).bold(true).fontType(FONT.SONGTI);
+			Env mainRBEnv = new Env(mainBEnv).fontColor(FONT.RED);
+
+			StandardResult standardResult = standardResultMapper.selectByPrimaryKey(stdResId);
+			String dateCount = standardResult.getDateCount();
+			String sourceCount = standardResult.getSourceCount();
+
+			// 信息总数
+			int totalInfo = 0;
+			// 信息平均数
+			int avgInfo = 0;
+			// 信息峰值日期
+			String maxDate = "";
+			// 信息峰值
+			int maxCount = 0;
+			// 信息峰值占比
+			float pOfMaxCount = 0.0f;
+			String[] dateCountArray = dateCount.split(",");
+			// 第一天的日期
+			String firstDateCount = dateCountArray[0].split("=")[0];
+			// 最后一天的日期
+			String lastDateCount = dateCountArray[dateCountArray.length - 1].split("=")[0];
+			for (String eachCount : dateCountArray) {
+				String[] curCount = eachCount.split("=");
+				int count = Integer.parseInt(curCount[1]);
+				if (maxCount < count) {
+					maxCount = count;
+					maxDate = curCount[0];
+				}
+				totalInfo += count;
+			}
+			avgInfo = totalInfo / dateCountArray.length;
+			pOfMaxCount = Math.round((float) maxCount / totalInfo * 100);
+			// title、count、url
+			List<String[]> maxDayInfoCount = dayInfoCount(content, clusterCount, maxDate);
+			List<String[]> msgTypeCount = calcSourceCount(sourceCount);
+			// 一周概况
+			wu.addParaText("一周概况", titleEnv);
+			wu.addParaText("本周互联网相关舆情信息更新量 " + totalInfo + " 条（日均 " + avgInfo + " 条）与上周xxx条（日均xx条）相比，信息量...。", mainEnv);
+			wu.appendParaText("未发现“正/负”面舆情。", mainBEnv);
+
+			wu.setBreak();
+
+			// 舆情聚焦
+			wu.addParaText("舆情聚焦", titleEnv);
+			String[] essentialIndexs = staticsInfo.get(0);
+			for (int i = 1; i < staticsInfo.size(); i++) {
+				String[] currentInfo = staticsInfo.get(i);
+				wu.addParaText(i + ". " + currentInfo[Integer.parseInt(essentialIndexs[0]) + 1], mainBEnv);
+				wu.addParaText("该事件出现次数：" + currentInfo[0] + "条。", mainEnv);
+				wu.addParaText("该新闻的网址为：" + currentInfo[Integer.parseInt(essentialIndexs[1]) + 1], mainEnv);
+			}
+			wu.addParaText("行业舆情", titleEnv);
+
+			wu.setBreak();
+
+			// 监测信息量日分布情况
+			wu.addParaText("监测信息量日分布情况", titleEnv);
+			wu.addParaText(firstDateCount + " 至 " + lastDateCount + "，通过四川电信互联网舆情信息服务平台监测数据显示，本时间段内与" + "“" + reportName
+					+ "”相关互联网信息 " + totalInfo + " 条，", mainEnv);
+			wu.appendParaText("未发现“正/负”面舆情。", mainBEnv);
+			wu.addParaText("信息具体情况如下：", mainEnv);
+			wu.addParaText("监测数据显示，" + reportName + firstDateCount + " 至 " + lastDateCount + "相关信息总量 " + totalInfo
+					+ " 条，平均每日信息量为 " + avgInfo + " 条。其中，" + maxDate + "当天的相关信息量是本周最大峰值，相关信息共有 " + maxCount
+					+ " 条，占一周信息量的 ", mainEnv);
+			wu.appendParaText(pOfMaxCount + "%", mainRBEnv);
+			wu.appendParaText("，主要为", mainEnv);
+			for (int i = 0; i < maxDayInfoCount.size() && i < 3; i++) {
+				String[] infoCount = maxDayInfoCount.get(i);
+				wu.appendParaText("《" + infoCount[0] + "》", mainBEnv);
+				wu.appendParaText("（" + infoCount[1] + "条，网址：" + infoCount[2] + "）", mainEnv);
+			}
+			wu.appendParaText("（只罗列出这一天的排名前三条信息。），相关转载传播。", mainEnv);
+			wu.addParaText("本周信息主要为" + msgTypeCount.get(0)[0] + "信息，占所有信息的比例共为", mainEnv);
+			wu.appendParaText(msgTypeCount.get(0)[1] + "%", mainRBEnv);
+			wu.appendParaText("；其次" + msgTypeCount.get(1)[0] + "信息，占比共为", mainEnv);
+			wu.appendParaText(msgTypeCount.get(1)[1] + "%", mainRBEnv);
+			wu.appendParaText("；" + msgTypeCount.get(2)[0] + "信息，占比共为", mainEnv);
+			wu.appendParaText(msgTypeCount.get(2)[1] + "%", mainRBEnv);
+			wu.appendParaText("。", mainEnv);
+
+			wu.setBreak();
+
+			// 舆情聚焦(摘要部分，陈杰)
+			wu.addParaText("摘要部分", titleEnv);
+			wu.write(filename);
+		} catch (Exception e) {
+			logger.error("产生核心报告出错!{}", e.toString());
+		}
 	}
 
 	/**

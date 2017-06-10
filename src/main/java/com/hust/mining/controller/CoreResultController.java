@@ -75,7 +75,7 @@ public class CoreResultController {
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
             String coreResName = new String(coreResult.getResName().getBytes(),"ISO8859-1");
-            response.setHeader("Content-Disposition", "attachment;filename="+coreResName+".txt");
+            response.setHeader("Content-Disposition", "attachment;filename="+coreResName+".docx");
             if(!coreResultService.export(coreResId, outputStream)){
             	throw new Exception();
             }
