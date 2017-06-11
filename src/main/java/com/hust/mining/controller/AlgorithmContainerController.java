@@ -1,10 +1,14 @@
 package com.hust.mining.controller;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,7 @@ import com.hust.mining.service.RedisService;
 import com.hust.mining.service.ResultService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.service.WebsiteService;
+import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.ResultUtil;
 
 @Controller
@@ -43,8 +48,6 @@ public class AlgorithmContainerController {
     private ResultService resultService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private WebsiteService websiteService;
     @Autowired
     private RedisService redisService;
 	/**
@@ -84,6 +87,42 @@ public class AlgorithmContainerController {
     }
 	
 	@ResponseBody
+	@RequestMapping("/downloadResult")
+	public void downloadResult(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		OutputStream outputStream = null;
+		try {
+			List<String[]> list = algorithmContainerService.Downloade(request);
+			System.out.println("输出结果：");
+			for (String[] strings : list) {
+				for (String string : strings) {
+					System.out.print(string+"  ");
+				}
+				System.out.println();
+			}
+			System.out.println("输出完");
+			if (list == null) {
+				response.sendError(404, "导出错误");
+				return;
+			}
+			outputStream = response.getOutputStream();
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("multipart/form-data");
+			response.setHeader("Content-Disposition", "attachment;fileName=ClusterResult.xls");
+			HSSFWorkbook workbook = ExcelUtil.exportToExcel(list);
+			workbook.write(outputStream);
+		} catch (Exception e) {
+			logger.info("excel 下载失败\t" + e.toString());
+		} finally {
+			try {
+				outputStream.close();
+			} catch (Exception e) {
+				logger.info("下载excel时，关闭outputstream失败");
+			}
+		}
+		
+	}
+	
+	@ResponseBody
     @RequestMapping("/getCountResult")
     public Object getCountResult(HttpServletRequest request) {
        
@@ -101,7 +140,7 @@ public class AlgorithmContainerController {
 	{
 		//待聚类文本
 		List<String[]> list= (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
-		if (k_value < 0 && k_value > list.size()) 
+		if (k_value < 0 || k_value > list.size()) 
 		{
 			 return ResultUtil.errorWithMsg("K超出其取值范围: 1~"+list.size());
 		}
@@ -124,7 +163,7 @@ public class AlgorithmContainerController {
 	{
 		//待聚类文本
 		List<String[]> list= (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
-		if (Threshold < 0 && Threshold > 1) 
+		if (Threshold < 0 || Threshold > 1) 
 		{
 			 return ResultUtil.errorWithMsg("阈值超出其取值范围: 0 ~ 1");
 		}
@@ -147,9 +186,9 @@ public class AlgorithmContainerController {
 	{
 		//待聚类文本
 		List<String[]> list= (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
-		if (Eps < 0 ) 
+		if (Eps < 0 || Eps > 1 ) 
 		{
-			 return ResultUtil.errorWithMsg("半径应该大于0");
+			 return ResultUtil.errorWithMsg("半径超出其取值范围: 0 ~ 1");
 		}
 		if (MinPts < 1 ) 
 		{
