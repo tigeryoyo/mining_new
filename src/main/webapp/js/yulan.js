@@ -184,7 +184,6 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     form.append("titleIndex", titleIndex);
     form.append("timeIndex", time);
     form.append("sourceType", sourceType);
-    console.log("(((((((((");
     console.log(form);
     $.ajax({
         async : false,
@@ -195,22 +194,16 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
         contentType : false,
         mimeType : "multipart/form-data",
         data : form,
-        beforeSend : function() {
-            begin();
-        },
+        
         success : function(response) {
             var msg = JSON.parse(response);
             if (msg.status == "OK") {
-                // alert(msg.tagName);
-                // cookie_value1="'"+item.fileId+"'";
-
+            	alert("上传成功");
             } else {
                 alert("上传失败");
             }
         },
-        complete : function() {
-            stop();
-        },
+       
         error : function() {
             alert("预览失败");
             stop();

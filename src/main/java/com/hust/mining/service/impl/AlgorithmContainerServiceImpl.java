@@ -16,6 +16,7 @@ import java.util.concurrent.Future;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.tools.ant.taskdefs.optional.jlink.jlink;
+import org.apache.xmlbeans.impl.xb.xsdownload.DownloadedSchemaEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,30 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
       
     }
     /**
+     * 下载聚类结果
+     */
+    @Override
+	public List<String[]> Downloade(HttpServletRequest request) {
+    	//存储原始文本的内容
+        List<String[]> content= (List<String[]>) redisService.getObject(KEY.REDIS_CONTENT, request);
+        //存储分类后的文本序号，每个数组为一个类
+        List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
+		//用于存储结果
+        List<String[]> list = new ArrayList<String[]>();
+        for (String[] strings : cluster) {
+        	for (String string : strings) {
+				int i = Integer.parseInt(string);
+				String[] s = content.get(i+1);
+				list.add(s);
+			}
+			String[] s1 = {" "," " ," "};
+			list.add(s1);
+		}
+        return list;
+	}
+
+    
+    /**
      * 第一个参数为：去除属性后的文本
      * 聚类的结果
      * 属性列
@@ -106,14 +131,7 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
 		redisService.setObject(KEY.REDIS_CLUSTER_RESULT, cluster, request);
 		redisService.setObject(KEY.REDIS_COUNT_RESULT, countResult, request);
 		List<String[]> list2 = getResult(request);
-		System.out.println("结果是：");
-		for (String[] strings : list2) {
-			for (String string : strings) {
-				System.out.print(string+"   ");
-			}
-			System.out.println();
-		}
-		System.out.println("结果完");
+		
     }
     
     @Override
@@ -127,7 +145,7 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
             System.out.println("cluster为:");
             for (String[] strings : cluster) {
 			   for (String string : strings) {
-				System.out.print(string+ "");
+				System.out.print(string+ "  ");
 			}
 			   System.out.println();
            }
@@ -334,6 +352,7 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
             return "聚类失败";
         }
         List<List<Integer>> result= Sort(list, resultIndexSetList,indexOfTitle,indexOfTime);
+        System.out.println("result:");
         storeResult(list, result, attrs, request);
         return "聚类成功";
 	}
@@ -385,8 +404,5 @@ public class AlgorithmContainerServiceImpl implements AlgorithmContainerService 
         storeResult(list, result, attrs, request);
         	return "聚类成功";
 	}
-
-
-	
 
 }

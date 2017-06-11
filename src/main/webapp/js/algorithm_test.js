@@ -121,103 +121,94 @@ function showMining(){
 
 //kmeans保存设置请求
 function kmeans_conservation(){
-    var k_value = $("#k_value").val();
-    var granularity = $("#kmeans_granularity:checked").val();
+	 var algorithm = $("input[name='algorithm']:checked").val();
+     var granularity = $("#kmeans_granularity:checked").val();
+     console.log(algorithm+"**k");
+	 console.log(granularity+"**gr");
     //ajax 发送请求
-    $.ajax({
-        type:"post",
-        url:"",
-        data:{
-
-        },
-        dataType:"json",
-        beforeSend : function(){
-            begin();
-        },
-        success: function(msg){
-            if(msg.status=="OK"){
-            	showMining();
-            }else{
-                alert(msg.result);
-            }
-        },
-        complete : function(){
-            console.log("all")
-            stop();
-        },
-        error: function(){
-            alert("请求失败");
-        }
-    })
+	 $.ajax({
+	    	type:"POST",
+	    	url:"/user/setAlgorithmAndGranularity",
+	    	data:{
+	    		algorithm:algorithm,
+	    		granularity:granularity	
+	    	},
+	    	dataType:"json",
+			
+	        success : function(msg){
+	        	if(msg.status=="OK"){
+	        		alert("设置成功！");
+					
+	        	}else{
+	        		console.log(msg.result);
+	        	}
+	        },
+			error: function(){
+				alert("请求失败");
+			}
+	    	
+	    })
 }
+
 //canopy保存设置请求
 function canopy_conservation() {
-    var Threshold = $("#Threshold").val();
-    var size = $("#canopy_size:checked").val();
-  
-    //ajax 发送请求
-    $.ajax({
-        type:"post",
-        url:"",
-        data:{
-
-        },
-        dataType:"json",
-        beforeSend : function(){
-            begin();
-        },
-        success: function(msg){
-            if(msg.status=="OK"){
-                var items = msg.result;
-                showMining();
-            }else{
-                alert(msg.result);
-           //     $('.summary_tab table').html("");
-            }
-        },
-        complete : function(){
-            console.log("all")
-            stop();
-        },
-        error: function(){
-            alert("请求失败");
-        }
-    })
+	var algorithm = $("input[name='algorithm']:checked").val();
+    var granularity = $("#canopy_granularity:checked").val();
+    console.log(algorithm+"**k");
+	 console.log(granularity+"**gr");
+   //ajax 发送请求
+	 $.ajax({
+	    	type:"POST",
+	    	url:"/user/setAlgorithmAndGranularity",
+	    	data:{
+	    		algorithm:algorithm,
+	    		granularity:granularity	
+	    	},
+	    	dataType:"json",
+			
+	        success : function(msg){
+	        	if(msg.status=="OK"){
+	        		alert("设置成功！");
+					
+	        	}else{
+	        		console.log(msg.result);
+	        	}
+	        },
+			error: function(){
+				alert("请求失败");
+			}
+	    	
+	    })
 }
 //dbscan保存设置请求
 function dbscans_conservation() {
-    var radius = $("#radius").val();
-    var minNum = $("#minNum").val();
-    var size = $("#dbscan_size:checked").val();
-    
-    //ajax 发送请求
-    $.ajax({
-        type:"post",
-        url:"",
-        data:{
-
-        },
-        dataType:"json",
-        beforeSend : function(){
-            begin();
-        },
-        success: function(msg){
-            if(msg.status=="OK"){
-                var items = msg.result;
-                showMining();
-            }else{
-                alert(msg.result);
-                //     $('.summary_tab table').html("");
-            }
-        },
-        complete : function(){
-            console.log("all")
-            stop();
-        },
-        error: function(){
-            alert("请求失败");
-        }
-    })
+	var algorithm = $("input[name='algorithm']:checked").val();
+    var granularity = $("#dbscan_size:checked").val();
+    console.log(algorithm+"**k");
+	 console.log(granularity+"**gr");
+   //ajax 发送请求
+	 $.ajax({
+	    	type:"POST",
+	    	url:"/user/setAlgorithmAndGranularity",
+	    	data:{
+	    		algorithm:algorithm,
+	    		granularity:granularity	
+	    	},
+	    	dataType:"json",
+			
+	        success : function(msg){
+	        	if(msg.status=="OK"){
+	        		alert("设置成功！");
+					
+	        	}else{
+	        		console.log(msg.result);
+	        	}
+	        },
+			error: function(){
+				alert("请求失败");
+			}
+	    	
+	    })
 }
 //kmeans聚类请求
 function kmeans_cluster(){
@@ -316,7 +307,6 @@ function dbscan_cluster(){
                 showMining();
             }else{
                 alert(msg.result);
-                //     $('.summary_tab table').html("");
             }
         },
         complete : function(){
@@ -327,13 +317,6 @@ function dbscan_cluster(){
             alert("请求失败");
         }
     })
-}
-
-
-//下载按钮操作
-function download()
-{
-	
 }
 
 

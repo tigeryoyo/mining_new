@@ -15,6 +15,8 @@ public interface AlgorithmContainerService {
 	  public String UseKmeans(List<String[]> list, int k,int granularity, HttpServletRequest request);
 
 	  int getContent(Condition con, HttpServletRequest request);
+	  
+	  public List<String[]> Downloade(HttpServletRequest request);
 
 	  void storeResult(List<String[]> list, List<List<Integer>> result1, String[] attrs, HttpServletRequest request);
 
