@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.util.ArrayUtil;
 import org.junit.runner.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,7 +21,10 @@ import com.hust.mining.model.params.StatisticParams;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.ResultService;
+import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.ResultUtil;
+
+import net.sf.json.JSONArray;
 
 @RequestMapping(value = "/result")
 public class ResultController {
@@ -51,7 +55,13 @@ public class ResultController {
         if (StringUtils.isBlank(resultId)) {
             return ResultUtil.errorWithMsg("不存在记录");
         }
+        System.out.println(resultId+"--REusltc-"+issueId);
         List<String[]> list = resultService.getCountResultById(resultId, issueId, request);
+//        for(String[] ss : list){
+//        	if(list.indexOf(ss) > 0){
+//        		System.out.println(ss[5]+"-----");
+//        	}
+//        }
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("不存在记录");
         }
@@ -87,6 +97,12 @@ public class ResultController {
             return ResultUtil.errorWithMsg("不存在记录");
         }
         redisService.setString(KEY.RESULT_ID, resultId, request);
+        for(String[] ss : list){
+        	
+        	System.out.print(ss[0]+" ");
+        	
+        	
+        }System.out.println();
         return ResultUtil.success(list);
     }
     
@@ -118,7 +134,11 @@ public class ResultController {
     @RequestMapping("/deleteClusterItems")
     public Object delClusterItems(@RequestParam(value = "clusterIndex", required = false) String clusterIndex,
     		@RequestParam(value = "ItemIdSets", required = false) int[] sets, HttpServletRequest request) {
-    	System.out.println(sets+":"+sets.length);
+    	
+    	for(int i : sets){
+    		System.out.print(i+ " ");
+    	}
+    	System.out.println("sets:----");
     	if(clusterIndex == null || Integer.valueOf(clusterIndex) < 0 || sets == null){
     		return ResultUtil.errorWithMsg("对不起，删除失败！");
     	}
@@ -130,6 +150,7 @@ public class ResultController {
         if (StringUtils.isEmpty(resultId)) {
             return ResultUtil.errorWithMsg("请重新选择一条挖掘记录");
         }
+        
         boolean result = resultService.deleteClusterItems(clusterIndex, sets, request);
         if (result) {
             return ResultUtil.success("删除成功");

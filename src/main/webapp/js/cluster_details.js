@@ -62,7 +62,7 @@ function showClusterDetails(index,rid,count){
 				$('.details_tab table').attr('id',index);
 				}
 			}else{
-				alert(msg.result);
+				alert(msg.result);				
 			}
 		},
 		complete : function() {
@@ -71,13 +71,17 @@ function showClusterDetails(index,rid,count){
 		error : function(msg) {
 			 $('#code').hide();
 		     $('#goodcover').hide();
-		     location.reload();
+		     freshData();
 //			alert(msg.result);
 		}
 	});
 	//类中只有一个元素直接打开url
 	if(url != '' && count == 1){
 		window.open(url);
+	}else if(url == ''){
+		 $('#code').hide();
+	     $('#goodcover').hide();
+	     freshData();
 	}else{
 		 $('#code').center();
 	     $('#goodcover').show();
@@ -135,7 +139,7 @@ $(function(){
 
 /* 删除 类中某些元素*/
 function deleteClusterItem(index) {
-	var sets = [];
+	var sets = new Array();
 	var clusterIndex = $('.details_tab table').attr('id');
 	if(index == null || index == -1){
 		$(".details_tab input:checked").each(function(i) {
@@ -155,21 +159,23 @@ function deleteClusterItem(index) {
 			ItemIdSets: sets,
 		},
 		dataType : "json",
+//		async: false,//同步
 		success : function(msg) {
 			if (msg.status == "OK") {
-				showClusterDetails(clusterIndex,null,2);
+				var rid = $('.summary_up table tr img').attr("id");
+				showClusterDetails(clusterIndex,rid,2);
 			} else {
 				//alert(msg.result);
 				 $('#code').hide();
 			     $('#goodcover').hide();
-			     location.reload();
+			     freshData();
 			}
 		},
 		error : function(msg) {
 //			alert(msg.result);
 			 $('#code').hide();
 		     $('#goodcover').hide();
-		     location.reload();
+		     freshData();
 		}
 	});
 }
@@ -180,12 +186,12 @@ $(function() {
     $('#closebt').click(function() {
         $('#code').hide();
         $('#goodcover').hide();
-        location.reload();
+        freshData();
     });
 	$('#goodcover').click(function() {
         $('#code').hide();
         $('#goodcover').hide();
-        location.reload();
+        freshData();
     });
     /*
 	 * var val=$(window).height(); var codeheight=$("#code").height(); var

@@ -1,5 +1,6 @@
 package com.hust.mining.service.impl;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -342,8 +343,9 @@ public class ResultServiceImpl implements ResultService {
             if(indexList == null || indexList.length == 0){
             	return null;
             }
-            for(String[] item : content){
-            	for(String index : indexList){
+            //---
+            for(String index : indexList){
+            	for(String[] item : content){
             		//item[Index.?] 未定义全局常量
             		// item 第一行为标题。从第二行开始
                 	if(String.valueOf(Integer.valueOf(index) + 1).equals(item[0])){
@@ -374,38 +376,37 @@ public class ResultServiceImpl implements ResultService {
             List<String[]> count = (List<String[]>) redisService.getObject(KEY.REDIS_COUNT_RESULT, request);
             List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
             
-            if(cluster.size() == sets.length){
+            String[] items = cluster.get(Integer.valueOf(clusterIndex));
+            String[] clusterCount = count.get(Integer.valueOf(clusterIndex));
+            String[] newItems = null;
+            //该类元素个数和要删除的个数相同，则直接删除这个类
+            if(items.length == sets.length){
             	return deleteSets(new int[]{Integer.valueOf(clusterIndex)}, request);
             }
             //排序、升序
             Arrays.sort(sets);
-            
-            String[] items = cluster.get(Integer.valueOf(clusterIndex));
-            String[] clusterCount = count.get(Integer.valueOf(clusterIndex));
-            String[] newItems = null;
+                        
             //
             if(items != null && items.length != 0 ){
 
-            	// 删除集合中指定的一些元素
+            	//数组转List
             	List<String> clusterList = new ArrayList<String>();
             	for(String s : items){
-            		System.out.print(s+" ");
             		clusterList.add(s);
             	}
-            	System.out.println();
+            	// 删除集合中指定的一些元素
             	for(int i = sets.length - 1 ; i >= 0 ; i--){
-            		System.out.print(i+" ");
-            		clusterList.remove(i);
+            		clusterList.remove(sets[i]);
             	}
-            	for(String s : clusterList){
-            		System.out.print(s+" ");
-            	}
+            	//新的类集合
             	newItems = clusterList.toArray(new String[clusterList.size()]);
             	cluster.set(Integer.valueOf(clusterIndex), newItems);
             	
             }
             if(newItems != null && newItems.length != 0){
+            	//更新类第一条记录
             	clusterCount[1] = String.valueOf(newItems.length);
+            	clusterCount[0] = newItems[0];
             }else if(newItems.length == 0){
             	count.remove(clusterCount);
             }
@@ -416,6 +417,7 @@ public class ResultServiceImpl implements ResultService {
             Result result = new Result();
             result.setRid(resultId);
             result.setIssueId(issueId);
+            System.out.println("shanchu"+resultId+"--"+issueId);
             ResultWithContent rc = new ResultWithContent();
             rc.setResult(result);
             rc.setModiCluster(cluster);

@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2016/12/18.
  */
-document.write('<script type="text/javascript" src="js/cluster_details.js"></script>');
+//document.write('<script type="text/javascript" src="js/cluster_details.js"></script>');
 
 function historyRecord() {
 	$
@@ -231,9 +231,12 @@ function freshData() {
 					console.log(item);
 					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="'
 							+ i
-							+ '"/></td><td height="32" align="center"><a href="'
-							+ item[indexOfUrl]
-							+ '" target="_blank">'
+							+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
+							+ i
+							+ ',\''
+							+ $('.summary_up table tr img').attr("id")
+							+ '\','
+							+ item[0]+')">'
 							+ item[indexOfTitle]
 							+ '</a></td><td height="32" align="center">'
 							+ item[indexOfTime]
