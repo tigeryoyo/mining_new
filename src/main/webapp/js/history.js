@@ -111,78 +111,6 @@ function historyData(rid) {
 	})
 }
 
-function showClusterDetails(index,rid,count){
-	var url = '';
-	console.log(rid);
-//	var title = '';
-//	var time = '';
-	$.ajax({
-		type : "post",
-		url : "/result/getClusterResult",
-		data : {
-			clusterIndex : index,
-			resultId : rid
-		},
-		dataType : "json",
-		async: false,//同步
-		beforeSend : function() {
-			begin();
-		},
-		success : function(msg) {
-			if (msg.status == "OK") {
-				var items = msg.result;
-				var indexOfUrl = parseInt(items[0][1]);// + 1
-				if(items == null || items.length == 0){
-					alert('没有记录');
-					return;
-				}else if(items.length == 1){
-					url = items[i + 1][indexOfUrl];
-					return;
-				}
-				var indexOfTitle = parseInt(items[0][0]) ;//+ 1				
-				var indexOfTime = parseInt(items[0][2]) ;//+ 1
-				
-				$('.details_tab table tr:not(:first)').remove();
-				for (var i = 0; i < items.length - 1; i++) {
-					// items第一行存储index，故从i+1读起
-					item = items[i + 1];
-					url = item[indexOfUrl];
-					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="'
-						+ i
-						+ '"/></td><td height="32" align="center"><a href="'
-						+ item[indexOfUrl]
-						+ '" target="blank">'
-						+ item[indexOfTitle]
-						+ '</a></td><td height="32" align="center">'
-						+ item[indexOfTime]
-						+ '</td><td height="32" align="center">'
-						+ '<img src="images/user_del.png" class="delItem"  id="'
-						+ i
-						+'"  /></td></tr>';
-				$('.details_tab table').append(rows);
-				//将类的id作为table的id
-				$('.details_tab table').attr('id',index);
-				}
-			}else{
-				alert(msg.result);
-			}
-		},
-		complete : function() {
-			stop();
-		},
-		error : function(msg) {
-			alert(msg.result);
-		}
-	});
-	//类中只有一个元素直接打开url
-	if(url != '' && count == 1){
-		window.open(url);
-	}else{
-		 $('#code').center();
-	     $('#goodcover').show();
-	     $('#code').fadeIn();
-	}
-}
 
 function buildStandardData(){
 	$.ajax({
@@ -192,7 +120,7 @@ function buildStandardData(){
 }
 
 
-/* 删除 */
+/* 删除历史记录 */
 function historyDel() {
 	$(".summary_up table tr").unbind('click').on("click", "img", function() {
 		var result_id = $(this).attr("id");
@@ -254,7 +182,7 @@ function historyReset() {
 	})
 }
 
-/* 合并 */
+/* 合并类簇 */
 function addLayData() {
 	var sets = [];
 	$(".summary_tab input:checked").each(function(i) {
@@ -335,7 +263,7 @@ function freshData() {
 	});
 }
 
-/* 删除 */
+/* 删除选中类簇 */
 function deleteLayData() {
 	var sets = [];
 	$(".summary_tab input:checked").each(function(i) {
@@ -357,55 +285,6 @@ function deleteLayData() {
 		},
 		error : function() {
 			alert("数据请求失败");
-		}
-	});
-}
-
-//删除类中单个元素
-$(function(){
-	$(".details_tab table").on("click",".delItem",function(){
-		var index = $(this).attr("id");
-
-		console.log(index);
-		if(index == null || index < 0){
-			alert('删除出现错误');
-		}else{
-			deleteClusterItem(index);
-		}
-		
-	})
-})
-/* 删除 类中某些元素*/
-function deleteClusterItem(index) {
-	var sets = [];
-	var clusterIndex = $('.details_tab table').attr('id');
-	if(index == null || index == -1){
-		$(".details_tab input:checked").each(function(i) {
-			sets.push($(this).attr('class'));
-		});
-	}else{
-		sets.push(index);
-	}
-	
-	console.log(sets);
-	$.ajax({
-		type : "post",
-		traditional : true,
-		url : "/result/deleteClusterItems",
-		data : {
-			clusterIndex: clusterIndex,
-			ItemIdSets: sets,
-		},
-		dataType : "json",
-		success : function(msg) {
-			if (msg.status == "OK") {
-				freshClusterData(clusterIndex);
-			} else {
-				alert(msg.result);
-			}
-		},
-		error : function(msg) {
-			alert(msg.result);
 		}
 	});
 }

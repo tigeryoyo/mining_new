@@ -114,7 +114,7 @@ public class ResultController {
      * @param request
      * @return
      */
-    //@ResponseBody
+    @ResponseBody
     @RequestMapping("/deleteClusterItems")
     public Object delClusterItems(@RequestParam(value = "clusterIndex", required = false) String clusterIndex,
     		@RequestParam(value = "ItemIdSets", required = false) int[] sets, HttpServletRequest request) {
@@ -137,6 +137,25 @@ public class ResultController {
         return ResultUtil.errorWithMsg("删除失败");
     }
 
+    @ResponseBody
+    @RequestMapping("/resetClusterItems")
+    public Object resetClusterItems(@RequestBody String index, HttpServletRequest request) {
+        String issueId = redisService.getString(KEY.ISSUE_ID, request);
+        if (StringUtils.isEmpty(issueId)) {
+            return ResultUtil.errorWithMsg("请重新选择任务");
+        }
+        String resultId = resultService.getCurrentResultId(request);
+        if (StringUtils.isEmpty(resultId)) {
+            return ResultUtil.errorWithMsg("请重新选择一条挖掘记录");
+        }
+        boolean result = resultService.resetCluster(index, request);
+        if (result) {
+            return ResultUtil.success("合并成功");
+        }
+        return ResultUtil.errorWithMsg("合并失败");
+    }
+
+    
     @ResponseBody
     @RequestMapping("/combineSets")
     public Object combineSets(@RequestBody int[] sets, HttpServletRequest request) {
