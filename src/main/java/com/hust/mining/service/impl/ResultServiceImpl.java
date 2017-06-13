@@ -1,5 +1,6 @@
 package com.hust.mining.service.impl;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -326,5 +327,163 @@ public class ResultServiceImpl implements ResultService {
         
         return line;
     }
+
+	@Override
+	public List<String[]> getClusterResultById( String clusterIndex, String resultId, String issueId, HttpServletRequest request) {
+        List<String[]> list = new ArrayList<String[]>();
+        String[] indexList = null;
+        try {
+            List<String[]> content = resultDao.getResultConentById(resultId, issueId, DIRECTORY.CONTENT);
+            List<String[]> cluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
+        	//clusterIndex是类的Index
+            if(Integer.valueOf(clusterIndex) >= cluster.size()){
+            	return null;
+            }
+            indexList = cluster.get(Integer.valueOf(clusterIndex));
+            if(indexList == null || indexList.length == 0){
+            	return null;
+            }
+            //---
+            for(String index : indexList){
+            	for(String[] item : content){
+            		//item[Index.?] 未定义全局常量
+            		// item 第一行为标题。从第二行开始
+                	if(String.valueOf(Integer.valueOf(index) + 1).equals(item[0])){
+                		list.add(item);
+                	}
+                }
+            }
+            list.add(0, AttrUtil.findEssentialIndex(content.get(0)));
+        } catch (Exception e) {
+            logger.error("get count result failed:{}", e.toString());
+            e.printStackTrace();
+            return null;
+        }
+        
+        return list;
+	}
+
+	/**
+	 * 删除类中元素
+	 * sets id集合
+	 */
+	@Override
+	public boolean deleteClusterItems(String clusterIndex, int[] sets, HttpServletRequest request) {
+		String resultId = redisService.getString(KEY.RESULT_ID, request);
+        String issueId = issueService.getCurrentIssueId(request);
+        try {
+            // 从redis获取数据
+            List<String[]> count = (List<String[]>) redisService.getObject(KEY.REDIS_COUNT_RESULT, request);
+            List<String[]> cluster = (List<String[]>) redisService.getObject(KEY.REDIS_CLUSTER_RESULT, request);
+            
+            String[] items = cluster.get(Integer.valueOf(clusterIndex));
+            String[] clusterCount = count.get(Integer.valueOf(clusterIndex));
+            String[] newItems = null;
+            //该类元素个数和要删除的个数相同，则直接删除这个类
+            if(items.length == sets.length){
+            	return deleteSets(new int[]{Integer.valueOf(clusterIndex)}, request);
+            }
+            //排序、升序
+            Arrays.sort(sets);
+                        
+            //
+            if(items != null && items.length != 0 ){
+
+            	//数组转List
+            	List<String> clusterList = new ArrayList<String>();
+            	for(String s : items){
+            		clusterList.add(s);
+            	}
+            	// 删除集合中指定的一些元素
+            	for(int i = sets.length - 1 ; i >= 0 ; i--){
+            		clusterList.remove(sets[i]);
+            	}
+            	//新的类集合
+            	newItems = clusterList.toArray(new String[clusterList.size()]);
+            	cluster.set(Integer.valueOf(clusterIndex), newItems);
+            	
+            }
+            if(newItems != null && newItems.length != 0){
+            	//更新类第一条记录
+            	clusterCount[1] = String.valueOf(newItems.length);
+            	clusterCount[0] = newItems[0];
+            }else if(newItems.length == 0){
+            	count.remove(clusterCount);
+            }
+            // 更新redis数据
+            redisService.setObject(KEY.REDIS_CLUSTER_RESULT, cluster, request);
+            redisService.setObject(KEY.REDIS_COUNT_RESULT, count, request);
+            // 写回数据库
+            Result result = new Result();
+            result.setRid(resultId);
+            result.setIssueId(issueId);
+            System.out.println("shanchu"+resultId+"--"+issueId);
+            ResultWithContent rc = new ResultWithContent();
+            rc.setResult(result);
+            rc.setModiCluster(cluster);
+            rc.setModiCount(count);
+            int update = resultDao.updateResult(rc);
+            if (update <= 0) {
+                return false;
+            }
+            String user = userService.getCurrentUser(request);
+            Issue issue = new Issue();
+            issue.setIssueId(issueId);
+            issue.setLastOperator(user);
+            issue.setLastUpdateTime(new Date());
+            issueDao.updateIssueInfo(issue);
+        } catch (Exception e) {
+            logger.error("sth failed when delete sets:{}" + e.toString());
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+	}
+
+	/**
+	 * 重置某个类中元素
+	 */
+	@Override
+	public boolean resetCluster(String index, HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		int idx = Integer.valueOf(index);
+		
+		String resultId = redisService.getString(KEY.RESULT_ID, request);
+        String issueId = issueService.getCurrentIssueId(request);
+        // 从文件系统获取原数据
+        List<String[]> origCluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.ORIG_CLUSTER);
+        List<String[]> origCount = resultDao.getResultConentById(resultId, issueId, DIRECTORY.ORIG_COUNT);
+    
+        // 从文件系统获取修改后的数据
+        List<String[]> modiCluster = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_CLUSTER);
+        List<String[]> modiCount = resultDao.getResultConentById(resultId, issueId, DIRECTORY.MODIFY_COUNT);
+       
+        if(idx > origCluster.size() || idx < 0){
+        	return false;
+        }
+        //重置被修改的类簇的数据
+        modiCluster.set(idx, origCluster.get(idx));
+        modiCount.set(idx, origCount.get(idx));
+        
+        // 用原始数据覆盖修改后数据
+        Result result = new Result();
+        result.setRid(resultId);
+        result.setIssueId(issueId);
+        ResultWithContent rc = new ResultWithContent();
+        rc.setResult(result);
+        rc.setModiCluster(modiCluster);
+        rc.setModiCount(modiCount);
+        int update = resultDao.updateResult(rc);
+        if (update <= 0) {
+            return false;
+        }
+        String user = userService.getCurrentUser(request);
+        Issue issue = new Issue();
+        issue.setIssueId(issueId);
+        issue.setLastOperator(user);
+        issue.setLastUpdateTime(new Date());
+        issueDao.updateIssueInfo(issue);
+        return true;
+	}
 
 }

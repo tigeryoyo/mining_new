@@ -1,6 +1,8 @@
 /**
  * Created by Administrator on 2016/12/18.
  */
+//document.write('<script type="text/javascript" src="js/cluster_details.js"></script>');
+
 function historyRecord() {
 	$
 			.ajax({
@@ -47,62 +49,68 @@ function historyRecord() {
 historyRecord();
 
 function historyData(rid) {
-	$
-			.ajax({
-				type : "post",
-				url : "/result/getCountResult",
-				data : {
-					resultId : rid
-				},
-				dataType : "json",
-				beforeSend : function() {
-					begin();
-				},
-				success : function(msg) {
-					$('.summary_tab table tr:not(:first)').html('');
-					if (msg.status == "OK") {
-						// alert("删除成功");
-						var items = msg.result;
+	$.ajax({
+		type : "post",
+		url : "/result/getCountResult",
+		data : {
+			resultId : rid
+		},
+		dataType : "json",
+		beforeSend : function() {
+			begin();
+		},
+		success : function(msg) {
+			$('.summary_tab table tr:not(:first)').html('');
+			if (msg.status == "OK") {
+				// alert("删除成功");
+				var items = msg.result;
 
-						var indexOfTitle = parseInt(items[0][0]) + 1;
-						var indexOfUrl = parseInt(items[0][1]) + 1;
-						var indexOfTime = parseInt(items[0][2]) + 1;
-						for (var i = 0; i < items.length - 1; i++) {
-							// items第一行存储index，故从i+1读起
-							item = items[i + 1];
-							rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="'
-									+ i
-									+ '"/></td><td height="32" align="center"><a href="'
-									+ item[indexOfUrl]
-									+ '" target="_blank">'
-									+ item[indexOfTitle]
-									+ '</a></td><td height="32" align="center">'
-									+ item[indexOfTime]
-									+ '</td><td height="32" align="center">'
-									+ '<a href="javascript:;" onclick="toPaint('
-									+ i
-									+ ',\''
-									+ item[indexOfTitle]
-											.replace(/\"/g, " ").replace(/\'/g,
-													" ")
-									+ '\')">'
-									+ item[0]
-									+ '</a>' + '</td></tr>';
-							$('.summary_tab table').append(rows);
+				var indexOfTitle = parseInt(items[0][0]) + 1;
+				var indexOfUrl = parseInt(items[0][1]) + 1;
+				var indexOfTime = parseInt(items[0][2]) + 1;
+				for (var i = 0; i < items.length - 1; i++) {
+					// items第一行存储index，故从i+1读起
+					item = items[i + 1];
+					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="'
+							+ i
+							+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
+							// + item[indexOfUrl]
+							// + '
+							+ i
+							+ ',\''
+							// + item[indexOfUrl]
+							+ rid
+							+ '\','
+							+ item[0]+')">'
+							+ item[indexOfTitle]
+							+ '</a></td><td height="32" align="center">'
+							+ item[indexOfTime]
+							+ '</td><td height="32" align="center">'
+							+ '<a href="javascript:;" onclick="toPaint('
+							+ i
+							+ ',\''
+							+ item[indexOfTitle]
+									.replace(/\"/g, " ").replace(/\'/g,
+											" ")
+							+ '\')">'
+							+ item[0]
+							+ '</a>' + '</td></tr>';
+					$('.summary_tab table').append(rows);
 
-						}
-					} else {
-						alert(msg.result);
-					}
-				},
-				complete : function() {
-					stop();
-				},
-				error : function() {
-					alert("请求失败");
 				}
-			})
+			} else {
+				alert(msg.result);
+			}
+		},
+		complete : function() {
+			stop();
+		},
+		error : function(msg) {
+			alert(msg.result);
+		}
+	})
 }
+
 
 function buildStandardData(){
 	$.ajax({
@@ -112,7 +120,7 @@ function buildStandardData(){
 }
 
 
-/* 删除 */
+/* 删除历史记录 */
 function historyDel() {
 	$(".summary_up table tr").unbind('click').on("click", "img", function() {
 		var result_id = $(this).attr("id");
@@ -174,7 +182,7 @@ function historyReset() {
 	})
 }
 
-/* 合并 */
+/* 合并类簇 */
 function addLayData() {
 	var sets = [];
 	$(".summary_tab input:checked").each(function(i) {
@@ -201,62 +209,64 @@ function addLayData() {
 }
 
 function freshData() {
-	$
-			.ajax({
-				type : "post",
-				url : "/result/getCountResult",
-				beforeSend : function() {
-					begin();
-				},
-				success : function(msg) {
-					$('.summary_tab table tr:not(:first)').html('');
-					if (msg.status == "OK") {
-						// alert("删除成功");
-						var items = msg.result;
-						console.log(items);
+	$.ajax({
+		type : "post",
+		url : "/result/getCountResult",
+		beforeSend : function() {
+			begin();
+		},
+		success : function(msg) {
+			$('.summary_tab table tr:not(:first)').html('');
+			if (msg.status == "OK") {
+				// alert("删除成功");
+				var items = msg.result;
+				console.log(items);
 
-						var indexOfTitle = parseInt(items[0][0]) + 1;
-						var indexOfUrl = parseInt(items[0][1]) + 1;
-						var indexOfTime = parseInt(items[0][2]) + 1;
-						for (var i = 0; i < items.length - 1; i++) {
-							// items第一行存储index，故从i+1读起
-							item = items[i + 1];
-							console.log(item);
-							rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="'
-									+ i
-									+ '"/></td><td height="32" align="center"><a href="'
-									+ item[indexOfUrl]
-									+ '" target="_blank">'
-									+ item[indexOfTitle]
-									+ '</a></td><td height="32" align="center">'
-									+ item[indexOfTime]
-									+ '</td><td height="32" align="center">'
-									+ '<a href="javascript:;" onclick="toPaint('
-									+ i
-									+ ',\''
-									+ item[indexOfTitle]
-											.replace(/\"/g, " ").replace(/\'/g,
-													" ")
-									+ '\')">'
-									+ item[0]
-									+ '</a>' + '</td></tr>';
-							$('.summary_tab table').append(rows);
+				var indexOfTitle = parseInt(items[0][0]) + 1;
+				var indexOfUrl = parseInt(items[0][1]) + 1;
+				var indexOfTime = parseInt(items[0][2]) + 1;
+				for (var i = 0; i < items.length - 1; i++) {
+					// items第一行存储index，故从i+1读起
+					item = items[i + 1];
+					console.log(item);
+					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="'
+							+ i
+							+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
+							+ i
+							+ ',\''
+							+ $('.summary_up table tr img').attr("id")
+							+ '\','
+							+ item[0]+')">'
+							+ item[indexOfTitle]
+							+ '</a></td><td height="32" align="center">'
+							+ item[indexOfTime]
+							+ '</td><td height="32" align="center">'
+							+ '<a href="javascript:;" onclick="toPaint('
+							+ i
+							+ ',\''
+							+ item[indexOfTitle]
+									.replace(/\"/g, " ").replace(/\'/g,
+											" ")
+							+ '\')">'
+							+ item[0]
+							+ '</a>' + '</td></tr>';
+					$('.summary_tab table').append(rows);
 
-						}
-					} else {
-						alert(msg.result);
-					}
-				},
-				complete : function() {
-					stop();
-				},
-				error : function() {
-					alert("数据请求失败");
 				}
-			});
+			} else {
+				alert(msg.result);
+			}
+		},
+		complete : function() {
+			stop();
+		},
+		error : function() {
+			alert("数据请求失败");
+		}
+	});
 }
 
-/* 删除 */
+/* 删除选中类簇 */
 function deleteLayData() {
 	var sets = [];
 	$(".summary_tab input:checked").each(function(i) {
@@ -282,6 +292,7 @@ function deleteLayData() {
 	});
 }
 
+//全选所有聚类历史结果
 $(function() {
 	$("#historyAll").click(function() {
 		if (this.checked) {
