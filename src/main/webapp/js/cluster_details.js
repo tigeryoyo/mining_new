@@ -12,8 +12,7 @@
 function showClusterDetails(index,rid,count){
 	var url = '';
 	console.log(rid);
-//	var title = '';
-//	var time = '';
+	$("#clusterItemAll").prop("checked",false);
 	$.ajax({
 		type : "post",
 		url : "/result/getClusterResult",
@@ -45,7 +44,7 @@ function showClusterDetails(index,rid,count){
 					// items第一行存储index，故从i+1读起
 					item = items[i + 1];
 					url = item[indexOfUrl];
-					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="'
+					rows = '<tr><td height="32" align="center"><input type="checkbox" id="itemCheckbox" style="width:20px;height:20px" class="'
 						+ i
 						+ '"/></td><td height="32" align="center"><a href="'
 						+ item[indexOfUrl]
@@ -91,13 +90,16 @@ function showClusterDetails(index,rid,count){
 //全选类中所有元素
 $(function() {
 	$("#clusterItemAll").click(function() {
+//		$("#itemCheckbox").each(function(){
+//			 $(this).prop("checked",!!$(".checkAll").prop("checked"));
+//		});
 		if (this.checked) {
 			$(".details_tab tr :checkbox").prop("checked", true);
 		} else {
 			$(".details_tab tr :checkbox").prop("checked", false);
 		}
-	})
-})
+	});
+});
 
 /* 重置某个类簇元素*/
 function clusterItemsReset() {
@@ -139,8 +141,12 @@ $(function(){
 
 /* 删除 类中某些元素*/
 function deleteClusterItem(index) {
-	var sets = new Array();
+	var sets = new Array();	
 	var clusterIndex = $('.details_tab table').attr('id');
+	var sum = 0 ;
+	$(".details_tab input").each(function(i) {
+		sum++;
+	});
 	if(index == null || index == -1){
 		$(".details_tab input:checked").each(function(i) {
 			sets.push($(this).attr('class'));
@@ -163,7 +169,13 @@ function deleteClusterItem(index) {
 		success : function(msg) {
 			if (msg.status == "OK") {
 				var rid = $('.summary_up table tr img').attr("id");
-				showClusterDetails(clusterIndex,rid,2);
+				if(sets.length == sum){
+					$('#code').hide();
+				    $('#goodcover').hide();
+				    freshData();
+				}else{
+					showClusterDetails(clusterIndex,rid,2);
+				}				
 			} else {
 				//alert(msg.result);
 				 $('#code').hide();
