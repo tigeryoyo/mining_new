@@ -1,6 +1,8 @@
 /**
  * Created by Administrator on 2016/12/18.
  */
+// document.write('<script type="text/javascript"
+// src="js/cluster_details.js"></script>');
 function historyRecord() {
 	$.ajax({
 		type : "post",
@@ -45,9 +47,14 @@ function historyData(rid) {
 				for (var i = 0; i < items.length - 1; i++) {
 					// items第一行存储index，故从i+1读起
 					item = items[i + 1];
-					rows = '<tr><td height="32" align="center"><input type="checkbox" class="' + i + '"/></td><td height="32" align="center"><a href="' + item[indexOfUrl] + '" target="_blank">'
-						+ item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">' + '<a href="javascript:;" onclick="toPaint(' + i
-						+ ',\'' + item[indexOfTitle].replace(/\"/g, " ").replace(/\'/g, " ") + '\')">' + item[0] + '</a>' + '</td></tr>';
+					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
+						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
+						// + item[indexOfUrl]
+						// + '
+						+ i + ',\''
+						// + item[indexOfUrl]
+						+ rid + '\',' + item[0] + ')">' + item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">'
+						+ '<a href="javascript:;" onclick="toPaint(' + i + ',\'' + item[indexOfTitle].replace(/\"/g, " ").replace(/\'/g, " ") + '\')">' + item[0] + '</a>' + '</td></tr>';
 					$('.summary_tab table').append(rows);
 
 				}
@@ -55,8 +62,8 @@ function historyData(rid) {
 				alert(msg.result);
 			}
 		},
-		error : function() {
-			alert("请求失败");
+		error : function(msg) {
+			alert(msg.result);
 		}
 	})
 }
@@ -68,7 +75,7 @@ function buildStandardData() {
 	});
 }
 
-/* 删除 */
+/* 删除历史记录 */
 function historyDel() {
 	$(".summary_up table tr").unbind('click').on("click", "img", function() {
 		var result_id = $(this).attr("id");
@@ -130,7 +137,7 @@ function historyReset() {
 	})
 }
 
-/* 合并 */
+/* 合并类簇 */
 function addLayData() {
 	var sets = [];
 	$(".summary_tab input:checked").each(function(i) {
@@ -174,7 +181,8 @@ function freshData() {
 					// items第一行存储index，故从i+1读起
 					item = items[i + 1];
 					console.log(item);
-					rows = '<tr><td height="32" align="center"><input type="checkbox" class="' + i + '"/></td><td height="32" align="center"><a href="' + item[indexOfUrl] + '" target="_blank">'
+					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
+						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails(' + i + ',\'' + $('.summary_up table tr img').attr("id") + '\',' + item[0] + ')">'
 						+ item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">' + '<a href="javascript:;" onclick="toPaint(' + i
 						+ ',\'' + item[indexOfTitle].replace(/\"/g, " ").replace(/\'/g, " ") + '\')">' + item[0] + '</a>' + '</td></tr>';
 					$('.summary_tab table').append(rows);
@@ -190,7 +198,7 @@ function freshData() {
 	});
 }
 
-/* 删除 */
+/* 删除选中类簇 */
 function deleteLayData() {
 	var sets = [];
 	$(".summary_tab input:checked").each(function(i) {
@@ -216,6 +224,7 @@ function deleteLayData() {
 	});
 }
 
+// 全选所有聚类历史结果
 $(function() {
 	$("#historyAll").click(function() {
 		if (this.checked) {

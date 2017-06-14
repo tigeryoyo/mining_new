@@ -2,7 +2,7 @@
 //2.1任务列表显示
 
 issueType="extensive";
-//选中全局任务时的数据类型
+// 选中全局任务时的数据类型
 $(document).ready(function(){
 	initShowPage (1);
 });
@@ -10,15 +10,15 @@ $(document).ready(function(){
 // radio选中事件
 $(function(){
 	$(":radio").click(function(){
-		//清空数据显示
+		// 清空数据显示
 		$('.ht_cont tr:not(:first)').html("");
-		issueType=$(this).val()
+		issueType=$(this).val();
 		setCookie_issueType(issueType);
 		var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
     	choosenLabel.parent().css("color","red");
     	choosenLabel.parent().siblings('label').css("color","black");
     	choosenLabel.attr("checked",true);
-		//显示数据
+		// 显示数据
     	initShowPage(1);
 	});
 });
@@ -289,6 +289,7 @@ function setCookie(value1){
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
+	
 	baseAjax("topic_details");
 }
 
