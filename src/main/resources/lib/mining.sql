@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : mysql
-Source Server Version : 50633
+Source Server         : localhost_3306
+Source Server Version : 50718
 Source Host           : localhost:3306
 Source Database       : mining
 
 Target Server Type    : MYSQL
-Target Server Version : 50633
+Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2017-06-08 21:53:57
+Date: 2017-06-14 13:53:38
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -79,6 +79,33 @@ CREATE TABLE `issue` (
 -- ----------------------------
 -- Records of issue
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for label
+-- ----------------------------
+DROP TABLE IF EXISTS `label`;
+CREATE TABLE `label` (
+  `labelid` int(11) NOT NULL AUTO_INCREMENT,
+  `labelname` varchar(32) NOT NULL,
+  PRIMARY KEY (`labelid`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of label
+-- ----------------------------
+INSERT INTO `label` VALUES ('1', '戒毒fffff');
+INSERT INTO `label` VALUES ('2', '公安');
+INSERT INTO `label` VALUES ('3', '杀人');
+INSERT INTO `label` VALUES ('4', '跳楼');
+INSERT INTO `label` VALUES ('5', '救人');
+INSERT INTO `label` VALUES ('6', '车祸');
+INSERT INTO `label` VALUES ('7', '政法');
+INSERT INTO `label` VALUES ('9', '坠楼');
+INSERT INTO `label` VALUES ('10', '高考');
+INSERT INTO `label` VALUES ('11', '中考');
+INSERT INTO `label` VALUES ('13', '查询');
+INSERT INTO `label` VALUES ('14', '查看');
+INSERT INTO `label` VALUES ('15', '哈哈哈');
 
 -- ----------------------------
 -- Table structure for power
@@ -394,6 +421,23 @@ CREATE TABLE `source_type` (
 -- ----------------------------
 INSERT INTO `source_type` VALUES ('1', '微博');
 INSERT INTO `source_type` VALUES ('7', '新闻');
+
+-- ----------------------------
+-- Table structure for standardresult_label
+-- ----------------------------
+DROP TABLE IF EXISTS `standardresult_label`;
+CREATE TABLE `standardresult_label` (
+  `std_rid` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `labelid` int(11) NOT NULL,
+  KEY `std_rid` (`std_rid`),
+  KEY `labelid` (`labelid`),
+  CONSTRAINT `standardresult_label_ibfk_1` FOREIGN KEY (`std_rid`) REFERENCES `standard_result` (`std_rid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `standardresult_label_ibfk_2` FOREIGN KEY (`labelid`) REFERENCES `label` (`labelid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of standardresult_label
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for standard_result

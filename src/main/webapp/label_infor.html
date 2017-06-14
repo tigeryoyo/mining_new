@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>标签管理——信息显示</title>
+	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/page.css">
+	<link rel="stylesheet" href="css/loading.css">
+    
+</head>
+<body>
+	<div class="main">
+		<iframe src="g_header.html" width="1000px" height="177px"></iframe>
+		<div class="content">
+			<iframe src="g_left.html" width="200px" height="760px"></iframe>
+			<div class="right float_r">
+				<div class="s_nav">当前位置：<a href="#">标签管理</a>>>信息显示</div>
+				<div class="user_infor">
+                    <div class="role_search">
+                    	<div class="role_search_input">
+                        	<input type="search" placeholder="请输入标签名称" class="qx_name" id="label_Search" />
+                            <img src="images/icon_search.png" class="icon_search" />
+                        </div>
+                         <img src="images/btn_role_search.png" onClick="initSearchPage(1)" class="btn_role" />
+                        <button onclick="labelInforAdd()">添加标签</button> 
+                    </div>
+                    <div class="infor_tablist">
+                      <table width="692" border="0" class="infor_tab02">
+                          <tr class="infor_tab02_tit">
+                            <td width="169" height="40" align="center" bgcolor="#86c6ea">标签编号</td>
+                            <td width="231" height="40" align="center" bgcolor="#86c6ea">标签名称</td>
+                            <td colspan="2" height="40" align="center" bgcolor="#86c6ea">操作</td>
+                          </tr>
+                        </table>
+                  </div>
+                   <div class="user_num"><ul class="page" maxshowpageitem="5" pagelistcount="10"  id="page"></ul></div>
+				</div>
+			</div>
+            <div class="clear"></div>
+		</div>
+        <iframe src="g_footer.html" width="1000px" height="80px"></iframe>
+	</div>
+</body>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/loading.js"></script>
+	<script type="text/javascript" src="js/waiting.js"></script>
+	<script type="text/javascript" src="js/page.js"></script>
+    <script type="text/javascript" src="js/label.js"></script>
+</html>
