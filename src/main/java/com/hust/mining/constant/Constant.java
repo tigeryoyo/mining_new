@@ -153,14 +153,46 @@ public class Constant {
     
     public static class DIRECTORY {
 
+    	/**
+    	 * 上传的文件（单文件） upload文件
+    	 */
         public static String FILE;
+        /**
+         * 初始的聚类结果
+         * （每一行为一个类，每个数字为一条数据（来源于content的index+1） 以tab隔开）
+         */
         public static String ORIG_CLUSTER;
+        /**
+         * 聚类结果里面 每个类的数量
+         * 标题index  （tab）  类数量
+         */
         public static String ORIG_COUNT;
+        /**
+         * 修改后的聚类结果
+         * 每一行为一个类，每个数字为一条数据（来源于content的index+1） 以tab隔开）
+         */
         public static String MODIFY_CLUSTER;
+        /**
+         * 修改后的聚类结果中 每个类的数量
+         * 标题index  （tab）  类数量
+         */
         public static String MODIFY_COUNT;
+        /**
+         * 从upload的文件读取构成的聚类文件
+         * 第一行为属性
+         * 后面为需要聚类的新闻
+         */
         public static String CONTENT;
+        /**
+         * 准数据的聚类结果
+         * 每一行为一个类，每个数字为一条数据（来源于content的index+1） 以tab隔开）
+         */
         public static String STDRES_CLUSTER;
         public static String STDRES_COUNT;
+        /**
+         * 核心数据的存储结果
+         * 标题index  （tab）  类数量
+         */
         public static String CORERES;
         
         public static void init(String dirFile, String dirOrigCluster, String dirOrigCount, String dirModiCluster,
