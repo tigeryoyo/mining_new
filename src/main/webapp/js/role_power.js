@@ -16,9 +16,6 @@ function getIncludePowers(roleId){
 		url:"/role/includePowersOfRole",
 		data:{roleId:roleId},
 		dataType:"json",
-		beforeSend : function(){
-//            begin();
-        },
         success : function(msg){
         	if(msg.status=="OK"){
 				var powers = msg.result;
@@ -34,9 +31,7 @@ function getIncludePowers(roleId){
         	}
         },
         complete : function(){
-//        	stop();
         	getNotIncludePowers(roleId,count);
-//        	stop();            
         },
 		error: function(msg){
 			alert(msg.result);
@@ -50,9 +45,6 @@ function getNotIncludePowers(roleId,index){
 		url:"/role/notIncludePowersOfRole",
 		data:{roleId:roleId},
 		dataType:"json",
-		beforeSend : function(){
-//            begin();
-        },
         success : function(msg){
         	if(msg.status=="OK"){
 				var powers = msg.result;
@@ -66,7 +58,6 @@ function getNotIncludePowers(roleId,index){
         	}
         },
         complete : function(){
-//        	stop();
 			console.log("all");            
         },
 		error: function(msg){
@@ -111,9 +102,6 @@ function changeRole(){
 			powerName:getPowerNames()
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
@@ -122,9 +110,6 @@ function changeRole(){
 				alert(msg.result);
 			}
 		},
-		complete:function(){
-            stop();
-        },
 		error: function(msg){
 		    alert(msg.result);
 		}

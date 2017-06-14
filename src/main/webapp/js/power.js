@@ -10,9 +10,6 @@ function powerInforShow(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-		    begin();
-		},
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
@@ -35,9 +32,6 @@ function powerInforShow(page){
 				// /alert("fail");
 				$('.infor_tab02 tr:not(:first)').html("");
 			}
-		},
-		complete:function(){
-		    stop();
 		},
 		error: function(){
 			
@@ -107,7 +101,7 @@ function setCookie(value1,value2,value3){
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name2 +"="+ escape (value2) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name3 +"="+ escape (value3) + ";expires=" + exp.toGMTString();
-	window.location.href = "power_change.html";
+	baseAjax("power_change");
 }
 
 /**
@@ -265,9 +259,6 @@ function powerInforSearch(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-		    begin();
-		},
 		success: function(msg){
 			$(".infor_tab02 tr:not(:first)").html("");
 			if( msg.status == "OK"){
@@ -288,9 +279,6 @@ function powerInforSearch(page){
 				alert(msg.result);
 			}
 		},
-		complete:function(){
-		    stop();
-		},
 		error: function(){
 			alert("数据请求失败");
 		}
@@ -299,7 +287,7 @@ function powerInforSearch(page){
 
 // 用户添加
 function powerInforAdd() {
-	window.location.href = "power_add.html";
+	baseAjax("power_add");
 }
 function addPower(){
 	$.ajax({
@@ -310,19 +298,13 @@ function addPower(){
 			powerUrl:$("#urlPower").val()
 		},
 		dataType:"json",
-		beforeSend : function(){
-		    begin();
-		},
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				window.location.href = "/power_infor.html"
+				baseAjax("power_infor");
 			}else{
 				alert(msg.result);
 			}
-		},
-		complete:function(){
-		    stop();
 		},
 		error: function(){
 			
@@ -357,20 +339,13 @@ function powerInforChange(){
 			powerUrl:$("#new_url_power").val()	
 		},
 		dataType:"json",
-		beforeSend : function(){
-		    begin();
-		},
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("修改成功");
-				window.location.href = "/power_infor.html";
+				alert("修改成功");	
 			}else{
 				alert(msg.result);
 			}
-		},
-		complete:function(){
-		    stop();
 		},
 		error: function(){
 			alert("数据请求失败");
@@ -398,7 +373,7 @@ $(function(){
 				dataType:"json",
 				success:function(msg){
 					if(msg.status=="OK"){
-						window.location.href = "/power_infor.html"
+						baseAjax("power_infor");
 					}else{
 						alert(msg.result);
 					}

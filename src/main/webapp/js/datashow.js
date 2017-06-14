@@ -1,14 +1,10 @@
 // JavaScript Document
 //3.1任务详情展示
-function analysisUrl(parm) {
-	var reg = new RegExp("(^|&)" + parm + "=([^&]*)(&|$)");
-	var r = window.location.search.substr(1).match(reg);
-	return unescape(r[2]);
-}
+
 issueType = "";
 function dataShow() {
 	var issueId = getCookie("issueId");
-	issueType = analysisUrl("issueType");
+	issueType = getCookie("issueType");
 	if (issueType == "extensive") {
 		showExtensiveIssueDetails(issueId);
 	} else if (issueType == "standard") {
@@ -291,7 +287,7 @@ function clusterSingleFile(id) {
 		success : function(msg) {
 			console.log(msg);
 			if (msg.status == "OK") {
-				window.location.href = "history.html";
+				baseAjax("history");
 			} else {
 				alert(msg.result);
 			}

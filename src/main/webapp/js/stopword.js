@@ -14,9 +14,6 @@ function stopwordInforShow(page){
             limit:10
         },
         dataType:"json",
-        beforeSend : function(){
-            begin();
-        },
         success: function(msg){
             $('.infor_tab02 tr:not(:first)').html("");
             if( msg.status == "OK"){
@@ -40,9 +37,6 @@ function stopwordInforShow(page){
                 $('.infor_tab02 tr:not(:first)').html("");
             }
         },
-        complete:function () {
-            stop();
-        },
         error: function(){
             alert("数据请求失败");
         }
@@ -61,7 +55,7 @@ function stopwordInforShow(page){
     document.cookie = cookie_name2 +"="+ escape (value2) + ";expires=" + exp.toGMTString();
     document.cookie = cookie_name3 +"="+ escape (value3) + ";expires=" + exp.toGMTString();
     document.cookie = cookie_name4 +"="+ escape (value4) + ";expires=" + exp.toGMTString();
-    window.location.href = "website_change.html";
+    baseAjax = "website_change.html";
 }*/
 
 function initShowPage(currenPage){
@@ -244,9 +238,6 @@ function stopwordInforSearch(page){
             limit:10
         },
         dataType:"json",
-        beforeSend : function(){
-            begin();
-        },
         success: function(msg){
             if( msg.status == "OK"){
                 // alert("success");
@@ -269,7 +260,6 @@ function stopwordInforSearch(page){
                 $('.infor_tab02 tr:not(:first)').html("");
                 alert(msg.result);
             }
-            stop();
         },
         error: function(){
             alert("数据请求失败");
@@ -304,7 +294,7 @@ function initSearchPage(currenPage){
 
 // 添加停用词页面跳转
 function stopwordInforAdd(){
-    window.location.href = "stopword_add.html";
+   baseAjax("stopword_add");
 }
 
 // 用户删除
@@ -321,20 +311,14 @@ $(function(){
                     stopwordId:stopword_id
                 } ,
                 dataType:"json",
-                beforeSend : function(){
-                    begin();
-                },
                 success:function(msg){
                     // alert("lll");
                     if(msg.status=="OK"){
-                        window.location.href="/stopword_infor.html"
+                        baseAjax("stopword_infor");
                     }else{
                         alert(msg.result);
                     }
                 } ,
-                complete:function () {
-                  stop();
-                },
                 error: function(){
                     alert("数据请求失败");
                 }

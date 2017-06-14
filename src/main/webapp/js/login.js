@@ -17,7 +17,7 @@ function login() {
             },
             success: function(msg){
                 if(msg.status ==='OK'){
-                    window.location.href="/topic_list.html";
+                	window.location.href="/base.html?href=topic_list";
                 }else{
                     alert('用户名和密码错误');
                 }

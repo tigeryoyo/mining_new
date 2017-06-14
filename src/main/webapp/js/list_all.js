@@ -13,6 +13,7 @@ $(function(){
 		//清空数据显示
 		$('.ht_cont tr:not(:first)').html("");
 		issueType=$(this).val()
+		setCookie_issueType(issueType);
 		var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
     	choosenLabel.parent().css("color","red");
     	choosenLabel.parent().siblings('label').css("color","black");
@@ -22,6 +23,13 @@ $(function(){
 	});
 });
 
+function setCookie_issueType(value){
+	var Days = 1; // 此 cookie 将被保存 1 天
+	var exp　= new Date();
+	exp.setTime(exp.getTime() +Days*24*60*60*1000);
+	document.cookie = "issueType="+ escape (value) + ";expires=" + exp.toGMTString();
+}
+
 function allData (page){
 	search_click=false;
     $.ajax({
@@ -30,9 +38,6 @@ function allData (page){
 		data:JSON.stringify(GetJsonData(page)),
 		dataType:"json",
 		contentType:"application/json",
-		beforeSend : function(){
-		    begin();
-		},
         success:function(msg){
             // console.log(msg);
             if(msg.status=="OK"){
@@ -58,9 +63,6 @@ function allData (page){
             }
 
         },
-        complete:function(){
-		    stop();
-		} ,
         error:function(){
         }
     });
@@ -287,7 +289,7 @@ function setCookie(value1){
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	window.location.href = "topic_details.html?issueType="+issueType;
+	baseAjax("topic_details");
 }
 
 function getCookie(name) {
@@ -309,9 +311,6 @@ function searchData(page){
         data:JSON.stringify(SearchJsonData(page)),
         dataType:"json",
         contentType:"application/json",
-        beforeSend : function(){
-		    begin();
-		},
         success:function(msg){
             if(msg.status=="OK"){
                 $('.ht_cont tr:not(:first)').html("");
@@ -328,9 +327,6 @@ function searchData(page){
             }
 
         } ,
-        complete:function(){
-		    stop();
-		},
         error:function(){
             
         }

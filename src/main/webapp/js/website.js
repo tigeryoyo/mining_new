@@ -10,9 +10,6 @@ function websiteInforShow(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			$('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
@@ -37,7 +34,6 @@ function websiteInforShow(page){
 				// alert("fail");
 				$('.infor_tab02 tr:not(:first)').html("");
 			}
-			stop();
 		},
 		error: function(){
             alert("数据请求失败");
@@ -114,7 +110,7 @@ function setCookie(value1,value2,value3,value4,value5){
 	document.cookie = cookie_name3 +"="+ escape (value3) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name4 +"="+ escape (value4) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name5 +"="+ escape (value5) + ";expires=" + exp.toGMTString();
-	window.location.href = "website_change.html";
+	baseAjax("website_change");
 }
 
 /**
@@ -281,9 +277,6 @@ function websiteInforSearch(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){			
 			if( msg.status == "OK"){
 				// alert("success");
@@ -308,7 +301,6 @@ function websiteInforSearch(page){
 				$('.infor_tab02 tr:not(:first)').html("");
 				alert(msg.result);
 			}
-			stop();
 		},
 		error: function(){
             alert("数据请求失败");
@@ -318,7 +310,7 @@ function websiteInforSearch(page){
 
 // 用户添加
 function websiteInforAdd(){
-	window.location.href = "website_add.html";	
+	baseAjax("website_add");	
 }
 // 用户编辑
 function getCookie(name) {
@@ -347,7 +339,7 @@ $(function(){
 				success:function(msg){
 					// alert("lll");
 					if(msg.status=="OK"){
-						window.location.href="/website_infor.html"
+						baseAjax("website_infor");
 					}else{
 						alert(msg.result);
 					}

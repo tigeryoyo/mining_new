@@ -48,6 +48,11 @@ function algorithm_submit(){
     })
 }
 
+//加载完成时执行algorithm_Show()
+$(function(){
+   algorithm_Show();
+})
+
 
 function algorithm_Show(){
     $.ajax({

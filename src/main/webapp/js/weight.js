@@ -10,9 +10,6 @@ function weightInforShow(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			$('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
@@ -33,9 +30,6 @@ function weightInforShow(page){
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -102,7 +96,7 @@ function setCookie(value1,value2,value3){
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name2 +"="+ escape (value2) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name3 +"="+ escape (value3) + ";expires=" + exp.toGMTString();
-	window.location.href = "weight_change.html";
+	baseAjax("weight_change");
 }
 
 /**
@@ -262,9 +256,6 @@ function weightInforSearch(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			$('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
@@ -285,9 +276,6 @@ function weightInforSearch(page){
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         }
@@ -297,7 +285,7 @@ function weightInforSearch(page){
 
 // 用户添加
 function weightInforAdd(){
-	window.location.href = "weight_add.html";
+	baseAjax("weight_add");
 }
 function addWeight(){
 	$.ajax({
@@ -308,20 +296,14 @@ function addWeight(){
 			weight:$("#add_weight").val()
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				window.location.href="/weight_infor.html"
+				baseAjax("weight_infor");
 			}else{
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -357,9 +339,6 @@ function weightInforChange(){
 			weight:$("#new_weight_weight").val()
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
@@ -368,9 +347,6 @@ function weightInforChange(){
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -402,7 +378,7 @@ $(function(){
 					// alert("lll");
 					console.log(msg);
 					if(msg.status=="OK"){
-						window.location.href="/weight_infor.html"
+						baseAjax("weight_infor");
 					}else{
 						alert(msg.result);
 					}

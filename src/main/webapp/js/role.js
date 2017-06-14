@@ -10,9 +10,6 @@ function roleInforShow(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			if(msg.status=="OK"){
 				var items=msg.result;
@@ -23,7 +20,7 @@ function roleInforShow(page){
 				$.each(items,function(idx,item){
 					cookie_value1="'"+item.roleId+"'";
 					cookie_value2="'"+item.roleName+"'";
-					row = '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.roleName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delRole" name="'+item.roleName+'" id="'+item.roleId+'" /></td></tr>'
+					row = '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.roleName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delRole" id="'+item.roleId+'" /></td></tr>'
 					$('#role_infor_tab').append(row);
 				});
 			}else{
@@ -32,7 +29,6 @@ function roleInforShow(page){
 		},
 		complete : function(){
 			console.log("all")
-            stop();
         },
 		error: function(){
 			alert("请求失败");
@@ -99,7 +95,7 @@ function setCookie(value1,value2){
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name2 +"="+ escape (value2) + ";expires=" + exp.toGMTString();
-	window.location.href = "role_change.html";
+	baseAjax("role_change");
 }
 /**
  * 根据页码加载数据
@@ -256,9 +252,6 @@ function roleInforSearch(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			if( msg.status == "OK"){
 				$('#role_infor_tab tr:not(:first)').html("");
@@ -290,8 +283,9 @@ function roleInforSearch(page){
 
 // 用户添加
 function roleInforAdd() {
-	window.location.href = "role_add.html";
+	baseAjax("role_add");
 }
+
 function addRoleInfo(){
 	console.log($(".addRole").val())
 	$.ajax({
@@ -306,7 +300,7 @@ function addRoleInfo(){
         },
 		success: function(msg){
 			if( msg.status == "OK"){
-				window.location.href="/role_infor.html"
+				baseAjax("role_infor");
 			}else{
 				alert(msg.result);
 			}
@@ -336,16 +330,12 @@ function getCookie(name) {
 
 
 
-// 删除角色
+// 用户删除
+
 $(function(){
 	$("#role_infor_tab").on("click",".delRole",function(){
 		var role_id = $(this).attr("id");
-		var role_name = $(this).attr("name");
-		console.log(role_id+role_name);
-		if(role_name == "超级管理员"){
-			alert('对不起，超级管理员角色不能被删除！');
-			return;
-		}
+		console.log(role_id);
 		roleInforDel(role_id);
 		function roleInforDel(role_id){
 			$.ajax({
@@ -357,7 +347,7 @@ $(function(){
 				dataType:"json",
 				success:function(msg){
 					if(msg.status=="OK"){
-					    window.location.href="/role_infor.html"
+					    baseAjax("role_infor");
 					}else{
 						alert(msg.result);
 					}

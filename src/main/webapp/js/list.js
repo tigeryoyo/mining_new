@@ -2,27 +2,26 @@
 //2.1任务列表显示
 //设置issueType
 issueType="extensive";
-//选中创建任务时的数据类型
+// 选中创建任务时的数据类型
 $(document).ready(function(){
     var reg = new RegExp("(^|&)issueType=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
-    if(r!=null){
-    	issueType=analysisUrl("issueType");
-    	var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
-    	choosenLabel.parent().css("color","red");
-    	choosenLabel.parent().siblings('label').css("color","black");
-    	choosenLabel.attr("checked",true);
+    var r = getCookie("issueType");
+    
+    if(r != null){
+    	issueType = r;
+    	console.log("issueType="+issueType);
     }
-    initShowPage(1)
+    setCookie_issueType(issueType);
+    var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
+    choosenLabel.parent().css("color","red");
+    choosenLabel.parent().siblings('label').css("color","black");
+    choosenLabel.attr("checked",true);
+    
+    initShowPage(1);
 });
 
-function analysisUrl(parm){
-	 var reg = new RegExp("(^|&)"+parm+"=([^&]*)(&|$)");
-	 var r = window.location.search.substr(1).match(reg);
-	 return unescape(r[2]);
-}
 
-//给radio绑定点击变红事件
+// 给radio绑定点击变红事件
 $(document).ready(function() {
 	$(':radio').click(function() {
 		if (this.checked) {
@@ -32,11 +31,12 @@ $(document).ready(function() {
 	});
 })
 
-//radio选中事件
+// radio选中事件
 $(function(){
 	$(":radio").click(function(){
 		$('.ht_cont tr:not(:first)').html("");
 		issueType=$(this).val()
+		setCookie_issueType(issueType);
 		initShowPage(1);
 	});
 });
@@ -49,9 +49,6 @@ function allData (page){
 		data:JSON.stringify(GetJsonData(page)),
 		dataType:"json",
 		contentType:"application/json",
-		beforeSend : function(){
-		    begin();
-		},
         success:function(msg){
             // console.log(msg);
             if(msg.status=="OK"){
@@ -76,9 +73,6 @@ function allData (page){
             }
 
         },
-        complete:function(){
-		    stop();
-		} ,
         error:function(msg){
         	alert(msg.result);
         }
@@ -310,11 +304,17 @@ function setCookie(value1){
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	window.location.href = "topic_details.html?issueType="+issueType;
+	baseAjax("topic_details");
+}
+
+function setCookie_issueType(value){
+	var Days = 1; // 此 cookie 将被保存 1 天
+	var exp　= new Date();
+	exp.setTime(exp.getTime() +Days*24*60*60*1000);
+	document.cookie = "issueType="+ escape (value) + ";expires=" + exp.toGMTString();
 }
 
 function getCookie(name) {
-	
 	console.log(document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
@@ -332,14 +332,12 @@ function searchData(page){
         data:JSON.stringify(SearchJsonData(page)),
         dataType:"json",
         contentType:"application/json",
-        beforeSend : function(){
-		    begin();
-		},
         success:function(msg){
             // console.log(msg);
             if(msg.status=="OK"){
                 // alert("success") ;
                 var items = msg.result.list ;
+                console.log()
                 $('.ht_cont tr:not(:first)').html("");
                 $.each(items,function(idx,item) {
                     var item_issueId="'"+item.issueId+"'";
@@ -360,9 +358,6 @@ function searchData(page){
             }
 
         } ,
-        complete:function(){
-		    stop();
-		},
         error:function(){
             
         }

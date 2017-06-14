@@ -25,9 +25,6 @@ function personalInforShow(){
 		type:"GET",
 		url:"/personal/getPersonalInfo",
 		dataType:"json",
-		beforeSend : function(){
-			begin();
-		},
 		success : function(msg){
 			if( msg.status == "OK"){
 				var user = msg.result;
@@ -39,9 +36,6 @@ function personalInforShow(){
 			}else{
 				alert(msg.result);
 			}
-		},
-		complete : function(){
-			stop();
 		},
 		error : function(){
 			alert("数据请求失败");
@@ -84,21 +78,15 @@ function personalInforChange(){
 			email:$("#new_email").val(),
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
 				alert(msg.result);
-				window.location.href="personal_infor.html";
+				baseAjax("personal_infor");
 			}else{
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -134,21 +122,15 @@ function passwordChange(){
 			oldpass:$("#old_pass").val(),
 			newpass:newPass
 		},
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
 				alert("密码更改成功！");
-				window.location.href="password_change.html";
+				baseAjax("password_change");
 			}else{
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         },

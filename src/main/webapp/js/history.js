@@ -1,50 +1,29 @@
 /**
  * Created by Administrator on 2016/12/18.
  */
-//document.write('<script type="text/javascript" src="js/cluster_details.js"></script>');
-
+// document.write('<script type="text/javascript"
+// src="js/cluster_details.js"></script>');
 function historyRecord() {
-	$
-			.ajax({
-				type : "post",
-				url : "/result/queryResultList",
-				beforeSend : function() {
-					begin();
-				},
-				success : function(msg) {
-					$('.summary_up table tr:not(:first)').html('');
-					if (msg.status === 'OK') {
-						var items = msg.result;
-						$
-								.each(
-										items,
-										function(i, item) {
-											rows = '<tr><td height="32" align="center"><a href="javascript:;" onclick="historyData(\''
-													+ item.rid
-													+ '\')">'
-													+ item.comment
-													+ '</a></td><td height="32" align="center">'
-													+ item.creator
-													+ '</td><td height="32" align="center">'
-													+ new Date(
-															item.createTime.time)
-															.format('yyyy-MM-dd hh:mm:ss')
-													+ '</td><td height="32" align="center"><img src="images/reset.png" id="'
-													+ item.rid
-													+ '" onclick="historyReset()" /> <img src="images/delete.png" id="'
-													+ item.rid
-													+ '" onclick="historyDel()" /></td></tr>'
-											$('.summary_up table').append(rows);
-										});
-					}
-				},
-				complete : function() {
-					stop();
-				},
-				error : function(msg) {
-					alert("数据请求失败");
-				}
-			});
+	$.ajax({
+		type : "post",
+		url : "/result/queryResultList",
+		success : function(msg) {
+			$('.summary_up table tr:not(:first)').html('');
+			if (msg.status === 'OK') {
+				var items = msg.result;
+				$.each(items, function(i, item) {
+					rows = '<tr><td height="32" align="center"><a href="javascript:;" onclick="historyData(\'' + item.rid + '\')">' + item.comment + '</a></td><td height="32" align="center">'
+						+ item.creator + '</td><td height="32" align="center">' + new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')
+						+ '</td><td height="32" align="center"><img src="images/reset.png" id="' + item.rid + '" onclick="historyReset()" /> <img src="images/delete.png" id="' + item.rid
+						+ '" onclick="historyDel()" /></td></tr>'
+					$('.summary_up table').append(rows);
+				});
+			}
+		},
+		error : function(msg) {
+			alert("数据请求失败");
+		}
+	});
 }
 historyRecord();
 
@@ -56,9 +35,6 @@ function historyData(rid) {
 			resultId : rid
 		},
 		dataType : "json",
-		beforeSend : function() {
-			begin();
-		},
 		success : function(msg) {
 			$('.summary_tab table tr:not(:first)').html('');
 			if (msg.status == "OK") {
@@ -71,30 +47,14 @@ function historyData(rid) {
 				for (var i = 0; i < items.length - 1; i++) {
 					// items第一行存储index，故从i+1读起
 					item = items[i + 1];
-					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="'
-							+ i
-							+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
-							// + item[indexOfUrl]
-							// + '
-							+ i
-							+ ',\''
-							// + item[indexOfUrl]
-							+ rid
-							+ '\','
-							+ item[0]+')">'
-							+ item[indexOfTitle]
-							+ '</a></td><td height="32" align="center">'
-							+ item[indexOfTime]
-							+ '</td><td height="32" align="center">'
-							+ '<a href="javascript:;" onclick="toPaint('
-							+ i
-							+ ',\''
-							+ item[indexOfTitle]
-									.replace(/\"/g, " ").replace(/\'/g,
-											" ")
-							+ '\')">'
-							+ item[0]
-							+ '</a>' + '</td></tr>';
+					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
+						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
+						// + item[indexOfUrl]
+						// + '
+						+ i + ',\''
+						// + item[indexOfUrl]
+						+ rid + '\',' + item[0] + ')">' + item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">'
+						+ '<a href="javascript:;" onclick="toPaint(' + i + ',\'' + item[indexOfTitle].replace(/\"/g, " ").replace(/\'/g, " ") + '\')">' + item[0] + '</a>' + '</td></tr>';
 					$('.summary_tab table').append(rows);
 
 				}
@@ -102,23 +62,18 @@ function historyData(rid) {
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-			stop();
-		},
 		error : function(msg) {
 			alert(msg.result);
 		}
 	})
 }
 
-
-function buildStandardData(){
+function buildStandardData() {
 	$.ajax({
 		type : "post",
-		url: "/issue/create"
+		url : "/issue/create"
 	});
 }
-
 
 /* 删除历史记录 */
 function historyDel() {
@@ -154,7 +109,7 @@ function historyDel() {
 function toPaint(currentSet, title) {
 	setCookie('currentSet', currentSet);
 	setCookie('title', title);
-	window.location.href = "/data_results.html";
+	baseAjax("data_results");
 }
 
 function historyReset() {
@@ -212,9 +167,6 @@ function freshData() {
 	$.ajax({
 		type : "post",
 		url : "/result/getCountResult",
-		beforeSend : function() {
-			begin();
-		},
 		success : function(msg) {
 			$('.summary_tab table tr:not(:first)').html('');
 			if (msg.status == "OK") {
@@ -229,36 +181,16 @@ function freshData() {
 					// items第一行存储index，故从i+1读起
 					item = items[i + 1];
 					console.log(item);
-					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="'
-							+ i
-							+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
-							+ i
-							+ ',\''
-							+ $('.summary_up table tr img').attr("id")
-							+ '\','
-							+ item[0]+')">'
-							+ item[indexOfTitle]
-							+ '</a></td><td height="32" align="center">'
-							+ item[indexOfTime]
-							+ '</td><td height="32" align="center">'
-							+ '<a href="javascript:;" onclick="toPaint('
-							+ i
-							+ ',\''
-							+ item[indexOfTitle]
-									.replace(/\"/g, " ").replace(/\'/g,
-											" ")
-							+ '\')">'
-							+ item[0]
-							+ '</a>' + '</td></tr>';
+					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
+						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails(' + i + ',\'' + $('.summary_up table tr img').attr("id") + '\',' + item[0] + ')">'
+						+ item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">' + '<a href="javascript:;" onclick="toPaint(' + i
+						+ ',\'' + item[indexOfTitle].replace(/\"/g, " ").replace(/\'/g, " ") + '\')">' + item[0] + '</a>' + '</td></tr>';
 					$('.summary_tab table').append(rows);
 
 				}
 			} else {
 				alert(msg.result);
 			}
-		},
-		complete : function() {
-			stop();
 		},
 		error : function() {
 			alert("数据请求失败");
@@ -292,7 +224,7 @@ function deleteLayData() {
 	});
 }
 
-//全选所有聚类历史结果
+// 全选所有聚类历史结果
 $(function() {
 	$("#historyAll").click(function() {
 		if (this.checked) {

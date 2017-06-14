@@ -1,75 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>停用词管理--添加停用词</title>
-    <link rel="stylesheet" href="css/loading.css">
-    <link rel="stylesheet" href="css/style.css">
-    <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/loading.js"></script>
-    <script type="text/javascript" src="js/waiting.js"></script>
-    <script type="text/javascript" src="js/stopword_add.js"></script>
-    <script type="text/javascript" src="js/dateformat.js"></script>
+<meta charset="UTF-8">
+<title>停用词管理--添加停用词</title>
+<script type="text/javascript" src="js/stopword_add.js"></script>
 </head>
 <body>
-<div class="main">
-    <iframe src="g_header.html" width="1000px" height="177px"></iframe>
-    <div class="content">
-        <iframe src="g_left.html" width="200px" height="760px"></iframe>
-        <div class="right float_r">
-            <div class="s_nav">
-                当前位置：
-                <a href="/topic_list.html">停用词管理</a>
-                >>添加停用词
-            </div>
-            <div class="ckht">
-                <div class="up_list_wrap" style="height: 400px">
-                     <table width="680" border="0" class="infor_tab02">
-                                <tr class="infor_tab02_tit">
-                                    <td colspan="2" height="40" align="center" valign="middle"
-                                        bgcolor="#86c6ea" class="d_blue">序号</td>
-                                    <td colspan="3" height="40" align="center" valign="middle"
-                                        bgcolor="#86c6ea" class="d_blue">停用词</td>
-                                </tr>
-                         <tr class="infor_tab02_tit">
-                             <td colspan="2" height="40" align="center" valign="middle"
-                                 bgcolor="#ffffff">1</td>
-                             <td colspan="3" height="40" align="center" valign="middle"
-                                 bgcolor="#ffffff" >
-                                 <input type="text" style="width: 100%; height: 100%; text-align: center" placeholder="请输入停用词">
-                             </td>
-                         </tr>
-                                <tr class="infor_tab02_tit" id="addStopword" data-num="1">
-                                    <td colspan="5" align="center" valign="middle">
-                                        <a href="javascript:;">
-                                            <img src="images/add_stopword.png"
-                                                 onClick="addStopwordInfor()" />
-                                        </a>
-                                    </td>
-                                </tr>
 
-                    </table>
-                </div>
-                <div>
-                    <table width="680" border="0" class="infor_tab02">
-                        <tr class="infor_tab02_tit">
-                            <td colspan="5" align="right" valign="middle" style="border: hidden;">
-                                <a href="javascript:;">
-                                    <img src="images/change_submit.png"
-                                         onClick="addStopword()" />
-                                </a>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                        新增文件：
-                        <div class="files_add" id="drop_area">将文件拖拽到此处</div>
-                    <div class="clear"></div>
-            </div>
-        </div>
-        <div class="clear"></div>
-    </div>
-    <iframe src="g_footer.html" width="1000px" height="80px"></iframe>
-</div>
+	<div class="s_nav">
+		当前位置： <a href="/topic_list.html">停用词管理</a> >>添加停用词
+	</div>
+	<div class="ckht">
+		<div class="up_list_wrap" style="height: 400px">
+			<table width="680" border="0" class="infor_tab02">
+				<tr class="infor_tab02_tit">
+					<td colspan="2" height="40" align="center" valign="middle"
+						bgcolor="#86c6ea" class="d_blue">序号</td>
+					<td colspan="3" height="40" align="center" valign="middle"
+						bgcolor="#86c6ea" class="d_blue">停用词</td>
+				</tr>
+				<tr class="infor_tab02_tit">
+					<td colspan="2" height="40" align="center" valign="middle"
+						bgcolor="#ffffff">1</td>
+					<td colspan="3" height="40" align="center" valign="middle"
+						bgcolor="#ffffff"><input type="text"
+						style="width: 100%; height: 100%; text-align: center"
+						placeholder="请输入停用词"></td>
+				</tr>
+				<tr class="infor_tab02_tit" id="addStopword" data-num="1">
+					<td colspan="5" align="center" valign="middle"><a
+						href="javascript:;"> <img src="images/add_stopword.png"
+							onClick="addStopwordInfor()" />
+					</a></td>
+				</tr>
+
+			</table>
+		</div>
+		<div>
+			<table width="680" border="0" class="infor_tab02">
+				<tr class="infor_tab02_tit">
+					<td colspan="5" align="right" valign="middle"
+						style="border: hidden;"><a href="javascript:;"> <img
+							src="images/change_submit.png" onClick="addStopword()" />
+					</a></td>
+				</tr>
+			</table>
+		</div>
+		新增文件：
+		<div class="files_add" id="drop_area">将文件拖拽到此处</div>
+		<div class="clear"></div>
+	</div>
+
 </body>
 </html>

@@ -44,18 +44,11 @@ $(function() {
                     contentType : false,
                     mimeType : "multipart/form-data",
                     data : fd,
-                    beforeSend : function() {
-                        begin();
-                    },
                     success : function(response) {
                         reSetView(response, filename, fileArray.length);
                     },
-                    complete : function() {
-                        stop();
-                    },
                     error : function() {
                         alert("预览失败");
-                        stop();
                     }
                 });
                 fileArray.push(file);
@@ -184,29 +177,29 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     form.append("titleIndex", titleIndex);
     form.append("timeIndex", time);
     form.append("sourceType", sourceType);
+    console.log("(((((((((");
     console.log(form);
     $.ajax({
         async : false,
         crossDomain : true,
-        url : "/AlgorithmContainer/upload",
+        url : "/Al/upload",
         method : "POST",
         processData : false,
         contentType : false,
         mimeType : "multipart/form-data",
         data : form,
-        
         success : function(response) {
             var msg = JSON.parse(response);
             if (msg.status == "OK") {
-            	alert("上传成功");
+                // alert(msg.tagName);
+                // cookie_value1="'"+item.fileId+"'";
+
             } else {
                 alert("上传失败");
             }
         },
-       
         error : function() {
             alert("预览失败");
-            stop();
         }
     });
 }
