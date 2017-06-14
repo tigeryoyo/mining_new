@@ -10,9 +10,6 @@ function userInforShow(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			$('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
@@ -43,9 +40,6 @@ function userInforShow(page){
 				 alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -161,7 +155,7 @@ function setCookie(value1,value2,value3,value4,value5,value6,value7){
 	document.cookie = cookie_name5 +"="+ escape (value5) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name6 +"="+ escape (value6) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name7 +"="+ escape (value7) + ";expires=" + exp.toGMTString();
-	window.location.href = "user_change.html";
+	baseAjax("user_change");
 }
 
 
@@ -332,9 +326,6 @@ function userInforSearch(page){
 			row:(parseInt(10*page-10))
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 		    $('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
@@ -364,9 +355,6 @@ function userInforSearch(page){
 				 alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -376,7 +364,7 @@ function userInforSearch(page){
 
 // 用户添加
 function userInforAdd(){
-	window.location.href = "user_add.html";
+	baseAjax("user_add");
 }
 function addUser(){
 	if(!$("#passWord").val().match(/^[\w]{6,30}$/)){
@@ -407,12 +395,7 @@ function addUser(){
         alert('请输入正确信息');
         return;
     }
-	var rolename = $("#select_roleName option:selected").val();
-	console.log(rolename);
-	if(rolename == undefined || rolename == '请选择角色'){
-		alert('请选择角色');
-        return;
-	}
+	
 	$.ajax({
 		type:"post",
 		url:"/user/insertUserInfo",
@@ -422,25 +405,19 @@ function addUser(){
 			password:$("#passWord").val(),
 			telphone:$("#userTel").val(),
 			email:$("#userEmail").val(),
-			roleName:rolename
+			roleName:$("#select_roleName option:selected").val()
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-			    window.location.href="/user_infor.html"
+			    baseAjax("user_infor");
 			}else{
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
-		error: function(msg){
-            alert(msg);
+		error: function(){
+            alert("数据请求失败");
         },
 	})	
 }
@@ -480,12 +457,6 @@ function userInforChange(){
 	var newRole=getCookie("roleName");
 	var newId=getCookie("userId");
 	var newPassword=getCookie("passWord");
-	var rolename = $("#select_roleName option:selected").val();
-	console.log(rolename);
-	if(rolename == undefined || rolename == '请选择角色'){
-		alert('请选择角色');
-        return;
-	}
 	$.ajax({
 		type:"post",
 		url:"/user/updateUserInfo",
@@ -496,24 +467,18 @@ function userInforChange(){
 			password:$("#new_user_type").val(),
 			telphone:$("#new_telphone_type").val(),
 			email:$("#new_email_type").val(),
-			roleName:rolename
+			roleName:$("#select_roleName option:selected").val(),
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				//alert(msg.result);
-				window.location.href="/user_infor.html"
+				// alert("更新成功");
+				alert(msg.result);
 			}else{
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(msg){
             alert(msg.result);
         },
@@ -527,64 +492,36 @@ function clearChangeInfor(){
 	$("#select_roleName option:selected").val('请选择角色');
 }
 
-//获取当前用户ID
-function CurrentUserId() {
-	var userId = null;
-    $.ajax({
-        url : "/getCurrentUserId",
-        type : "post",
-        data : "",
-        async: false,//同步  
-        success : function(msg) {
-            if (msg.status == 'OK') {
-                userId = msg.result;
-            }
-        },
-        error : function(msg) {
-            alert(msg);
-        }
-    });
-    return userId;
-    //window.onload = user();
- }
 
 // 用户删除
 $(function(){
 	$(".infor_tab02").on("click",".delUser",function(){
 		var user_id = $(this).attr("id");
-//		console.log(user_id);
-		var currentUserId = CurrentUserId();
-		console.log(currentUserId);
-		if(user_id == currentUserId){
-			alert('对不起，不能删除当前登录用户');
-		}else{
-			userInforDel(user_id);
-		}
+		console.log(user_id);
+		userInforDel(user_id);
+		function userInforDel(user_id){
+	
+			$.ajax({
+				type:"post",
+				url:"/user/deleteUserInfoById",
+				data:{
+					userId:user_id,
+				} ,
+				dataType:"json",
+				success:function(msg){
+					// alert("lll");
+					console.log(msg);
+					if(msg.status=="OK"){
+						baseAjax("user_infor");
+					}else{
+						alert(msg.result);
+					}
 		
+				} ,
+				error: function(){
+		            alert("数据请求失败");
+		        },
+			});
+		}
 	})
 })
-
-//从数据库删除用户
-function userInforDel(user_id){
-	$.ajax({
-		type:"post",
-		url:"/user/deleteUserInfoById",
-		data:{
-			userId:user_id,
-		} ,
-		dataType:"json",
-		success:function(msg){
-			// alert("lll");
-			console.log(msg);
-			if(msg.status=="OK"){
-				window.location.href="/user_infor.html";
-			}else{
-				alert(msg.result);
-			}
-
-		} ,
-		error: function(){
-            alert("数据请求失败");
-        },
-	});
-}

@@ -10,9 +10,6 @@ function typeInforShow(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 		    $('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
@@ -29,9 +26,6 @@ function typeInforShow(page){
 			    alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
 			alert("数据请求失败");
 		}
@@ -95,7 +89,7 @@ function setCookie(value1,value2){
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name2 +"="+ escape (value2) + ";expires=" + exp.toGMTString();
-	window.location.href = "type_change.html";
+	baseAjax("type_change");
 }
 
 /**
@@ -254,9 +248,6 @@ function typeInforSearch(page){
 			limit:10
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 		    $('.infor_tab02 tr:not(:first)').html("");
 			if( msg.status == "OK"){
@@ -275,9 +266,6 @@ function typeInforSearch(page){
 				 alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         },
@@ -287,7 +275,7 @@ function typeInforSearch(page){
 
 // 用户添加
 function typeInforAdd() {
-	window.location.href = "type_add.html";
+	baseAjax("type_add");
 }
 function AddtypeInfor(){
 	var submit=$("#addType").val().replace(' ','');
@@ -302,20 +290,14 @@ function AddtypeInfor(){
 			name:submit
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				window.location.href="/type_infor.html"
+				baseAjax("type_infor");
 			}else{
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         }
@@ -353,21 +335,15 @@ function ChangetypeInfor(){
 			id:newId
 		},
 		dataType:"json",
-		beforeSend : function(){
-            begin();
-        },
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
 				alert("修改成功");	
-				// window.location.href = "type_infor.html";
+				// baseAjax("type_infor");
 			}else{
 				alert(msg.result);
 			}
 		},
-		complete : function() {
-            stop();
-        },
 		error: function(){
             alert("数据请求失败");
         }
@@ -395,7 +371,7 @@ $(function(){
 					// alert("lll");
 					console.log(msg);
 					if(msg.status=="OK"){
-						window.location.href='/type_infor.html';
+						baseAjax("type_infor");
 					}else{
 						alert(msg.result);
 					}

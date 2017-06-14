@@ -45,15 +45,11 @@ function submit(fd) {
 		dataType : "json",
 		mimeType : "multipart/form-data",
 		data : fd,
-		beforeSend : function() {
-			begin();
-		},
 		success : function(msg) {
 			alert(msg.result);
 		},
 		complete : function() {
 			box.innerHTML="将文件拖拽到此处";
-			stop();
 		},
 		error : function() {
 			alert("数据请求失败");

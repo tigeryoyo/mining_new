@@ -44,14 +44,8 @@ $(function() {
                     contentType : false,
                     mimeType : "multipart/form-data",
                     data : fd,
-                    beforeSend : function() {
-                        begin();
-                    },
                     success : function(response) {
                         reSetView(response, filename, fileArray.length);
-                    },
-                    complete : function() {
-                        stop();
                     },
                     error : function() {
                         alert("预览失败");
@@ -194,9 +188,6 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
         contentType : false,
         mimeType : "multipart/form-data",
         data : form,
-        beforeSend : function() {
-            begin();
-        },
         success : function(response) {
             var msg = JSON.parse(response);
             if (msg.status == "OK") {
@@ -206,9 +197,6 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
             } else {
                 alert("上传失败");
             }
-        },
-        complete : function() {
-            stop();
         },
         error : function() {
             alert("预览失败");

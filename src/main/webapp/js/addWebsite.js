@@ -9,17 +9,13 @@ function addWebsite() {
 			type : $("#typeWebsite").val()
 		},
 		dataType : "json",
-		beforeSend : function() {
-			begin();
-		},
 		success : function(msg) {
 			if (msg.status == "OK") {
-				window.location.href = "/website_infor.html"
+				baseAjax("website_infor");
 			} else {
 				alert(msg.result);
 			}
-			stop();
-			window.location.href = "website_infor.html";
+			baseAjax("website_infor");
 		},
 		error : function() {
 			alert("数据请求失败");
@@ -47,17 +43,13 @@ function websiteInforChange() {
 			type : $("#new_type_website").val()
 		},
 		dataType : "json",
-		beforeSend : function() {
-			begin();
-		},
 		success : function(msg) {
 			if (msg.status == "OK") {
 				// alert("更新成功");
 			} else {
 				alert(msg.result);
 			}
-			stop();
-			window.location.href = "unknow_website_infor.html";
+			baseAjax("unknow_website_infor");
 		},
 		error : function() {
 			alert("数据请求失败");

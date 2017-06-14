@@ -37,21 +37,15 @@ function addStopword() {
 		},
 		dataType : "json",
         traditional:true,
-		beforeSend : function() {
-			begin();
-		},
 		success : function(msg) {
 			console.log(msg);
 			if (msg.status == "OK") {
-				window.location.href = "/stopword_infor.html"
+				baseAjax("stopword_infor");
 			} else {
 				alert(msg.result);
 			}
 			stop();
 		},
-		complete:function () {
-			stop();
-        },
 		error : function() {
 			alert("数据请求失败");
 		}
@@ -112,9 +106,6 @@ $(function() {
 					contentType : false,
 					mimeType : "multipart/form-data",
 					data : fd,
-					beforeSend : function() {
-						begin();
-					},
 					success : function(msg) {
 						console.log(":"+msg.status)
 						if (msg.status == "OK") {
@@ -135,9 +126,6 @@ $(function() {
 						} else {
 							alert(msg.result);
 						}
-					},
-					complete : function() {
-						stop();
 					},
 					error : function() {
 						alert("预览失败");

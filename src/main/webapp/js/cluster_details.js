@@ -22,9 +22,6 @@ function showClusterDetails(index,rid,count){
 		},
 		dataType : "json",
 		async: false,//同步
-		beforeSend : function() {
-			begin();
-		},
 		success : function(msg) {
 			if (msg.status == "OK") {
 				var items = msg.result;
@@ -63,9 +60,6 @@ function showClusterDetails(index,rid,count){
 			}else{
 				alert(msg.result);				
 			}
-		},
-		complete : function() {
-			stop();
 		},
 		error : function(msg) {
 			 $('#code').hide();

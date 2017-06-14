@@ -29,8 +29,8 @@ function scxsj(issueType,stdResId){
 			if (msg.status == "OK") {
 				// var value = prompt("请输入准数据名：");
 				// return value;
-				window.location.href = "/topic_list.html?issueType="
-						+ issueType;
+				setCookie_issueType(issueType);
+				baseAjax("topic_list");
 			} else {
 				alert(msg.result);
 			}
@@ -42,6 +42,13 @@ function scxsj(issueType,stdResId){
 			console.log("ERROR");
 		}
 	});
+}
+
+function setCookie_issueType(value){
+	var Days = 1; // 此 cookie 将被保存 1 天
+	var exp　= new Date();
+	exp.setTime(exp.getTime() +Days*24*60*60*1000);
+	document.cookie = "issueType="+ escape (value) + ";expires=" + exp.toGMTString();
 }
 
 function ckfsj(issueId){
