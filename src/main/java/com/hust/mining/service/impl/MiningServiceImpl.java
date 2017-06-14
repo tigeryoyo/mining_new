@@ -284,6 +284,11 @@ public class MiningServiceImpl implements MiningService {
                         return o1.compareTo(o2);
                     }
                 });
+        //属性行
+        String[] attrs = content.remove(0);
+        int indexOfUrl = AttrUtil.findIndexOfUrl(attrs);
+        int indexOfTime = AttrUtil.findIndexOfTime(attrs);
+        
         if (null == array) {
             array = new String[content.size()];
             for (int i = 0; i < content.size(); i++) {
@@ -296,10 +301,10 @@ public class MiningServiceImpl implements MiningService {
             if (CommonUtil.isEmptyArray(row)) {
                 continue;
             }
-            Website website = websiteDao.queryByUrl(CommonUtil.getPrefixUrl(row[Index.URL_INDEX]));
+            Website website = websiteDao.queryByUrl(CommonUtil.getPrefixUrl(row[indexOfUrl]));
             String level = website.getLevel();
             String type = website.getType();
-            String timeKey = CommonUtil.getTimeKey(row[Index.TIME_INDEX], interval);
+            String timeKey = CommonUtil.getTimeKey(row[indexOfTime], interval);
             Map<String, Map<String, Integer>> timeMap = map.get(timeKey);
             if (timeMap == null) {
                 timeMap = new HashMap<String, Map<String, Integer>>();
