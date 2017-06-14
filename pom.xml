@@ -19,9 +19,13 @@
 			<url>http://maven.nlpcn.org</url>
 		</repository>
 		<repository>
+			<id>central</id>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
 			<id>nexus</id>
 			<name>nexus</name>
-			<url>http://218.199.92.27:8081/nexus/content/groups/public/</url>
+			<url>http://211.69.197.168:8081/nexus/content/groups/public/</url>
 		</repository>
 	</repositories>
 	<dependencies>
