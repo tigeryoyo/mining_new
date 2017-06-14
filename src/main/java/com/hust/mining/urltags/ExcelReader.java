@@ -71,7 +71,6 @@ public class ExcelReader {
 		} finally {
 			try {
 				if (wb != null) {
-					wb.close();
 				}
 				if (is != null) {
 					is.close();
@@ -141,7 +140,6 @@ public class ExcelReader {
 		} finally {
 			try {
 				if (wb != null) {
-					wb.close();
 				}
 				if (is != null) {
 					is.close();
