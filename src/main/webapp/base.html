@@ -196,6 +196,10 @@
 
 		var query = location.href.split('?href=')[1], eleTarget = target || null;
 
+		if (typeof query != "undefined") {
+			query = query.split('#')[0];
+		}
+
 		/*if(typeof query != "undefined") {
 		  query=query.split('&')[0];
 		}    */
