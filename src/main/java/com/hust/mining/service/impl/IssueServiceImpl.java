@@ -457,7 +457,7 @@ public class IssueServiceImpl implements IssueService {
 		int algorithmType = user2.getAlgorithm();
 		// 去重结束
 		
-		//对欲聚类的集合排序 以提高聚类的精确度
+		//对预聚类的集合排序 以提高聚类的精确度
 		
 		
 		Map<String, Object> res = mining(filteredContent, CONVERTERTYPE.DIGITAL, algorithmType, granularity);
@@ -583,4 +583,5 @@ public class IssueServiceImpl implements IssueService {
 		newContent.add(0,filteredContent.get(0));
 		return newContent;
 	}
+
 }
