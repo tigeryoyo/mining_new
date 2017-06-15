@@ -104,7 +104,13 @@ public class Constant {
     }
 
     public static class CONVERTERTYPE {
+    	/**
+    	 * 0-1模型
+    	 */
         public static final int DIGITAL = 1;
+        /**
+         * TF-IDF模型
+         */
         public static final int TFIDF = 2;
     }
     

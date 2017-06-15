@@ -135,6 +135,11 @@ public class ConvertUtil {
 		return newList;
 	}
 
+	/**
+	 * 将(所有类（单个类（类内元素的index））)变为（所有类（单个类））
+	 * @param list 聚类结果集（index）
+	 * @return
+	 */
 	public static List<String[]> toStringListB(List<List<Integer>> list) {
 		if (list == null || list.size() == 0) {
 			return null;

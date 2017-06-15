@@ -61,6 +61,16 @@ public class FileController {
 	@Autowired
 	private RedisService redisService;
 
+	/**
+	 * 上传文件
+	 * @param file  文件流
+	 * @param titleIndex  标题下标，excel文件标题栏 新闻标题的位置
+	 * @param timeIndex   时间下标
+	 * @param urlIndex    url下标
+	 * @param sourceType  新闻类型下标
+	 * @param request     请求
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
 	public Object upload(@RequestParam(value = "file", required = true) MultipartFile file,
