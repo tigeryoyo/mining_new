@@ -182,7 +182,7 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
     $.ajax({
         async : false,
         crossDomain : true,
-        url : "/Al/upload",
+        url : "/AlgorithmContainer/upload",
         method : "POST",
         processData : false,
         contentType : false,
@@ -191,7 +191,7 @@ function upFile(filex, urlIndex, titleIndex, time, sourceType) {
         success : function(response) {
             var msg = JSON.parse(response);
             if (msg.status == "OK") {
-                // alert(msg.tagName);
+                 alert(msg.tagName+"上传成功！");
                 // cookie_value1="'"+item.fileId+"'";
 
             } else {
