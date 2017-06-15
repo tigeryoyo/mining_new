@@ -53,6 +53,11 @@ public class FileDao {
         return 0;
     }
 
+    /**
+     * 读取excel文件的内容，包含标题栏
+     * @param filenames 需要读取内容的文件名（可以为单个，也可以为集合）
+     * @return
+     */
     public List<String[]> getFileContent(String...filenames) {
         List<String[]> content = FileUtil.readForUnificating(filenames);
         return content;
