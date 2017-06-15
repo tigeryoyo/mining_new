@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class StandardResult_label {
+import java.io.Serializable;
+
+public class StandardResult_label implements Serializable{
     private String stdRid;
 
     private Integer labelid;

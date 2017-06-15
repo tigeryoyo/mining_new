@@ -1,6 +1,8 @@
 package com.hust.mining.model;
 
-public class Label {
+import java.io.Serializable;
+
+public class Label implements Serializable{
     private Integer labelid;
 
     private String labelname;
