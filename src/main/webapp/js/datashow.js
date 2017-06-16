@@ -218,6 +218,12 @@ function downloadCoreRes(coreResId) {
 	form.submit(); // 自动提交
 }
 
+//隐藏贴标签按钮
+function hidelabel()
+{
+	$('attach_label').hide();
+}
+
 function changeStyle() {
 	$('.his_result').hide();
 	$('.sur_result').hide();

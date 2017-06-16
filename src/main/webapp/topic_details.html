@@ -3,10 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <title>查看任务</title>
+<!-- 引入遮罩的样式 -->
+<link rel="stylesheet" href="css/history_clusterdetails.css">
 <script type="text/javascript" src="js/datashow.js"></script>
 <script type="text/javascript" src="js/tuozhuai.js"></script>
 <script type="text/javascript" src="js/dateformat.js"></script>
 <script type="text/javascript" src="js/scxsj.js"></script>
+<script type="text/javascript" src="js/label.js"></script>
+
 
 </head>
 <body>
@@ -23,6 +27,7 @@
 		<ul class="ckht_list">
 			<li class="issueName">任务名称：</li>
 			<li class="files_list">文件列表：
+			<button type="button" id="attachlabel" class="attach_label">贴标签</button>
 				<div class="up_list_wrap">
 					<table border="0" class="up_list">
 						<tr class="d_blue">
@@ -51,6 +56,36 @@
 				onclick="allDel()" /> <img src="images/up_all.png"
 				class="btn_up_del03" />
 		</div>
+	</div>
+	
+	<!-- 遮罩div -->
+	<div id="goodcover"></div>
+	<div id=code style="min-height:200px;width:730px">
+		<div class="close1" style="float:right;">
+			<a href="javascript:void(0)" id="closebt"><img
+				src="images/close.gif"></a>
+		</div>
+		<div class="user_infor">
+	        <div class="resetButton">
+	        	<div class="role_search_input">
+	            	<input type="search" placeholder="请输入标签名称" class="qx_name" id="label_Search" />
+	                <img src="images/icon_search.png" class="icon_search" />
+	            </div>
+	             <img src="images/btn_role_search.png" onClick="initSearchPage(1)" class="btn_role" />
+	            <button onclick="labelInforAdd()">添加标签</button> 
+	        </div>
+            <div class="infor_tablist">
+              <table width="692" border="0" class="infor_tab02">
+                  <tr class="infor_tab02_tit">
+                    <td width="169" height="40" align="center" bgcolor="#86c6ea">标签编号</td>
+                    <td width="231" height="40" align="center" bgcolor="#86c6ea">标签名称</td>
+                    <td colspan="2" height="40" align="center" bgcolor="#86c6ea">操作</td>
+                  </tr>
+                </table>
+            </div>
+         
+		</div>
+		<div class="user_num1" style=" margin-bottom:0px;"><ul class="page" maxshowpageitem="5" pagelistcount="10"  id="page"></ul></div>
 	</div>
 </body>
 </html>
