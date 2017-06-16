@@ -240,21 +240,21 @@ public class MiningServiceImpl implements MiningService {
             item[Index.COUNT_ITEM_AMOUNT] = tmpList.length;
             reList.add(item);
         }
-        //按照递减进行排序，如果数量相同，按照时间进行排序
-        Collections.sort(reList, new Comparator<int[]>() {
-
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                // TODO Auto-generated method stub
-                int compare = o2[Index.COUNT_ITEM_AMOUNT] - o1[Index.COUNT_ITEM_AMOUNT];
-                if (compare == 0) {
-                    String time1 = content.get(o1[Index.COUNT_ITEM_INDEX])[Index.TIME_INDEX];
-                    String time2 = content.get(o2[Index.COUNT_ITEM_INDEX])[Index.TIME_INDEX];
-                    compare = time1.compareTo(time2);
-                }
-                return compare;
-            }
-        });
+//        //按照递减进行排序，如果数量相同，按照时间进行排序
+//        Collections.sort(reList, new Comparator<int[]>() {
+//
+//            @Override
+//            public int compare(int[] o1, int[] o2) {
+//                // TODO Auto-generated method stub
+//                int compare = o2[Index.COUNT_ITEM_AMOUNT] - o1[Index.COUNT_ITEM_AMOUNT];
+//                if (compare == 0) {
+//                    String time1 = content.get(o1[Index.COUNT_ITEM_INDEX])[Index.TIME_INDEX];
+//                    String time2 = content.get(o2[Index.COUNT_ITEM_INDEX])[Index.TIME_INDEX];
+//                    compare = time1.compareTo(time2);
+//                }
+//                return compare;
+//            }
+//        });
         return reList;
     }
 
