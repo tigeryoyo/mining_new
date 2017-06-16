@@ -21,7 +21,7 @@ public class LabelController {
 	@ResponseBody
 	@RequestMapping("/selectAllLabel")
 	public Object selectAllLabel(@RequestParam(value="start", required=true) int start,
-			@RequestParam(value = "limit", required = true) int limit, HttpServletRequest request)
+			@RequestParam(value = "limit", required = true) int limit)
 	{
 		List<Label> labels = labelService.selectAllLable(start, limit);
 		if (labels.isEmpty()){
@@ -32,8 +32,7 @@ public class LabelController {
 	
 	@ResponseBody
 	@RequestMapping("/selectlabelcount")
-	public Object selectlabelcount(@RequestParam(value="labelname",required = false)String labelname,
-			HttpServletRequest request)
+	public Object selectlabelcount(@RequestParam(value="labelname",required = false)String labelname)
 	{
 		long count=0;
 		if (null==labelname) {
@@ -56,8 +55,7 @@ public class LabelController {
 	@RequestMapping("/selectLabelByName")
 	public Object selectLabelByName(@RequestParam(value="labelname", required=true) String labelname,
 			@RequestParam(value = "start", required = true) int start,
-			@RequestParam(value = "limit", required = true) int limit,
-			HttpServletRequest request)
+			@RequestParam(value = "limit", required = true) int limit)
 	{
 		List<Label> labels = labelService.selectLableLikeName(labelname,start,limit);
 		if (labels.isEmpty()) {
@@ -71,8 +69,7 @@ public class LabelController {
 	 */
 	@ResponseBody
 	@RequestMapping("insertLabel")
-	public Object insertLabel(@RequestParam(value="labelname", required=true) String labelname,
-			HttpServletRequest request)
+	public Object insertLabel(@RequestParam(value="labelname", required=true) String labelname)
 	{
 		Label label= new Label();
 		label.setLabelname(labelname);
@@ -88,8 +85,7 @@ public class LabelController {
 	 */
 	@ResponseBody
 	@RequestMapping("/deleteLabelById")
-	public Object deleteLabelById(@RequestParam(value="labelId", required=true) int labelid,
-			HttpServletRequest request)
+	public Object deleteLabelById(@RequestParam(value="labelId", required=true) int labelid)
 	{
 		boolean status = labelService.deleteLabelById(labelid);
 		if (status==false) {
@@ -103,7 +99,7 @@ public class LabelController {
 	@ResponseBody
 	@RequestMapping("/updateLabel")
 	public Object updateLabel(@RequestParam(value="labelid",required=true)int labelid,
-			@RequestParam(value="labelname",required=true) String labelname ,HttpServletRequest request)
+			@RequestParam(value="labelname",required=true) String labelname)
 	{
 		Label label = new Label();
 		label.setLabelid(labelid);

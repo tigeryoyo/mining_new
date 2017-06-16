@@ -47,7 +47,12 @@ public class LabelServiceImpl implements LabelService {
 		return labels;
 	}
 	
-	
+	@Override
+	public Label selectByname(String labelname)
+	{
+		List<Label> labels = labeldao.selectLabelByName(labelname);
+		return labels.get(0);
+	}
 
 	@Override
 	public boolean insertLable(String label) {

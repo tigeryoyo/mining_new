@@ -10,6 +10,8 @@ public interface StandardResult_labelMapper {
 
     int deleteByExample(StandardResult_labelExample example);
 
+    int deleteByPrimaryKey(@Param("stdRid") String stdRid, @Param("labelid") Integer labelid);
+
     int insert(StandardResult_label record);
 
     int insertSelective(StandardResult_label record);

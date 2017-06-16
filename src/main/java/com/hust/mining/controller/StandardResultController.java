@@ -21,10 +21,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.StandardResultDao;
 import com.hust.mining.model.Issue;
+import com.hust.mining.model.Label;
 import com.hust.mining.model.StandardResult;
 import com.hust.mining.service.IssueService;
+import com.hust.mining.service.LabelService;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.StandardResultService;
+import com.hust.mining.service.StandardResult_labelService;
 import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.FileUtil;
@@ -42,6 +45,10 @@ public class StandardResultController {
     private StandardResultService standardResultService;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private StandardResult_labelService stand_label;
+    @Autowired
+    private LabelService labelservice;
     
     @ResponseBody
     @RequestMapping(value = "/queryStandardResults")
@@ -130,5 +137,75 @@ public class StandardResultController {
     	JSONObject json = new JSONObject();
         json.put("issueId", issueId);
         return ResultUtil.success(json);
+    }
+    
+    /**
+     * 为准数据贴标签
+     */
+    @ResponseBody
+    @RequestMapping(value="/SetLabelForStandardResult")
+    public Object SetLabelForStandardResult(@RequestParam(value="stdResId",required=true) String stdResId,
+    		@RequestParam(value="labelids",required=false) List<Integer> labelids)
+    {
+    	if (labelids.isEmpty()) {
+			return ResultUtil.errorWithMsg("没有选中任何标签！");
+		}
+    	boolean status = stand_label.attachlabels(stdResId, labelids);
+    	if (status==false) {
+    		return ResultUtil.errorWithMsg("贴标签失败！");
+		}
+    	return ResultUtil.success("贴标签成功！");
+    	
+    }
+    
+    /**
+     * 查看某个准数据被打贴了什么标签
+     * @param stdResId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/selectLabelsForStandResult")
+    public Object selectLabelsForStandResult(@RequestParam(value="stdResId",required=true)String stdResId)
+    {
+    	if (stdResId==null) {
+    		return ResultUtil.errorWithMsg("没有选中任何准数据！");
+		}
+    	List<Integer> list = stand_label.selectLabelsForStandResult(stdResId);
+    	return ResultUtil.success(list);
+    }
+    
+    /**
+     * 根据标签查找那些准数据包含此标签
+     * @param labelname
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/selectStandResultsBylabel")
+    public Object selectStandResultsBylabel(@RequestParam(value="labelname",required=true)String labelname)
+    {
+    	//根据labelname找到labelid
+    	Label label = labelservice.selectByname(labelname);
+    	if (label==null) {
+    		return ResultUtil.errorWithMsg("没有准数据包含此标签！");
+		}
+    	//根据labelId返回任务的id列表
+    	List<String> list = stand_label.selectStandResultsBylabel(label.getLabelid());
+    	return ResultUtil.success(list);
+    }
+    
+    @ResponseBody
+    @RequestMapping(value="/deleteLabelOfStandard")
+    public Object deleteLabelOfStandard(@RequestParam(value="staRtId",required=true)String staRtId,
+    		@RequestParam(value="labelid",required=true)int labelid)
+    {
+    	
+    	if (staRtId.isEmpty()) {
+    		return ResultUtil.errorWithMsg("请选择准数据！");
+		}
+    	boolean status = stand_label.delete(staRtId, labelid);
+    	if (status==false) {
+    		return ResultUtil.errorWithMsg("移除标签失败！");
+		}
+    	return ResultUtil.success("移除标签成功！");
     }
 }

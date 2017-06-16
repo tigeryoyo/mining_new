@@ -19,6 +19,8 @@ public interface LabelService {
 	long selectLabelCount(String name);
 
 	long selectallcount();
+
+	Label selectByname(String labelname);
 	
 
 }

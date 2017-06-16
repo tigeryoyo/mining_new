@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hust.mining.dao.mapper.StandardResult_labelMapper">
   <resultMap id="BaseResultMap" type="com.hust.mining.model.StandardResult_label">
-    <result column="std_rid" jdbcType="VARCHAR" property="stdRid" />
-    <result column="labelid" jdbcType="INTEGER" property="labelid" />
+    <id column="std_rid" jdbcType="VARCHAR" property="stdRid" />
+    <id column="labelid" jdbcType="INTEGER" property="labelid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -80,6 +80,11 @@
       order by ${orderByClause}
     </if>
   </select>
+  <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from standardresult_label
+    where std_rid = #{stdRid,jdbcType=VARCHAR}
+      and labelid = #{labelid,jdbcType=INTEGER}
+  </delete>
   <delete id="deleteByExample" parameterType="com.hust.mining.model.StandardResult_labelExample">
     delete from standardresult_label
     <if test="_parameter != null">
