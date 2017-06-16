@@ -57,11 +57,7 @@ public class ResultController {
         }
         System.out.println(resultId+"--REusltc-"+issueId);
         List<String[]> list = resultService.getCountResultById(resultId, issueId, request);
-//        for(String[] ss : list){
-//        	if(list.indexOf(ss) > 0){
-//        		System.out.println(ss[5]+"-----");
-//        	}
-//        }
+
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("不存在记录");
         }
@@ -97,12 +93,7 @@ public class ResultController {
             return ResultUtil.errorWithMsg("不存在记录");
         }
         redisService.setString(KEY.RESULT_ID, resultId, request);
-        for(String[] ss : list){
-        	
-        	System.out.print(ss[0]+" ");
-        	
-        	
-        }System.out.println();
+        
         return ResultUtil.success(list);
     }
     

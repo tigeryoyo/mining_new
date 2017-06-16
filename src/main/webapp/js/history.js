@@ -172,7 +172,6 @@ function freshData() {
 			if (msg.status == "OK") {
 				// alert("删除成功");
 				var items = msg.result;
-				console.log(items);
 
 				var indexOfTitle = parseInt(items[0][0]) + 1;
 				var indexOfUrl = parseInt(items[0][1]) + 1;
@@ -180,7 +179,7 @@ function freshData() {
 				for (var i = 0; i < items.length - 1; i++) {
 					// items第一行存储index，故从i+1读起
 					item = items[i + 1];
-					console.log(item);
+					//console.log(item);
 					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
 						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails(' + i + ',\'' + $('.summary_up table tr img').attr("id") + '\',' + item[0] + ')">'
 						+ item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">' + '<a href="javascript:;" onclick="toPaint(' + i
