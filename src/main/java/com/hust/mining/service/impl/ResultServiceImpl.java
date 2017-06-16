@@ -344,14 +344,8 @@ public class ResultServiceImpl implements ResultService {
             	return null;
             }
             //---
-            for(String index : indexList){
-            	for(String[] item : content){
-            		//item[Index.?] 未定义全局常量
-            		// item 第一行为标题。从第二行开始
-                	if(String.valueOf(Integer.valueOf(index) + 1).equals(item[0])){
-                		list.add(item);
-                	}
-                }
+            for(String index : indexList){            	
+                		list.add(content.get(Integer.parseInt(index)+1));
             }
             list.add(0, AttrUtil.findEssentialIndex(content.get(0)));
         } catch (Exception e) {

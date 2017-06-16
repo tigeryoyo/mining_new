@@ -16,7 +16,7 @@ function roleInforShow(page){
 				var cookie_value1;
 				var cookie_value2;
 				$('#role_infor_tab tr:not(:first)').html("");
-				console.log(msg);
+				
 				$.each(items,function(idx,item){
 					cookie_value1="'"+item.roleId+"'";
 					cookie_value2="'"+item.roleName+"'";
@@ -335,7 +335,7 @@ function getCookie(name) {
 $(function(){
 	$("#role_infor_tab").on("click",".delRole",function(){
 		var role_id = $(this).attr("id");
-		console.log(role_id);
+		//console.log(role_id);
 		roleInforDel(role_id);
 		function roleInforDel(role_id){
 			$.ajax({

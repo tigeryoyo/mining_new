@@ -79,7 +79,7 @@ function buildStandardData() {
 function historyDel() {
 	$(".summary_up table tr").unbind('click').on("click", "img", function() {
 		var result_id = $(this).attr("id");
-		console.log(result_id);
+		
 		fileDel(result_id);
 		function fileDel(result_id) {
 
@@ -91,7 +91,7 @@ function historyDel() {
 				},
 				dataType : "json",
 				success : function(msg) {
-					console.log(msg);
+					
 					if (msg.status == "OK") {
 						historyRecord();
 					} else {
@@ -115,7 +115,7 @@ function toPaint(currentSet, title) {
 function historyReset() {
 	$(".summary_up table tr").unbind('click').on("click", "img", function() {
 		var result_id = $(this).attr("id");
-		console.log(result_id);
+		
 		$.ajax({
 			type : "post",
 			url : "/result/resetResultById",
@@ -130,8 +130,8 @@ function historyReset() {
 					alert("合并失败");
 				}
 			},
-			error : function() {
-				alert("请求失败");
+			error : function(msg) {
+				alert(msg.result);
 			}
 		})
 	})
@@ -143,7 +143,7 @@ function addLayData() {
 	$(".summary_tab input:checked").each(function(i) {
 		sets.push($(this).attr('class'));
 	});
-	console.log(sets);
+	
 	$.ajax({
 		type : "post",
 		url : "/result/combineSets",
@@ -157,8 +157,8 @@ function addLayData() {
 				alert(msg.result);
 			}
 		},
-		error : function() {
-			alert("数据请求失败");
+		error : function(msg) {
+			alert(msg.result);
 		}
 	});
 }
@@ -172,7 +172,6 @@ function freshData() {
 			if (msg.status == "OK") {
 				// alert("删除成功");
 				var items = msg.result;
-				console.log(items);
 
 				var indexOfTitle = parseInt(items[0][0]) + 1;
 				var indexOfUrl = parseInt(items[0][1]) + 1;
@@ -180,7 +179,7 @@ function freshData() {
 				for (var i = 0; i < items.length - 1; i++) {
 					// items第一行存储index，故从i+1读起
 					item = items[i + 1];
-					console.log(item);
+					//console.log(item);
 					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
 						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails(' + i + ',\'' + $('.summary_up table tr img').attr("id") + '\',' + item[0] + ')">'
 						+ item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">' + '<a href="javascript:;" onclick="toPaint(' + i
@@ -192,8 +191,8 @@ function freshData() {
 				alert(msg.result);
 			}
 		},
-		error : function() {
-			alert("数据请求失败");
+		error : function(msg) {
+			alert(msg.result);
 		}
 	});
 }
@@ -204,7 +203,7 @@ function deleteLayData() {
 	$(".summary_tab input:checked").each(function(i) {
 		sets.push($(this).attr('class'));
 	});
-	console.log(sets);
+	
 	$.ajax({
 		type : "post",
 		url : "/result/deleteSets",
@@ -218,8 +217,8 @@ function deleteLayData() {
 				alert(msg.result);
 			}
 		},
-		error : function() {
-			alert("数据请求失败");
+		error : function(msg) {
+			alert(msg.result);
 		}
 	});
 }

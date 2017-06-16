@@ -1,7 +1,7 @@
 //角色权限配置js文件
 function getCookie(name) {
 
-	console.log(document.cookie);
+	//console.log(document.cookie);
 	var arr = document.cookie.match(new RegExp("(^|)" + name + "=([^;]*)(;|$)"));
 	if (arr != null)
 		return unescape(arr[2]);
@@ -23,7 +23,7 @@ function getIncludePowers(roleId) {
 				if (msg.status == "OK") {
 					var powers = msg.result;
 					count = powers.length;
-					console.log(msg);
+					//console.log(msg);
 					$
 						.each(
 							powers,
@@ -40,8 +40,8 @@ function getIncludePowers(roleId) {
 			complete : function() {
 				getNotIncludePowers(roleId, count);
 			},
-			error : function() {
-				alert("请求失败");
+			error : function(msg) {
+				alert(msg.result);
 			}
 		})
 }
@@ -58,7 +58,7 @@ function getNotIncludePowers(roleId, index) {
 			success : function(msg) {
 				if (msg.status == "OK") {
 					var powers = msg.result;
-					console.log(msg);
+					
 					$
 						.each(
 							powers,
@@ -74,14 +74,15 @@ function getNotIncludePowers(roleId, index) {
 			complete : function() {
 				console.log("all")
 			},
-			error : function() {
-				alert("请求失败");
+			error : function(msg) {
+				alert(msg.result);
 			}
 		})
 }
 // 权限显示
 function showPowers() {
 	var roleId = getCookie("id");
+	$(".checkAll").prop("checked",false);
 	getIncludePowers(roleId);
 }
 
@@ -98,7 +99,7 @@ function getPowerNames() {
 		}
 	});
 	list = list.substr(0, list.length - 1);
-	console.log(list);
+	
 	// return JSON.stringify(list);
 	return list;
 }
@@ -116,9 +117,10 @@ function changeRole() {
 		},
 		dataType : "json",
 		success : function(msg) {
-			console.log(msg);
+			
 			if (msg.status == "OK") {
 				alert("修改角色信息成功");
+				baseAjax("role_infor");
 			} else {
 				alert(msg.result);
 			}
@@ -132,6 +134,7 @@ function changeRole() {
 //
 function clearNewrole() {
 	$("#new_name_role").val(getCookie("role_name"));
+	$('#role_power_tab tr:not(:first)').html('');
 	showPowers();
 }
 
