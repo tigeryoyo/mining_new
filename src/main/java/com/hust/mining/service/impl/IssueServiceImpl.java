@@ -456,10 +456,7 @@ public class IssueServiceImpl implements IssueService {
 		int granularity = user2.getGranularity();
 		int algorithmType = user2.getAlgorithm();
 		// 去重结束
-		
-		//对预聚类的集合排序 以提高聚类的精确度
-		
-		
+				
 		Map<String, Object> res = mining(filteredContent, CONVERTERTYPE.DIGITAL, algorithmType, granularity);
 		if (null == res) {
 			return null;
