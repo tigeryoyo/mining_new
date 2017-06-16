@@ -11,7 +11,7 @@ function powerInforShow(page){
 		},
 		dataType:"json",
 		success: function(msg){
-			console.log(msg);
+			//console.log(msg);
 			if( msg.status == "OK"){
 				// alert("success");
 				var items = msg.result ;
@@ -299,7 +299,7 @@ function addPower(){
 		},
 		dataType:"json",
 		success: function(msg){
-			console.log(msg);
+			//console.log(msg);
 			if( msg.status == "OK"){
 				baseAjax("power_infor");
 			}else{
@@ -321,7 +321,7 @@ function clearPower(){
 // 用户编辑
 function getCookie(name) {
 	
-	console.log(document.cookie);
+	//console.log(document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
 		return unescape(arr[2]); 
@@ -340,7 +340,7 @@ function powerInforChange(){
 		},
 		dataType:"json",
 		success: function(msg){
-			console.log(msg);
+			//console.log(msg);
 			if( msg.status == "OK"){
 				alert("修改成功");	
 			}else{
@@ -361,7 +361,7 @@ function clearNewPower(){
 $(function(){
 	$(".infor_tab02").on("click",".delPower",function(){
 		var power_id = $(this).attr("id");
-		console.log(power_id);
+		//console.log(power_id);
 		powerInforDel(power_id);
 		function powerInforDel(power_id){
 			$.ajax({

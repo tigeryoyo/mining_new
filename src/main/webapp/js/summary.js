@@ -75,8 +75,8 @@ function fileSearch() {
 				alert(msg.result);
 			}
 		},
-		error : function() {
-			alert("数据请求失败");
+		error : function(msg) {
+			alert(msg.result);
 		}
 	});
 }
@@ -109,7 +109,7 @@ function fileSummary() {
 							for (var i = 0; i < items.length - 1; i++) {
 								// items第一行存储index，故从i+1读起
 								item = items[i + 1];
-								console.log(item);
+								
 								rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' 
 								+ i
 								+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
@@ -130,9 +130,8 @@ function fileSummary() {
 						}
 
 					},
-					error : function() {
-						console.log("失败了");
-						alert("数据请求失败");
+					error : function(msg) {
+						alert(msg.result);
 					}
 				});
 	}else{
@@ -151,7 +150,7 @@ function addLayData() {
 	$(".summary_tab input:checked").each(function(i) {
 		sets.push($(this).attr('class'));
 	});
-	console.log(sets);
+	
 	$.ajax({
 		type : "post",
 		url : "/result/combineSets",
@@ -165,8 +164,8 @@ function addLayData() {
 				alert(msg.result);
 			}
 		},
-		error : function() {
-			alert("数据请求失败");
+		error : function(msg) {
+			alert(msg.result);
 		}
 	});
 }
@@ -188,7 +187,7 @@ function freshData() {
 				for (var i = 0; i < items.length - 1; i++) {
 					// items第一行存储index，故从i+1读起
 					item = items[i + 1];
-					console.log(item);
+					
 					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
 						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails(' + i + ',\'' + '' + '\',' + item[0] + ')">'
 						+ item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">' + '<a href="javascript:;" onclick="toPaint(' + i
@@ -212,7 +211,7 @@ function deleteLayData() {
 	$(".summary_tab input:checked").each(function(i) {
 		sets.push($(this).attr('class'));
 	});
-	console.log(sets);
+	
 	$.ajax({
 		type : "post",
 		url : "/result/deleteSets",
@@ -226,8 +225,8 @@ function deleteLayData() {
 				alert(msg.result);
 			}
 		},
-		error : function() {
-			alert("数据请求失败");
+		error : function(msg) {
+			alert(msg.result);
 		}
 	});
 }

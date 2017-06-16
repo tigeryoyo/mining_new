@@ -11,7 +11,7 @@
  */
 function showClusterDetails(index,rid,count){
 	var url = '';
-	console.log(rid);
+	
 	$("#clusterItemAll").prop("checked",false);
 	$.ajax({
 		type : "post",
@@ -123,7 +123,6 @@ $(function(){
 	$(".details_tab table").on("click",".delItem",function(){
 		var index = $(this).attr("id");
 
-		console.log(index);
 		if(index == null || index < 0){
 			alert('删除出现错误');
 		}else{
@@ -133,7 +132,10 @@ $(function(){
 	})
 })
 
-/* 删除 类中某些元素*/
+/* 删除 类中某些元素 
+ * index --点击一个标题后边的删除按钮时的下标
+ * 若index为空则取多选框选中的元素
+ * */
 function deleteClusterItem(index) {
 	var sets = new Array();	
 	var clusterIndex = $('.details_tab table').attr('id');
@@ -149,7 +151,6 @@ function deleteClusterItem(index) {
 		sets.push(index);
 	}
 	
-	console.log(sets);
 	$.ajax({
 		type : "post",
 		traditional : true,
