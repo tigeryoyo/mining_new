@@ -47,6 +47,13 @@ public class IssueController {
 	@Autowired
 	private RedisService redisService;
 
+	/**
+	 * 创建任务
+	 * @param issueName 创建任务的名字
+	 * @param issueType 创建任务的类型（泛数据，准数据，核心数据）
+	 * @param request
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	public Object createIssue(@RequestParam(value = "issueName", required = true) String issueName,
@@ -192,6 +199,12 @@ public class IssueController {
         return ResultUtil.success(count);
     }
 
+	/**
+	 * 单文件聚类
+	 * @param fileId 聚类文件id
+	 * @param request
+	 * @return
+	 */
     @ResponseBody
     @RequestMapping("/miningSingleFile")
     public Object miningSingleFile(@RequestParam(value = "fileId", required = true) String fileId, HttpServletRequest request) {

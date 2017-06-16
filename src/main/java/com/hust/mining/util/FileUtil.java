@@ -164,6 +164,12 @@ public class FileUtil {
 		return map;
 	}
 
+	/**
+	 * 写入文件
+	 * @param filename  文件名
+	 * @param content 文件内容   包含标题
+	 * @return
+	 */
 	public static boolean write(String filename, List<String[]> content) {
 		if (StringUtils.isEmpty(filename)) {
 			return false;
