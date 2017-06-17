@@ -1,10 +1,13 @@
 package com.hust.mining.dao;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -22,11 +25,13 @@ import com.hust.mining.model.CoreResultExample;
 import com.hust.mining.model.CoreResultExample.Criteria;
 import com.hust.mining.model.StandardResult;
 import com.hust.mining.model.params.CoreResultQueryCondition;
+import com.hust.mining.urltags.crawler;
 import com.hust.mining.util.AttrUtil;
 import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.FileUtil;
 import com.hust.mining.util.WordUtil;
 import com.hust.mining.util.WordUtil.Env;
+import com.hust.summary.Summary;
 
 @Repository
 public class CoreResultDao {
@@ -81,7 +86,12 @@ public class CoreResultDao {
 
 	/**
 	 * 产生核心报告txt版本
-	 * 
+	 * @param reportName
+	 * @param stdResId
+	 * @param staticsInfo
+	 * @param content Conten内容
+	 * @param clusterCount 聚类结果（一行为一个类（每个数字为content内容的index+1））
+	 * @return
 	 */
 	public List<StringBuilder> generateTxtCoreReport(String reportName, String stdResId, List<String[]> staticsInfo,
 			List<String[]> content, List<int[]> clusterCount) {
@@ -169,11 +179,17 @@ public class CoreResultDao {
 
 	/**
 	 * 产生核心报告word版本
-	 * 
+	 * @param filename
+	 * @param reportName
+	 * @param stdResId
+	 * @param staticsInfo
+	 * @param content Content内容
+	 * @param clusterCount 聚类结果（一行为一个类（每个数字为content内容的index+1））
 	 */
 	public void generateWordCoreReport(String filename, String reportName, String stdResId, List<String[]> staticsInfo,
-			List<String[]> content, List<int[]> clusterCount) {
+		List<String[]> content, List<int[]> clusterCount) {
 		List<StringBuilder> sbList = new ArrayList<StringBuilder>();
+		String[] attrs = content.get(0);
 		try {
 			WordUtil wu = new WordUtil();
 			wu.addParaText("(四川省戒毒管理局专供)", new Env().bold(true).fontType(FONT.KAITI));
@@ -266,12 +282,26 @@ public class CoreResultDao {
 			wu.setBreak();
 
 			// 舆情聚焦(摘要部分，陈杰)
-			wu.addParaText("摘要部分", titleEnv);
-			wu.write(filename);
+			wu.addParaText("舆情聚焦", titleEnv);
+			//List<标题，摘要内容，发布媒体>
+			List<String[]> summary = new ArrayList<>();
+			summary = generateSummary(attrs,content,clusterCount);
+			int num = 1;
+			for (String[] strings : summary) {
+				wu.addParaText((num++)+". "+strings[0], mainBEnv);
+				wu.addParaText("        "+strings[1]+strings[2], mainEnv);
+			}
+			try {
+				wu.write(filename);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} catch (Exception e) {
 			logger.error("产生核心报告出错!{}", e.toString());
 		}
 	}
+
 
 	/**
 	 * 统计某一天新闻出现的数量
@@ -357,6 +387,65 @@ public class CoreResultDao {
 		return res;
 	}
 
+	/**
+	 * 通过读取content的内容获取url爬取新闻，然后摘要，并统计每个类的发布机构
+	 * @param content Conten内容
+	 * @param clusterCount 聚类结果（一行为一个类（每个数字为content内容的index+1））
+	 * @return 返回摘要（List<标题，摘要，发布机构>）
+	 */
+	private List<String[]> generateSummary(String[] attrs, List<String[]> content, List<int[]> clusterCount) {
+		List<String[]> summary = new ArrayList<>();
+		for (String string : attrs) {
+			System.out.print(string+" ");
+		}
+		System.out.println();
+		int titleIndex = AttrUtil.findIndexOfTitle(attrs);
+		int urlIndex = AttrUtil.findIndexOfUrl(attrs);
+		int organizationIndex = AttrUtil.findIndexOfSth(attrs, "网站|媒体名称");
+		for (int[] index : clusterCount) {
+			String title = null;
+			List<String> sentence = null;
+			Set<String> organization = new HashSet<>();
+			//是否找到了要摘要的文章
+			boolean flag = false;
+			//找到可以爬的sentence
+			for (int i : index) {
+				if(!flag){
+					sentence = crawler.getSummary(content.get(i)[urlIndex]);
+					if(null != sentence){
+						flag = true;
+						title = content.get(i)[titleIndex];
+						sentence.add(0, title);
+						Summary s = new Summary(sentence);
+						s.summary();
+						sentence = s.getSummary(null);
+					}
+				}
+				organization.add(content.get(i)[organizationIndex]);
+			}
+			String str_organization = "（";
+			if(organization.size()==0){
+				str_organization = "（四川戒毒所）";
+			}else{
+				for (String string : organization) {
+					str_organization += string+"、";
+				}
+				str_organization = str_organization.substring(0, str_organization.length()-1)+"）";				
+			}
+			String str_sentence = "";
+			if(flag){
+				for (String string : sentence) {
+					str_sentence += string+"。";
+				}				
+			}else{
+				title = content.get(index[0])[titleIndex];
+				str_sentence = "由于该类新闻没有合适的网站来获取新闻内容，故无法获得摘要。该类新闻的第一条新闻来源于："+content.get(index[0])[urlIndex];
+			}
+			summary.add(new String[]{title,str_sentence,str_organization});
+		}
+		return summary;
+	}
+	
 	/**
 	 * 导出文件
 	 */
