@@ -339,7 +339,12 @@
     			<artifactId>jsoup</artifactId>
  				<version>1.10.2</version>
 		</dependency>
-		
+		<!-- 摘要 -->
+		<dependency>
+			<groupId>com.hust</groupId>
+			<artifactId>summary</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>mining</finalName>
