@@ -4,12 +4,9 @@
 issueType="extensive";
 // 选中创建任务时的数据类型
 $(document).ready(function(){
-    var reg = new RegExp("(^|&)issueType=([^&]*)(&|$)");
     var r = getCookie("issueType");
-    
     if(r != null){
     	issueType = r;
-    	console.log("issueType="+issueType);
     }
     setCookie_issueType(issueType);
     var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
@@ -50,7 +47,6 @@ function allData (page){
 		dataType:"json",
 		contentType:"application/json",
         success:function(msg){
-            // console.log(msg);
             if(msg.status=="OK"){
                 // alert("success") ;
 				var items = msg.result.list ;
@@ -135,8 +131,6 @@ function GetJsonData(page) {
 	var myDate=new Date();
 	end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + (myDate.getDate()+1);
 	start=myDate.getFullYear() + "-" + myDate.getMonth() + "-" + myDate.getDate();
-	console.log(end)
-	console.log(start)
 
     var json = {
 		"issueId":"",
@@ -304,7 +298,14 @@ function setCookie(value1){
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	baseAjax("topic_details");
+	console.log("setCookie="+issueType);
+	if(issueType=="extensive"){
+		baseAjax("topic_details_extensive");
+	}else if(issueType=="standard"){
+		baseAjax("topic_details_standard");
+	}else if(issueType=="core"){
+		baseAjax("topic_details_core");
+	}
 }
 
 function setCookie_issueType(value){
@@ -315,7 +316,6 @@ function setCookie_issueType(value){
 }
 
 function getCookie(name) {
-	console.log(document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
 		return unescape(arr[2]); 
@@ -333,11 +333,9 @@ function searchData(page){
         dataType:"json",
         contentType:"application/json",
         success:function(msg){
-            // console.log(msg);
             if(msg.status=="OK"){
                 // alert("success") ;
                 var items = msg.result.list ;
-                console.log()
                 $('.ht_cont tr:not(:first)').html("");
                 $.each(items,function(idx,item) {
                     var item_issueId="'"+item.issueId+"'";
@@ -371,8 +369,6 @@ function SearchJsonData(page) {
 	var obj3 = $('#cj_name').val();
 	var obj4 = $('#lb_time').val();
 	var obj5 = $('#lo_time').val();
-	// console.log(obj);
-	// console.log(obj1);
     var json = {
 		"issueId":"",
 		"issueName": $('#ht_name').val(),
@@ -393,7 +389,6 @@ function SearchJsonData(page) {
 $(function(){
 	$(".ht_cont").on("click","img",function(){
 		var issueId = $(this).attr("class");
-		console.log(issueId);
 		deleteData(issueId);
 	})
 });
@@ -409,8 +404,6 @@ function deleteData(issueId){
 		} ,
 		dataType:"json",
 		success:function(msg){
-			// alert("lll");
-			console.log(msg);
 			if(msg.status=="OK"){
 				searchData(1);
 			}else{
