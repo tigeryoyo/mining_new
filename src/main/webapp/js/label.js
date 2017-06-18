@@ -230,7 +230,7 @@ function labelInforChange(){
 			console.log(msg);
 			if( msg.status == "OK"){
 				alert("修改成功");
-				window.location.href = "/label_infor.html";
+			//	window.location.href = "/label_infor.html";
 			}else{
 				alert(msg.result);
 			}
