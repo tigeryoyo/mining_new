@@ -5,34 +5,33 @@
 <title>查看任务</title>
 <!-- 引入遮罩的样式 -->
 <link rel="stylesheet" href="css/history_clusterdetails.css">
-<script type="text/javascript" src="js/datashow.js"></script>
-<script type="text/javascript" src="js/dateformat.js"></script>
-<script type="text/javascript" src="js/scxsj.js"></script>
-<script type="text/javascript" src="js/label.js"></script>
-
-
 </head>
 <body>
 	<div class="s_nav">
 		当前位置： <a href="javascript:;" onclick="baseAjax('topic_list')">任务管理</a>
 		<span>>>任务详情 </span><span style="color: red; font-weight: bold;">（准数据）</span>
+		<span style="float: right; text-align: right">查看该任务对应的：<b
+			style="text-decoration: underline"
+			onclick="queryLinkedIssue('extensive')">泛数据</b>&nbsp;&nbsp;&nbsp;<b
+			style="text-decoration: underline" onclick="queryLinkedIssue('core')">核心数据</b>&nbsp;&nbsp;
+		</span>
 	</div>
 	<div class="ckht">
 		<ul class="ckht_list">
 			<li class="issueName">任务名称：</li>
 			<li class="files_list">文件列表：
-				<button type="button" id="attachlabel" class="attach_label">贴标签</button>
+				<button type="button" id="attachlabel" class="btn btn-primary">贴标签</button>
 				<div class="up_list_wrap">
 					<table border="0" class="up_list">
 						<tr class="d_blue">
 							<td width="50" align="center" valign="middle" bgcolor="#86c6ea"
 								class="d_blue">序号</td>
 							<td width="235" align="center" valign="middle" bgcolor="#86c6ea"
-								class="d_blue">准数据结果名</td>
+								class="d_blue">文件名称</td>
 							<td width="85" align="center" valign="middle" bgcolor="#86c6ea"
-								class="d_blue">创建人</td>
+								class="d_blue">上传人</td>
 							<td width="160" align="center" valign="middle" bgcolor="#86c6ea"
-								class="d_blue">创建时间</td>
+								class="d_blue">上传时间</td>
 							<td width="230" align="center" valign="middle" bgcolor="#86c6ea"
 								class="d_blue">操作</td>
 						</tr>
@@ -44,36 +43,114 @@
 
 	<!-- 遮罩div -->
 	<div id="goodcover"></div>
-	<div id=code style="min-height: 200px; width: 730px">
+	<div id=code
+		style="min-height: 200px; width: 730px; position: relative;">
 		<div class="close1" style="float: right;">
 			<a href="javascript:void(0)" id="closebt"><img
 				src="images/close.gif"></a>
 		</div>
-		<div class="user_infor">
-			<div class="resetButton">
-				<div class="role_search_input">
-					<input type="search" placeholder="请输入标签名称" class="qx_name"
-						id="label_Search" /> <img src="images/icon_search.png"
-						class="icon_search" />
-				</div>
-				<img src="images/btn_role_search.png" onClick="initSearchPage(1)"
-					class="btn_role" />
-				<button onclick="labelInforAdd()">添加标签</button>
-			</div>
-			<div class="infor_tablist">
-				<table width="692" border="0" class="infor_tab02">
-					<tr class="infor_tab02_tit">
-						<td width="169" height="40" align="center" bgcolor="#86c6ea">标签编号</td>
-						<td width="231" height="40" align="center" bgcolor="#86c6ea">标签名称</td>
-						<td colspan="2" height="40" align="center" bgcolor="#86c6ea">操作</td>
-					</tr>
-				</table>
-			</div>
+		<ul class="nav nav-tabs" role="tablelist">
+			<li role="presentation" class="active"><a href="#fileInfo"
+				aria-controls="fileInfo" role="tab" data-toggle="tab">文件信息</a></li>
+			<li role="presentation"><a href="#labInfo"
+				aria-controls="labInfo" role="tab" data-toggle="tab">标签信息</a></li>
+		</ul>
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active user_infor"
+				style="height: 427px; overflow-y: scroll;" id="fileInfo">
+				<span style="display: block">文件信息：</span>
+				<div
+					style="border: 1px solid; border-radius: 5px; width: 670px; min-height: 200px; margin: 10px auto;">
 
-		</div>
-		<div class="user_num1" style="margin-bottom: 0px;">
-			<ul class="page" maxshowpageitem="5" pagelistcount="10" id="page"></ul>
+				</div>
+				<span style="display: block">已贴标签：</span>
+				<div
+					style="border: 1px solid; border-radius: 5px; width: 670px; min-height: 50px; margin: 10px auto;">
+					<button class="btn btn-success" style="margin: 5px;">标签1</button>
+				</div>
+				<span style="display: block">未贴标签：</span>
+				<div
+					style="border: 1px solid; border-radius: 5px; width: 670px; min-height: 160px; margin: 10px auto;">
+					<button class="btn btn-success" style="margin: 5px;">标签2</button>
+				</div>
+				<button class="btn btn-primary" style="float: right;">提交</button>
+			</div>
+			<div role="tabpanel" class="tab-pane user_infor" id="labInfo">
+				<div id="labelInfo">
+					<div class="role_search_input">
+						<input type="search" placeholder="请输入标签名称" class="form-control"
+							id="label_Search" /> <img src="images/icon_search.png"
+							class="icon_search" />
+						<button class="btn btn-primary" onClick="initSearchPage(1)"
+							style="margin-left: 10px">搜 索</button>
+						<button class="btn btn-primary" onclick="labelInforAdd()">添加标签</button>
+					</div>
+					<div class="infor_tablist" style="width: 670px;">
+						<table width="670" border="0" class="infor_tab02">
+							<tr class="infor_tab02_tit">
+								<td width="169" height="45" align="center" bgcolor="#86c6ea">标签编号</td>
+								<td width="231" height="45" align="center" bgcolor="#86c6ea">标签名称</td>
+								<td colspan="2" height="45" align="center" bgcolor="#86c6ea">操作</td>
+							</tr>
+						</table>
+					</div>
+					<div class="user_num1"
+						style="width: 500px; position: absolute; right: 0px; bottom: 0px;">
+						<ul class="page" maxshowpageitem="5" pagelistcount="7" id="page"></ul>
+					</div>
+				</div>
+				<div id="addLabel" style="display: none;">
+					<div class="user_infor">
+						<form>
+							<table width="470" border="0" class="change_tab">
+								<tr>
+									<td width="100" height="50">标签名称：</td>
+									<td width="200" height="50"><input type="text"
+										id="namelabel" /></td>
+									<td width="160" height="50">&nbsp;</td>
+								</tr>
+								<tr>
+									<td width="100" height="80">
+										<button class="btn btn-primary" onclick="addlabel()">提交</button>
+									</td>
+									<td width="200" height="80">
+										<button class="btn btn-primary" onclick="backLabelInfor()">取消</button>
+									</td>
+									<td width="160" height="80">&nbsp;</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+				<div id="editLabel" style="display: none;">
+					<div class="user_infor">
+						<form>
+							<table width="470" border="0" class="change_tab">
+								<tr>
+									<td width="100" height="50">标签名称：</td>
+									<td width="200" height="50"><input type="text"
+										id="new_name_label" /></td>
+									<td width="160" height="50">&nbsp;</td>
+								</tr>
+								<tr>
+									<td width="100" height="80">
+										<button class="btn btn-primary" onclick="labelInforChange()">提交</button>
+									</td>
+									<td width="200" height="80">
+										<button class="btn btn-primary" onclick="backLabelInfor()">取消</button>
+									</td>
+									<td width="160" height="80">&nbsp;</td>
+								</tr>
+							</table>
+						</form>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>
+<script type="text/javascript" src="js/datashow.js"></script>
+<script type="text/javascript" src="js/dateformat.js"></script>
+<script type="text/javascript" src="js/scxsj.js"></script>
+<script type="text/javascript" src="js/label.js"></script>
 </html>
