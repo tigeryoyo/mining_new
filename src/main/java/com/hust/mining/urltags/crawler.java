@@ -19,21 +19,26 @@ public class crawler {
 	 * @return
 	 * @throws IOException
 	 */
-    private static List<String> getContent(String url) throws IOException {  
+    private static List<String> getContent(String url){  
     	
     	List<String> list = new ArrayList<>();
         // TODO Auto-generated method stub          
     	 Document doc;  
-         doc=Jsoup.connect(url).get(); 
- 		//正文
-         Elements pElements=doc.select("p");
-         for (Element element : pElements) {
-        	String str = trim(element.text());
-         	if(null != str){
-         		list.add(str); 
-         	} 
- 			System.out.println(element.text());
- 		}
+         try {
+			doc=Jsoup.connect(url).get();
+			//正文
+	         Elements pElements=doc.select("p");
+	         for (Element element : pElements) {
+	        	String str = trim(element.text());
+	         	if(null != str){
+	         		list.add(str); 
+	         	} 
+	 			System.out.println(element.text());
+	 		}
+		} catch (IOException e) {
+			return null;
+		} 
+ 		
  		return list;          
     }  
     
@@ -44,25 +49,30 @@ public class crawler {
      * @return
      * @throws IOException
      */
-    private static List<String> getContent1(String url) throws IOException { 
+    private static List<String> getContent1(String url){ 
     	
     	List<String> list = new ArrayList<>();
         // TODO Auto-generated method stub          
-    	 Document doc;  
-         doc=Jsoup.connect(url).get(); 
- 		//正文
-         Elements pElements=doc.select("p");
-         for (Element element : pElements) {
- 			String pString = element.text();
- 			String[] ss = pString.split(" ");
- 			for (String string : ss) {
- 				String str = trim(string);
- 	        	if(null != str){
- 	        		list.add(str); 
- 	        	} 
-				System.out.println(string);
+    	 Document doc;
+         try {
+			doc=Jsoup.connect(url).get();
+			Elements pElements=doc.select("p");
+			for (Element element : pElements) {
+	 			String pString = element.text();
+	 			String[] ss = pString.split(" ");
+	 			for (String string : ss) {
+	 				String str = trim(string);
+	 	        	if(null != str){
+	 	        		list.add(str); 
+	 	        	} 
+					System.out.println(string);
+	 			}
 			}
- 		}
+				
+		} catch (IOException e) {
+			return null;
+		} 
+ 		//正文
  		return list;          
     }  
     
@@ -73,22 +83,25 @@ public class crawler {
      * @return
      * @throws IOException
      */
-    private static List<String> getContent2(String url) throws IOException {  
+    private static List<String> getContent2(String url){  
     	
     	List<String> list = new ArrayList<>();
         // TODO Auto-generated method stub          
         Document doc;  
-        doc=Jsoup.connect(url).get(); 
-		//正文
-        Elements pElements=doc.select("div.box_con>p");
-        for (Element element : pElements) {
-        	String str = trim(element.text());
-        	if(null != str){
-        		list.add(str); 
-        	} 
-			System.out.println(element.text());
-		}
-		return null;          
+        try {
+			doc=Jsoup.connect(url).get();
+			Elements pElements=doc.select("div.box_con>p");
+	        for (Element element : pElements) {
+	        	String str = trim(element.text());
+	        	if(null != str){
+	        		list.add(str); 
+	        	} 
+				System.out.println(element.text());
+			}
+		} catch (IOException e) {
+			return null;
+		} 
+		return list;          
     }  
     
   //爬取四川长安网
@@ -98,29 +111,31 @@ public class crawler {
      * @return
      * @throws IOException
      */
-    private static List<String> getContent3(String url) throws IOException {
+    private static List<String> getContent3(String url){
     	
     	List<String> list = new ArrayList<>();
         // TODO Auto-generated method stub          
         Document doc;  
-        doc=Jsoup.connect(url).get(); 
-        
-		//正文
-        Elements pElements=doc.select("td.black14>div");
-        for (Element element : pElements) {
-        	String str = trim(element.text());
-        	if(null != str){
-        		list.add(str); 
-        	}
-			System.out.println(element.text());
-		}
+        try {
+			doc=Jsoup.connect(url).get();
+			//正文
+	        Elements pElements=doc.select("td.black14>div");
+	        for (Element element : pElements) {
+	        	String str = trim(element.text());
+	        	if(null != str){
+	        		list.add(str); 
+	        	}
+				System.out.println(element.text());
+			}
+		} catch (IOException e) {
+			return null;
+		} 
 		return list;          
     }  
 
     public static List<String> getSummary(String url){
     	String stdUrl = CommonUtil.getPrefixUrl(url);
     	List<String> list = new ArrayList<>();
-    	try {
     	switch (stdUrl) {
 		case "http://www.legaldaily.com.cn":		
 				list = getContent(url);
@@ -140,10 +155,6 @@ public class crawler {
 
 		default:
 			return null;
-		}
-    	} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}		
     	return list;
     }

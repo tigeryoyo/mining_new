@@ -52,6 +52,16 @@ public class AttrUtil {
 		
 		return -1;
 	}
+	
+	public static int findIndexOfWebName(String[] attrs){
+		for(int i=0; i<attrs.length; i++){
+			if(Pattern.matches("媒体名称|网站|", attrs[i])){
+				return i;
+			}
+		}
+		
+		return -1;
+	}
 
 	public static int findIndexOfUrl(List<String> attrs){
 		for(int i=0; i<attrs.size(); i++){

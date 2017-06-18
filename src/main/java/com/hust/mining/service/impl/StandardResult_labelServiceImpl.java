@@ -53,6 +53,20 @@ public class StandardResult_labelServiceImpl implements StandardResult_labelServ
 		}
 		return labelids;
 	}
+	
+	/**
+	 * 查找当前的任务，没有哪些标签
+	 */
+	@Override
+	public List<Integer> findLabelNotInStandardResult(String stdResId) {
+		List<StandardResult_label> standardResult_labels = standartResult_labeldao.findLabelNotInStandardResult(stdResId);
+		List<Integer> labelids = new ArrayList<Integer>();
+		for (StandardResult_label standardResult_label : standardResult_labels) {
+			Integer integer = standardResult_label.getLabelid();
+			labelids.add(integer);
+		}
+		return labelids;
+	}
 
 	@Override
 	public List<String> selectStandResultsBylabel(int labelid) {
