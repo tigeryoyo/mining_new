@@ -95,6 +95,9 @@ function fileSummary() {
 					data : JSON.stringify(fileIds),
 					dataType : "json",
 					contentType : "application/json",
+					beforeSend : function() {
+						begin();
+					},
 					success : function(msg) {
 						// console.log(msg);
 						if (msg.status == "OK") {
@@ -129,6 +132,9 @@ function fileSummary() {
 							alert(msg.result);
 						}
 
+					},
+					complete : function() {
+						stop();
 					},
 					error : function(msg) {
 						alert(msg.result);
