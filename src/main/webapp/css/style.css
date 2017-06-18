@@ -15,7 +15,7 @@ table { border-collapse:collapse; }
 body { color:#000;font-family: "微软雅黑"; font-size:14px; background:#ffffff;/* overflow-y:scroll;*/  overflow-x : scroll;}
 .clear{clear:both;}
 a { color:#000; text-decoration:none; }
-a:hover { color:#000000; }
+a:hover { color:#000000; text-decoration:none; }
 .float_l{float:left;}
 .float_r{float:right;}
 .main .nomg_r{ margin-right:0px;}
@@ -38,7 +38,7 @@ a:hover { color:#000000; }
 /* 左侧 */
 .content{ width:1000px; margin-top:10px; }
 .left{ width:200px;  margin-right:10px; background:#f7f7f7; }
-.tit_bar{ width:145px; height: 50px; color:#fff; padding-left:55px; font-size: 20px; line-height:50px;}
+.tit_bar{ width:200px; height: 50px; color:#fff; padding-left:55px; font-size: 20px; line-height:50px;}
 .sb01{ background:#0e63ab url(../images/icon_ht.png) no-repeat 15px center; }
 .sb02{ background:#0e63ab url(../images/icon_qx.png) no-repeat 15px center; }
 .sb03{ background:#0e63ab url(../images/icon_xt.png) no-repeat 15px center; }
@@ -46,11 +46,11 @@ a:hover { color:#000000; }
 .left ul{ width: 200px; font-size:16px; }
 .left ul li{ width: 200px;  text-align: center; line-height:40px;}
 .left ul li a{ display:block;  line-height:40px;}
-.left ul li:hover a{ background:#86c6ea; color:#ffffff; }
-.left ul li.current a{ background:#86c6ea; color:#ffffff; }
+.left ul li:hover a{ background:#86c6ea; color:#ffffff; text-decoration:none; }
+.left ul li.current a{ background:#009ad6; color:#ffffff; text-decoration:none; }
 
 
-.right{ width:750px; min-height:760px; background: #f7f7f7; padding:0 20px; }
+.right{ width:790px; min-height:760px; background: #f7f7f7; padding:0 20px; }
 .s_nav{ line-height:50px; font-size: 16px; border-bottom:1px solid #999;}
 
 /* 查看任务*/
@@ -163,7 +163,7 @@ a:hover { color:#000000; }
 .stop_zs{ display:block;}
 
 /*用户信息显示*/
-.user_infor{ width:710px; padding:20px 20px;}
+.user_infor{ width:710px; padding:10px 20px;}
 .infor_tab01{ font-size:16px; margin-bottom:20px;}
 .infor_tab01 input{ width:130px; height:30px; background:#dddddd; padding-left:10px;}
 .infor_tab01 button{ height:30px; padding:0 15px; background:#0e63ab; margin-left:20px; border-radius:5px; color:#fff; cursor:pointer;}
@@ -189,9 +189,9 @@ a:hover { color:#000000; }
 
 /*角色信息显示*/
 .role_search{ width:430px; float:right; margin-bottom:20px;}
-.role_search_input{ width:170px; height:34px;  background:#dddddd; float:left; padding-left:20px; padding-right:35px; position:relative;}
-.role_search_input input{ width:180px; height:34px; background:#dddddd; float:left; outline:none;}
-.icon_search{ position:absolute; right:5px;top:7px;}
+.role_search_input{float:right; margin: 0px 0px 10px auto;}
+.role_search_input input{ width:180px;}
+.icon_search{margin-left: -35px;}
 .btn_role{ margin-left:20px;}
 .role_add_del{ width:200px; margin-top:20px; }
 .role_add_del table { line-height:30px; font-size:14px;}
