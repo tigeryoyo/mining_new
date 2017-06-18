@@ -4,7 +4,16 @@
 issueType="extensive";
 // 选中全局任务时的数据类型
 $(document).ready(function(){
-	initShowPage (1);
+	var r = getCookie("issueType");
+    if(r != null){
+    	issueType = r;
+    }
+    setCookie_issueType(issueType);
+    var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
+    choosenLabel.parent().css("color","red");
+    choosenLabel.parent().siblings('label').css("color","black");
+    choosenLabel.attr("checked",true);
+	initShowPage(1);
 });
 
 // radio选中事件
@@ -39,7 +48,6 @@ function allData (page){
 		dataType:"json",
 		contentType:"application/json",
         success:function(msg){
-            // console.log(msg);
             if(msg.status=="OK"){
                 // alert("success") ;
 				var items = msg.result.list ;
@@ -122,8 +130,6 @@ function GetJsonData(page) {
     var myDate=new Date();
     end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + (myDate.getDate()+1);
     start=myDate.getFullYear() + "-" + myDate.getMonth() + "-" + myDate.getDate();
-    console.log(end)
-    console.log(start)
 
     var json = {
         "issueId":"",
@@ -295,7 +301,6 @@ function setCookie(value1){
 
 function getCookie(name) {
 	
-	console.log(document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
 		return unescape(arr[2]); 
@@ -341,8 +346,6 @@ function SearchJsonData(page) {
 	var obj3 = $('#cj_name').val();
 	var obj4 = $('#lb_time').val();
 	var obj5 = $('#lo_time').val();
-	// console.log(obj);
-	// console.log(obj1);
     var json = {
 		"issueId":"",
 		"issueName": $('#ht_name').val(),
@@ -363,7 +366,6 @@ function SearchJsonData(page) {
 $(function(){
 	$(".ht_cont").on("click","img",function(){
 		var issueId = $(this).attr("class");
-		console.log(issueId);
 		deleteData(issueId);
 	})
 })
