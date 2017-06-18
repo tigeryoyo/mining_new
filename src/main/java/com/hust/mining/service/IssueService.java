@@ -30,6 +30,8 @@ public interface IssueService {
     long queryIssueCount(IssueQueryCondition con);
 
     Issue queryIssueById(String issueId);
+    
+    String queryLinkedIssue(String issueId, String issueType);
 
     int updateIssueInfo(Issue issue,HttpServletRequest request);
 

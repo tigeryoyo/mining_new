@@ -96,6 +96,23 @@ public class IssueController {
 	}
 
 	@ResponseBody
+	@RequestMapping("/queryLinkedIssue")
+	public Object queryLinkedIssue(@RequestParam(value = "issueType",required = true) String issueType, 
+			HttpServletRequest request){
+		String issueId = redisService.getString(KEY.ISSUE_ID, request);
+		
+		String linkedIssueId = issueService.queryLinkedIssue(issueId, issueType);
+		if(StringUtils.isBlank(linkedIssueId)){
+			return ResultUtil.errorWithMsg("该任务不存在"+issueType);
+		}
+		JSONObject result = new JSONObject();
+		result.put("issueId", linkedIssueId);
+		redisService.setString(KEY.ISSUE_ID, linkedIssueId, request);
+		
+		return ResultUtil.success(result);
+	}
+	
+	@ResponseBody
 	@RequestMapping("/queryOwnIssue")
 	public Object queryOwnIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
 		String user = userService.getCurrentUser(request);
