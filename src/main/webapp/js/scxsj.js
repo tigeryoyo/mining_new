@@ -51,17 +51,38 @@ function setCookie_issueType(value){
 	document.cookie = "issueType="+ escape (value) + ";expires=" + exp.toGMTString();
 }
 
-function ckfsj(issueId){
-	alert("查看泛数据");
+function setCookie_issueId(value){
+	var Days = 1; // 此 cookie 将被保存 1 天
+	var exp　= new Date();
+	exp.setTime(exp.getTime() +Days*24*60*60*1000);
+	document.cookie = "issueId="+ escape (value) + ";expires=" + exp.toGMTString();
 }
 
-function ckzsj(issueId){
-	alert("查看准数据");
-}
-
-function ckhxsj(issueId){
-	alert("查看核心数据");
-}
-
-function ckxsj(issueId){
+function queryLinkedIssue(issueType){
+	$.ajax({
+		type : "post",
+		url : "/issue/queryLinkedIssue",
+		data : {
+			issueType : issueType,
+		},
+		dataType : "json",
+		beforeSend : function() {
+			begin();
+		},
+		success : function(msg) {
+			if (msg.status == "OK") {
+				setCookie_issueType(issueType);
+				setCookie_issueId(msg.result.issueId);
+				baseAjax("topic_details_"+issueType);
+			} else {
+				alert(msg.result);
+			}
+		},
+		complete : function() {
+			stop();
+		},
+		error : function() {
+			console.log("ERROR");
+		}
+	});
 }
