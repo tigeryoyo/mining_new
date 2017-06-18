@@ -25,14 +25,10 @@ function showExtensiveIssueDetails(issueId) {
 			issueId : issueId
 		},
 		dataType : "json",
-		beforeSend : function() {
-			begin();
-		},
 		success : function(msg) {
 			if (msg.status == "OK") {
 				var items = msg.result.issue;
 				$('.issueName').text("任务名称：" + items.issueName);
-				showIssueType();
 				var tabs = msg.result.list;
 				$('.up_list tr:not(:first)').html("");
 				$.each(tabs, function(i, item) {
@@ -48,9 +44,6 @@ function showExtensiveIssueDetails(issueId) {
 			}
 
 		},
-		complete : function() {
-			stop();
-		},
 		error : function() {
 			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
 		}
@@ -58,7 +51,6 @@ function showExtensiveIssueDetails(issueId) {
 }
 
 function showStandardIssueDetails(issueId) {
-	changeStyle();
 	$.ajax({
 		type : "post",
 		url : "/standardResult/queryStandardResults",
@@ -66,15 +58,10 @@ function showStandardIssueDetails(issueId) {
 			issueId : issueId
 		},
 		dataType : "json",
-		beforeSend : function() {
-			begin();
-		},
 		success : function(msg) {
-			changeStyle();
 			if (msg.status == "OK") {
 				var items = msg.result.issue;
 				$('.issueName').text("任务名称：" + items.issueName);
-				showIssueType();
 				var stdResList = msg.result.stdResList;
 				$('.up_list tr:not(:first)').html("");
 				$.each(stdResList, function(i, item) {
@@ -86,25 +73,18 @@ function showStandardIssueDetails(issueId) {
 						+ ') /><img class="btn_sc" src="images/delete.png" onclick=deleteStandardResult(' + stdResId + ') /></td></tr>'
 					$('.up_list').append(row);
 				});
-
 			} else {
-				changeStyle();
 				alert("查询失败");
 			}
 
 		},
-		complete : function() {
-			stop();
-		},
 		error : function() {
-			changeStyle();
 			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
 		}
 	});
 }
 
 function showCoreIssueDetails(issueId) {
-	changeStyle();
 	$.ajax({
 		type : "post",
 		url : "/coreResult/queryCoreResults",
@@ -112,15 +92,10 @@ function showCoreIssueDetails(issueId) {
 			issueId : issueId
 		},
 		dataType : "json",
-		beforeSend : function() {
-			begin();
-		},
 		success : function(msg) {
-			changeStyle();
 			if (msg.status == "OK") {
 				var items = msg.result.issue;
 				$('.issueName').text("任务名称：" + items.issueName);
-				showIssueType();
 				var coreResList = msg.result.coreResList;
 				$('.up_list tr:not(:first)').html("");
 				$.each(coreResList, function(i, item) {
@@ -133,16 +108,11 @@ function showCoreIssueDetails(issueId) {
 				});
 
 			} else {
-				changeStyle();
 				alert("查询失败");
 			}
 
 		},
-		complete : function() {
-			stop();
-		},
 		error : function() {
-			changeStyle();
 			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
 		}
 	});
@@ -222,41 +192,6 @@ function downloadCoreRes(coreResId) {
 function hidelabel()
 {
 	$('attach_label').hide();
-}
-
-function changeStyle() {
-	$('.his_result').hide();
-	$('.sur_result').hide();
-	$('.up_del').hide();
-	// 隐藏上传文件框框
-	$('.ckht_list li:eq(2)').hide();
-	$('.up_list_wrap').height(200);
-	var titleTr = $('.up_list tr:eq(0)');
-	var titleTds = titleTr.children();
-	titleTds.eq(0).text("序号");
-	titleTds.eq(1).text("数据结果名");
-	titleTds.eq(1).css("color", "white");
-	titleTds.eq(2).text("创建人");
-	titleTds.eq(3).text("创建时间");
-	titleTds.eq(4).text("操作");
-}
-
-function showIssueType() {
-	if (issueType == "extensive") {
-		$("span#issueType").text("(泛数据)");
-		$("span#fhtag").children(".tag1").text("准数据");
-		$("span#fhtag").children(".tag2").text("核心数据");
-	} else if (issueType == "standard") {
-		$("span#issueType").text("(准数据)");
-		$("span#fhtag").children(".tag1").text("泛数据");
-		$("span#fhtag").children(".tag2").text("核心数据");
-	} else if (issueType == "core") {
-		$("span#issueType").text("(核心数据)");
-		$("span#fhtag").children(".tag1").text("泛数据");
-		$("span#fhtag").children(".tag2").text("准数据");
-	} else {
-		$("span#issueType").text("error");
-	}
 }
 
 function localRefresh() {

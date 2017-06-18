@@ -298,7 +298,14 @@ function setCookie(value1){
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	baseAjax("topic_details");
+	console.log("setCookie="+issueType);
+	if(issueType=="extensive"){
+		baseAjax("topic_details_extensive");
+	}else if(issueType=="standard"){
+		baseAjax("topic_details_standard");
+	}else if(issueType=="core"){
+		baseAjax("topic_details_core");
+	}
 }
 
 function setCookie_issueType(value){
