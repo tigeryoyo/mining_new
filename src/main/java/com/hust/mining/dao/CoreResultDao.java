@@ -86,11 +86,14 @@ public class CoreResultDao {
 
 	/**
 	 * 产生核心报告txt版本
+	 * 
 	 * @param reportName
 	 * @param stdResId
 	 * @param staticsInfo
-	 * @param content Conten内容
-	 * @param clusterCount 聚类结果（一行为一个类（每个数字为content内容的index+1））
+	 * @param content
+	 *            Conten内容
+	 * @param clusterCount
+	 *            聚类结果（一行为一个类（每个数字为content内容的index+1））
 	 * @return
 	 */
 	public List<StringBuilder> generateTxtCoreReport(String reportName, String stdResId, List<String[]> staticsInfo,
@@ -179,15 +182,18 @@ public class CoreResultDao {
 
 	/**
 	 * 产生核心报告word版本
+	 * 
 	 * @param filename
 	 * @param reportName
 	 * @param stdResId
 	 * @param staticsInfo
-	 * @param content Content内容
-	 * @param clusterCount 聚类结果（一行为一个类（每个数字为content内容的index+1））
+	 * @param content
+	 *            Content内容
+	 * @param clusterCount
+	 *            聚类结果（一行为一个类（每个数字为content内容的index+1））
 	 */
 	public void generateWordCoreReport(String filename, String reportName, String stdResId, List<String[]> staticsInfo,
-		List<String[]> content, List<int[]> clusterCount) {
+			List<String[]> content, List<int[]> clusterCount) {
 		List<StringBuilder> sbList = new ArrayList<StringBuilder>();
 		String[] attrs = content.get(0);
 		try {
@@ -200,6 +206,7 @@ public class CoreResultDao {
 			Env mainEnv = new Env().fontType(FONT.FANGSONG);
 			Env mainBEnv = new Env(mainEnv).bold(true).fontType(FONT.SONGTI);
 			Env mainRBEnv = new Env(mainBEnv).fontColor(FONT.RED);
+			Env mainSEnv = new Env(mainEnv).fontSize(10);
 
 			StandardResult standardResult = standardResultMapper.selectByPrimaryKey(stdResId);
 			String dateCount = standardResult.getDateCount();
@@ -247,8 +254,7 @@ public class CoreResultDao {
 			for (int i = 1; i < staticsInfo.size(); i++) {
 				String[] currentInfo = staticsInfo.get(i);
 				wu.addParaText(i + ". " + currentInfo[Integer.parseInt(essentialIndexs[0]) + 1], mainBEnv);
-				wu.addParaText("该事件出现次数：" + currentInfo[0] + "条。", mainEnv);
-				wu.addParaText("该新闻的网址为：" + currentInfo[Integer.parseInt(essentialIndexs[1]) + 1], mainEnv);
+				wu.addParaText(currentInfo[0] + "条;" + currentInfo[Integer.parseInt(essentialIndexs[1]) + 1], mainSEnv);
 			}
 			wu.addParaText("行业舆情", titleEnv);
 
@@ -268,9 +274,9 @@ public class CoreResultDao {
 			for (int i = 0; i < maxDayInfoCount.size() && i < 3; i++) {
 				String[] infoCount = maxDayInfoCount.get(i);
 				wu.appendParaText("《" + infoCount[0] + "》", mainBEnv);
-				wu.appendParaText("（" + infoCount[1] + "条，网址：" + infoCount[2] + "）", mainEnv);
+				wu.addParaText("（" + infoCount[1] + "条;" + infoCount[2] + "）", mainSEnv);
 			}
-			wu.appendParaText("（只罗列出这一天的排名前三条信息。），相关转载传播。", mainEnv);
+			wu.addParaText("，相关转载传播。", mainEnv);
 			wu.addParaText("本周信息主要为" + msgTypeCount.get(0)[0] + "信息，占所有信息的比例共为", mainEnv);
 			wu.appendParaText(msgTypeCount.get(0)[1] + "%", mainRBEnv);
 			wu.appendParaText("；其次" + msgTypeCount.get(1)[0] + "信息，占比共为", mainEnv);
@@ -283,25 +289,32 @@ public class CoreResultDao {
 
 			// 舆情聚焦(摘要部分，陈杰)
 			wu.addParaText("舆情聚焦", titleEnv);
-			//List<标题，摘要内容，发布媒体>
+			// List<标题，摘要内容，发布媒体>
 			List<String[]> summary = new ArrayList<>();
-			summary = generateSummary(attrs,content,clusterCount);
+			summary = generateSummary(attrs, content, clusterCount);
 			int num = 1;
 			for (String[] strings : summary) {
-				wu.addParaText((num++)+". "+strings[0], mainBEnv);
-				wu.addParaText("        "+strings[1]+strings[2], mainEnv);
+				wu.addParaText((num++) + ". " + strings[0], mainBEnv);
+				wu.addParaText("        " + strings[1] + strings[2], mainEnv);
 			}
-			try {
-				wu.write(filename);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			wu.setPageBreak();
+
+			Env env1 = new Env().fontType(FONT.KAITI);
+			Env env2 = new Env(env1).alignment("right");
+			Env env3 = new Env(env1).fontSize(16).bold(true);
+			wu.addParaText("（责任编辑：汪静远）", env2);
+			wu.addParaText("四川电信互联网舆情信息服务中心 ", env3);
+			wu.addParaText("声明：", env3);
+			wu.appendParaText(
+					"以上舆情信息仅供参考，用户对于舆情信息所反映出的问题或状况的处理，应综合其他信息加以判断和利用，仅凭以上舆情信息做出判断、进行决策等处理措施造成不利后果及损失的，我单位不承担任何责任。",
+					env1);
+
+			wu.write(filename);
 		} catch (Exception e) {
 			logger.error("产生核心报告出错!{}", e.toString());
 		}
 	}
-
 
 	/**
 	 * 统计某一天新闻出现的数量
@@ -389,14 +402,17 @@ public class CoreResultDao {
 
 	/**
 	 * 通过读取content的内容获取url爬取新闻，然后摘要，并统计每个类的发布机构
-	 * @param content Conten内容
-	 * @param clusterCount 聚类结果（一行为一个类（每个数字为content内容的index+1））
+	 * 
+	 * @param content
+	 *            Conten内容
+	 * @param clusterCount
+	 *            聚类结果（一行为一个类（每个数字为content内容的index+1））
 	 * @return 返回摘要（List<标题，摘要，发布机构>）
 	 */
 	private List<String[]> generateSummary(String[] attrs, List<String[]> content, List<int[]> clusterCount) {
 		List<String[]> summary = new ArrayList<>();
 		for (String string : attrs) {
-			System.out.print(string+" ");
+			System.out.print(string + " ");
 		}
 		System.out.println();
 		int titleIndex = AttrUtil.findIndexOfTitle(attrs);
@@ -406,13 +422,13 @@ public class CoreResultDao {
 			String title = null;
 			List<String> sentence = null;
 			Set<String> organization = new HashSet<>();
-			//是否找到了要摘要的文章
+			// 是否找到了要摘要的文章
 			boolean flag = false;
-			//找到可以爬的sentence
+			// 找到可以爬的sentence
 			for (int i : index) {
-				if(!flag){
+				if (!flag) {
 					sentence = crawler.getSummary(content.get(i)[urlIndex]);
-					if(null != sentence){
+					if (null != sentence) {
 						flag = true;
 						title = content.get(i)[titleIndex];
 						sentence.add(0, title);
@@ -424,28 +440,28 @@ public class CoreResultDao {
 				organization.add(content.get(i)[organizationIndex]);
 			}
 			String str_organization = "（";
-			if(organization.size()==0){
+			if (organization.size() == 0) {
 				str_organization = "（四川戒毒所）";
-			}else{
+			} else {
 				for (String string : organization) {
-					str_organization += string+"、";
+					str_organization += string + "、";
 				}
-				str_organization = str_organization.substring(0, str_organization.length()-1)+"）";				
+				str_organization = str_organization.substring(0, str_organization.length() - 1) + "）";
 			}
 			String str_sentence = "";
-			if(flag){
+			if (flag) {
 				for (String string : sentence) {
-					str_sentence += string+"。";
-				}				
-			}else{
+					str_sentence += string + "。";
+				}
+			} else {
 				title = content.get(index[0])[titleIndex];
-				str_sentence = "由于该类新闻没有合适的网站来获取新闻内容，故无法获得摘要。该类新闻的第一条新闻来源于："+content.get(index[0])[urlIndex];
+				str_sentence = "由于该类新闻没有合适的网站来获取新闻内容，故无法获得摘要。该类新闻的第一条新闻来源于：" + content.get(index[0])[urlIndex];
 			}
-			summary.add(new String[]{title,str_sentence,str_organization});
+			summary.add(new String[] { title, str_sentence, str_organization });
 		}
 		return summary;
 	}
-	
+
 	/**
 	 * 导出文件
 	 */

@@ -58,6 +58,7 @@ public class WordUtil {
 		fonts.setAscii(env.getFontType());
 		fonts.setEastAsia(env.getFontType());
 		fonts.setHAnsi(env.getFontType());
+		rpr.addNewU();
 	}
 
 	/**
@@ -80,12 +81,23 @@ public class WordUtil {
 		fonts.setHAnsi(env.getFontType());
 	}
 
+	/**
+	 * 空格
+	 */
 	public void setBreak() {
 		para = doc.createParagraph();
 		XWPFRun run = para.createRun();
 		run.addBreak();
 	}
 
+	/**
+	 * 换页
+	 */
+	public void setPageBreak() {
+		para = doc.createParagraph();
+		para.setPageBreak(true);
+	}
+	
 	/**
 	 * 设置文本参数：字体大小、字体、字体颜色、加粗与否、标题目录、左对齐居中右对齐
 	 * 
