@@ -425,12 +425,12 @@ public class IssueServiceImpl implements IssueService {
 		con.setIssueId(issueId);
 		con.setFileIds(fileIds);
 		List<IssueFile> files = fileDao.queryFilesByCondition(con);
-		//获取upload文件夹下的需要聚类的文件名
+		// 获取upload文件夹下的需要聚类的文件名
 		String[] filenames = new String[files.size()];
 		for (int i = 0; i < files.size(); i++) {
 			filenames[i] = DIRECTORY.FILE + files.get(i).getFileId();
 		}
-		//读取需要聚类文件的内容，已把标题栏做合并处理
+		// 读取需要聚类文件的内容，已把标题栏做合并处理
 		List<String[]> contentWithAttr = fileDao.getFileContent(filenames);
 
 		if (null == contentWithAttr) {
@@ -449,14 +449,13 @@ public class IssueServiceImpl implements IssueService {
 			}
 		}
 		filteredContent.add(0, attrs);
-		
 
 		List<User> users = userService.selectSingleUserInfo(user, request);
 		User user2 = users.get(0);
 		int granularity = user2.getGranularity();
 		int algorithmType = user2.getAlgorithm();
 		// 去重结束
-				
+
 		Map<String, Object> res = mining(filteredContent, CONVERTERTYPE.DIGITAL, algorithmType, granularity);
 		if (null == res) {
 			return null;
@@ -519,11 +518,17 @@ public class IssueServiceImpl implements IssueService {
 	// 标明 向量的装换方式，和算法。
 	/**
 	 * 选择算法和向量模型，对给定集合按标题排序后进行聚类
-	 * @param content 需要聚类的集合（包含属性）
-	 * @param converterType 向量模型 （0-1或TF-IDF）
-	 * @param algorithmType 算法（canopy、kmeans等等）
-	 * @param granularity 精度（粗or细）
-	 * @return 返回 排序后的集合，聚类的结果（List<String[]>所有类（类内记录下标，用空格隔开）），类的信息（List<int[]>类内最早的一条记录index，类记录个数）
+	 * 
+	 * @param content
+	 *            需要聚类的集合（包含属性）
+	 * @param converterType
+	 *            向量模型 （0-1或TF-IDF）
+	 * @param algorithmType
+	 *            算法（canopy、kmeans等等）
+	 * @param granularity
+	 *            精度（粗or细）
+	 * @return 返回
+	 *         排序后的集合，聚类的结果（List<String[]>所有类（类内记录下标，用空格隔开）），类的信息（List<int[]>类内最早的一条记录index，类记录个数）
 	 */
 	private Map<String, Object> mining(List<String[]> content, int converterType, int algorithmType, int granularity) {
 		if (content == null || content.size() == 0) {
@@ -531,8 +536,8 @@ public class IssueServiceImpl implements IssueService {
 		}
 		// 将属性存储起来，因为下面cluster会删除属性
 		String[] attrs = content.get(0);
-		//对聚类内容按标题排序
-		int titleIndex = AttrUtil.findIndexOfTitle(attrs);		
+		// 对聚类内容按标题排序
+		int titleIndex = AttrUtil.findIndexOfTitle(attrs);
 		content = resortContent(content, titleIndex);
 		for (String[] string : content) {
 			System.out.println(string[titleIndex]);
@@ -552,32 +557,75 @@ public class IssueServiceImpl implements IssueService {
 		result.put("clusterResult", clusterResult);
 		result.put("countResult", countResult);
 		content.add(0, attrs);
-		result.put("content", content);			
+		result.put("content", content);
 		return result;
+	}
+
+	@Override
+	public String queryLinkedIssue(String issueId, String issueType) {
+		Issue issue = queryIssueById(issueId);
+		if (issueType.equals(Constant.ISSUETYPE_EXTENSIVE)) {
+			// 如果本数据类型为核心数据
+			if (StringUtils.isBlank(issue.getIssueHold())) {
+				// 获取对应的准数据
+				issue = queryIssueById(issue.getIssueBelongTo());
+			}
+			
+			if(issue == null){
+				return null;
+			}
+
+			// issue为准数据
+			return issue.getIssueBelongTo();
+		} else if (issueType.equals(Constant.ISSUETYPE_STANDARD)) {
+			// 如果本数据为核心数据
+			if (StringUtils.isBlank(issue.getIssueHold())) {
+				return issue.getIssueBelongTo();
+			}
+
+			// issue为核心数据
+			return issue.getIssueHold();
+		} else {
+			// 如果本数据为泛数据
+			if (StringUtils.isBlank(issue.getIssueBelongTo())) {
+				// 获取对应的准数据
+				issue = queryIssueById(issue.getIssueHold());
+			}
+			
+			if(issue == null){
+				return null;
+			}
+
+			// issue为准数据
+			return issue.getIssueHold();
+		}
 	}
 
 	@Override
 	public long queryIssueCount(IssueQueryCondition con) {
 		return issueDao.queryIssueCount(con);
 	}
-	
+
 	/**
 	 * 对以去重好的待聚类集合按照标题进行重排序
-	 * @param filteredContent 去重后的待聚类集合(不带标题)
-	 * @param titleIndex 去重后的待聚类集合中的标题下标
+	 * 
+	 * @param filteredContent
+	 *            去重后的待聚类集合(不带标题)
+	 * @param titleIndex
+	 *            去重后的待聚类集合中的标题下标
 	 * @return
 	 */
-	private List<String[]> resortContent(List<String[]> filteredContent,int titleIndex){
+	private List<String[]> resortContent(List<String[]> filteredContent, int titleIndex) {
 		List<String[]> newContent = new ArrayList<String[]>();
 		newContent.addAll(filteredContent);
 		newContent.remove(0);
-		//排序
+		// 排序
 		Collections.sort(newContent, new Comparator<String[]>() {
-            public int compare(String[] o1, String[] o2) {
-                return (o1[titleIndex]).compareTo(o2[titleIndex]);
-            }
-        });
-		newContent.add(0,filteredContent.get(0));
+			public int compare(String[] o1, String[] o2) {
+				return (o1[titleIndex]).compareTo(o2[titleIndex]);
+			}
+		});
+		newContent.add(0, filteredContent.get(0));
 		return newContent;
 	}
 
