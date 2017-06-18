@@ -108,7 +108,6 @@ public class IssueController {
 		JSONObject result = new JSONObject();
 		result.put("issueId", linkedIssueId);
 		redisService.setString(KEY.ISSUE_ID, linkedIssueId, request);
-		
 		return ResultUtil.success(result);
 	}
 	
