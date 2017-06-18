@@ -39,6 +39,20 @@ public class StandardResult_labeDao {
 	}
 	
 	/**
+	 * 返回的是任务id=stdResId的实体类,找出不包含当前准数据ID的记录。
+	 * @param stdResId 任务ID
+	 * @return
+	 */
+	public List<StandardResult_label> findLabelNotInStandardResult(String stdResId){
+		
+		StandardResult_labelExample example = new StandardResult_labelExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andStdRidNotEqualTo(stdResId);
+		List<StandardResult_label> standardResult_labels = standardResult_labelMapper.selectByExample(example);
+		return standardResult_labels;
+	}
+	
+	/**
 	 * 根据标签查找任务
 	 * @param labelid
 	 * @return

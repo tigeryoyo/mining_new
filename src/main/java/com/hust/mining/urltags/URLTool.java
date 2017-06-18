@@ -16,53 +16,35 @@ import com.hust.mining.util.ExcelUtil;
 public class URLTool {
 	
 	public static void main(String[] args) {
-		String fileName = "E:/测试数据/汪哥交流以及数据5.11/汪哥交流以及数据5.11/准数据/四川戒毒管理局2017.5.4~5.10准数据.xlsx";//C:/Users/tankai/Desktop/result.xls
-		new URLTool().statisticUrl(fileName);
+		//测试
 		
 	}
 	/**
 	 * 统计准数据文件url中出现次数最多的网站
-	 * @param fileName
+	 * @param fileContent 包含两个内容，第一个是URL,第二个是网站名
 	 */
-	public void statisticUrl(String fileName){
+	public List<String[]> statisticUrl(List<String[]> fileContent){
 		Map<String,Integer> urlNumberMap = new HashedMap();
-		
 		Map<String,String> urlNameMap = new HashedMap();
-		List<List<String>> origData = ExcelReader.read(fileName);
-		origData.remove(0);
-		if(origData.isEmpty()){
-			return;
+		//去除属性行
+		fileContent.remove(0);
+		if(fileContent.isEmpty()){
+			return null;
 		}
-		for(List<String> row : origData){
-			String url = row.get(5).trim();
-			String urlName = row.get(0).trim();
+		for(String [] row : fileContent){
+			String url = row[0].trim();
+			String urlName = row[1].trim();
 			if(!url.equals("")){
-				url = CommonUtil.getPrefixUrl(url);
+				url = CommonUtil.getPrefixUrl(url); //去掉前缀
 				countUrl(url,urlNumberMap);
 				if(!urlNameMap.containsKey(url)){
 					urlNameMap.put(url, urlName);
 				}
 			}
 		}
-		
-		List<String> dataList = ExcelReader.read(fileName,5);
-		dataList.remove(0);
-		if(dataList.isEmpty()){
-			return;
-		}
-		System.out.println(dataList.size());
-		for(String  url : dataList){
-			System.out.println(url);
-			if(!url.trim().equals("")){
-				url = CommonUtil.getPrefixUrl(url);
-				countUrl(url,urlNumberMap);
-			}
-		}
-	
-	
 		System.out.println("排序后-----");
 		System.out.println("网站url\t网站名称\t数量");
-		sort(urlNumberMap,urlNameMap);
+		return sort(urlNumberMap,urlNameMap);
 	}
 
 	public void countUrl(String url, Map<String, Integer> urlNumberMap) {
@@ -75,7 +57,8 @@ public class URLTool {
 		
 	}
 	//对url按数量进行排序
-	public void sort( Map<String, Integer> urlNumberMap, Map<String, String> urlNameMap){
+	public List<String[]> sort( Map<String, Integer> urlNumberMap, Map<String, String> urlNameMap){
+		List<String[]> list = new ArrayList<String[]>();
 		List<Map.Entry<String, Integer>> urls = new ArrayList<>(urlNumberMap.entrySet());
 		Collections.sort(urls, new Comparator<Map.Entry<String, Integer>>() {
 
@@ -90,6 +73,12 @@ public class URLTool {
 			System.out.println(String.format("%-50s", entry.getKey())+
 					String.format("%-25s", urlNameMap.get(entry.getKey()))+
 					String.format("%-5s", entry.getValue()));
+			String[] string = new String[3];
+			string[0] = entry.getKey();
+			string[1] = urlNameMap.get(entry.getKey());
+			string[2] = entry.getValue().toString();
+			list.add(string);
 		}
+		return list;
 	}
 }

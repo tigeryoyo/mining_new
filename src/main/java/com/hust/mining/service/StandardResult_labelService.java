@@ -13,5 +13,7 @@ public interface StandardResult_labelService {
 	public List<String> selectStandResultsBylabel(int labelid);
 
 	boolean delete(String stdResId, int labelid);
+
+	List<Integer> findLabelNotInStandardResult(String stdResId);
 	
 }

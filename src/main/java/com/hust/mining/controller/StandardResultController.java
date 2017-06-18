@@ -2,6 +2,7 @@ package com.hust.mining.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,8 @@ import com.hust.mining.service.LabelService;
 import com.hust.mining.service.RedisService;
 import com.hust.mining.service.StandardResultService;
 import com.hust.mining.service.StandardResult_labelService;
+import com.hust.mining.urltags.URLTool;
+import com.hust.mining.util.AttrUtil;
 import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.ExcelUtil;
 import com.hust.mining.util.FileUtil;
@@ -125,7 +128,7 @@ public class StandardResultController {
             }
         }
     }
-    
+   
     @ResponseBody
     @RequestMapping(value = "/delete")
     public Object delete(@RequestParam(value = "stdResId", required = false) String stdResId,
@@ -139,6 +142,7 @@ public class StandardResultController {
         return ResultUtil.success(json);
     }
     
+    ////以下全是关于为准数据贴标签的函数
     /**
      * 为准数据贴标签
      */
@@ -155,6 +159,22 @@ public class StandardResultController {
     		return ResultUtil.errorWithMsg("贴标签失败！");
 		}
     	return ResultUtil.success("贴标签成功！");
+    	
+    }
+    
+    /**
+     * 查找当前的任务，没有哪些标签
+     */
+    @ResponseBody
+    @RequestMapping(value="/findLabelNotInStandardResult")
+    public Object findLabelNotInStandardResult(@RequestParam(value="stdResId",required=true) String stdResId,
+    		@RequestParam(value="labelids",required=false) List<Integer> labelids)
+    {
+    	if (stdResId==null) {
+    		return ResultUtil.errorWithMsg("没有选中任何准数据！");
+		}
+    	List<Integer> list = stand_label.findLabelNotInStandardResult(stdResId);
+    	return ResultUtil.success(list);
     	
     }
     
@@ -208,4 +228,39 @@ public class StandardResultController {
 		}
     	return ResultUtil.success("移除标签成功！");
     }
+    
+    @ResponseBody
+    @RequestMapping(value="/countURL")
+	public Object deleteLabelOfStandard(@RequestParam(value="staRtId",required=true)String staRtId)
+	{
+    	//获取当前准数据的内容
+    	List<String[]> cluster = standardResultService.getStdResContentById(staRtId);
+    	if (cluster.isEmpty()) {
+    		return ResultUtil.errorWithMsg("当前准数据为空！");
+		}
+    	String[] firstline = cluster.get(0);
+    	int URL = AttrUtil.findIndexOfUrl(firstline);
+    	int name = AttrUtil.findIndexOfWebName(firstline);
+    	List<String[]> uRList = new ArrayList<String[]>();
+    	for (String[] strings : cluster) {
+			String[] string = new String[2];
+			string[0] = strings[URL];
+			string[1] = strings[name];
+			uRList.add(string);
+		}
+    	URLTool urlTool = new URLTool();
+    	List<String[]> result = urlTool.statisticUrl(uRList);
+    	if (result.isEmpty()) {
+    		return ResultUtil.errorWithMsg("统计网站失败！");
+		}
+    	List<String[]> finalresult = new ArrayList<String[]>();
+    	//只需输出5个
+    	for(int i = 0; i < 5; i++)
+    	{
+    		finalresult.add(result.get(i));
+    	}
+    	return ResultUtil.success(finalresult);
+    	
+	}
+    
 }
