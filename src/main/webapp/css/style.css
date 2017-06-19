@@ -63,12 +63,11 @@ a:hover { color:#000000; text-decoration:none; }
 .files_list table{ margin:5px auto;}
 .files_list table td{ border:1px solid #999999; font-size:14px; background:#ffffff;}
 .files_list table .d_blue{ background:#86c6ea;}
-.btn_sc{ display:inline-block;margin-right:10px; margin-top:10px;}
-.btn_jl{ display:inline-block;  margin-top:10px;}
+.btn_sc{ display:inline-block;margin-right:10px;}
+.btn_jl{ display:inline-block;}
 .files_add{ width:450px; height:150px; background:#fff; margin:20px auto; line-height:150px; font-size:30px; text-align:center;}
 
 .up_del{ width:750px;}
-
 @keyframes twinkling{	/*透明度由0到1*/
 			0%{
 				opacity:0.1;				/*透明度为0*/
@@ -79,19 +78,19 @@ a:hover { color:#000000; text-decoration:none; }
 		}
 
 .up_del li{ height:50px; line-height:50px; overflow:hidden;}
-.files_name{ width:90px; height:30px; line-height:30px;  padding-left:5px; font-size:12px;}
+.files_name{ width:110px; height:30px; line-height:30px;  padding-left:5px; font-size:12px;}
 .files_tname{ width:70px; height:30px; line-height:30px;  padding-left:5px; font-size: 12px;}
 .up_del li select{ width:70px; height:30px; line-height:30px; font-size:12px; padding-left:5px;}
 .up_del li select option{ width:75px; height:26px; line-height:26px; font-size:12px;}
 .btn_up_del01{float:right; margin-top:10px; margin-right:10px;}
 .btn_up_del02{float:right; margin-top:10px;}
-.btn_up_del03{float:right; margin-top:10px; margin-right:10px;}
+.btn_up_del03{float:right; margin-right:10px;}
 .btn_up_del04{float:right; margin-top:10px;}
 
 /*查看任务*/
 .cjht{ width:750px; height:200px;}
 .ht_name{ width:515px; margin:60px auto; font-size:18px; line-height:34px;}
-.input_ht_name{ width:340px; height:34px; line-height:34px; background:#dddddd; padding-left:10px;}
+.input_ht_name{ width:340px; height:34px; line-height:34px; padding-left:10px;}
 .btn_cj{ display:inline-block; float:right; }
 
 /*自有任务*/
@@ -124,7 +123,7 @@ a:hover { color:#000000; text-decoration:none; }
 .btn_hz{ display:block;}
 .summary_time{ width:750px; margin-top:5px; }
 .summary_time li{ float:left;  line-height: 38px; margin-right:5px; }
-.summary_time li input{ width:15px; height:15px; background:#dddddd;  }
+.summary_time li input{ width:15px; height:15px; }
 .summary_time li input.lol_begin{ width:105px; height:30px; line-height:30px; font-size:12px;}
 .summary_time li input.lol_end{ width:105px; height:30px; line-height:30px; font-size:12px;}
 .summary_time li.file_search{margin-top:3px; cursor: pointer;}
@@ -165,15 +164,15 @@ a:hover { color:#000000; text-decoration:none; }
 /*用户信息显示*/
 .user_infor{ width:710px; padding:10px 20px;}
 .infor_tab01{ font-size:16px; margin-bottom:20px;}
-.infor_tab01 input{ width:130px; height:30px; background:#dddddd; padding-left:10px;}
-.infor_tab01 button{ height:30px; padding:0 15px; background:#0e63ab; margin-left:20px; border-radius:5px; color:#fff; cursor:pointer;}
+.infor_tab01 input{ width:130px; height:30px;  padding-left:10px;}
+.infor_tab01 button{ margin-left:20px; border-radius:5px; color:#fff; cursor:pointer;}
 /*.infor_tablist{ width:710px; height:300px; overflow:hidden; overflow-y:scroll; }*/
 .infor_tablist{ width:710px;  }
 .infor_tab02{ font-size:14px;}
 .infor_tab02 tr td{ border:1px solid #999999;}
 .infor_tab02_tit{ font-size:16px;  }
 .user_num{ float:right;  heiht:30px; margin-top:50px; margin-right:20px;}
-.user_num input{ float:left; height:28px; border-radius:5px; padding:0 8px; margin-left:5px; background:#ccc; line-height:28px; font-size:12px; cursor:pointer;}
+.user_num input{ float:left; height:28px; border-radius:5px; padding:0 8px; margin-left:5px;  line-height:28px; font-size:12px; cursor:pointer;}
 .user_num button{  float:left; height:28px; border-radius:5px; padding:0 8px; margin-left:5px; background:#ccc; line-height:28px; font-size:12px; cursor:pointer;}
 .user_num button:hover{background:#0e63ab; color:#fff; }
 .user_num input.cur{background:#0e63ab; color:#fff; }
@@ -182,7 +181,7 @@ a:hover { color:#000000; text-decoration:none; }
 
 /*编辑用户*/
 .change_tab{ font-size:16px; margin:0 auto;}
-.change_tab input { width:190px; height:30px; line-height:30px; background:#dddddd; padding-left:10px;}
+.change_tab input { padding-left:10px;}
 .user_tijiao{ margin-left:65px;}
 .user_warn{ font-size:12px; color:red; padding-left: 10px;}
 .change_tab select{ width:200px; height:30px; line-height:36px; background:#dddddd; padding-left:10px;}

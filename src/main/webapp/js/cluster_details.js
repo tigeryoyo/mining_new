@@ -50,9 +50,9 @@ function showClusterDetails(index,rid,count){
 						+ '</a></td><td height="32" align="center">'
 						+ item[indexOfTime]
 						+ '</td><td height="32" align="center">'
-						+ '<img src="images/user_del.png" class="delItem"  id="'
+						+ '<button class="btn btn-dangerous delItem" type="button" id="'
 						+ i
-						+'"  /></td></tr>';
+						+'" ></button></td></tr>';
 				$('.details_tab table').append(rows);
 				//将类的id作为table的id
 				$('.details_tab table').attr('id',index);

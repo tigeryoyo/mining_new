@@ -69,7 +69,8 @@
 <script type="text/javascript" src="js/bootstrap.js"></script>
 
 <script type="text/javascript">
-	
+bootstrapButton = $.fn.button.noConflict(); 
+$.fn.bootstrapBtn = bootstrapButton;
 /*	$(window).scroll(function() {
 		var scrollHeight = $(window).scrollTop();
 		var sideHeight = $('#header').height(); //header的高度
@@ -153,6 +154,7 @@
 			}
 		});
 		title = document.title;
+		console.log(title+"--------------------------")
 		history.pushState({
 			title : title
 		}, title, "?href=" + item);
@@ -250,14 +252,14 @@
 		}
 	}
 
-	if (history.pushState) { //如果浏览器支持history的pushstate属性,在前进后退的时候直接触发pageTrigger事件
+ 	if (history.pushState) { //如果浏览器支持history的pushstate属性,在前进后退的时候直接触发pageTrigger事件
 		window.addEventListener("popstate", function() {
 			pageTrigger();
 
 		});
 		// 默认载入
 		pageTrigger();
-	}
+	} 
 
 	function user() {
 		$.ajax({
