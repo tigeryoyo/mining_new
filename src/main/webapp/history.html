@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <title>文件汇总</title>
 <link rel="stylesheet" href="css/history_clusterdetails.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/page.css">
+<link rel="stylesheet" href="css/loading.css">
 <script type="text/javascript" src="js/history.js"></script>
 <script type="text/javascript" src="js/cluster_details.js"></script>
 <script type="text/javascript" src="js/dateformat.js"></script>
@@ -45,11 +48,19 @@
 						id="historyAll" /> <span>全选</span>
 					</label> <img onclick="addLayData()" src="images/tab_btn03.png"
 						class="heibing" /> <img onclick="deleteLayData()"
-						src="images/tab_btn04.png" /> <a href="javascript:void(0);"
+						src="images/tab_btn04.png" /> 
+					
+					<div class="select_clusters" style=" width:140px; float:left; margin-top:16px;margin-left:20px;display: inline;">
+						<input style="width: 80px;" type="text" value="1" placeholder="请输入数量" class="form-control" id="clusternum_input" />
+                        <button class="btn btn-primary" onclick="selectClusters()">选中</button> 
+					</div>
+						
+					<a href="javascript:void(0);"
 						onclick="sczsj()"> <img src="images/sczsj.png"
 						style="float: right; margin-right: 0px;" />
 					</a>
 					<div class="clear"></div>
+					
 				</div>
 			</div>
 		</div>
