@@ -67,17 +67,17 @@ function reSetView(response, filename, index) {
     var array = msg.result;
     var date_ = new Date();
     var now_time = date_.toLocaleDateString();// 当前日期
-    var li_context = '<li>文件：<input type="text" class="files_name"  name="'
+    var li_context = '<li>文件：<input type="text" class="files_name form-control"  name="'
             + index
             + '" value="'
             + filename
-            + '" /> URL：<select class="select01">'
+            + '" /> URL：<select class="select01 form-control">'
             + getSpinner(array, '链接|网址')
-            + '</select>标题：<select class="select02">'
+            + '</select>标题：<select class="select02 form-control">'
             + getSpinner(array, '标题|内容')
-            + '</select> 时间：<select class="select03">'
+            + '</select> 时间：<select class="select03 form-control">'
             + getSpinner(array, '发布时间|发贴时间|时间')
-            + '</select> 类型：<select class="select04"><option> 微博</option><option selected = true> 新闻</option></select><img src="images/delete.png" class="btn_up_del02" /><img src="images/up.png" class="btn_up_del01" /></li>'
+            + '</select> 类型：<select class="select04 form-control"><option> 微博</option><option selected = true> 新闻</option></select><button type="button" class="btn_up_del02 btn btn-danger" >删除</button><button type="button" class="btn_up_del01 btn btn-primary" >上传</button></li>'
     $("#file_ul").append(li_context);
     $("#file_ul").css("border", "2px solid blue");
     up_del();
