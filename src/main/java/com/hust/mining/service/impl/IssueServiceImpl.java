@@ -565,41 +565,34 @@ public class IssueServiceImpl implements IssueService {
 	public String queryLinkedIssue(String issueId, String issueType) {
 		Issue issue = queryIssueById(issueId);
 		if (issueType.equals(Constant.ISSUETYPE_EXTENSIVE)) {
-			// 如果本数据类型为核心数据
-			if (StringUtils.isBlank(issue.getIssueHold())) {
-				// 获取对应的准数据
+			//如果issue为核心数据
+			if(issue.getIssueType().equals(Constant.ISSUETYPE_CORE)){
+				// 将issue变为该核心数据对应的准数据
 				issue = queryIssueById(issue.getIssueBelongTo());
+				if(issue == null){
+					return null;
+				}
 			}
-			
-			if(issue == null){
-				return null;
-			}
-
-			// issue为准数据
 			return issue.getIssueBelongTo();
 		} else if (issueType.equals(Constant.ISSUETYPE_STANDARD)) {
-			// 如果本数据为核心数据
-			if (StringUtils.isBlank(issue.getIssueHold())) {
+			if (issue.getIssueType().equals(Constant.ISSUETYPE_EXTENSIVE)) {
+				return issue.getIssueHold();
+			} else {
 				return issue.getIssueBelongTo();
 			}
-
-			// issue为核心数据
-			return issue.getIssueHold();
 		} else {
-			// 如果本数据为泛数据
-			if (StringUtils.isBlank(issue.getIssueBelongTo())) {
-				// 获取对应的准数据
+			//如果issue为泛数据
+			if(issue.getIssueType().equals(Constant.ISSUETYPE_EXTENSIVE)){
+				//将issue变为该泛数据对应的准数据
 				issue = queryIssueById(issue.getIssueHold());
+				if(issue == null){
+					return null;
+				}
 			}
-			
-			if(issue == null){
-				return null;
-			}
-
-			// issue为准数据
 			return issue.getIssueHold();
 		}
 	}
+
 
 	@Override
 	public long queryIssueCount(IssueQueryCondition con) {
