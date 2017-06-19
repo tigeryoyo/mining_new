@@ -46,19 +46,14 @@
 					<label class="clear_choose"> <input type="checkbox"
 						style="width: 20px; height: 20px; float: left; margin-left: 24px;"
 						id="historyAll" /> <span>全选</span>
-					</label> <img onclick="addLayData()" src="images/tab_btn03.png"
-						class="heibing" /> <img onclick="deleteLayData()"
-						src="images/tab_btn04.png" /> 
+					</label><button class="btn btn-primary" onclick="addLayData()">合并</button>
+						<button class="btn btn-dangerous" onclick="deleteLayData()">删除</button>
 					
 					<div class="select_clusters" style=" width:140px; float:left; margin-top:16px;margin-left:20px;display: inline;">
 						<input style="width: 80px;" type="text" value="1" placeholder="请输入数量" class="form-control" id="clusternum_input" />
                         <button class="btn btn-primary" onclick="selectClusters()">选中</button> 
 					</div>
-						
-					<a href="javascript:void(0);"
-						onclick="sczsj()"> <img src="images/sczsj.png"
-						style="float: right; margin-right: 0px;" />
-					</a>
+						<button class="btn btn-success" style="float: right; margin-right: 0px;" onclick="sczsj()">生成准数据</button>
 					<div class="clear"></div>
 					
 				</div>
@@ -78,9 +73,9 @@
 					style="width: 20px; height: 20px; float: left; display: inline-block; vertical-align: middle;"
 					id="clusterItemAll">&nbsp;<span
 					style="font-size: 18px; vertical-align: top;">全选</span></input>&nbsp;&nbsp;
-				<img onclick="deleteClusterItem(-1)" src="images/delete.png" />
-				&nbsp;&nbsp;&nbsp; <img src="images/reset.png" id=""
-					onclick="clusterItemsReset()" />
+				<button class="btn btn-dangerous" onclick="deleteClusterItem(-1)">删除</button>
+				<button class="btn btn-primary" onclick="clusterItemsReset()" >重置</button>
+				&nbsp;
 			</div>
 			<div class="details_tab">
 				<table width="780" border="0">

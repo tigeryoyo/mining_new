@@ -23,13 +23,8 @@
 		</span>
 	</div>
 	<div class="ckht">
-		<a href="javascript:;" class="his_result"
-			onclick="baseAjax('history')"> <img src="images/history.png"
-			alt="" />
-		</a> <a href="javascript:;" class="sur_result"
-			onclick="baseAjax('summary')"> <img src="images/summary.png"
-			alt="" />
-		</a>
+		<button class="btn btn-primary" onclick="baseAjax('history')">历史记录</button>
+		<button class="btn btn-primary" onclick="baseAjax('summary')">数据汇总</button>
 		<ul class="ckht_list">
 			<li class="issueName">任务名称：</li>
 			<li class="files_list">文件列表：
@@ -57,9 +52,8 @@
 		<div class="up_del">
 			<ul id="file_ul">
 			</ul>
-			<img src="images/delete_all.png" class="btn_up_del04"
-				onclick="allDel()" /> <img src="images/up_all.png"
-				class="btn_up_del03" />
+			<button class="btn btn-dangerous" onclick="allDel()">全部删除</button>
+			<button class="btn btn-primary btn_up_del03" >全部上传</button>
 		</div>
 	</div>
 </body>

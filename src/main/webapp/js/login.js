@@ -27,3 +27,10 @@ function login() {
             }
         });
     }
+
+function keyDown(e){
+	var ev= window.event||e;
+	if (ev.keyCode == 13) {
+		login();
+	}
+}
