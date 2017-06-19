@@ -37,8 +37,8 @@ function personalInforShow(){
 				alert(msg.result);
 			}
 		},
-		error : function(){
-			alert("数据请求失败");
+		error : function(msg){
+			alert(msg.result);
 		},
 	})
 		
@@ -87,8 +87,8 @@ function personalInforChange(){
 				alert(msg.result);
 			}
 		},
-		error: function(){
-            alert("数据请求失败");
+		error: function(msg){
+			alert(msg.result);
         },
 	})	
 }
@@ -131,8 +131,8 @@ function passwordChange(){
 				alert(msg.result);
 			}
 		},
-		error: function(){
-            alert("数据请求失败");
+		error: function(msg){
+			alert(msg.result);
         },
 	})
 }

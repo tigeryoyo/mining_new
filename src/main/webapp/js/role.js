@@ -333,12 +333,20 @@ function getCookie(name) {
 
 
 
-// 用户删除
-
+//角色删除
 $(function(){
 	$("#role_infor_tab").on("click",".delRole",function(){
 		var role_id = $(this).attr("id");
-		//console.log(role_id);
+		var role_name = $(this).parents('tr').find("td").eq('1').text();
+		
+		if(role_name == "超级管理员"){
+			alert('对不起，超级管理员角色不能被删除！');
+			return;
+		}
+		if(role_name == "管理员"){
+			alert('对不起，管理员角色不能被删除！');
+			return;
+		}
 		roleInforDel(role_id);
 		function roleInforDel(role_id){
 			$.ajax({
@@ -355,8 +363,8 @@ $(function(){
 						alert(msg.result);
 					}
 				},
-				error: function(){
-		            alert("数据请求失败");
+				error: function(msg){
+		            alert(msg.result);
 		        }
 			});
 		}
