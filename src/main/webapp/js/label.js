@@ -236,7 +236,7 @@ function labelInforChange(){
 			}
 		},
 		error: function(){
-			alert("数据请求失败");
+			alert("数据请求失败11111");
 		}
 	})	
 }
@@ -275,9 +275,13 @@ $(function(){
 
 //返回标签信息显示界面
 function backLabelInfor() {
+	alert("aa");
     $("#addLabel").css("display",'none');
     $("#labelInfo").css("display",'block');
+    alert("abcc");
     $("#editLabel").css("display",'none');
+	alert("ab");
+
    // $("#attachlabel").click()
 }
 

@@ -91,7 +91,7 @@ a:hover { color:#000000; text-decoration:none; }
 /*查看任务*/
 .cjht{ width:750px; height:200px;}
 .ht_name{ width:515px; margin:60px auto; font-size:18px; line-height:34px;}
-.input_ht_name{ width:340px; height:34px; line-height:34px; background:#dddddd; padding-left:10px;}
+.input_ht_name{ width:340px; height:34px; line-height:34px; padding-left:10px;}
 .btn_cj{ display:inline-block; float:right; }
 
 /*自有任务*/
@@ -124,7 +124,7 @@ a:hover { color:#000000; text-decoration:none; }
 .btn_hz{ display:block;}
 .summary_time{ width:750px; margin-top:5px; }
 .summary_time li{ float:left;  line-height: 38px; margin-right:5px; }
-.summary_time li input{ width:15px; height:15px; background:#dddddd;  }
+.summary_time li input{ width:15px; height:15px; }
 .summary_time li input.lol_begin{ width:105px; height:30px; line-height:30px; font-size:12px;}
 .summary_time li input.lol_end{ width:105px; height:30px; line-height:30px; font-size:12px;}
 .summary_time li.file_search{margin-top:3px; cursor: pointer;}
@@ -165,7 +165,7 @@ a:hover { color:#000000; text-decoration:none; }
 /*用户信息显示*/
 .user_infor{ width:710px; padding:10px 20px;}
 .infor_tab01{ font-size:16px; margin-bottom:20px;}
-.infor_tab01 input{ width:130px; height:30px; background:#dddddd; padding-left:10px;}
+.infor_tab01 input{ width:130px; height:30px;  padding-left:10px;}
 .infor_tab01 button{ height:30px; padding:0 15px; background:#0e63ab; margin-left:20px; border-radius:5px; color:#fff; cursor:pointer;}
 /*.infor_tablist{ width:710px; height:300px; overflow:hidden; overflow-y:scroll; }*/
 .infor_tablist{ width:710px;  }
@@ -182,7 +182,7 @@ a:hover { color:#000000; text-decoration:none; }
 
 /*编辑用户*/
 .change_tab{ font-size:16px; margin:0 auto;}
-.change_tab input { width:190px; height:30px; line-height:30px; background:#dddddd; padding-left:10px;}
+.change_tab input { width:190px; height:30px; line-height:30px; padding-left:10px;}
 .user_tijiao{ margin-left:65px;}
 .user_warn{ font-size:12px; color:red; padding-left: 10px;}
 .change_tab select{ width:200px; height:30px; line-height:36px; background:#dddddd; padding-left:10px;}

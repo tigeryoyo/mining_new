@@ -15,8 +15,8 @@
 			<table width="880" border="0" class="change_tab">
 				<tr>
 					<td align="right" colspan="2" width="81" height="50">角色名称：</td>
-					<td width="680" height="50"><input type="text"
-						class="roleChange" id="new_name_role" /></td>
+					<td width="680" height="50"><input type="text" style="width: 190px;"
+						class="roleChange form-control" id="new_name_role" /></td>
 				</tr>
 				<tr>
 					<td align="right" colspan="2" width="81" valign="top"><br />
@@ -43,12 +43,12 @@
 				</tr>
 
 				<tr>
-					<td align="right" colspan="2" width="81" height="80"><a
-						href="javascript:;"><img onclick="changeRole()"
-							src="images/change_submit.png" class="float_r" /></a></td>
-					<td align="center" width="600" height="80"><a
-						href="javascript:;"><img src="images/change_again.png"
-							onclick="clearNewrole()" class="user_tijiao float_l" /></a></td>
+					<td align="right" colspan="2" width="81" height="80">
+						<button class="btn btn-primary" onclick="changeRole()">提交</button>
+					</td>
+					<td align="center" width="600" height="80">
+						<button class="btn btn-primary" onclick="clearNewrole()">重置</button>
+					</td>
 				</tr>
 			</table>
 		</form>

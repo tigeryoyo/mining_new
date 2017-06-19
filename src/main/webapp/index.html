@@ -19,7 +19,7 @@
 <script src="js/jquery/jquery-1.11.1.min.js"></script>
 <script src="js/bootstrap/bootstrap.min.js"></script>
 <script src="js/jquery/jquery.backstretch.min.js"></script>
-<script src="js/login.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
 <script type="text/javascript" src="js/loading.js"></script>
 <script type="text/javascript" src="js/waiting.js"></script>
 
@@ -82,7 +82,7 @@
 								<div class="form-group">
 									<label class="sr-only" for="form-password">Password</label>
 									<input type="password" name="form-password" placeholder="密码"
-										class="form-password form-control" id="form-password">
+										class="form-password form-control" onkeydown="keyDown(event)" id="form-password">
 								</div>
 								<button type="button" class="btn" style="font-size: 22px;"
 									onclick="login()">登&nbsp;录</button>
@@ -103,5 +103,4 @@
         <![endif]-->
 
 </body>
-
 </html>
