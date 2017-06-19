@@ -308,8 +308,8 @@ function addPower(){
 				alert(msg.result);
 			}
 		},
-		error: function(){
-			
+		error: function(msg){
+			alert(msg.result);
 		}
 	})	
 }
@@ -344,13 +344,14 @@ function powerInforChange(){
 		success: function(msg){
 			//console.log(msg);
 			if( msg.status == "OK"){
-				alert("修改成功");	
+				alert("修改成功");
+				baseAjax("power_infor");
 			}else{
 				alert(msg.result);
 			}
 		},
-		error: function(){
-			alert("数据请求失败");
+		error: function(msg){
+			alert(msg.result);
 		}
 	})	
 }
@@ -380,8 +381,8 @@ $(function(){
 						alert(msg.result);
 					}
 				} ,
-				error:function(){
-					alert("数据请求失败");
+				error:function(msg){
+					alert(msg.result);
 				}
 			});
 		}

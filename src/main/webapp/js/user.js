@@ -418,8 +418,8 @@ function addUser(){
 				alert(msg.result);
 			}
 		},
-		error: function(){
-            alert("数据请求失败");
+		error: function(msg){
+            alert(msg.result);
         },
 	})	
 }
@@ -475,8 +475,9 @@ function userInforChange(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				// alert("更新成功");
-				alert(msg.result);
+				alert("角色信息更新成功");
+				//alert(msg.result);
+				baseAjax("user_infor");
 			}else{
 				alert(msg.result);
 			}
@@ -494,36 +495,64 @@ function clearChangeInfor(){
 	$("#select_roleName option:selected").val('请选择角色');
 }
 
+//获取当前用户ID
+function CurrentUserId() {
+	var userId = null;
+   $.ajax({
+       url : "/getCurrentUserId",
+       type : "post",
+       data : "",
+       async: false,//同步  
+       success : function(msg) {
+           if (msg.status == 'OK') {
+               userId = msg.result;
+           }
+       },
+       error : function(msg) {
+    	   alert(msg);
+        }
+    });
+    return userId;
+    //window.onload = user();
+ }
 
-// 用户删除
+// 删除用户判断是否删除的是当前登录用户,用户是否为管理员
 $(function(){
 	$(".infor_tab02").on("click",".delUser",function(){
 		var user_id = $(this).attr("id");
-		console.log(user_id);
-		userInforDel(user_id);
-		function userInforDel(user_id){
-	
-			$.ajax({
-				type:"post",
-				url:"/user/deleteUserInfoById",
-				data:{
-					userId:user_id,
-				} ,
-				dataType:"json",
-				success:function(msg){
-					// alert("lll");
-					console.log(msg);
-					if(msg.status=="OK"){
-						baseAjax("user_infor");
-					}else{
-						alert(msg.result);
-					}
+		var rolename = $(this).parents('tr').find("td").eq('3').text();
 		
-				} ,
-				error: function(){
-		            alert("数据请求失败");
-		        },
-			});
+		var currentUserId = CurrentUserId();
+		
+		if(user_id == currentUserId){
+			alert('对不起，不能删除当前登录用户');
+		}else if(rolename == "超级管理员" || rolename == "管理员"){
+			alert('对不起，不能删除管理员');			
+		}else{
+			userInforDel(user_id);
 		}
 	})
 })
+// 用户删除
+function userInforDel(user_id){	
+	$.ajax({
+		type:"post",
+		url:"/user/deleteUserInfoById",
+		data:{
+			userId:user_id,
+		} ,
+		dataType:"json",
+		success:function(msg){
+			
+			if(msg.status=="OK"){
+				baseAjax("user_infor");
+			}else{
+				alert(msg.result);
+			}
+
+		} ,
+		error: function(msg){
+            alert(msg.result);
+        },
+	});
+}
