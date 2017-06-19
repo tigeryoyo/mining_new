@@ -103,7 +103,7 @@ function showCoreIssueDetails(issueId) {
 					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.resName + '</td><td align="center" valign="middle">'
 						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')
 						+ '</td><td align="center" valign="middle"><img src="images/xiazai.png" class="btn_sc" onclick=downloadCoreRes(' + coreResId
-						+ ') /><img class="btn_sc" src="images/chakan.png" onclick=alert("查看") /><img class="btn_sc" src="images/delete.png" onclick=deleteCoreResult(' + coreResId + ') /></td></tr>'
+						+ ') /><img class="btn_sc" src="images/delete.png" onclick=deleteCoreResult(' + coreResId + ') /></td></tr>'
 					$('.up_list').append(row);
 				});
 
