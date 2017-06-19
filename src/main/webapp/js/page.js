@@ -121,7 +121,7 @@ var  page = {
         }
         appendStr+="<li class='"+nextPageClass+"' page-data='"+nextPage+"' page-rel='nextpage'>下一页&gt;</li>";
         appendStr+="<li class='"+nextPageClass+"' page-data='"+pageCount+"' page-rel='lastpage'>尾页</li>";
-		appendStr+="<li><input class='turnPageNum' type='text' maxlength='4' name='page'><div style='margin-top:4px;height:26px;line-height:26px;float: left'>/共"+pageCount+"页</div></li>";
+		appendStr+="<li><input class='form-control turnPageNum' type='text' maxlength='4' name='page'><div style='margin-top:4px;height:26px;line-height:26px;float: left'>/共"+pageCount+"页</div></li>";
 		appendStr+="<li class='turnPage' id='turnPage'>跳转</li>";
        return appendStr;
 

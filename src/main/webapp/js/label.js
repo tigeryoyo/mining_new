@@ -25,7 +25,7 @@ function labelInforShow(page){
 					// alert(msg.tagName);
 					cookie_value1="'"+item.labelid+"'";
 					cookie_value2="'"+item.labelname+"'";
-                    row= '<tr><td width="169" height="40" align="center" bgcolor="#ffffff">'+((page-1)*7+idx+1)+'</td><td width="231" height="40" align="center" bgcolor="#ffffff">'+item.labelname+'</td><td colspan="2" width="140" height="40" align="center" bgcolor="#ffffff"><button class="btn btn-primary" onclick="labelInforEdit('+"'"+item.labelid+"'"+','+"'"+item.labelname+"'"+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-danger dellabel" id="'+item.labelid+'" >删除</button></td></tr>'
+                    row= '<tr><td width="169" height="40" align="center" bgcolor="#ffffff">'+((page-1)*7+idx+1)+'</td><td width="231" height="40" align="center" bgcolor="#ffffff">'+item.labelname+'</td><td colspan="2" width="140" height="40" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onclick="labelInforEdit('+"'"+item.labelid+"'"+','+"'"+item.labelname+"'"+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger dellabel" id="'+item.labelid+'" >删除</button></td></tr>'
                     $('.infor_tab02').append(row);
 					
 				});
@@ -138,7 +138,7 @@ function labelInforSearch(page){
 					// alert(msg.tagName);
 					cookie_value1="'"+item.labelid+"'";
 					cookie_value2="'"+item.labelname+"'";
-					row= '<tr><td width="169" height="40" align="center" bgcolor="#ffffff">'+((page-1)*7+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.labelname+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><button class="btn btn-primary" onclick="labelInforEdit('+"'"+item.labelid+"'"+','+"'"+item.labelname+"'"+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-danger dellabel" id="'+item.labelid+'" >删除</button></td></tr>'
+					row= '<tr><td width="169" height="40" align="center" bgcolor="#ffffff">'+((page-1)*7+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.labelname+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onclick="labelInforEdit('+"'"+item.labelid+"'"+','+"'"+item.labelname+"'"+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger dellabel" id="'+item.labelid+'" >删除</button></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -275,14 +275,9 @@ $(function(){
 
 //返回标签信息显示界面
 function backLabelInfor() {
-	alert("aa");
     $("#addLabel").css("display",'none');
     $("#labelInfo").css("display",'block');
-    alert("abcc");
     $("#editLabel").css("display",'none');
-	alert("ab");
-
-   // $("#attachlabel").click()
 }
 
 //弹出框的样式

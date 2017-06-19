@@ -24,7 +24,7 @@ function powerInforShow(page){
 					cookie_value1="'"+item.powerId+"'";
 					cookie_value2="'"+item.powerName+"'";
 					cookie_value3="'"+item.powerUrl+"'";
-					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.powerName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><a href="javascript:;"><img src="images/user_bj.png"  onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;"><img src="images/user_del.png" class="delPower" id="'+item.powerId+'" /></a></td></tr>'
+					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.powerName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delPower" id="'+item.powerId+'" >删除</button></td></tr>'
 					$('.infor_tab02').append(row);
 					
 				});
@@ -103,13 +103,14 @@ function setCookie(value1,value2,value3){
 	document.cookie = cookie_name3 +"="+ escape (value3) + ";expires=" + exp.toGMTString();
 	baseAjax("power_change");
 }
+/*
 
-/**
+/!**
  * 根据页码加载数据
  * 
  * @param {整型}
  *            page 页码
- */
+ *!/
 var search_click;
 function setViewForPage(page){
 	if(search_click){
@@ -118,9 +119,9 @@ function setViewForPage(page){
 		powerInforShow(page);
 	}
 }
-/**
+/!**
  * 省略号点击
- */
+ *!/
 function setPageChangeView(){
 	var bt_name=parseInt($("#other").attr('name'))+3;
 	updatePageValue(bt_name);
@@ -128,12 +129,12 @@ function setPageChangeView(){
 	setFirstSelected();
 	updateNowPage(bt_name);
 }
-/**
+/!**
  * 更新页码数据
  * 
  * @param {Object}
  *            base_num
- */
+ *!/
 function updatePageValue(base_num){
 	var p1=parseInt(base_num);
 	var p2=parseInt(base_num)+1;
@@ -143,12 +144,12 @@ function updatePageValue(base_num){
 	$("#p_3").val(p3);
 	$("#other").attr('name',p1);
 }
-/**
+/!**
  * 页码点击
  * 
  * @param {Object}
  *            p_id 页码
- */
+ *!/
 function pageNumClick(p_id){
 	// background: #0e63ab;
     // color: #fff;
@@ -163,9 +164,9 @@ function pageNumClick(p_id){
 		button.style.color='#FFFFFF';
 	}
 }
-/**
+/!**
  * 设置第一个页码按钮为选中状态
- */
+ *!/
 function setFirstSelected(){
 	cleanAllSelected();
 	$("#p_1").css("background","#0e63ab");
@@ -181,9 +182,9 @@ function setThirdSelected(){
 	$("#p_3").css("background","#0e63ab");
 	$("#p_3").css("color","#FFFFFF");
 }
-/**
+/!**
  * 清除所有的选中状态
- */
+ *!/
 function cleanAllSelected(){
 	$("#p_1").css("background","#CCCCCC");
 	$("#p_1").css("color","buttontext");
@@ -192,12 +193,12 @@ function cleanAllSelected(){
 	$("#p_3").css("background","#CCCCCC");
 	$("#p_3").css("color","buttontext");
 }
-/**
+/!**
  * 上一页，下一页点击
  * 
  * @param {Object}
  *            action -1上一页，1下一页
- */
+ *!/
 function changPageOne(action){
 	var now_page=parseInt($("#down_page").attr('name'));
 	var page=now_page+action;
@@ -205,9 +206,9 @@ function changPageOne(action){
 		updateAllStyleAndData(page,action);
 	}
 }
-/**
+/!**
  * 跳zhuan
- */
+ *!/
 function changePage(){
 	var page=$(".go_num").val();
 	if(page!=undefined&&page.length>0){
@@ -234,15 +235,16 @@ function updateAllStyleAndData(page,action){
 		}
 	}
 }
-/**
+/!**
  * 更新当前页码
  * 
  * @param {Object}
  *            page 当前页
- */
+ *!/
 function updateNowPage(page){
 	$("#down_page").attr('name',page);
 }
+*/
 
 
 // 信息搜索
@@ -272,7 +274,7 @@ function powerInforSearch(page){
 					cookie_value1="'"+item.powerId+"'";
 					cookie_value2="'"+item.powerName+"'";
 					cookie_value3="'"+item.powerUrl+"'";
-					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.powerName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><a href="javascript:;"><img src="images/user_bj.png"  onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="javascript:;"><img src="images/user_del.png" class="delPower" id="'+item.powerId+'" /></a></td></tr>'
+					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.powerName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delPower" id="'+item.powerId+'" >删除</button></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{

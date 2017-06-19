@@ -5,19 +5,19 @@
 //细节展示
 function kmeans_detail() {
     $("#algorithm_detail").html("");
-    var content = "k值：<input type='text' id='k_value' name='k_value'><br>粒度选择：<input type='radio' id='kmeans_granularity' name='kmeans_granularity' value='1' checked='checked'> 粗粒度 <input type='radio' id='kmeans_granularity' value='2'> 细粒度";
+    var content = "k值：<input type='text' class='form-control' id='k_value' name='k_value'><br>粒度选择：<input type='radio' name='kmeans_granularity' value='1' checked='checked'> 粗粒度 <input type='radio' name='kmeans_granularity' value='2'> 细粒度";
     $("#algorithm_detail").append(content);
 }
 
 function canopy_detail() {
     $("#algorithm_detail").html("");
-    var content = "阀值：<input type='text' id='Threshold'> <br>粒度选择：<input type='radio' id='canopy_granularity' value='1' checked='checked'> 粗粒度 <input type='radio' id='canopy_granularity' value='2'> 细粒度 ";
+    var content = "阀值：<input type='text' class='form-control' id='Threshold'> <br>粒度选择：<input type='radio' name='canopy_granularity' value='1' checked='checked'> 粗粒度 <input type='radio' name='canopy_granularity' value='2'> 细粒度 ";
     $("#algorithm_detail").append(content);
 }
 
 function dbscan_detail() {
     $("#algorithm_detail").html("");
-    var content = "半径：<input type='text' id='radius'>最小数量：<input type='text' id='minNum'><br>粒度选择：<input type='radio' id='dbscan_size' value='1' checked='checked'> 粗粒度 <input type='radio' id='dbscan_size' value='2'> 细粒度 ";
+    var content = "半径：<input type='text' class='form-control' id='radius'>最小数量：<input type='text' class='form-control' id='minNum'><br>粒度选择：<input type='radio' name='dbscan_size' value='1' checked='checked'> 粗粒度 <input type='radio' name='dbscan_size' value='2'> 细粒度 ";
     $("#algorithm_detail").append(content);
 }
 

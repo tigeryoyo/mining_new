@@ -11,7 +11,7 @@
 		当前位置： <a href="javascript:;">映射表管理</a> >>信息显示  <b style="color:red;text-">（已知url管理）</b>
 	</div>
 	<div class="user_infor">
-	<button onclick="baseAjax('unknow_website_infor')">切换未知url管理</button>
+	<button type="button"  onclick="baseAjax('unknow_website_infor')">切换未知url管理</button>
 		<table width="710" border="0" class="infor_tab01">
 			<tr>
 				<td width="85" height="50">网站URL：</td>
@@ -21,7 +21,7 @@
 				<td height="50" colspan="2" />
 				<td height="50" colspan="2">
 					<form action="/website/downloadKnownUrl" method="POST">
-						<button type="submit" class="btn btn-primary">导出已知url</button>
+						<button type="button"  type="submit" class="btn btn-primary">导出已知url</button>
 					</form>
 				</td>
 			</tr>
@@ -31,10 +31,10 @@
 				<td width="85" height="50">网站类型：</td>
 				<td height="50"><input type="text" class="form-control" id="web_type"></td>
 				<td height="50" colspan="2">
-					<button class="btn btn-primary" onclick="initSearchPage(1)">搜索</button>
+					<button type="button"  class="btn btn-primary" onclick="initSearchPage(1)">搜索</button>
 				</td>
 				<td height="50" colspan="2">
-					<button class="btn btn-primary" onClick="websiteInforAdd()">添加映射表</button>
+					<button type="button"  class="btn btn-primary" onClick="websiteInforAdd()">添加映射表</button>
 				</td>
 			</tr>
 		</table>

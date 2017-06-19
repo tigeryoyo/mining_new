@@ -14,8 +14,8 @@ function historyRecord() {
 				$.each(items, function(i, item) {
 					rows = '<tr><td height="32" align="center"><a href="javascript:;" onclick="historyData(\'' + item.rid + '\')">' + item.comment + '</a></td><td height="32" align="center">'
 						+ item.creator + '</td><td height="32" align="center">' + new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')
-						+ '</td><td height="32" align="center"><img src="images/reset.png" id="' + item.rid + '" onclick="historyReset()" /> <img src="images/delete.png" id="' + item.rid
-						+ '" onclick="historyDel()" /></td></tr>'
+						+ '</td><td height="32" align="center"><button type="button" class="btn btn-primary" id="' + item.rid + '" onclick="historyReset()">重置</button> <button type="button" class="btn btn-danger" id="' + item.rid
+						+ '" onclick="historyDel()">删除</button></td></tr>'
 					$('.summary_up table').append(rows);
 				});
 			}
