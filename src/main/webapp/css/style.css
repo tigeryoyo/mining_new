@@ -182,7 +182,7 @@ a:hover { color:#000000; text-decoration:none; }
 
 /*编辑用户*/
 .change_tab{ font-size:16px; margin:0 auto;}
-.change_tab input { width:190px; height:30px; line-height:30px; background:#dddddd; padding-left:10px;}
+.change_tab input { padding-left:10px;}
 .user_tijiao{ margin-left:65px;}
 .user_warn{ font-size:12px; color:red; padding-left: 10px;}
 .change_tab select{ width:200px; height:30px; line-height:36px; background:#dddddd; padding-left:10px;}
