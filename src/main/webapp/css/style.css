@@ -166,7 +166,7 @@ a:hover { color:#000000; text-decoration:none; }
 .user_infor{ width:710px; padding:10px 20px;}
 .infor_tab01{ font-size:16px; margin-bottom:20px;}
 .infor_tab01 input{ width:130px; height:30px;  padding-left:10px;}
-.infor_tab01 button{ height:30px; padding:0 15px; background:#0e63ab; margin-left:20px; border-radius:5px; color:#fff; cursor:pointer;}
+.infor_tab01 button{ margin-left:20px; border-radius:5px; color:#fff; cursor:pointer;}
 /*.infor_tablist{ width:710px; height:300px; overflow:hidden; overflow-y:scroll; }*/
 .infor_tablist{ width:710px;  }
 .infor_tab02{ font-size:14px;}
@@ -182,7 +182,7 @@ a:hover { color:#000000; text-decoration:none; }
 
 /*编辑用户*/
 .change_tab{ font-size:16px; margin:0 auto;}
-.change_tab input { width:190px; height:30px; line-height:30px; padding-left:10px;}
+.change_tab input { width:190px; height:30px; line-height:30px; background:#dddddd; padding-left:10px;}
 .user_tijiao{ margin-left:65px;}
 .user_warn{ font-size:12px; color:red; padding-left: 10px;}
 .change_tab select{ width:200px; height:30px; line-height:36px; background:#dddddd; padding-left:10px;}
