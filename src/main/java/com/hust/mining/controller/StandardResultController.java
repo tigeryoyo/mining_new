@@ -149,12 +149,12 @@ public class StandardResultController {
     @ResponseBody
     @RequestMapping(value="/SetLabelForStandardResult")
     public Object SetLabelForStandardResult(@RequestParam(value="stdResId",required=true) String stdResId,
-    		@RequestParam(value="labelids",required=false) List<Integer> labelids)
+    		@RequestParam(value="labelid",required=true) Integer labelid)
     {
-    	if (labelids.isEmpty()) {
+    	if (labelid.equals(null)) {
 			return ResultUtil.errorWithMsg("没有选中任何标签！");
 		}
-    	boolean status = stand_label.attachlabels(stdResId, labelids);
+    	boolean status = stand_label.attachlabels(stdResId, labelid);
     	if (status==false) {
     		return ResultUtil.errorWithMsg("贴标签失败！");
 		}
@@ -172,7 +172,34 @@ public class StandardResultController {
     	if (stdResId==null) {
     		return ResultUtil.errorWithMsg("没有选中任何准数据！");
 		}
-    	List<Label> list = stand_label.findLabelNotInStandardResult(stdResId);
+    	//当前任务已有的标签
+		List<Label> exitLabel = new ArrayList<Label>();
+		exitLabel = stand_label.selectLabelsForStandResult(stdResId);
+		System.out.println("已有的标签长度："+exitLabel.size());
+		//全部标签
+		List<Label> allLabel = new ArrayList<Label>();
+		allLabel = labelservice.selectAllLable(0, 0);
+		System.out.println("全部标签长度："+allLabel.size());
+		//没有的标签
+		List<Label> list = new ArrayList<Label>();
+		for(int i = 0; i < allLabel.size();i++)
+		{
+			int status = 0;//0表示不存在相同的
+			for(int j = 0; j < exitLabel.size(); j++)
+			{
+				String string1 = allLabel.get(i).getLabelname();
+				String string2 = exitLabel.get(j).getLabelname();
+				if (string1.equals(string2)) {
+					status = 1;
+				}
+			}
+			if (status!=1) {
+				Label label = new Label();
+				label = allLabel.get(i);
+				list.add(label);
+			}
+		}
+		System.out.println("没有的标签长度："+list.size());
     	return ResultUtil.success(list);
     	
     }

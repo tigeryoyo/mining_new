@@ -34,22 +34,6 @@ public class StandardResult_labeDao {
 		StandardResult_labelExample example = new StandardResult_labelExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andStdRidEqualTo(stdResId);
-		System.out.println("dao找那个ID是："+stdResId);
-		List<StandardResult_label> standardResult_labels = standardResult_labelMapper.selectByExample(example);
-		System.out.println("dao中的个数是："+standardResult_labels.size());
-		return standardResult_labels;
-	}
-	
-	/**
-	 * 返回的是任务id=stdResId的实体类,找出不包含当前准数据ID的记录。
-	 * @param stdResId 任务ID
-	 * @return
-	 */
-	public List<StandardResult_label> findLabelNotInStandardResult(String stdResId){
-		
-		StandardResult_labelExample example = new StandardResult_labelExample();
-		Criteria criteria = example.createCriteria();
-		criteria.andStdRidNotEqualTo(stdResId);
 		List<StandardResult_label> standardResult_labels = standardResult_labelMapper.selectByExample(example);
 		return standardResult_labels;
 	}

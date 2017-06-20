@@ -29,18 +29,15 @@ public class StandardResult_labelServiceImpl implements StandardResult_labelServ
 	 * 为准数据贴标签，参数为任务ID，以及标签ID
 	 */
 	@Override
-	public boolean attachlabels(String staResId, List<Integer> labels) {
+	public boolean attachlabels(String staResId, Integer label) {
 		StandardResult_label standardResult_label = new StandardResult_label();
-		//遍历标签列表
-		for (Integer label : labels) {
-			standardResult_label.setLabelid(label);
-			standardResult_label.setStdRid(staResId);
-			//判断插入语句是否成功执行
-			int status = standartResult_labeldao.insert(standardResult_label);
-			if (status==0) {
-				logger.info("为"+staResId+"任务贴标签失败！");
-				return false;
-			}
+		standardResult_label.setLabelid(label);
+		standardResult_label.setStdRid(staResId);
+		//判断插入语句是否成功执行
+		int status = standartResult_labeldao.insert(standardResult_label);
+		if (status==0) {
+			logger.info("为"+staResId+"任务贴标签失败！");
+			return false;
 		}
 		return true;
 	}
@@ -51,40 +48,16 @@ public class StandardResult_labelServiceImpl implements StandardResult_labelServ
 	@Override
 	public List<Label> selectLabelsForStandResult(String stdResId) {
 		List<StandardResult_label> standardResult_labels = standartResult_labeldao.selectLabelsForStandResult(stdResId);
-		System.out.println("servce显示standard_label:");
-		for (StandardResult_label standardResult_label : standardResult_labels) {
-			System.out.println(standardResult_label.getStdRid()+"***"+standardResult_label.getLabelid());
-		}
 		List<Label> labels = new ArrayList<Label>();
 		for (StandardResult_label standardResult_label : standardResult_labels) {
 			Integer integer = standardResult_label.getLabelid();
 			Label label = new Label();
 			label = labelservice.selectByID(integer);
 			labels.add(label);
-		}
-		System.out.println("service标签ID是：");
-		for (Label label : labels) {
-			System.out.println(label.getLabelname());
 		}
 		return labels;
 	}
 	
-	/**
-	 * 查找当前的任务，没有哪些标签
-	 */
-	@Override
-	public List<Label> findLabelNotInStandardResult(String stdResId) {
-		List<StandardResult_label> standardResult_labels = standartResult_labeldao.findLabelNotInStandardResult(stdResId);
-		List<Label> labels = new ArrayList<Label>();
-		for (StandardResult_label standardResult_label : standardResult_labels) {
-			Integer integer = standardResult_label.getLabelid();
-			Label label = new Label();
-			label = labelservice.selectByID(integer);
-			labels.add(label);
-		}
-		return labels;
-	}
-
 	@Override
 	public List<String> selectStandResultsBylabel(int labelid) {
 		List<StandardResult_label> standardResult_labels = standartResult_labeldao.selectStandResultsBylabel(labelid);
