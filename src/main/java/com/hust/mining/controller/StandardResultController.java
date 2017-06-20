@@ -167,13 +167,12 @@ public class StandardResultController {
      */
     @ResponseBody
     @RequestMapping(value="/findLabelNotInStandardResult")
-    public Object findLabelNotInStandardResult(@RequestParam(value="stdResId",required=true) String stdResId,
-    		@RequestParam(value="labelids",required=false) List<Integer> labelids)
+    public Object findLabelNotInStandardResult(@RequestParam(value="stdResId",required=true) String stdResId)
     {
     	if (stdResId==null) {
     		return ResultUtil.errorWithMsg("没有选中任何准数据！");
 		}
-    	List<Integer> list = stand_label.findLabelNotInStandardResult(stdResId);
+    	List<Label> list = stand_label.findLabelNotInStandardResult(stdResId);
     	return ResultUtil.success(list);
     	
     }
@@ -190,7 +189,11 @@ public class StandardResultController {
     	if (stdResId==null) {
     		return ResultUtil.errorWithMsg("没有选中任何准数据！");
 		}
-    	List<Integer> list = stand_label.selectLabelsForStandResult(stdResId);
+    	List<Label> list = stand_label.selectLabelsForStandResult(stdResId);
+    	System.out.println("已有的标签是：");
+    	for (Label label : list) {
+			System.out.println(label.getLabelname());
+		}
     	return ResultUtil.success(list);
     }
     

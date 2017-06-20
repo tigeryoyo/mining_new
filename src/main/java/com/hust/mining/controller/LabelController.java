@@ -71,6 +71,9 @@ public class LabelController {
 	@RequestMapping("insertLabel")
 	public Object insertLabel(@RequestParam(value="labelname", required=true) String labelname)
 	{
+		if (labelname==null) {
+			return ResultUtil.errorWithMsg("请输入标签名称！");
+		}
 		Label label= new Label();
 		label.setLabelname(labelname);
 		boolean status = labelService.insertLable(labelname);
