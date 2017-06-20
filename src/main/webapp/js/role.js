@@ -20,7 +20,7 @@ function roleInforShow(page){
 				$.each(items,function(idx,item){
 					cookie_value1="'"+item.roleId+"'";
 					cookie_value2="'"+item.roleName+"'";
-					row = '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.roleName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delRole" id="'+item.roleId+'" /></td></tr>'
+					row = '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.roleName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delRole" id="'+item.roleId+'">删除</button></td></tr>'
 					$('#role_infor_tab').append(row);
 				});
 			}else{
@@ -97,12 +97,14 @@ function setCookie(value1,value2){
 	document.cookie = cookie_name2 +"="+ escape (value2) + ";expires=" + exp.toGMTString();
 	baseAjax("role_change");
 }
-/**
+/*
+
+/!**
  * 根据页码加载数据
  * 
  * @param {整型}
  *            page 页码
- */
+ *!/
 var search_click;
 function setViewForPage(page){
 	if(search_click){
@@ -111,9 +113,9 @@ function setViewForPage(page){
 		roleInforShow(page);
 	}
 }
-/**
+/!**
  * 省略号点击
- */
+ *!/
 function setPageChangeView(){
 	var bt_name=parseInt($("#other").attr('name'))+3;
 	updatePageValue(bt_name);
@@ -121,12 +123,12 @@ function setPageChangeView(){
 	setFirstSelected();
 	updateNowPage(bt_name);
 }
-/**
+/!**
  * 更新页码数据
  * 
  * @param {Object}
  *            base_num
- */
+ *!/
 function updatePageValue(base_num){
 	var p1=parseInt(base_num);
 	var p2=parseInt(base_num)+1;
@@ -136,12 +138,12 @@ function updatePageValue(base_num){
 	$("#p_3").val(p3);
 	$("#other").attr('name',p1);
 }
-/**
+/!**
  * 页码点击
  * 
  * @param {Object}
  *            p_id 页码
- */
+ *!/
 function pageNumClick(p_id){
 	// background: #0e63ab;
     // color: #fff;
@@ -156,9 +158,9 @@ function pageNumClick(p_id){
 		button.style.color='#FFFFFF';
 	}
 }
-/**
+/!**
  * 设置第一个页码按钮为选中状态
- */
+ *!/
 function setFirstSelected(){
 	cleanAllSelected();
 	$("#p_1").css("background","#0e63ab");
@@ -174,9 +176,9 @@ function setThirdSelected(){
 	$("#p_3").css("background","#0e63ab");
 	$("#p_3").css("color","#FFFFFF");
 }
-/**
+/!**
  * 清除所有的选中状态
- */
+ *!/
 function cleanAllSelected(){
 	$("#p_1").css("background","#CCCCCC");
 	$("#p_1").css("color","buttontext");
@@ -185,12 +187,12 @@ function cleanAllSelected(){
 	$("#p_3").css("background","#CCCCCC");
 	$("#p_3").css("color","buttontext");
 }
-/**
+/!**
  * 上一页，下一页点击
  * 
  * @param {Object}
  *            action -1上一页，1下一页
- */
+ *!/
 function changPageOne(action){
 	var now_page=parseInt($("#down_page").attr('name'));
 	var page=now_page+action;
@@ -198,9 +200,9 @@ function changPageOne(action){
 		updateAllStyleAndData(page,action);
 	}
 }
-/**
+/!**
  * 跳zhuan
- */
+ *!/
 function changePage(){
 	var page=$(".go_num").val();
 	if(page!=undefined&&page.length>0){
@@ -227,15 +229,16 @@ function updateAllStyleAndData(page,action){
 		}
 	}
 }
-/**
+/!**
  * 更新当前页码
  * 
  * @param {Object}
  *            page 当前页
- */
+ *!/
 function updateNowPage(page){
 	$("#down_page").attr('name',page);
 }
+*/
 
 
 // 信息搜索
@@ -261,7 +264,7 @@ function roleInforSearch(page){
 				$.each(items,function(idx,item){
 					cookie_value1="'"+item.roleId+"'";
 					cookie_value2="'"+item.roleName+"'";
-					row = '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.roleName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+')">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delRole" id="'+item.roleId+'" /></td></tr>'
+					row = '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.roleName+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delRole" id="'+item.roleId+'">删除</button></td></tr>'
 					$('#role_infor_tab').append(row);
 				});
 			}else{
@@ -330,12 +333,20 @@ function getCookie(name) {
 
 
 
-// 用户删除
-
+//角色删除
 $(function(){
 	$("#role_infor_tab").on("click",".delRole",function(){
 		var role_id = $(this).attr("id");
-		//console.log(role_id);
+		var role_name = $(this).parents('tr').find("td").eq('1').text();
+		
+		if(role_name == "超级管理员"){
+			alert('对不起，超级管理员角色不能被删除！');
+			return;
+		}
+		if(role_name == "管理员"){
+			alert('对不起，管理员角色不能被删除！');
+			return;
+		}
 		roleInforDel(role_id);
 		function roleInforDel(role_id){
 			$.ajax({
@@ -352,8 +363,8 @@ $(function(){
 						alert(msg.result);
 					}
 				},
-				error: function(){
-		            alert("数据请求失败");
+				error: function(msg){
+		            alert(msg.result);
 		        }
 			});
 		}

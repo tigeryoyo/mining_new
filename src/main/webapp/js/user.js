@@ -33,7 +33,7 @@ function userInforShow(page){
 					cookie_value5="'"+getRoleName(item.userId,array_userRole,array_role)+"'";
 					cookie_value6="'"+item.userId+"'";
 					cookie_value7="'"+item.password+"'";
-					row= '<tr><td width="66" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="64" height="30" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="30" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="30" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="30" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="30" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')" />&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delUser"  id="'+item.userId+'"  /></td></tr>'
+					row= '<tr><td width="66" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="64" height="30" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="30" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="30" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="30" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="30" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')">编辑</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delUser"  id="'+item.userId+'" >删除</button></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -158,13 +158,14 @@ function setCookie(value1,value2,value3,value4,value5,value6,value7){
 	baseAjax("user_change");
 }
 
+/*
 
-/**
+/!**
  * 根据页码加载数据
  * 
  * @param {整型}
  *            page 页码
- */
+ *!/
 var search_click;
 function setViewForPage(page){
 		
@@ -175,9 +176,9 @@ function setViewForPage(page){
 	}
 }
 
-/**
+/!**
  * 省略号点击
- */
+ *!/
 function setPageChangeView(){
 	var bt_name=parseInt($("#other").attr('name'))+3;
 	updatePageValue(bt_name);
@@ -185,12 +186,12 @@ function setPageChangeView(){
 	setFirstSelected();
 	updateNowPage(bt_name);
 }
-/**
+/!**
  * 更新页码数据
  * 
  * @param {Object}
  *            base_num
- */
+ *!/
 function updatePageValue(base_num){
 	var p1=parseInt(base_num);
 	var p2=parseInt(base_num)+1;
@@ -200,12 +201,12 @@ function updatePageValue(base_num){
 	$("#p_3").val(p3);
 	$("#other").attr('name',p1);
 }
-/**
+/!**
  * 页码点击
  * 
  * @param {Object}
  *            p_id 页码
- */
+ *!/
 function pageNumClick(p_id){
 	// background: #0e63ab;
     // color: #fff;
@@ -220,9 +221,9 @@ function pageNumClick(p_id){
 		button.style.color='#FFFFFF';
 	}
 }
-/**
+/!**
  * 设置第一个页码按钮为选中状态
- */
+ *!/
 function setFirstSelected(){
 	cleanAllSelected();
 	$("#p_1").css("background","#0e63ab");
@@ -238,9 +239,9 @@ function setThirdSelected(){
 	$("#p_3").css("background","#0e63ab");
 	$("#p_3").css("color","#FFFFFF");
 }
-/**
+/!**
  * 清除所有的选中状态
- */
+ *!/
 function cleanAllSelected(){
 	$("#p_1").css("background","#CCCCCC");
 	$("#p_1").css("color","buttontext");
@@ -249,12 +250,12 @@ function cleanAllSelected(){
 	$("#p_3").css("background","#CCCCCC");
 	$("#p_3").css("color","buttontext");
 }
-/**
+/!**
  * 上一页，下一页点击
  * 
  * @param {Object}
  *            action -1上一页，1下一页
- */
+ *!/
 function changPageOne(action){
 	var now_page=parseInt($("#down_page").attr('name'));
 	var page=now_page+action;
@@ -262,9 +263,9 @@ function changPageOne(action){
 		updateAllStyleAndData(page,action);
 	}
 }
-/**
+/!**
  * 跳zhuan
- */
+ *!/
 function changePage(){
 	var page=$(".go_num").val();
 	if(page!=undefined&&page.length>0){
@@ -291,15 +292,16 @@ function updateAllStyleAndData(page,action){
 		}
 	}
 }
-/**
+/!**
  * 更新当前页码
  * 
  * @param {Object}
  *            page 当前页
- */
+ *!/
 function updateNowPage(page){
 	$("#down_page").attr('name',page);
 }
+*/
 
 
 
@@ -348,7 +350,7 @@ function userInforSearch(page){
 					cookie_value5="'"+getRoleName(item.userId,array_userRole,array_role)+"'";
 					cookie_value6="'"+item.userId+"'";
 					cookie_value7="'"+item.password+"'";
-					row= '<tr><td width="66" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="64" height="30" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="30" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="30" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="30" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="30" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="30" align="center" bgcolor="#ffffff"><img src="images/user_bj.png" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')" />&nbsp;&nbsp;&nbsp;<img src="images/user_del.png" class="delUser"  id="'+item.userId+'" /></td></tr>'
+					row= '<tr><td width="66" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="64" height="30" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="30" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="30" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="30" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="30" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')" >编辑</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delUser"  id="'+item.userId+'" >删除</button>/td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -416,8 +418,8 @@ function addUser(){
 				alert(msg.result);
 			}
 		},
-		error: function(){
-            alert("数据请求失败");
+		error: function(msg){
+            alert(msg.result);
         },
 	})	
 }
@@ -473,8 +475,9 @@ function userInforChange(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				// alert("更新成功");
-				alert(msg.result);
+				alert("角色信息更新成功");
+				//alert(msg.result);
+				baseAjax("user_infor");
 			}else{
 				alert(msg.result);
 			}
@@ -492,36 +495,64 @@ function clearChangeInfor(){
 	$("#select_roleName option:selected").val('请选择角色');
 }
 
+//获取当前用户ID
+function CurrentUserId() {
+	var userId = null;
+   $.ajax({
+       url : "/getCurrentUserId",
+       type : "post",
+       data : "",
+       async: false,//同步  
+       success : function(msg) {
+           if (msg.status == 'OK') {
+               userId = msg.result;
+           }
+       },
+       error : function(msg) {
+    	   alert(msg);
+        }
+    });
+    return userId;
+    //window.onload = user();
+ }
 
-// 用户删除
+// 删除用户判断是否删除的是当前登录用户,用户是否为管理员
 $(function(){
 	$(".infor_tab02").on("click",".delUser",function(){
 		var user_id = $(this).attr("id");
-		console.log(user_id);
-		userInforDel(user_id);
-		function userInforDel(user_id){
-	
-			$.ajax({
-				type:"post",
-				url:"/user/deleteUserInfoById",
-				data:{
-					userId:user_id,
-				} ,
-				dataType:"json",
-				success:function(msg){
-					// alert("lll");
-					console.log(msg);
-					if(msg.status=="OK"){
-						baseAjax("user_infor");
-					}else{
-						alert(msg.result);
-					}
+		var rolename = $(this).parents('tr').find("td").eq('3').text();
 		
-				} ,
-				error: function(){
-		            alert("数据请求失败");
-		        },
-			});
+		var currentUserId = CurrentUserId();
+		
+		if(user_id == currentUserId){
+			alert('对不起，不能删除当前登录用户');
+		}else if(rolename == "超级管理员" || rolename == "管理员"){
+			alert('对不起，不能删除管理员');			
+		}else{
+			userInforDel(user_id);
 		}
 	})
 })
+// 用户删除
+function userInforDel(user_id){	
+	$.ajax({
+		type:"post",
+		url:"/user/deleteUserInfoById",
+		data:{
+			userId:user_id,
+		} ,
+		dataType:"json",
+		success:function(msg){
+			
+			if(msg.status=="OK"){
+				baseAjax("user_infor");
+			}else{
+				alert(msg.result);
+			}
+
+		} ,
+		error: function(msg){
+            alert(msg.result);
+        },
+	});
+}

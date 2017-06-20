@@ -23,11 +23,11 @@
 		</span>
 	</div>
 	<div class="ckht">
-		<button class="btn btn-primary" onclick="baseAjax('history')">历史记录</button>
-		<button class="btn btn-primary" onclick="baseAjax('summary')">数据汇总</button>
 		<ul class="ckht_list">
 			<li class="issueName">任务名称：</li>
 			<li class="files_list">文件列表：
+			<button type="button"  class="btn btn-primary" style="float:right" onclick="baseAjax('summary')">数据汇总</button>
+			<button type="button"  class="btn btn-primary" style="float:right; margin-right: 10px;" onclick="baseAjax('history')">历史记录</button>
 				<div class="up_list_wrap">
 					<table border="0" class="up_list">
 						<tr class="d_blue">
@@ -52,8 +52,8 @@
 		<div class="up_del">
 			<ul id="file_ul">
 			</ul>
-			<button class="btn btn-dangerous" onclick="allDel()">全部删除</button>
-			<button class="btn btn-primary btn_up_del03" >全部上传</button>
+			<button type="button"  class="btn btn-danger" style="float:right;" onclick="allDel()">全部删除</button>
+			<button type="button"  class="btn btn-primary btn_up_del03" >全部上传</button>
 		</div>
 	</div>
 </body>

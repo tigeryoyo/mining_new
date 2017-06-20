@@ -63,12 +63,11 @@ a:hover { color:#000000; text-decoration:none; }
 .files_list table{ margin:5px auto;}
 .files_list table td{ border:1px solid #999999; font-size:14px; background:#ffffff;}
 .files_list table .d_blue{ background:#86c6ea;}
-.btn_sc{ display:inline-block;margin-right:10px; margin-top:10px;}
-.btn_jl{ display:inline-block;  margin-top:10px;}
+.btn_sc{ display:inline-block;margin-right:10px;}
+.btn_jl{ display:inline-block;}
 .files_add{ width:450px; height:150px; background:#fff; margin:20px auto; line-height:150px; font-size:30px; text-align:center;}
 
 .up_del{ width:750px;}
-
 @keyframes twinkling{	/*透明度由0到1*/
 			0%{
 				opacity:0.1;				/*透明度为0*/
@@ -79,13 +78,13 @@ a:hover { color:#000000; text-decoration:none; }
 		}
 
 .up_del li{ height:50px; line-height:50px; overflow:hidden;}
-.files_name{ width:90px; height:30px; line-height:30px;  padding-left:5px; font-size:12px;}
+.files_name{ width:110px; height:30px; line-height:30px;  padding-left:5px; font-size:12px;}
 .files_tname{ width:70px; height:30px; line-height:30px;  padding-left:5px; font-size: 12px;}
 .up_del li select{ width:70px; height:30px; line-height:30px; font-size:12px; padding-left:5px;}
 .up_del li select option{ width:75px; height:26px; line-height:26px; font-size:12px;}
 .btn_up_del01{float:right; margin-top:10px; margin-right:10px;}
 .btn_up_del02{float:right; margin-top:10px;}
-.btn_up_del03{float:right; margin-top:10px; margin-right:10px;}
+.btn_up_del03{float:right; margin-right:10px;}
 .btn_up_del04{float:right; margin-top:10px;}
 
 /*查看任务*/
@@ -173,7 +172,7 @@ a:hover { color:#000000; text-decoration:none; }
 .infor_tab02 tr td{ border:1px solid #999999;}
 .infor_tab02_tit{ font-size:16px;  }
 .user_num{ float:right;  heiht:30px; margin-top:50px; margin-right:20px;}
-.user_num input{ float:left; height:28px; border-radius:5px; padding:0 8px; margin-left:5px; background:#ccc; line-height:28px; font-size:12px; cursor:pointer;}
+.user_num input{ float:left; height:28px; border-radius:5px; padding:0 8px; margin-left:5px;  line-height:28px; font-size:12px; cursor:pointer;}
 .user_num button{  float:left; height:28px; border-radius:5px; padding:0 8px; margin-left:5px; background:#ccc; line-height:28px; font-size:12px; cursor:pointer;}
 .user_num button:hover{background:#0e63ab; color:#fff; }
 .user_num input.cur{background:#0e63ab; color:#fff; }

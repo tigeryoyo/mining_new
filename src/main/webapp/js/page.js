@@ -60,7 +60,7 @@ var  page = {
         });
         var pageCount = listCount%page.pagelistcount>0?parseInt(listCount/page.pagelistcount)+1:parseInt(listCount/page.pagelistcount);
        //页码输入框监听事件
-        $("#"+pageId +">li>input[class='turnPageNum']").keyup(function(){
+        $("#"+pageId +">li>input[id='turnPageNum']").keyup(function(){
             console.log("turnPageNum keyup")
             $(this).val($(this).val().replace(/[^0-9]/g,''));
             if($(this).val()>pageCount){
@@ -78,9 +78,10 @@ var  page = {
         }).css("ime-mode", "disabled"); //CSS设置输入法不可用
 
         $("#"+pageId+">li[class='turnPage']").on("click",function(){
-            var targetPage = $("#"+pageId +">li>input[class='turnPageNum']").val();
+            var targetPage = $("#"+pageId +">li>input[id='turnPageNum']").val();
             if(targetPage<=pageCount)
             	page.setPageListCount(pageId,listCount,targetPage,fun);
+           
         })
     },
     "getPageListModel":function(pageCount,currentPage){
@@ -121,7 +122,7 @@ var  page = {
         }
         appendStr+="<li class='"+nextPageClass+"' page-data='"+nextPage+"' page-rel='nextpage'>下一页&gt;</li>";
         appendStr+="<li class='"+nextPageClass+"' page-data='"+pageCount+"' page-rel='lastpage'>尾页</li>";
-		appendStr+="<li><input class='turnPageNum' type='text' maxlength='4' name='page'><div style='margin-top:4px;height:26px;line-height:26px;float: left'>/共"+pageCount+"页</div></li>";
+		appendStr+="<li><input id='turnPageNum' class='turnPageNum form-control' type='text' maxlength='4' name='page'><div style='margin-top:4px;height:26px;line-height:26px;float: left'>/共"+pageCount+"页</div></li>";
 		appendStr+="<li class='turnPage' id='turnPage'>跳转</li>";
        return appendStr;
 
