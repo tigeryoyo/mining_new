@@ -2,6 +2,9 @@ package com.hust.mining.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +38,7 @@ public class LabelController {
 	public Object selectlabelcount(@RequestParam(value="labelname",required = false)String labelname)
 	{
 		long count=0;
-		if (null==labelname) {
+		if (StringUtils.isBlank(labelname)) {
 			count=labelService.selectallcount();
 		}
 		else {
@@ -71,7 +74,7 @@ public class LabelController {
 	@RequestMapping("insertLabel")
 	public Object insertLabel(@RequestParam(value="labelname", required=true) String labelname)
 	{
-		if (labelname==null) {
+		if (StringUtils.isBlank(labelname)) {
 			return ResultUtil.errorWithMsg("请输入标签名称！");
 		}
 		Label label= new Label();

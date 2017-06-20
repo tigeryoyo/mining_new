@@ -169,7 +169,7 @@ public class StandardResultController {
     @RequestMapping(value="/findLabelNotInStandardResult")
     public Object findLabelNotInStandardResult(@RequestParam(value="stdResId",required=true) String stdResId)
     {
-    	if (stdResId==null) {
+    	if (StringUtils.isBlank(stdResId)) {
     		return ResultUtil.errorWithMsg("没有选中任何准数据！");
 		}
     	//当前任务已有的标签
@@ -213,7 +213,7 @@ public class StandardResultController {
     @RequestMapping(value="/selectLabelsForStandResult")
     public Object selectLabelsForStandResult(@RequestParam(value="stdResId",required=true)String stdResId)
     {
-    	if (stdResId==null) {
+    	if (StringUtils.isBlank(stdResId)) {
     		return ResultUtil.errorWithMsg("没有选中任何准数据！");
 		}
     	List<Label> list = stand_label.selectLabelsForStandResult(stdResId);
@@ -235,7 +235,7 @@ public class StandardResultController {
     {
     	//根据labelname找到labelid
     	Label label = labelservice.selectByname(labelname);
-    	if (label==null) {
+    	if (StringUtils.isBlank(labelname)) {
     		return ResultUtil.errorWithMsg("没有准数据包含此标签！");
 		}
     	//根据labelId返回任务的id列表
@@ -249,7 +249,7 @@ public class StandardResultController {
     		@RequestParam(value="labelid",required=true)int labelid)
     {
     	
-    	if (staRtId.isEmpty()) {
+    	if (StringUtils.isBlank(staRtId)) {
     		return ResultUtil.errorWithMsg("请选择准数据！");
 		}
     	boolean status = stand_label.delete(staRtId, labelid);
