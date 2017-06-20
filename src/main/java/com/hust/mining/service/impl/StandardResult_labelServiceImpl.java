@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hust.mining.dao.StandardResult_labeDao;
+import com.hust.mining.model.Label;
 import com.hust.mining.model.StandardResult_label;
+import com.hust.mining.service.LabelService;
 import com.hust.mining.service.StandardResult_labelService;
 
 @Service
@@ -20,6 +22,9 @@ public class StandardResult_labelServiceImpl implements StandardResult_labelServ
 	
 	@Autowired
 	private StandardResult_labeDao standartResult_labeldao;
+	
+	@Autowired
+	private LabelService labelservice;
 	/**
 	 * 为准数据贴标签，参数为任务ID，以及标签ID
 	 */
@@ -44,28 +49,40 @@ public class StandardResult_labelServiceImpl implements StandardResult_labelServ
 	 * 返回的是标签的list
 	 */
 	@Override
-	public List<Integer> selectLabelsForStandResult(String stdResId) {
+	public List<Label> selectLabelsForStandResult(String stdResId) {
 		List<StandardResult_label> standardResult_labels = standartResult_labeldao.selectLabelsForStandResult(stdResId);
-		List<Integer> labelids = new ArrayList<Integer>();
+		System.out.println("servce显示standard_label:");
+		for (StandardResult_label standardResult_label : standardResult_labels) {
+			System.out.println(standardResult_label.getStdRid()+"***"+standardResult_label.getLabelid());
+		}
+		List<Label> labels = new ArrayList<Label>();
 		for (StandardResult_label standardResult_label : standardResult_labels) {
 			Integer integer = standardResult_label.getLabelid();
-			labelids.add(integer);
+			Label label = new Label();
+			label = labelservice.selectByID(integer);
+			labels.add(label);
 		}
-		return labelids;
+		System.out.println("service标签ID是：");
+		for (Label label : labels) {
+			System.out.println(label.getLabelname());
+		}
+		return labels;
 	}
 	
 	/**
 	 * 查找当前的任务，没有哪些标签
 	 */
 	@Override
-	public List<Integer> findLabelNotInStandardResult(String stdResId) {
+	public List<Label> findLabelNotInStandardResult(String stdResId) {
 		List<StandardResult_label> standardResult_labels = standartResult_labeldao.findLabelNotInStandardResult(stdResId);
-		List<Integer> labelids = new ArrayList<Integer>();
+		List<Label> labels = new ArrayList<Label>();
 		for (StandardResult_label standardResult_label : standardResult_labels) {
 			Integer integer = standardResult_label.getLabelid();
-			labelids.add(integer);
+			Label label = new Label();
+			label = labelservice.selectByID(integer);
+			labels.add(label);
 		}
-		return labelids;
+		return labels;
 	}
 
 	@Override
