@@ -15,11 +15,11 @@ body {
 }
 
 /*背景图片的实现*/
-.top-wapper {
+/* .top-wapper {
     width: 1440px;
     height: 760px;
     background-color: rgba(0,0,0,0.6); 
-} 
+}  */
 
 strong { font-weight: 500; }
 
