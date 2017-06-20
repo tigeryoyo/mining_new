@@ -77,7 +77,7 @@ function buildStandardData() {
 
 /* 删除历史记录 */
 function historyDel() {
-	$(".summary_up table tr").unbind('click').on("click", "img", function() {
+	$(".summary_up table tr").unbind('click').on("click", "button", function() {
 		var result_id = $(this).attr("id");
 		
 		fileDel(result_id);
@@ -113,7 +113,7 @@ function toPaint(currentSet, title) {
 }
 
 function historyReset() {
-	$(".summary_up table tr").unbind('click').on("click", "img", function() {
+	$(".summary_up table tr").unbind('click').on("click", "button", function() {
 		var result_id = $(this).attr("id");
 		
 		$.ajax({
@@ -181,7 +181,7 @@ function freshData() {
 					item = items[i + 1];
 					//console.log(item);
 					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
-						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails(' + i + ',\'' + $('.summary_up table tr img').attr("id") + '\',' + item[0] + ')">'
+						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails(' + i + ',\'' + $('.summary_up table tr button').attr("id") + '\',' + item[0] + ')">'
 						+ item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">' + '<a href="javascript:;" onclick="toPaint(' + i
 						+ ',\'' + item[indexOfTitle].replace(/\"/g, " ").replace(/\'/g, " ") + '\')">' + item[0] + '</a>' + '</td></tr>';
 					$('.summary_tab table').append(rows);

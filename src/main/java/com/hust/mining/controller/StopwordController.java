@@ -89,7 +89,7 @@ public class StopwordController {
 			list.add(stopword);
 		}
 		if (!stopwordService.insertStopwords(list)) {
-			return ResultUtil.errorWithMsg("insert stopword error");
+			return ResultUtil.errorWithMsg("插入停用词失败，可能是该停用词已存在！");
 		}
 		return ResultUtil.success("insert stopword success");
 	}

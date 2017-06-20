@@ -50,9 +50,9 @@ function showClusterDetails(index,rid,count){
 						+ '</a></td><td height="32" align="center">'
 						+ item[indexOfTime]
 						+ '</td><td height="32" align="center">'
-						+ '<button class="btn btn-dangerous delItem" type="button" id="'
+						+ '<button class="btn btn-danger delItem" type="button" id="'
 						+ i
-						+'" ></button></td></tr>';
+						+'" >删除</button></td></tr>';
 				$('.details_tab table').append(rows);
 				//将类的id作为table的id
 				$('.details_tab table').attr('id',index);
@@ -163,7 +163,7 @@ function deleteClusterItem(index) {
 //		async: false,//同步
 		success : function(msg) {
 			if (msg.status == "OK") {
-				var rid = $('.summary_up table tr img').attr("id");
+				var rid = $('.summary_up table tr button').attr("id");
 				if(sets.length == sum){
 					$('#code').hide();
 				    $('#goodcover').hide();
