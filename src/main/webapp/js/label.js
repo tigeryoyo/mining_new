@@ -1,4 +1,40 @@
-// JavaScript Document
+/** 以下js代码全是关于为准数据贴标签、查看准数据有哪些标签及没有哪些标签、根据标签查找准数据。涉及到标签和准数据*/
+showlabelofStandard();
+//查看当前准数据已有的标签
+function showlabelofStandard()
+{
+	var issueId = getCookie("stdResId");
+	console.log("当前话题ID是："+issueId);
+	$.ajax({
+		type:"post",
+		url:"/standardResult/selectLabelsForStandResult",
+		data:{stdResId:issueId},
+		datatype:"json",
+		success: function(msg){
+			console.log("后台是：");
+			console.log(msg);
+			if( msg.status == "OK"){
+				var items = msg.result ; //从后台获取的为label实体
+				var cookie_value1;
+				$('.labelofStandard').html("");
+				$.each(items,function(item) {
+					cookie_value1="'"+item.labelid+"'";
+					cookie_value2="'"+item.labelname+"'";
+					row= '<button class="btn btn-success" style="margin: 5px; onclick="deleteLabelOfStandard('+"'"+item.labelid+"'"+','+"'"+issueId+"'"+')">'+item.labelname+'</button>'
+                    $('.labelofStandard').append(row);
+				});
+			}else{
+				$('.labelofStandard').html("");
+			}
+		},
+		error: function(){
+			alert("请求失败！");
+		}
+		
+	})
+}
+
+/************* 以下js代码全是标签增、删、查、改。只涉及到标签。************************/
 //显示每一页标签信息
 function labelInforShow(page){
 	search_click=false;
@@ -10,11 +46,8 @@ function labelInforShow(page){
 			limit:7
 		},
 		dataType:"json",
-		beforeSend : function(){
-		    begin();
-		},
 		success: function(msg){
-			console.log(msg);
+		
 			if( msg.status == "OK"){
 				// alert("success");
 				var items = msg.result ;
@@ -34,11 +67,8 @@ function labelInforShow(page){
 				$('.infor_tab02 tr:not(:first)').html("");
 			}
 		},
-		complete:function(){
-		    stop();
-		},
 		error: function(){
-			
+			alert("请求失败！");
 		}
 	})	
 }
@@ -49,7 +79,7 @@ function initShowPage(currenPage){
     if("undefined" == typeof(currenPage) || null == currenPage){
         currenPage = 1;
     }
-    console.log(currenPage);
+  
     $.ajax({
         type: "post",
         url: "/label/selectlabelcount",
@@ -77,7 +107,7 @@ function initSearchPage(currenPage){
         currenPage = 1;
     }
     labelInfor=$("#label_Search").val();
-    console.log(labelInfor);
+
     $.ajax({
         type: "post",
         url: "/label/selectlabelcount",
@@ -169,22 +199,16 @@ function addlabel(){
 			labelname:$("#namelabel").val(),
 		},
 		dataType:"json",
-		beforeSend : function(){
-		    begin();
-		},
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				window.location.href = "/label_infor.html"
+				showLabelInfor();
 			}else{
 				alert(msg.result);
 			}
 		},
-		complete:function(){
-		    stop();
-		},
 		error: function(){
-			
+			alert("添加失败！");
 		}
 	})	
 }
@@ -193,11 +217,7 @@ function clearlabel(){
 	$("#namelabel").val('');
 }
 
-
-// 标签修改编辑
 function getCookie(name) {
-	
-	console.log("cookie:"+document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
 		return unescape(arr[2]); 
@@ -216,7 +236,7 @@ function labelInforEdit(labelId,labelName){
 
 function labelInforChange(){
 	var newId=getCookie("labelid");
-	console.log(newId);
+
 	console.log($("#new_name_label").val());
 	$.ajax({
 		type:"post",
@@ -230,13 +250,13 @@ function labelInforChange(){
 			console.log(msg);
 			if( msg.status == "OK"){
 				alert("修改成功");
-			//	window.location.href = "/label_infor.html";
+				showLabelInfor();
 			}else{
 				alert(msg.result);
 			}
 		},
 		error: function(){
-			alert("数据请求失败11111");
+			alert("数据请求失败!");
 		}
 	})	
 }
@@ -248,7 +268,6 @@ function clearNewlabel(){
 $(function(){
 	$(".infor_tab02").on("click",".dellabel",function(){
 		var label_id = $(this).attr("id");
-		console.log(label_id);
 		labelInforDel(label_id);
 		function labelInforDel(label_id){
 			$.ajax({
@@ -260,7 +279,7 @@ $(function(){
 				dataType:"json",
 				success:function(msg){
 					if(msg.status=="OK"){
-						window.location.href = "/label_infor.html"
+						showLabelInfor();
 					}else{
 						alert(msg.result);
 					}
@@ -272,6 +291,11 @@ $(function(){
 		}
 	})
 })
+//返回标签信息显示页面
+function showLabelInfor()
+{
+	initShowPage(1)
+	}
 
 //返回标签信息显示界面
 function backLabelInfor() {

@@ -29,7 +29,7 @@ function stopwordInforShow(page){
                     cookie_value2="'"+item.word+"'";
                     cookie_value3="'"+item.creator+"'";
                     cookie_value4="'"+new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+"'";
-                    row= '<tr><td colspan="1" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td colspan="2" height="30" align="center" bgcolor="#ffffff">'+item.word+'</td><td colspan="3" height="30" align="center" bgcolor="#ffffff">'+new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+'</td><td colspan="2" height="30" align="center" bgcolor="#ffffff">'+item.creator+'</td><td colspan="1" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-danger delStopword" id="'+item.id+'">删除</button></td></tr>'
+                    row= '<tr><td colspan="1" height="40" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td colspan="2" height="40" align="center" bgcolor="#ffffff">'+item.word+'</td><td colspan="2" height="40" align="center" bgcolor="#ffffff">'+new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+'</td><td colspan="2" height="40" align="center" bgcolor="#ffffff">'+item.creator+'</td><td colspan="1" height="40" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-danger delStopword" id="'+item.id+'">删除</button></td></tr>'
                     $('.infor_tab02').append(row);
                 });
             }else{
@@ -255,7 +255,7 @@ function stopwordInforSearch(page){
                     cookie_value2="'"+item.word+"'";
                     cookie_value3="'"+item.creator+"'";
                     cookie_value4="'"+new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+"'";
-                    row= '<tr><td colspan="1" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td colspan="2" height="30" align="center" bgcolor="#ffffff">'+item.word+'</td><td colspan="3" height="30" align="center" bgcolor="#ffffff">'+new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+'</td><td colspan="2" height="30" align="center" bgcolor="#ffffff">'+item.creator+'</td><td colspan="1" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-danger delStopword" id="'+item.id+'" >删除</button></td></tr>'
+                    row= '<tr><td colspan="1" height="40" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td colspan="2" height="40" align="center" bgcolor="#ffffff">'+item.word+'</td><td colspan="2" height="40" align="center" bgcolor="#ffffff">'+new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+'</td><td colspan="2" height="40" align="center" bgcolor="#ffffff">'+item.creator+'</td><td colspan="1" height="40" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-danger delStopword" id="'+item.id+'" >删除</button></td></tr>'
                     $('.infor_tab02').append(row);
                 });
             }else{

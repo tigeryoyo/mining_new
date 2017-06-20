@@ -34,7 +34,9 @@ public class StandardResult_labeDao {
 		StandardResult_labelExample example = new StandardResult_labelExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andStdRidEqualTo(stdResId);
+		System.out.println("dao找那个ID是："+stdResId);
 		List<StandardResult_label> standardResult_labels = standardResult_labelMapper.selectByExample(example);
+		System.out.println("dao中的个数是："+standardResult_labels.size());
 		return standardResult_labels;
 	}
 	

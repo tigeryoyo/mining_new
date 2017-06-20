@@ -21,6 +21,8 @@ public interface LabelService {
 	long selectallcount();
 
 	Label selectByname(String labelname);
+
+	Label selectByID(int labelid);
 	
 
 }

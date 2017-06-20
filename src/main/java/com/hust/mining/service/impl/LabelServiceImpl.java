@@ -53,6 +53,12 @@ public class LabelServiceImpl implements LabelService {
 		List<Label> labels = labeldao.selectLabelByName(labelname);
 		return labels.get(0);
 	}
+	
+	@Override
+	public Label selectByID(int labelid)
+	{
+		return labeldao.selectByPrimaryKey(labelid);
+	}
 
 	@Override
 	public boolean insertLable(String label) {

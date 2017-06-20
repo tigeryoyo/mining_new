@@ -66,11 +66,20 @@ function showStandardIssueDetails(issueId) {
 				$('.up_list tr:not(:first)').html("");
 				$.each(stdResList, function(i, item) {
 					var stdResId = "'" + item.stdRid + "'";
+					if(i==0){
+						//把当前的准数据id存入cookie中
+						var value = item.stdRid;
+						var cookie_name1="stdResId";
+						var Days = 1; // 此 cookie 将被保存 1 天
+						var exp　= new Date();
+						exp.setTime(exp.getTime() +Days*24*60*60*1000);
+						document.cookie = cookie_name1 +"="+ escape (value) + ";expires=" + exp.toGMTString();
+		     		}
 					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.resName + '</td><td align="center" valign="middle">'
 						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')
 						+ '</td><td align="center" valign="middle"><button type="button" class="btn btn-primary btn_sc" onclick=downloadStdRes(' + stdResId
-						+ ')>下载</button><button type="button" class="btn btn-info btn_sc" onclick=schxsj('+ stdResId
-						+ ') >生成核心数据</button><button type="button" class="btn btn-danger btn_sc" onclick=deleteStandardResult(' + stdResId + ')>删除</button></td></tr>'
+						+ ')>下载</button><button type="button" class="btn btn-danger btn_sc" onclick=deleteStandardResult(' + stdResId + ')>删除</button><button type="button" class="btn btn-info btn_sc" onclick=schxsj('+ stdResId
+						+ ') >生成核心数据</button></td></tr>'
 					$('.up_list').append(row);
 				});
 			} else {
@@ -82,6 +91,18 @@ function showStandardIssueDetails(issueId) {
 			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
 		}
 	});
+}
+
+function test(test)
+{
+	console.log("sss");
+	}
+
+function getCookie(name) {
+	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
+	if(arr !=null) 
+		return unescape(arr[2]); 
+	return null;
 }
 
 function showCoreIssueDetails(issueId) {
@@ -206,13 +227,13 @@ function localRefresh() {
 		alert("error:datashow.js-->localRefresh()")
 	}
 }
-
+/*
 function getCookie(name) {
 	var arr = document.cookie.match(new RegExp("(^|)" + name + "=([^;]*)(;|$)"));
 	if (arr != null)
 		return unescape(arr[2]);
 	return null;
-}
+}*/
 
 function clusterSingleFile(id) {
 	$.ajax({
