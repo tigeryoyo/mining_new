@@ -58,7 +58,7 @@ function allData (page){
 						item_issueId="'"+item.issueId+"'";
 						count++;
 						row= '<tr><td height="40" align="center">'+((page-1)*10+count)+
-						'</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+item_issueId+')">'+item.issueName+
+						'</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+"'"+item_issueId+"'"+')">'+item.issueName+
 						'</a></td><td height="40" align="center">'+item.creator+
 						'</td><td height="40" align="center">'+ new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')+
 						'</td><td height="40" align="center">'+item.lastOperator+
