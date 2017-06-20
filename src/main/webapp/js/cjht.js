@@ -30,6 +30,7 @@ function creatInt() {
 		success : function(msg) {
 			if (msg.status == "OK") {
 				baseAjax("topic_list");
+				$('.left ul li').eq(1).addClass('current').siblings().removeClass("current")
 			} else {
 				alert("fail");
 			}
