@@ -57,7 +57,7 @@ a:hover { color:#000000; text-decoration:none; }
 .ckht{ width:750px; margin-top:5px; position: relative;} 
 .sur_result{position: absolute; right:20px; top:10px;}
 .his_result{position: absolute; right:125px; top:10px;}
-.ckht_list{ width:700px; margin-left:0px;  margin-top:0px;}
+.ckht_list{ width:750px; margin-left:0px;  margin-top:0px;}
 .ckht_list li{ line-height: 30px; font-size: 16px; }
 .up_list_wrap{width:750px; height:350px; overflow-y:scroll}
 .files_list table{ margin:5px auto;}
@@ -126,8 +126,8 @@ a:hover { color:#000000; text-decoration:none; }
 .summary_time li input{ width:15px; height:15px; }
 .summary_time li input.lol_begin{ width:105px; height:30px; line-height:30px; font-size:12px;}
 .summary_time li input.lol_end{ width:105px; height:30px; line-height:30px; font-size:12px;}
-.summary_time li.file_search{margin-top:3px; cursor: pointer;}
-.summary_time li.file_summary{margin-top:3px; cursor: pointer;}
+.summary_time li.file_search{cursor: pointer;}
+.summary_time li.file_summary{cursor: pointer;}
 .summary_wrap{ width:750px;/* display:none;*/ }
 .summary_show{ display:block; }
 .summary_up{ width:750px; margin-top:5px; height:200px; border:1px solid #0e63ab; overflow-y:scroll; }
@@ -140,7 +140,7 @@ a:hover { color:#000000; text-decoration:none; }
 .summary_tab .tab_tit{ width:265px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .summary_tab .tab_from{ width:115px; line-height:48px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .choose{ margin-right:10px;}
-.table_clear{ width:730px; margin-left:0px;}
+.table_clear{ width:750px; margin-left:0px;}
 .clear_choose{ float:left; margin-top:23px;font-size:18px;}
 .table_clear img{ float:left; margin-top:16px; margin-left:20px;}
 
@@ -162,16 +162,16 @@ a:hover { color:#000000; text-decoration:none; }
 .stop_zs{ display:block;}
 
 /*用户信息显示*/
-.user_infor{ width:710px; padding:10px 20px;}
+.user_infor{ width:750px; padding:10px 20px;}
 .infor_tab01{ font-size:16px; margin-bottom:20px;}
 .infor_tab01 input{ width:130px; height:30px;  padding-left:10px;}
 .infor_tab01 button{ margin-left:20px; border-radius:5px; color:#fff; cursor:pointer;}
 /*.infor_tablist{ width:710px; height:300px; overflow:hidden; overflow-y:scroll; }*/
-.infor_tablist{ width:710px;  }
+.infor_tablist{ width:750px;  }
 .infor_tab02{ font-size:14px;}
 .infor_tab02 tr td{ border:1px solid #999999;}
 .infor_tab02_tit{ font-size:16px;  }
-.user_num{ float:right;  heiht:30px; margin-top:50px; margin-right:20px;}
+.user_num{ float:right;  heiht:30px; margin-top:30px; margin-right:20px;}
 .user_num input{ float:left; height:28px; border-radius:5px; padding:0 8px; margin-left:5px;  line-height:28px; font-size:12px; cursor:pointer;}
 .user_num button{  float:left; height:28px; border-radius:5px; padding:0 8px; margin-left:5px; background:#ccc; line-height:28px; font-size:12px; cursor:pointer;}
 .user_num button:hover{background:#0e63ab; color:#fff; }
