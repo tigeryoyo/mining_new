@@ -51,11 +51,11 @@ function allData (page){
             if(msg.status=="OK"){
                 // alert("success") ;
 				var items = msg.result.list ;
-				var item_issueId;
+				
 				$('.ht_cont tr:not(:first)').html("");
 				var count=0;
 				$.each(items,function(idx,item) {
-						item_issueId="'"+item.issueId+"'";
+						var item_issueId="'"+item.issueId+"'";
 						count++;
 						row= '<tr><td height="40" align="center">'+((page-1)*10+count)+
 						'</td><td height="40" align="center"><a href="javascript:;" onclick="setCookie('+item_issueId+')">'+item.issueName+
@@ -365,12 +365,9 @@ function SearchJsonData(page) {
 
 // 2.3管理任务
 /*
-$(function(){
-	$(".ht_cont").on("click","img",function(){
-		var issueId = $(this).attr("class");
-		deleteData(issueId);
-	})
-})*/
+ * $(function(){ $(".ht_cont").on("click","img",function(){ var issueId =
+ * $(this).attr("class"); deleteData(issueId); }) })
+ */
 
 function deleteData(issueId){
 	$.ajax({
