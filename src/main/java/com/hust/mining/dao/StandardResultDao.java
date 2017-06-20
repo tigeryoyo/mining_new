@@ -107,19 +107,23 @@ public class StandardResultDao {
 		});
 
 		for (int i = 1; i < cluster.size(); i++) {
-			String[] tmp = cluster.get(i);
-			if (CommonUtil.isEmptyArray(tmp)) {
+			try{
+				String[] tmp = cluster.get(i);
+				if (CommonUtil.isEmptyArray(tmp) || StringUtils.isBlank(tmp[indexOfTime])) {
+					continue;
+				}
+				String currentTime = tmp[indexOfTime].trim().substring(0, 10);
+				Integer oldValue = map.get(currentTime);
+				if (oldValue != null) {
+					map.replace(currentTime, oldValue, oldValue + 1);
+				} else {
+					map.put(currentTime, 1);
+				}
+			}catch(Exception e){
+				logger.error("当前列 "+i+" 时间为空：{}",e.toString());
 				continue;
 			}
-			String currentTime = tmp[indexOfTime].trim().substring(0, 10);
-			Integer oldValue = map.get(currentTime);
-			if (oldValue != null) {
-				map.replace(currentTime, oldValue, oldValue + 1);
-			} else {
-				map.put(currentTime, 1);
-			}
 		}
-
 		String res = map.toString();
 		return res.substring(1, res.length() - 1);
 	}
@@ -147,7 +151,6 @@ public class StandardResultDao {
 		int i = 1;
 		try {
 			for (i = 1; i < cluster.size(); i++) {
-
 				String[] tmp = cluster.get(i);
 				if (CommonUtil.isEmptyArray(tmp)) {
 					continue;
