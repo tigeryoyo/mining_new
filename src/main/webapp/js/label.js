@@ -314,7 +314,7 @@ function addlabel(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				showLabelInfor();
+				backLabelInfor();
 			}else{
 				alert(msg.result);
 			}
@@ -362,7 +362,7 @@ function labelInforChange(){
 			console.log(msg);
 			if( msg.status == "OK"){
 				alert("修改成功");
-				showLabelInfor();
+				backLabelInfor();
 			}else{
 				alert(msg.result);
 			}
@@ -391,7 +391,7 @@ $(function(){
 				dataType:"json",
 				success:function(msg){
 					if(msg.status=="OK"){
-						showLabelInfor();
+						initShowPage(1);
 					}else{
 						alert(msg.result);
 					}
@@ -407,10 +407,11 @@ $(function(){
 function showLabelInfor()
 {
 	initShowPage(1)
-	}
+}
 
 //返回标签信息显示界面
 function backLabelInfor() {
+	initShowPage(1);
     $("#addLabel").css("display",'none');
     $("#labelInfo").css("display",'block');
     $("#editLabel").css("display",'none');
@@ -424,8 +425,8 @@ $(function() {
 	        $('#goodcover').show();
 	        $('#code').fadeIn();
 	        showcountwebsite();//显示统计网站的信息
-	 //       showlabelofStandard(); //显示已有的标签
-	 //       showlabelNotInStandard();//显示没有的标签
+	        showlabelofStandard(); //显示已有的标签
+	        showlabelNotInStandard();//显示没有的标签
 	    });
     $('#closebt').click(function() {
         $('#code').hide();
