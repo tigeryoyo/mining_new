@@ -184,7 +184,7 @@ a:hover { color:#000000; text-decoration:none; }
 .change_tab input { padding-left:10px;}
 .user_tijiao{ margin-left:65px;}
 .user_warn{ font-size:12px; color:red; padding-left: 10px;}
-.change_tab select{ width:200px; height:30px; line-height:36px; background:#dddddd; padding-left:10px;}
+.change_tab select{ width:200px; line-height:36px; padding-left:10px;}
 
 /*角色信息显示*/
 .role_search{ width:430px; float:right; margin-bottom:20px;}

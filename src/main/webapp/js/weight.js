@@ -23,7 +23,7 @@ function weightInforShow(page){
 					cookie_value1="'"+item.id+"'";
 					cookie_value2="'"+item.name+"'";
 					cookie_value3="'"+item.weight+"'";
-					row= '<tr><td width="88" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="162" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="181" height="30" align="center" bgcolor="#ffffff">'+item.weight+'</td><td colspan="2" width="243" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn b btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delWeight" id="'+item.id+'">删除</button></td></tr>'
+					row= '<tr><td width="88" height="40" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="162" height="40" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="181" height="40" align="center" bgcolor="#ffffff">'+item.weight+'</td><td colspan="2" width="243" height="40" align="center" bgcolor="#ffffff"><button type="button" class="btn b btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delWeight" id="'+item.id+'">删除</button></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -269,7 +269,7 @@ function weightInforSearch(page){
 					cookie_value1="'"+item.id+"'";
 					cookie_value2="'"+item.name+"'";
 					cookie_value3="'"+item.weight+"'";
-					row= '<tr><td width="88" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="162" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="181" height="30" align="center" bgcolor="#ffffff">'+item.weight+'</td><td colspan="2" width="243" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delWeight" id="'+item.id+'" >删除</button></td></tr>'
+					row= '<tr><td width="88" height="40" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="162" height="40" align="center" bgcolor="#ffffff">'+item.name+'</td><td width="181" height="40" align="center" bgcolor="#ffffff">'+item.weight+'</td><td colspan="2" width="243" height="40" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+')">编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delWeight" id="'+item.id+'" >删除</button></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -342,7 +342,7 @@ function weightInforChange(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				// alert("更新成功");	
+				baseAjax("weight_infor");	
 			}else{
 				alert(msg.result);
 			}

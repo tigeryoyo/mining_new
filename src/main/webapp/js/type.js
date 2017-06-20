@@ -19,7 +19,7 @@ function typeInforShow(page){
 				$.each(items,function(idx,item) {
 					cookie_value1="'"+item.id+"'";
 					cookie_value2="'"+item.name+"'";
-					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+')" >编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delType" id="'+item.id+'">删除</button></td></tr>'
+					row= '<tr><td width="169" height="40" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="40" align="center" bgcolor="#ffffff">'+item.name+'</td><td colspan="2" width="140" height="40" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+')" >编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delType" id="'+item.id+'">删除</button></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -240,7 +240,6 @@ function updateNowPage(page){
 function typeInforSearch(page){
 	search_click=true;
 	console.log($("#type_search").val());
-	setFirstSelected();
 	$.ajax({
 		type:"post",
 		url:"/sourceType/selectSourceTypeByName",
@@ -261,7 +260,7 @@ function typeInforSearch(page){
 				$.each(items,function(idx,item) {
 					cookie_value1="'"+item.id+"'";
 					cookie_value2="'"+item.name+"'";
-					row= '<tr><td width="169" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="30" align="center" bgcolor="#ffffff">'+item.name+'</td><td colspan="2" width="140" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+')" >编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delType" id="'+item.id+'" >删除</button></td></tr>'
+					row= '<tr><td width="169" height="40" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="231" height="40" align="center" bgcolor="#ffffff">'+item.name+'</td><td colspan="2" width="140" height="40" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+')" >编辑</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delType" id="'+item.id+'" >删除</button></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -341,7 +340,7 @@ function ChangetypeInfor(){
 			console.log(msg);
 			if( msg.status == "OK"){
 				alert("修改成功");	
-				// baseAjax("type_infor");
+				baseAjax("type_infor");
 			}else{
 				alert(msg.result);
 			}

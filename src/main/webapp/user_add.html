@@ -86,6 +86,7 @@
 							row = '<option>' + item.roleName + '</option>';
 							$('#select_roleName').append(row);
 						});
+						$('#select_roleName').find("option[text='" + roleName + "']").attr("selected", true);
 					} else {
 						alert(msg.result);
 					}
