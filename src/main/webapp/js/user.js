@@ -33,7 +33,7 @@ function userInforShow(page){
 					cookie_value5="'"+getRoleName(item.userId,array_userRole,array_role)+"'";
 					cookie_value6="'"+item.userId+"'";
 					cookie_value7="'"+item.password+"'";
-					row= '<tr><td width="66" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="64" height="30" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="30" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="30" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="30" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="30" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')">编辑</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delUser"  id="'+item.userId+'" >删除</button></td></tr>'
+					row= '<tr><td width="66" height="40" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="64" height="40" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="40" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="40" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="40" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="40" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="40" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')">编辑</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delUser"  id="'+item.userId+'" >删除</button></td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
@@ -314,7 +314,6 @@ function userInforSearch(page){
 	var obj4 = $('#user_tel').val();
 	var obj5 = $('#user_email').val();
 	console.log(obj1)
-	setFirstSelected();
 	$.ajax({
 		type:"post",
 		url:"/user/getUserInfoByPageLimit",
@@ -350,7 +349,7 @@ function userInforSearch(page){
 					cookie_value5="'"+getRoleName(item.userId,array_userRole,array_role)+"'";
 					cookie_value6="'"+item.userId+"'";
 					cookie_value7="'"+item.password+"'";
-					row= '<tr><td width="66" height="30" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="64" height="30" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="30" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="30" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="30" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="30" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="30" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')" >编辑</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delUser"  id="'+item.userId+'" >删除</button>/td></tr>'
+					row= '<tr><td width="66" height="40" align="center" bgcolor="#ffffff">'+((page-1)*10+idx+1)+'</td><td width="64" height="40" align="center" bgcolor="#ffffff">'+item.userName+'</td><td width="66" height="40" align="center" bgcolor="#ffffff">'+item.trueName+'</td><td width="67" height="40" align="center" bgcolor="#ffffff">'+getRoleName(item.userId,array_userRole,array_role)+'</td><td width="104" height="40" align="center" bgcolor="#ffffff">'+item.telphone+'</td><td width="157" height="40" align="center" bgcolor="#ffffff">'+item.email+'</td><td width="130" height="40" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie('+cookie_value1+','+cookie_value2+','+cookie_value3+','+cookie_value4+','+cookie_value5+','+cookie_value6+','+cookie_value7+')" >编辑</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delUser"  id="'+item.userId+'" >删除</button>/td></tr>'
 					$('.infor_tab02').append(row);
 				});
 			}else{
