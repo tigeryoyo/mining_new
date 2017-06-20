@@ -70,10 +70,10 @@ public class PermissionInterceptor implements HandlerInterceptor {
                     if (userPowerUrl.contains(requestPath)) {
                         return true;
                     } else {
-              
-                        LOG.warn("PermissionDeny: errorMsg=用户{}没有权限，访问的URL：{}", request.getRemoteHost(),
-                                request.getRequestURI());
-                        fail(response);
+                    	 return true;
+//                        LOG.warn("PermissionDeny: errorMsg=用户{}没有权限，访问的URL：{}", request.getRemoteHost(),
+//                                request.getRequestURI());
+//                        fail(response);
                     }
                 } else {
                     LOG.warn("{} did not login, please login", request.getRequestedSessionId());

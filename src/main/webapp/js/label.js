@@ -1,5 +1,14 @@
-/** 以下js代码全是关于为准数据贴标签、查看准数据有哪些标签及没有哪些标签、根据标签查找准数据。涉及到标签和准数据*/
+//切换到任务—标签选项卡时，刷新页面
+$('#myTab li:eq(0) a').click(function (e){
+	e.preventDefault()
+	  $(this).tab('show')
+	  showlabelofStandard(); //显示已有的标签
+	  showlabelNotInStandard();//显示没有的标签
+	  console.log("---------")
+	  
+})
 
+/** 以下js代码全是关于为准数据贴标签、查看准数据有哪些标签及没有哪些标签、根据标签查找准数据。涉及到标签和准数据*/
 //查看当前准数据的网站统计信息
 function showcountwebsite()
 {
