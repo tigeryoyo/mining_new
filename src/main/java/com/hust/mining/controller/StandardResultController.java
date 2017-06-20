@@ -245,7 +245,7 @@ public class StandardResultController {
     
     @ResponseBody
     @RequestMapping(value="/deleteLabelOfStandard")
-    public Object deleteLabelOfStandard(@RequestParam(value="staRtId",required=true)String staRtId,
+    public Object deleteLabelOfStandard(@RequestParam(value="stdResId",required=true)String staRtId,
     		@RequestParam(value="labelid",required=true)int labelid)
     {
     	
@@ -259,9 +259,11 @@ public class StandardResultController {
     	return ResultUtil.success("移除标签成功！");
     }
     
+   
+    
     @ResponseBody
     @RequestMapping(value="/countURL")
-	public Object deleteLabelOfStandard(@RequestParam(value="staRtId",required=true)String staRtId)
+	public Object countURL(@RequestParam(value="stdResId",required=true)String staRtId)
 	{
     	//获取当前准数据的内容
     	List<String[]> cluster = standardResultService.getStdResContentById(staRtId);
@@ -273,10 +275,13 @@ public class StandardResultController {
     	int name = AttrUtil.findIndexOfWebName(firstline);
     	List<String[]> uRList = new ArrayList<String[]>();
     	for (String[] strings : cluster) {
-			String[] string = new String[2];
-			string[0] = strings[URL];
-			string[1] = strings[name];
-			uRList.add(string);
+    		//过滤空行和为空的
+    		if (strings!=null && strings.length!=1) {
+    			String[] string = new String[2];
+    			string[0] = strings[URL];
+    			string[1] = strings[name];
+    			uRList.add(string);
+			}
 		}
     	URLTool urlTool = new URLTool();
     	List<String[]> result = urlTool.statisticUrl(uRList);
@@ -284,13 +289,16 @@ public class StandardResultController {
     		return ResultUtil.errorWithMsg("统计网站失败！");
 		}
     	List<String[]> finalresult = new ArrayList<String[]>();
-    	//只需输出5个
-    	for(int i = 0; i < 5; i++)
-    	{
-    		finalresult.add(result.get(i));
-    	}
-    	return ResultUtil.success(finalresult);
-    	
+    	if (result.size()<5) {
+    		return ResultUtil.success(result);
+		}
+    	else {
+    		//只需输出5个
+        	for(int i = 0; i < 5; i++)
+        	{
+        		finalresult.add(result.get(i));
+        	}
+        	return ResultUtil.success(finalresult);
+		}
 	}
-    
 }

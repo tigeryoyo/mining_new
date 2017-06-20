@@ -3,12 +3,12 @@
 //查看当前准数据的网站统计信息
 function showcountwebsite()
 {
-	var issueId = getCookie("stdResId");
-	console.log("当前话题ID是："+issueId);
+	var stdResId = getCookie("stdResId");
+	console.log("当前话题ID是："+stdResId);
 	$.ajax({
 		type:"post",
 		url:"/standardResult/countURL",
-		data:{stdResId:issueId},
+		data:{stdResId:stdResId},
 		datatype:"json",
 		success: function(msg){
 			console.log("URL后台是：");
@@ -52,7 +52,7 @@ function showlabelofStandard()
 				$.each(items,function(idx,item) {
 					cookie_value1="'"+item.labelid+"'";
 					cookie_value2="'"+item.labelname+"'";
-					row= '<button type="button" class="btn btn-success" style="margin: 5px; onclick="deleteLabelOfStandard('+"'"+item.labelid+"'"+','+"'"+issueId+"'"+')">'+item.labelname+'</button>'
+					row= '<button type="button" class="btn btn-success" style="margin: 5px;" onclick="deleteLabelOfStandard('+"'"+item.labelid+"'"+','+"'"+issueId+"'"+')">'+item.labelname+'</button>'
                     $('#labelofStandard').append(row);
 				});
 			}else{
@@ -86,7 +86,7 @@ function showlabelNotInStandard()
 				$.each(items,function(idx,item) {
 					cookie_value1="'"+item.labelid+"'";
 					cookie_value2="'"+item.labelname+"'";
-					row= '<button type="button" class="btn btn-success" style="margin: 5px; onclick="setLabelForStandardResult('+"'"+item.labelid+"'"+','+"'"+issueId+"'"+')">'+item.labelname+'</button>'
+					row= '<button type="button" class="btn btn-success" style="margin: 5px;" onclick="setLabelForStandardResult('+"'"+item.labelid+"'"+','+"'"+issueId+"'"+')">'+item.labelname+'</button>'
                     $('#labelNotinStandard').append(row);
 				});
 			}else{
@@ -111,7 +111,6 @@ function deleteLabelOfStandard(labelid,issueId)
 		datatype:"json",
 		success: function(msg){
 			if( msg.status == "OK"){
-				alert(msg.result);
 				showlabelofStandard(); //显示已有的标签
 		        showlabelNotInStandard();//显示没有的标签
 			}else{
@@ -135,7 +134,6 @@ function setLabelForStandardResult(labelid,issueId)
 		datatype:"json",
 		success: function(msg){
 			if( msg.status == "OK"){
-				alert(msg.result);
 				showlabelofStandard(); //显示已有的标签
 		        showlabelNotInStandard();//显示没有的标签
 			}else{
@@ -425,9 +423,9 @@ $(function() {
 	        $('#code').center();
 	        $('#goodcover').show();
 	        $('#code').fadeIn();
-	  //      showcountwebsite();//显示统计网站的信息
-	        showlabelofStandard(); //显示已有的标签
-	        showlabelNotInStandard();//显示没有的标签
+	        showcountwebsite();//显示统计网站的信息
+	 //       showlabelofStandard(); //显示已有的标签
+	 //       showlabelNotInStandard();//显示没有的标签
 	    });
     $('#closebt').click(function() {
         $('#code').hide();
