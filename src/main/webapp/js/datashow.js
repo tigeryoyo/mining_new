@@ -35,7 +35,7 @@ function showExtensiveIssueDetails(issueId) {
 					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.fileName + '</td><td align="center" valign="middle">'
 						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')
 						+ '</td><td align="center" valign="middle"><button type="button" class="btn btn-primary btn_sc" onClick=clusterSingleFile("' + item.fileId + '") >聚类</button>'
-						+ '<button type="button" class="btn btn-success btn_sc" onclick=downloadExtFile("' + item.fileId + '","' + item.fileName + '") >下载</button><button type="button" class="btn btn-danger btn_jl" id="'
+						+ '<button type="button" class="btn btn-success btn_sc" onclick=downloadExtFile("'+"'"+item.fileId +"'"+'","' +"'"+item.fileName +"'"+'") >下载</button><button type="button" class="btn btn-danger btn_jl" id="'
 						+ item.fileId + '" onclick="bind()">删除</button></td></tr>'
 					$('.up_list').append(row);
 				});
