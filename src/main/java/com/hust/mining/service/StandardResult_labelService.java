@@ -8,14 +8,14 @@ import com.hust.mining.model.Label;
 
 public interface StandardResult_labelService {
 	
-	public boolean attachlabels(String staResId,List<Integer> labels);
-	
 	public List<Label> selectLabelsForStandResult(String stdResId);
 	
 	public List<String> selectStandResultsBylabel(int labelid);
 
 	boolean delete(String stdResId, int labelid);
 
-	List<Label> findLabelNotInStandardResult(String stdResId);
+	public boolean attachlabels(String staResId, Integer label); 
+
+	
 	
 }
