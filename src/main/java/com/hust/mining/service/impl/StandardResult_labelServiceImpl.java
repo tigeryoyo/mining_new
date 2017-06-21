@@ -3,7 +3,6 @@ package com.hust.mining.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tools.ant.taskdefs.optional.depend.constantpool.StringCPInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ public class StandardResult_labelServiceImpl implements StandardResult_labelServ
 	
 	@Autowired
 	private StandardResult_labeDao standartResult_labeldao;
-	
 	@Autowired
 	private LabelService labelservice;
 	/**
