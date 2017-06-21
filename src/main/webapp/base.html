@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="css/loading.css">
 <link rel="stylesheet" href="css/page.css">
 <link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="css/bootstrap.min.css">
 <script type="text/javascript" src="js/dateformat.js"></script>
 </head>
 <body>
@@ -69,95 +69,101 @@
 <script type="text/javascript" src="js/bootstrap.js"></script>
 
 <script type="text/javascript">
-bootstrapButton = $.fn.button.noConflict(); 
-$.fn.bootstrapBtn = bootstrapButton;
-/*	$(window).scroll(function() {
-		var scrollHeight = $(window).scrollTop();
-		var sideHeight = $('#header').height(); //header的高度
-		var r_offL = $(".right").offset().left; //右边内容栏到浏览器左边的距离
-		var r_offT = $(".right").offset().top; //右边内容栏到浏览器顶部的距离
-		var rightH = $('.right').height(); //右边内容的高度
-		var l_offL = $(".left").offset().left; //左边导航栏到浏览器左边的距离
-		var leftH = $('.left').height(); //左边内容栏的高度
-		var l_offT = $('.left').offset().top; //左边内容栏到浏览器顶部的距离
-		var windowH = $(window).height();
+	bootstrapButton = $.fn.button.noConflict();
+	$.fn.bootstrapBtn = bootstrapButton;
+	/*	$(window).scroll(function() {
+	 var scrollHeight = $(window).scrollTop();
+	 var sideHeight = $('#header').height(); //header的高度
+	 var r_offL = $(".right").offset().left; //右边内容栏到浏览器左边的距离
+	 var r_offT = $(".right").offset().top; //右边内容栏到浏览器顶部的距离
+	 var rightH = $('.right').height(); //右边内容的高度
+	 var l_offL = $(".left").offset().left; //左边导航栏到浏览器左边的距离
+	 var leftH = $('.left').height(); //左边内容栏的高度
+	 var l_offT = $('.left').offset().top; //左边内容栏到浏览器顶部的距离
+	 var windowH = $(window).height();
 
-		if (scrollHeight < sideHeight) {
+	 if (scrollHeight < sideHeight) {
 
-			$('.right').css({
-				'position' : 'static'
-			});
+	 $('.right').css({
+	 'position' : 'static'
+	 });
 
-			$('.left').css({
-				'position' : 'static'
-			});
+	 $('.left').css({
+	 'position' : 'static'
+	 });
 
-		} else if (scrollHeight >= sideHeight && scrollHeight + windowH < l_offT + leftH + 10) {
+	 } else if (scrollHeight >= sideHeight && scrollHeight + windowH < l_offT + leftH + 10) {
 
-			$('.right').css({
-				'position' : 'fixed',
-				left : r_offL + 'px',
-				top : '10px'
-			});
+	 $('.right').css({
+	 'position' : 'fixed',
+	 left : r_offL + 'px',
+	 top : '10px'
+	 });
 
-			$('.left').css({
-				'position' : 'static'
-			});
+	 $('.left').css({
+	 'position' : 'static'
+	 });
 
-		} else if (rightH == leftH && windowH + scrollHeight >= l_offT + leftH + 10) {
+	 } else if (rightH == leftH && windowH + scrollHeight >= l_offT + leftH + 10) {
 
-			$('.right').css({
-				'position' : 'static'
-			})
+	 $('.right').css({
+	 'position' : 'static'
+	 })
 
-			$('.left').css({
-				'position' : 'static'
-			})
-		}
+	 $('.left').css({
+	 'position' : 'static'
+	 })
+	 }
 
-		else if (rightH > leftH && windowH + scrollHeight >= l_offT + leftH + 10 && windowH + scrollHeight < rightH + r_offT + 10) {
-			//如果继续下滑的时候右边内容高度大于左边导航栏高度，则让左侧导航栏固定
+	 else if (rightH > leftH && windowH + scrollHeight >= l_offT + leftH + 10 && windowH + scrollHeight < rightH + r_offT + 10) {
+	 //如果继续下滑的时候右边内容高度大于左边导航栏高度，则让左侧导航栏固定
 
-			$('.right').css({
-				'position' : 'static'
-			})
+	 $('.right').css({
+	 'position' : 'static'
+	 })
 
-			$('.left').css({
-				'position' : 'fixed',
-				top : windowH - leftH - 10 + 'px',
-				left : l_offL + 'px'
-			})
+	 $('.left').css({
+	 'position' : 'fixed',
+	 top : windowH - leftH - 10 + 'px',
+	 left : l_offL + 'px'
+	 })
 
-		} else if (windowH + scrollHeight >= rightH + r_offT + 10 && rightH > leftH) {
+	 } else if (windowH + scrollHeight >= rightH + r_offT + 10 && rightH > leftH) {
 
-			$('.left').css({
-				'position' : 'absolute',
-				top : rightH + r_offT - leftH + 'px',
-				left : l_offL + 'px'
-			})
+	 $('.left').css({
+	 'position' : 'absolute',
+	 top : rightH + r_offT - leftH + 'px',
+	 left : l_offL + 'px'
+	 })
 
-		}
-	});*/
+	 }
+	 });*/
 
 	function baseAjax(item) {
-		$.ajax({
-			type : "get",
-			url : item + ".html",
-			async : false,
-			dataType : "html",
-			data : '',
-			success : function(data) {
-				$(".right").empty().html(data);
-			},
-			error : function() {
-				alert("ajax加载失败！");
-			}
-		});
-		title = document.title;
-		console.log(title+"--------------------------")
-		history.pushState({
-			title : title
-		}, title, "?href=" + item);
+		if (item == "index") {
+			exit();
+		} else if(item == "error"){
+			window.parent.location.href = "/error.html";
+		} else {
+			$.ajax({
+				type : "get",
+				url : item + ".html",
+				async : false,
+				dataType : "html",
+				data : '',
+				success : function(data) {
+					$(".right").empty().html(data);
+				},
+				error : function() {
+					alert("ajax加载失败！");
+				}
+			});
+			title = document.title;
+			console.log(title + "--------------------------")
+			history.pushState({
+				title : title
+			}, title, "?href=" + item);
+		}
 
 	}
 
@@ -252,14 +258,14 @@ $.fn.bootstrapBtn = bootstrapButton;
 		}
 	}
 
- 	if (history.pushState) { //如果浏览器支持history的pushstate属性,在前进后退的时候直接触发pageTrigger事件
+	if (history.pushState) { //如果浏览器支持history的pushstate属性,在前进后退的时候直接触发pageTrigger事件
 		window.addEventListener("popstate", function() {
 			pageTrigger();
 
 		});
 		// 默认载入
 		pageTrigger();
-	} 
+	}
 
 	function user() {
 		$.ajax({
