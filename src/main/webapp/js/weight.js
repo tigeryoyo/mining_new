@@ -245,7 +245,6 @@ function weightInforSearch(page){
 	console.log($("#name").val());
 	console.log($("#weight").val());
 	search_click=true;
-	setFirstSelected();
 	$.ajax({
 		type:"post",
 		url:"/weight/selectByCondition",

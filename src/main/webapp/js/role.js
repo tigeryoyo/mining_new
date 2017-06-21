@@ -244,8 +244,7 @@ function updateNowPage(page){
 // 信息搜索
 function roleInforSearch(page){
 	var roleInfo = $("#searchRole").val();
-	search_click=true;
-	setFirstSelected();
+//	search_click=true;
 	$.ajax({
 		type:"post",
 		url:"/role/selectOneRoleInfo",
@@ -275,7 +274,7 @@ function roleInforSearch(page){
 		},
 		complete : function(){
 			console.log("one")
-            stop();
+           // stop();
         },
 		error: function(){
 			alert("请求失败");
