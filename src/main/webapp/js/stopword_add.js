@@ -8,7 +8,7 @@ function addStopwordInfor(word) {
 	var num = $('#addStopword').attr("data-num");
 	var row = '<tr class="infor_tab02_tit"> <td colspan="2" height="40" align="center" valign="middle" bgcolor="#ffffff">'
 			+ (++num)
-			+ '</td> <td colspan="3" height="40" align="center" valign="middle" bgcolor="#ffffff" > <input type="text" class="form-control" style="width: 100%; height: 100%; text-align: center" placeholder="请输入停用词" value="'
+			+ '</td> <td colspan="3" height="40" align="center" valign="middle" bgcolor="#ffffff" > <input name="stopword" type="text" class="form-control" style="width: 100%; height: 100%; text-align: center" placeholder="请输入停用词" value="'
 			+ word + '"> </td> </tr>';
 	$('#addStopword').before(row);
 	$('#addStopword').attr("data-num", num);
@@ -54,7 +54,7 @@ function addStopword() {
 
 function getWords(){
 	var words = new Array();
-	$("input").each(function(index,element){
+	$("input[name='stopword']").each(function(index,element){
 		words.push($(this).val());
 	});
 	console.log(words);
