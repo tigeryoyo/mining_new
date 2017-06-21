@@ -380,6 +380,9 @@ public class IssueController {
 		}
     	List<String[]> list = issue_labelservice.countURL(issueId);
     	List<String[]> finalresult = new ArrayList<String[]>();
+    	if (list==null) {
+    		return ResultUtil.errorWithMsg("该任务下没有文件！");
+		}
     	if (list.size()<5) {
     		return ResultUtil.success(list);
 		}

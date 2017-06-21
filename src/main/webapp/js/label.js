@@ -27,11 +27,11 @@ function showcountwebsite()
 				var cookie_value1;
 				$('#websiteCountInfo').html("");
 				$.each(items,function(idx,item) {
-					row= '<P>'+item+'</P>'
+					row= '<P>'+item[0]+'&nbsp;&nbsp;&nbsp;'+item[1]+'&nbsp;&nbsp;&nbsp;'+item[2]+'</P>'
                     $('#websiteCountInfo').append(row);
 				});
 			}else{
-				$('#websiteCountInfo').html("");
+				$('#websiteCountInfo').html(msg.result);
 			}
 		},
 		error: function(){
