@@ -74,16 +74,20 @@
 			success : function(msg) {
 				if (msg.status == "OK") {
 					var items = msg.result;
-					console.log(msg);
+					
 					$.each(items, function(idx, item) {
-						if (roleName == item.roleName) {
+						if(item.roleName == '超级管理员'){
+							;
+						}else if (roleName == item.roleName) {
 							row = '<option selected="true">' + item.roleName + '</option>';
+							$('#select_roleName').append(row);
 						} else {
 							row = '<option>' + item.roleName + '</option>';
+							$('#select_roleName').append(row);
 						}
-						$('#select_roleName').append(row);
+						
 					});
-					$('#select_roleName').find("option[text='" + roleName + "']").attr("selected", true);
+					//$('#select_roleName').find("option[text='" + roleName + "']").attr("selected", true);
 				} else {
 					alert(msg.result);
 				}

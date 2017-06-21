@@ -441,7 +441,8 @@ public class ResultServiceImpl implements ResultService {
 	public boolean resetCluster(String index, HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		int idx = Integer.valueOf(index);
-		
+		//要重置的元素在初始聚类结果中的下标
+		int origIndex = -1;
 		String resultId = redisService.getString(KEY.RESULT_ID, request);
         String issueId = issueService.getCurrentIssueId(request);
         // 从文件系统获取原数据
@@ -455,9 +456,25 @@ public class ResultServiceImpl implements ResultService {
         if(idx > origCluster.size() || idx < 0){
         	return false;
         }
+        //判断类簇序号有没有变化
+        String[] items = modiCluster.get(idx);
+        loop1:for(int i = 0 ; i < origCluster.size() ; i++){
+        	String[] cluster = origCluster.get(i);
+        	for(String s1 : items){
+        		for(String s2 : cluster){
+        			if(s1.equals(s2)){
+        				origIndex = i;
+        				break loop1;
+        			}
+        		}
+        	}
+        }
+        if(origIndex == -1){
+        	return false;
+        }
         //重置被修改的类簇的数据
-        modiCluster.set(idx, origCluster.get(idx));
-        modiCount.set(idx, origCount.get(idx));
+        modiCluster.set(idx, origCluster.get(origIndex));
+        modiCount.set(idx, origCount.get(origIndex));
         
         // 用原始数据覆盖修改后数据
         Result result = new Result();

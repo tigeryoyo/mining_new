@@ -82,7 +82,7 @@ function personalInforChange(){
 			console.log(msg);
 			if( msg.status == "OK"){
 				alert(msg.result);
-				baseAjax("personal_infor");
+				baseAjax("topic_list");
 			}else{
 				alert(msg.result);
 			}
@@ -126,7 +126,7 @@ function passwordChange(){
 			console.log(msg);
 			if( msg.status == "OK"){
 				alert("密码更改成功！");
-				baseAjax("password_change");
+				baseAjax("topic_list");
 			}else{
 				alert(msg.result);
 			}

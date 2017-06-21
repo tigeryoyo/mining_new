@@ -81,11 +81,19 @@
 				success : function(msg) {
 					if (msg.status == "OK") {
 						var items = msg.result;
-						console.log(msg);
+						
 						$.each(items, function(idx, item) {
-							row = '<option>' + item.roleName + '</option>';
-							$('#select_roleName').append(row);
+							if(item.roleName == '超级管理员'){
+								;
+							} else {
+								row = '<option>' + item.roleName + '</option>';
+								$('#select_roleName').append(row);
+							}
 						});
+						if($('#select_roleName option').size() == 0){
+							alert("还没有创建角色");
+							return;
+						}
 					} else {
 						alert(msg.result);
 					}

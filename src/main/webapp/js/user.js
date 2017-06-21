@@ -155,6 +155,13 @@ function setCookie(value1,value2,value3,value4,value5,value6,value7){
 	document.cookie = cookie_name5 +"="+ escape (value5) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name6 +"="+ escape (value6) + ";expires=" + exp.toGMTString();
 	document.cookie = cookie_name7 +"="+ escape (value7) + ";expires=" + exp.toGMTString();
+	if(value5 == '超级管理员'){
+		alert("对不起，不能修改超级管理员信息");
+		return;
+	}else if(value5 == '管理员'){
+		alert("对不起，不能修改管理员信息");
+		return;
+	}
 	baseAjax("user_change");
 }
 
@@ -304,7 +311,11 @@ function addUser(){
         alert('请输入正确信息');
         return;
     }
-	
+	var rolename = $("#select_roleName option:selected").val();
+	if(rolename===undefined||rolename==''){
+        alert('角色为空');
+        return;
+    }
 	$.ajax({
 		type:"post",
 		url:"/user/insertUserInfo",
@@ -362,7 +373,11 @@ function userInforChange(){
 		$("#new_email_type").focus(); 
 		return false; 
 	}
-	
+	var rolename = $("#select_roleName option:selected").val();
+	if(rolename===undefined||rolename==''){
+        alert('角色为空');
+        return;
+    }
 	var newRole=getCookie("roleName");
 	var newId=getCookie("userId");
 	var newPassword=getCookie("passWord");
@@ -382,7 +397,7 @@ function userInforChange(){
 		success: function(msg){
 			console.log(msg);
 			if( msg.status == "OK"){
-				alert("角色信息更新成功");
+				alert("用户信息更新成功");
 				// alert(msg.result);
 				baseAjax("user_infor");
 			}else{
@@ -433,7 +448,7 @@ $(function(){
 		
 		if(user_id == currentUserId){
 			alert('对不起，不能删除当前登录用户');
-		}else if(rolename == "超级管理员" || rolename == "管理员"){
+		}else if(rolename == "超级管理员"){
 			alert('对不起，不能删除管理员');			
 		}else{
 			userInforDel(user_id);

@@ -114,7 +114,10 @@ public class FileController {
 			outputStream = response.getOutputStream();
 			response.setCharacterEncoding("utf-8");
 			response.setContentType("multipart/form-data");
-			String name = new String(fileName.replace(".xlsx", ".xls").getBytes(),"ISO8859-1");
+			fileName = fileName.replace(" ", "");
+			fileName = fileName.replace("，", "");
+			fileName = fileName.replace(",", "");
+			String name = new String(fileName.trim().replace(".xlsx", ".xls").getBytes(),"ISO8859-1");
 			response.setHeader("Content-Disposition", "attachment;filename=" + name);
 			HSSFWorkbook workbook = ExcelUtil.exportToExcel(cluster);
 			workbook.write(outputStream);
