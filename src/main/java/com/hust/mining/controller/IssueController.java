@@ -24,10 +24,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.model.Issue;
+import com.hust.mining.model.Label;
+import com.hust.mining.model.StandardResult;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.service.IssueService;
+import com.hust.mining.service.LabelService;
 import com.hust.mining.service.RedisService;
+import com.hust.mining.service.StandardResultService;
 import com.hust.mining.service.UserService;
+import com.hust.mining.service.issue_labelService;
+import com.hust.mining.urltags.URLTool;
+import com.hust.mining.util.AttrUtil;
 import com.hust.mining.util.ResultUtil;
 
 import net.sf.json.JSONObject;
@@ -46,6 +53,12 @@ public class IssueController {
 	private IssueService issueService;
 	@Autowired
 	private RedisService redisService;
+	@Autowired
+	private issue_labelService issue_labelservice;
+	@Autowired
+    private LabelService labelservice;
+ 	@Autowired
+    private StandardResultService standardResultService;
 
 	/**
 	 * 创建任务
@@ -245,6 +258,138 @@ public class IssueController {
 		CustomDateEditor editor = new CustomDateEditor(df, false);
 		binder.registerCustomEditor(Date.class, editor);
 	}
+	
+	////以下全部都是为任务贴标签
+	@ResponseBody
+    @RequestMapping(value="/SetLabelForStandardResult")
+    public Object SetLabelForStandardResult(@RequestParam(value="issueId",required=true) String issueId,
+    		@RequestParam(value="labelid",required=true) Integer labelid)
+    {
+    	if (labelid.equals(null)) {
+			return ResultUtil.errorWithMsg("没有选中任何标签！");
+		}
+    	boolean status = issue_labelservice.attachlabels(issueId, labelid);
+    	if (status==false) {
+    		return ResultUtil.errorWithMsg("贴标签失败！");
+		}
+    	return ResultUtil.success("贴标签成功！");
+    }
+	
+	/**
+     * 查找当前的任务，没有哪些标签
+     */
+    @ResponseBody
+    @RequestMapping(value="/findLabelNotInStandardResult")
+    public Object findLabelNotInStandardResult(@RequestParam(value="issueId",required=true) String issueId)
+    {
+    	if (StringUtils.isBlank(issueId)) {
+    		return ResultUtil.errorWithMsg("没有选中任何准数据！");
+		}
+    	//当前任务已有的标签
+		List<Label> exitLabel = new ArrayList<Label>();
+		exitLabel = issue_labelservice.selectLabelsForStandResult(issueId);
+		System.out.println("已有的标签长度："+exitLabel.size());
+		//全部标签
+		List<Label> allLabel = new ArrayList<Label>();
+		allLabel = labelservice.selectAllLable(0, 0);
+		System.out.println("全部标签长度："+allLabel.size());
+		//没有的标签
+		List<Label> list = new ArrayList<Label>();
+		for(int i = 0; i < allLabel.size();i++)
+		{
+			int status = 0;//0表示不存在相同的
+			for(int j = 0; j < exitLabel.size(); j++)
+			{
+				String string1 = allLabel.get(i).getLabelname();
+				String string2 = exitLabel.get(j).getLabelname();
+				if (string1.equals(string2)) {
+					status = 1;
+				}
+			}
+			if (status!=1) {
+				Label label = new Label();
+				label = allLabel.get(i);
+				list.add(label);
+			}
+		}
+		System.out.println("没有的标签长度："+list.size());
+    	return ResultUtil.success(list);
+    }
+    
+    /**
+     * 查看某个准数据被打贴了什么标签
+     * @param stdResId
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/selectLabelsForStandResult")
+    public Object selectLabelsForStandResult(@RequestParam(value="issueId",required=true)String issueId)
+    {
+    	if (StringUtils.isBlank(issueId)) {
+    		return ResultUtil.errorWithMsg("没有选中任何准数据！");
+		}
+    	List<Label> list = issue_labelservice.selectLabelsForStandResult(issueId);
+    	System.out.println("已有的标签是：");
+    	for (Label label : list) {
+			System.out.println(label.getLabelname());
+		}
+    	return ResultUtil.success(list);
+    }
 
+    /**
+     * 根据标签查找那些准数据包含此标签
+     * @param labelname
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value="/selectStandResultsBylabel")
+    public Object selectIssuesBylabel(@RequestParam(value="labelname",required=true)String labelname)
+    {
+    	//根据labelname找到labelid
+    	Label label = labelservice.selectByname(labelname);
+    	if (StringUtils.isBlank(labelname)) {
+    		return ResultUtil.errorWithMsg("没有准数据包含此标签！");
+		}
+    	//根据labelId返回任务的id列表
+    	List<String> list = issue_labelservice.selectIssuesBylabel(label.getLabelid());
+    	return ResultUtil.success(list);
+    }
+    
+    @ResponseBody
+    @RequestMapping(value="/deleteLabelOfStandard")
+    public Object deleteLabelOfStandard(@RequestParam(value="issueId",required=true)String issueId,
+    		@RequestParam(value="labelid",required=true)int labelid)
+    {
+    	
+    	if (StringUtils.isBlank(issueId)) {
+    		return ResultUtil.errorWithMsg("请选择准数据任务！");
+		}
+    	boolean status = issue_labelservice.delete(issueId, labelid);
+    	if (status==false) {
+    		return ResultUtil.errorWithMsg("移除标签失败！");
+		}
+    	return ResultUtil.success("移除标签成功！");
+    }
 
+    @ResponseBody
+    @RequestMapping(value="/countURL")
+	public Object countURL(@RequestParam(value="issueId",required=true)String issueId)
+	{
+    	if (StringUtils.isBlank(issueId)) {
+    		return ResultUtil.errorWithMsg("请选择准数据任务！");
+		}
+    	List<String[]> list = issue_labelservice.countURL(issueId);
+    	List<String[]> finalresult = new ArrayList<String[]>();
+    	if (list.size()<5) {
+    		return ResultUtil.success(list);
+		}
+    	else {
+    		//只需输出5个
+        	for(int i = 0; i < 5; i++)
+        	{
+        		finalresult.add(list.get(i));
+        	}
+        	return ResultUtil.success(finalresult);
+		}
+	}
 }

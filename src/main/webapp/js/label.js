@@ -8,16 +8,16 @@ $('#myTab li:eq(0) a').click(function (e){
 	  
 })
 
-/** 以下js代码全是关于为准数据贴标签、查看准数据有哪些标签及没有哪些标签、根据标签查找准数据。涉及到标签和准数据*/
+/** 以下js代码全是关于为准数据任务贴标签、查看准数据任务有哪些标签及没有哪些标签。涉及到标签和准数据任务*/
 //查看当前准数据的网站统计信息
 function showcountwebsite()
 {
-	var stdResId = getCookie("stdResId");
-	console.log("当前话题ID是："+stdResId);
+	var issueId = getCookie("issueId");
+	console.log("当前话题ID是："+issueId);
 	$.ajax({
 		type:"post",
-		url:"/standardResult/countURL",
-		data:{stdResId:stdResId},
+		url:"/issue/countURL",
+		data:{issueId:issueId},
 		datatype:"json",
 		success: function(msg){
 			console.log("URL后台是：");
@@ -44,12 +44,12 @@ function showcountwebsite()
 //查看当前准数据已有的标签
 function showlabelofStandard()
 {
-	var issueId = getCookie("stdResId");
+	var issueId = getCookie("issueId");
 	console.log("当前话题ID是："+issueId);
 	$.ajax({
 		type:"post",
-		url:"/standardResult/selectLabelsForStandResult",
-		data:{stdResId:issueId},
+		url:"/issue/selectLabelsForStandResult",
+		data:{issueId:issueId},
 		datatype:"json",
 		success: function(msg){
 			console.log("已有后台是：");
@@ -78,12 +78,12 @@ function showlabelofStandard()
 //查看当前准数据没有的标签
 function showlabelNotInStandard()
 {
-	var issueId = getCookie("stdResId");
+	var issueId = getCookie("issueId");
 	console.log("当前话题ID是："+issueId);
 	$.ajax({
 		type:"post",
-		url:"/standardResult/findLabelNotInStandardResult",
-		data:{stdResId:issueId},
+		url:"/issue/findLabelNotInStandardResult",
+		data:{issueId:issueId},
 		datatype:"json",
 		success: function(msg){
 			console.log("没有后台是：");
@@ -115,8 +115,8 @@ function deleteLabelOfStandard(labelid,issueId)
 	console.log("需要删除标签ID是："+labelid);
 	$.ajax({
 		type:"post",
-		url:"/standardResult/deleteLabelOfStandard",
-		data:{stdResId:issueId,labelid:labelid},
+		url:"/issue/deleteLabelOfStandard",
+		data:{issueId:issueId,labelid:labelid},
 		datatype:"json",
 		success: function(msg){
 			if( msg.status == "OK"){
@@ -138,8 +138,8 @@ function setLabelForStandardResult(labelid,issueId)
 	console.log("需要添加标签ID是："+labelid);
 	$.ajax({
 		type:"post",
-		url:"/standardResult/SetLabelForStandardResult",
-		data:{stdResId:issueId,labelid:labelid},
+		url:"/issue/SetLabelForStandardResult",
+		data:{issueId:issueId,labelid:labelid},
 		datatype:"json",
 		success: function(msg){
 			if( msg.status == "OK"){
@@ -154,6 +154,153 @@ function setLabelForStandardResult(labelid,issueId)
 		}
 	})
 }
+
+///** 以下js代码全是关于为准数据文件贴标签、查看准数据文件有哪些标签及没有哪些标签。涉及到标签和准数据文件*/
+////查看当前准数据的网站统计信息
+//function showcountwebsite()
+//{
+//	var stdResId = getCookie("stdResId");
+//	console.log("当前话题ID是："+stdResId);
+//	$.ajax({
+//		type:"post",
+//		url:"/standardResult/countURL",
+//		data:{stdResId:stdResId},
+//		datatype:"json",
+//		success: function(msg){
+//			console.log("URL后台是：");
+//			console.log(msg);
+//			if( msg.status == "OK"){
+//				var items = msg.result ; //从后台获取的为label实体
+//				var cookie_value1;
+//				$('#websiteCountInfo').html("");
+//				$.each(items,function(idx,item) {
+//					row= '<P>'+item+'</P>'
+//                    $('#websiteCountInfo').append(row);
+//				});
+//			}else{
+//				$('#websiteCountInfo').html("");
+//			}
+//		},
+//		error: function(){
+//			alert("请求失败！");
+//		}
+//		
+//	})
+//}
+//
+////查看当前准数据已有的标签
+//function showlabelofStandard()
+//{
+//	var issueId = getCookie("stdResId");
+//	console.log("当前话题ID是："+issueId);
+//	$.ajax({
+//		type:"post",
+//		url:"/standardResult/selectLabelsForStandResult",
+//		data:{stdResId:issueId},
+//		datatype:"json",
+//		success: function(msg){
+//			console.log("已有后台是：");
+//			console.log(msg);
+//			if( msg.status == "OK"){
+//				var items = msg.result ; //从后台获取的为label实体
+//				var cookie_value1;
+//				$('#labelofStandard').html("");
+//				$.each(items,function(idx,item) {
+//					cookie_value1="'"+item.labelid+"'";
+//					cookie_value2="'"+item.labelname+"'";
+//					row= '<button type="button" class="btn btn-success" style="margin: 5px;" onclick="deleteLabelOfStandard('+"'"+item.labelid+"'"+','+"'"+issueId+"'"+')">'+item.labelname+'</button>'
+//                    $('#labelofStandard').append(row);
+//				});
+//			}else{
+//				$('#labelofStandard').html("");
+//			}
+//		},
+//		error: function(){
+//			alert("请求失败！");
+//		}
+//		
+//	})
+//}
+//
+////查看当前准数据没有的标签
+//function showlabelNotInStandard()
+//{
+//	var issueId = getCookie("stdResId");
+//	console.log("当前话题ID是："+issueId);
+//	$.ajax({
+//		type:"post",
+//		url:"/standardResult/findLabelNotInStandardResult",
+//		data:{stdResId:issueId},
+//		datatype:"json",
+//		success: function(msg){
+//			console.log("没有后台是：");
+//			console.log(msg);
+//			if( msg.status == "OK"){
+//				var items = msg.result ; //从后台获取的为label实体
+//				var cookie_value1;
+//				$('#labelNotinStandard').html("");
+//				$.each(items,function(idx,item) {
+//					cookie_value1="'"+item.labelid+"'";
+//					cookie_value2="'"+item.labelname+"'";
+//					row= '<button type="button" class="btn btn-success" style="margin: 5px;" onclick="setLabelForStandardResult('+"'"+item.labelid+"'"+','+"'"+issueId+"'"+')">'+item.labelname+'</button>'
+//                    $('#labelNotinStandard').append(row);
+//				});
+//			}else{
+//				$('#labelNotinStandard').html("");
+//			}
+//		},
+//		error: function(){
+//			alert("请求失败！");
+//		}
+//		
+//	})
+//}
+//
+//function deleteLabelOfStandard(labelid,issueId) 
+//{
+//	console.log("需要删除标签的话题ID是："+issueId);
+//	console.log("需要删除标签ID是："+labelid);
+//	$.ajax({
+//		type:"post",
+//		url:"/standardResult/deleteLabelOfStandard",
+//		data:{stdResId:issueId,labelid:labelid},
+//		datatype:"json",
+//		success: function(msg){
+//			if( msg.status == "OK"){
+//				showlabelofStandard(); //显示已有的标签
+//		        showlabelNotInStandard();//显示没有的标签
+//			}else{
+//				alert(msg.result);
+//			}
+//		},
+//		error: function(){
+//			alert("请求失败！");
+//		}
+//	})
+//}
+//
+//function setLabelForStandardResult(labelid,issueId) 
+//{
+//	console.log("需要添加标签的话题ID是："+issueId);
+//	console.log("需要添加标签ID是："+labelid);
+//	$.ajax({
+//		type:"post",
+//		url:"/standardResult/SetLabelForStandardResult",
+//		data:{stdResId:issueId,labelid:labelid},
+//		datatype:"json",
+//		success: function(msg){
+//			if( msg.status == "OK"){
+//				showlabelofStandard(); //显示已有的标签
+//		        showlabelNotInStandard();//显示没有的标签
+//			}else{
+//				alert(msg.result);
+//			}
+//		},
+//		error: function(){
+//			alert("请求失败！");
+//		}
+//	})
+//}
 
 /************* 以下js代码全是标签增、删、查、改。只涉及到标签。************************/
 //显示每一页标签信息
