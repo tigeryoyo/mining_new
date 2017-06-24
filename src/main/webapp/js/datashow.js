@@ -77,7 +77,7 @@ function showStandardIssueDetails(issueId) {
 		     		}
 					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.resName + '</td><td align="center" valign="middle">'
 						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')
-						+ '</td><td align="center" valign="middle"><button type="button" class="btn btn-primary btn_sc" onclick=downloadStdRes(' + stdResId
+						+ '</td><td align="center" valign="middle"><button type="button" class="btn btn-success btn_sc" onclick=downloadStdRes(' + stdResId
 						+ ')>下载</button><button type="button" class="btn btn-danger btn_sc" onclick="deleteStandardResult(' + stdResId + ')">删除</button><button type="button" class="btn btn-info btn_sc" onclick="schxsj('+ stdResId
 						+ ')" >生成核心数据</button></td></tr>'
 					$('.up_list').append(row);
@@ -123,7 +123,7 @@ function showCoreIssueDetails(issueId) {
 					var coreResId = "'" + item.coreRid + "'";
 					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.resName + '</td><td align="center" valign="middle">'
 						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')
-						+ '</td><td align="center" valign="middle"><button type="button" class="btn btn-primary btn_sc" onclick=downloadCoreRes(' + coreResId
+						+ '</td><td align="center" valign="middle"><button type="button" class="btn btn-success btn_sc" onclick=downloadCoreRes(' + coreResId
 						+ ')>下载</button><button type="button" class="btn btn-danger btn_sc" onclick=deleteCoreResult(' + coreResId + ')>删除</button></td></tr>'
 					$('.up_list').append(row);
 				});
