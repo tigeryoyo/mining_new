@@ -58,17 +58,17 @@ function websiteInforChange() {
 }
 
 function clearNewWebsite() {
-	$("#new_url_website").val('');
+//	$("#new_url_website").val('');
 	$("#new_name_website").val('');
 	$("#new_level_website").val('');
 	$("#new_type_website").val('');
 }
 
-function test(){
+/*function test(){
 	console.log("webSiteName="+getCookie("websiteName"));
 	console.log("webSiteUrl="+getCookie("url"));
 }
-test();
+test();*/
 
 function getCookie(name) {
 	var arr = document.cookie.match(new RegExp("(^|)" + name + "=([^;]*)(;|$)"));

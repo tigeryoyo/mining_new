@@ -228,7 +228,7 @@ function userInforSearch(page){
 	var obj3 = $('#user_role').val();
 	var obj4 = $('#user_tel').val();
 	var obj5 = $('#user_email').val();
-	console.log(obj1)
+//	console.log(obj1)
 	$.ajax({
 		type:"post",
 		url:"/user/getUserInfoByPageLimit",
@@ -329,7 +329,7 @@ function addUser(){
 		},
 		dataType:"json",
 		success: function(msg){
-			console.log(msg);
+//			console.log(msg);
 			if( msg.status == "OK"){
 			    baseAjax("user_infor");
 			}else{
@@ -353,7 +353,7 @@ function clearUserInfor(){
 // 用户编辑
 function getCookie(name) {
 	
-	console.log(document.cookie);
+//	console.log(document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
 		return unescape(arr[2]); 
@@ -395,7 +395,7 @@ function userInforChange(){
 		},
 		dataType:"json",
 		success: function(msg){
-			console.log(msg);
+//			console.log(msg);
 			if( msg.status == "OK"){
 				alert("用户信息更新成功");
 				// alert(msg.result);

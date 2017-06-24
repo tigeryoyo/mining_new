@@ -239,10 +239,10 @@ function selectClusters(){
 	var num = $("#clusternum_input").val();
 	$(".summary_tab tr").each(function(){
 		var clusterNum = $(this).find('a:not(:first)').text();
-		console.log(num+'--');
-		console.log(clusterNum);
+	//	console.log(num+'--');
+	//	console.log(clusterNum);
 		if(num == clusterNum){
-			console.log('yes');
+	//		console.log('yes');
 			$(this).find('input:checkbox').prop("checked", true);
 		}
 	})

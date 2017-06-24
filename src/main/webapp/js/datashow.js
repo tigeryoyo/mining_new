@@ -93,10 +93,10 @@ function showStandardIssueDetails(issueId) {
 	});
 }
 
-function test(test)
+/*function test(test)
 {
 	console.log("sss");
-	}
+	}*/
 
 function getCookie(name) {
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
@@ -247,7 +247,7 @@ function clusterSingleFile(id) {
 			begin();
 		},
 		success : function(msg) {
-			console.log(msg);
+//			console.log(msg);
 			if (msg.status == "OK") {
 				baseAjax("history");
 			} else {

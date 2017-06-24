@@ -34,7 +34,8 @@ function getIncludePowers(roleId) {
 							});
 
 				} else {
-					console.log(msg.result);
+				//	console.log(msg.result);
+					alert(msg.result);
 				}
 			},
 			complete : function() {
@@ -68,11 +69,12 @@ function getNotIncludePowers(roleId, index) {
 								$('#role_power_tab').append(row);
 							})
 				} else {
-					console.log(msg.result);
+				//	console.log(msg.result);
+					alert(msg.result);
 				}
 			},
 			complete : function() {
-				console.log("all")
+			//	console.log("all")
 			},
 			error : function(msg) {
 				alert(msg.result);

@@ -28,7 +28,7 @@ function roleInforShow(page){
 			}
 		},
 		complete : function(){
-			console.log("all")
+		//	console.log("all")
         },
 		error: function(){
 			alert("请求失败");
@@ -140,7 +140,7 @@ function roleInforSearch(page){
 			}
 		},
 		complete : function(){
-			console.log("one")
+		//	console.log("one")
            // stop();
         },
 		error: function(){
@@ -156,7 +156,7 @@ function roleInforAdd() {
 }
 
 function addRoleInfo(){
-	console.log($(".addRole").val())
+//	console.log($(".addRole").val())
 	$.ajax({
 		type:"post",
 		url:"/role/insertRoleInfo",
@@ -190,7 +190,7 @@ function clearRole(){
 // 角色编辑
 function getCookie(name) {
 	
-	console.log(document.cookie);
+//	console.log(document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
 		return unescape(arr[2]); 
