@@ -129,20 +129,20 @@ public class IssueController {
 	public Object queryOwnIssue(@RequestBody IssueQueryCondition con, HttpServletRequest request) {
 		String user = userService.getCurrentUser(request);
 		con.setUser(user);
-		System.out.println(con.getIssueId());
-		System.out.println(con.getIssueName());
-		System.out.println(con.getIssueType());
-		System.out.println(con.getIssueHold()+"***************");
+		//System.out.println(con.getIssueId());
+		//System.out.println(con.getIssueName());
+		//System.out.println(con.getIssueType());
+		//System.out.println(con.getIssueHold()+"***************");
 		if(null == con.getIssueType()){
 			return ResultUtil.successWithoutMsg();
 		}
-		System.out.println(con.getPageNo());
-		System.out.println(con.getPageSize());
-		System.out.println(con.getUser());
-		System.out.println("CreateEndTime" + con.getCreateEndTime());
-		System.out.println("CreateStartTime" + con.getCreateStartTime());
-		System.out.println("LastUpdateEndTime" + con.getLastUpdateEndTime());
-		System.out.println("LastUpdateStartTime" + con.getLastUpdateStartTime());
+		//System.out.println(con.getPageNo());
+		//System.out.println(con.getPageSize());
+		//System.out.println(con.getUser());
+		//System.out.println("CreateEndTime" + con.getCreateEndTime());
+		//System.out.println("CreateStartTime" + con.getCreateStartTime());
+		//System.out.println("LastUpdateEndTime" + con.getLastUpdateEndTime());
+		//System.out.println("LastUpdateStartTime" + con.getLastUpdateStartTime());
 		List<Issue> list = issueService.queryIssue(con);
 		if (null == list || 0 == list.size()) {
 			return ResultUtil.errorWithMsg("没有任务被创建！");
@@ -178,7 +178,7 @@ public class IssueController {
 		if(count<=0){
 			return ResultUtil.errorWithMsg("没有任务被创建！");
 		}
-		System.out.println(count+"-----------------------------");
+		//System.out.println(count+"-----------------------------");
 		return ResultUtil.success(count);
 	}
 
@@ -212,10 +212,10 @@ public class IssueController {
     @RequestMapping("/miningByFile")
     public Object miningByFileIds(@RequestBody List<String> fileIds,  HttpServletRequest request) {
       
-		 System.out.println("-------------");
-		 System.out.println("-------------"+fileIds.size());
+		 //System.out.println("-------------");
+		 //System.out.println("-------------"+fileIds.size());
         for (String string : fileIds) {
-        	System.out.println("-------------"+string);
+        	//System.out.println("-------------"+string);
 		}
     	String issueId = redisService.getString(KEY.ISSUE_ID, request);
         if (StringUtils.isEmpty(issueId)) {
@@ -243,7 +243,7 @@ public class IssueController {
         }
         List<String> fileIds = new ArrayList<String>();
         fileIds.add(fileId);
-        System.out.println("hahahah");
+        //System.out.println("hahahah");
         List<String[]> count = issueService.miningByFileIds(fileIds, request);
       
         if (count == null) {
@@ -288,11 +288,11 @@ public class IssueController {
     	//当前任务已有的标签
 		List<Label> exitLabel = new ArrayList<Label>();
 		exitLabel = issue_labelservice.selectLabelsForStandResult(issueId);
-		System.out.println("已有的标签长度："+exitLabel.size());
+		//System.out.println("已有的标签长度："+exitLabel.size());
 		//全部标签
 		List<Label> allLabel = new ArrayList<Label>();
 		allLabel = labelservice.selectAllLable(0, 0);
-		System.out.println("全部标签长度："+allLabel.size());
+		//System.out.println("全部标签长度："+allLabel.size());
 		//没有的标签
 		List<Label> list = new ArrayList<Label>();
 		for(int i = 0; i < allLabel.size();i++)
@@ -312,7 +312,7 @@ public class IssueController {
 				list.add(label);
 			}
 		}
-		System.out.println("没有的标签长度："+list.size());
+		//System.out.println("没有的标签长度："+list.size());
     	return ResultUtil.success(list);
     }
     
@@ -329,9 +329,9 @@ public class IssueController {
     		return ResultUtil.errorWithMsg("没有选中任何准数据！");
 		}
     	List<Label> list = issue_labelservice.selectLabelsForStandResult(issueId);
-    	System.out.println("已有的标签是：");
+    	//System.out.println("已有的标签是：");
     	for (Label label : list) {
-			System.out.println(label.getLabelname());
+			//System.out.println(label.getLabelname());
 		}
     	return ResultUtil.success(list);
     }

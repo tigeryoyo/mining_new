@@ -390,7 +390,7 @@ public class CoreResultDao {
 			Collections.sort(res, new Comparator<String[]>() {
 				@Override
 				public int compare(String[] o1, String[] o2) {
-					System.out.println(Integer.parseInt(o1[1]) + "\t" + Integer.parseInt(o2[1]));
+					//System.out.println(Integer.parseInt(o1[1]) + "\t" + Integer.parseInt(o2[1]));
 					return Integer.parseInt(o2[1]) - Integer.parseInt(o1[1]);
 				}
 			});
@@ -412,9 +412,9 @@ public class CoreResultDao {
 	private List<String[]> generateSummary(String[] attrs, List<String[]> content, List<int[]> clusterCount) {
 		List<String[]> summary = new ArrayList<>();
 		for (String string : attrs) {
-			System.out.print(string + " ");
+			//System.out.print(string + " ");
 		}
-		System.out.println();
+		//System.out.println();
 		int titleIndex = AttrUtil.findIndexOfTitle(attrs);
 		int urlIndex = AttrUtil.findIndexOfUrl(attrs);
 		int organizationIndex = AttrUtil.findIndexOfSth(attrs, "网站|媒体名称");

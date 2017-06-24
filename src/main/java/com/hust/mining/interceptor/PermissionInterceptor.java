@@ -40,12 +40,12 @@ public class PermissionInterceptor implements HandlerInterceptor {
         try {
             String url = request.getRequestURI();
             String requestPath = request.getServletPath();
-            System.out.println(requestPath+"-----");
+            //System.out.println(requestPath+"-----");
             // 登陆成功以后 当数据库权限是一定的 但是你添加权限信息，程序缓存的还是以前的权限信息 ，更新的权限没有添加到里面
             // 现在解决办法就是 在拦截器里面 可以重新获取权限信息
             // 先判断
             if ("/".equals(url) || "/index.html".equals(url)) {
-                System.out.println(requestPath+"=========1111111111111" + url);
+                //System.out.println(requestPath+"=========1111111111111" + url);
                 if (null != redisService.getString(KEY.USER_NAME, request)) {
                     response.sendRedirect("/topic_list.html");
                 } else {
@@ -65,7 +65,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
                     List<String> userPowerUrl =
                             userService.selectUserPowerUrl(redisService.getString(KEY.USER_NAME, request));
                     redisService.setObject("userPowerUrl", userPowerUrl, request);
-                    System.out.println(userPowerUrl);
+                    //System.out.println(userPowerUrl);
                     //
                     if (userPowerUrl.contains(requestPath)) {
                         return true;
@@ -77,7 +77,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
                     }
                 } else {
                     LOG.warn("{} did not login, please login", request.getRequestedSessionId());
-                    System.out.println("进入方法了");
+                    //System.out.println("进入方法了");
                     response.sendRedirect("/index.html");
                 }
             }

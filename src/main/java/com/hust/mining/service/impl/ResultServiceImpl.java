@@ -411,7 +411,7 @@ public class ResultServiceImpl implements ResultService {
             Result result = new Result();
             result.setRid(resultId);
             result.setIssueId(issueId);
-            System.out.println("shanchu"+resultId+"--"+issueId);
+            //System.out.println("shanchu"+resultId+"--"+issueId);
             ResultWithContent rc = new ResultWithContent();
             rc.setResult(result);
             rc.setModiCluster(cluster);
