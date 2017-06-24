@@ -17,8 +17,8 @@ $(function() {
 	box = document.getElementById('drop_area'); // 拖拽区域
 	box.addEventListener("drop", function(e) {
 		e.preventDefault(); // 取消默认浏览器拖拽效果
-		console.log("before");
-		console.log(e.dataTransfer.files);
+//		console.log("before");
+//		console.log(e.dataTransfer.files);
 		var file = e.dataTransfer.files[0]; // 获取文件对象
 		if (file.name.lastIndexOf("xls") !== -1
 				|| file.name.lastIndexOf("xlsx") !== -1) {

@@ -326,7 +326,7 @@ function addWebsite(){
 		},
 		dataType:"json",
 		success: function(msg){
-			console.log(msg);
+//			console.log(msg);
 			if( msg.status == "OK"){
 				baseAjax("unknow_website_infor");
 			}else{
@@ -351,7 +351,7 @@ function clearWebsite(){
 // 用户编辑
 function getCookie(name) {
 	
-	console.log(document.cookie);
+//	console.log(document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
 		return unescape(arr[2]); 
@@ -372,7 +372,7 @@ function websiteInforChange(){
 		},
 		dataType:"json",
 		success: function(msg){
-			console.log(msg);
+//			console.log(msg);
 			if( msg.status == "OK"){
 				// alert("更新成功");	
 			}else{

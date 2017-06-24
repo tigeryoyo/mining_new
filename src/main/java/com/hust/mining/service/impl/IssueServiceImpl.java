@@ -90,7 +90,7 @@ public class IssueServiceImpl implements IssueService {
 		if (insert > 0) {
 			redisService.setString(KEY.ISSUE_ID, issue.getIssueId(), request);
 		}
-		System.out.println(insert);
+		//System.out.println(insert);
 		return insert;
 	}
 
@@ -201,7 +201,7 @@ public class IssueServiceImpl implements IssueService {
 	public List<Issue> queryIssue(IssueQueryCondition con) {
 		// TODO Auto-generated method stub
 		List<Issue> list = issueDao.queryIssue(con);
-		System.out.println(list.size() + "service");
+		//System.out.println(list.size() + "service");
 		return list;
 	}
 
@@ -540,15 +540,15 @@ public class IssueServiceImpl implements IssueService {
 		int titleIndex = AttrUtil.findIndexOfTitle(attrs);
 		content = resortContent(content, titleIndex);
 		for (String[] string : content) {
-			System.out.println(string[titleIndex]);
+			//System.out.println(string[titleIndex]);
 		}
 		// 聚类
 		List<List<Integer>> clusterResult = miningService.cluster(content, converterType, algorithmType, granularity);
 		for (List<Integer> list : clusterResult) {
 			for (Integer integer : list) {
-				System.out.print(integer + "  ");
+				//System.out.print(integer + "  ");
 			}
-			System.out.println();
+			//System.out.println();
 		}
 		// 每个String[]都是某个类簇的数据ID的集合。
 		List<String[]> cluster = ConvertUtil.toStringListB(clusterResult);

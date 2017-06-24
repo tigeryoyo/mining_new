@@ -175,11 +175,11 @@ public class StandardResultController {
     	//当前任务已有的标签
 		List<Label> exitLabel = new ArrayList<Label>();
 		exitLabel = stand_label.selectLabelsForStandResult(stdResId);
-		System.out.println("已有的标签长度："+exitLabel.size());
+		//System.out.println("已有的标签长度："+exitLabel.size());
 		//全部标签
 		List<Label> allLabel = new ArrayList<Label>();
 		allLabel = labelservice.selectAllLable(0, 0);
-		System.out.println("全部标签长度："+allLabel.size());
+		//System.out.println("全部标签长度："+allLabel.size());
 		//没有的标签
 		List<Label> list = new ArrayList<Label>();
 		for(int i = 0; i < allLabel.size();i++)
@@ -199,7 +199,7 @@ public class StandardResultController {
 				list.add(label);
 			}
 		}
-		System.out.println("没有的标签长度："+list.size());
+		//System.out.println("没有的标签长度："+list.size());
     	return ResultUtil.success(list);
     	
     }
@@ -217,9 +217,9 @@ public class StandardResultController {
     		return ResultUtil.errorWithMsg("没有选中任何准数据！");
 		}
     	List<Label> list = stand_label.selectLabelsForStandResult(stdResId);
-    	System.out.println("已有的标签是：");
+    	//System.out.println("已有的标签是：");
     	for (Label label : list) {
-			System.out.println(label.getLabelname());
+			//System.out.println(label.getLabelname());
 		}
     	return ResultUtil.success(list);
     }

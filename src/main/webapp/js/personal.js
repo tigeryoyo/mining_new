@@ -12,7 +12,7 @@ function setCookie(value1){
 	document.cookie = cookie_name1 +"="+ escape (value1) + ";expires=" + exp.toGMTString();
 }
 function getCookie(name) {
-	console.log(document.cookie);
+//	console.log(document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
 		return unescape(arr[2]); 
@@ -79,7 +79,7 @@ function personalInforChange(){
 		},
 		dataType:"json",
 		success: function(msg){
-			console.log(msg);
+//			console.log(msg);
 			if( msg.status == "OK"){
 				alert(msg.result);
 				baseAjax("topic_list");
@@ -123,7 +123,7 @@ function passwordChange(){
 			newpass:newPass
 		},
 		success: function(msg){
-			console.log(msg);
+//			console.log(msg);
 			if( msg.status == "OK"){
 				alert("密码更改成功！");
 				baseAjax("topic_list");

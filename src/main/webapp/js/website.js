@@ -55,7 +55,7 @@ function initShowPage(currenPage){
                 listCount = msg.result;
                 $("#page").initPage(listCount,currenPage,websiteInforShow);
             } else {
-                console.log(msg.result);
+  //              console.log(msg.result);
             }
         },
         error: function () {
@@ -317,7 +317,7 @@ function websiteInforAdd(){
 // 用户编辑
 function getCookie(name) {
 	
-	console.log(document.cookie);
+//	console.log(document.cookie);
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
 	if(arr !=null) 
 		return unescape(arr[2]); 
@@ -328,7 +328,7 @@ function getCookie(name) {
 $(function(){
 	$(".infor_tab02").on("click",".delWebsite",function(){
 		var website_id = $(this).attr("id");
-		console.log(website_id);
+//		console.log(website_id);
 		websiteInforDel(website_id);
 		function websiteInforDel(website_id){
 			$.ajax({

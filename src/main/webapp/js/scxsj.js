@@ -39,7 +39,8 @@ function scxsj(issueType,stdResId){
 			stop();
 		},
 		error : function() {
-			console.log("ERROR");
+			alert("数据请求失败！");
+		//	console.log("ERROR");
 		}
 	});
 }
@@ -82,7 +83,8 @@ function queryLinkedIssue(issueType){
 			stop();
 		},
 		error : function() {
-			console.log("ERROR");
+		//	console.log("ERROR");
+			alert("数据请求失败！");
 		}
 	});
 }

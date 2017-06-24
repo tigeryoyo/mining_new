@@ -81,17 +81,17 @@ public class MiningServiceImpl implements MiningService {
         //如果选择的是canopy算法
         if (algorithmType == ALGORIRHMTYPE.CANOPY) 
         {
-        	 System.out.println("使用的是CANOPY");
+        	 //System.out.println("使用的是CANOPY");
         	 Canopy canopy = new Canopy();
              canopy.setVectors(vectors);
              //相似度方式的选择
              if (granularity == GRANULARITY.AcrossSimilarity) {
            	  canopy.setSimi(new AcrossSimilarity(vectors)); 
-           	  System.out.println("选择的是粗粒度AcrossSimilarity");
+           	  //System.out.println("选择的是粗粒度AcrossSimilarity");
    			
              } else if(granularity == GRANULARITY.CosSimilarity){
    			  canopy.setSimi(new CosSimilarity(vectors));
-   			  System.out.println("选择的是细粒度CosSimilarity");
+   			  //System.out.println("选择的是细粒度CosSimilarity");
              }
              //设置阀值
              canopy.setThreshold(Config.SIMILARITYTHRESHOLD);
@@ -108,7 +108,7 @@ public class MiningServiceImpl implements MiningService {
 		}
         else if (algorithmType == ALGORIRHMTYPE.KMEANS) 
         {
-        	 System.out.println("使用的是KMEANS");
+        	 //System.out.println("使用的是KMEANS");
         	 Canopy canopy = new Canopy();
              canopy.setVectors(vectors);
              //相似度方式的选择
@@ -128,11 +128,11 @@ public class MiningServiceImpl implements MiningService {
                //相似度方式的选择
                  if (granularity == GRANULARITY.AcrossSimilarity) {
                 	 kmeans.setSimi(new AcrossSimilarity(vectors)); 
-               	  System.out.println("选择的是粗粒度AcrossSimilarity");
+               	  //System.out.println("选择的是粗粒度AcrossSimilarity");
        			
                  } else if(granularity == GRANULARITY.CosSimilarity){
                 	 kmeans.setSimi(new CosSimilarity(vectors));
-       			  System.out.println("选择的是细粒度CosSimilarity");
+       			  //System.out.println("选择的是细粒度CosSimilarity");
                  }
                  kmeans.setK(k);
                  
@@ -153,16 +153,16 @@ public class MiningServiceImpl implements MiningService {
 		}
         else if (algorithmType == ALGORIRHMTYPE.DBSCAN) 
         {
-        	 System.out.println("使用的是DBSCAN");
+        	 //System.out.println("使用的是DBSCAN");
         	 DBScan dbscan = new DBScan();
         	 dbscan.setVectors(vectors);
              if (granularity == GRANULARITY.AcrossSimilarity) {
             	  dbscan.setSimi(new AcrossSimilarity(vectors)); 
-              	  System.out.println("选择的是粗粒度AcrossSimilarity");
+              	  //System.out.println("选择的是粗粒度AcrossSimilarity");
       			
                 } else if(granularity == GRANULARITY.CosSimilarity){
                   dbscan.setSimi(new CosSimilarity(vectors));
-      			  System.out.println("选择的是细粒度CosSimilarity");
+      			  //System.out.println("选择的是细粒度CosSimilarity");
                 }
              //设置阀值
              dbscan.setMinPts(Config.MinPts);
