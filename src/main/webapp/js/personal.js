@@ -47,10 +47,7 @@ function personalInforShow(){
 personalInforShow();
 //置空个人信息
 function clearChangeInfor(){
-	//$("#new_userName").val('');
-	$("#new_trueName").val('');
-	$("#new_telphone").val('');
-	$("#new_email").val('');
+	baseAjax('personal_infor');
 }
 //个人信息修改
 function personalInforChange(){
