@@ -80,6 +80,24 @@ CREATE TABLE `issue` (
 -- Records of issue
 -- ----------------------------
 
+
+-- ----------------------------
+-- Table structure for issue_label
+-- ----------------------------
+DROP TABLE IF EXISTS `issue_label`;
+CREATE TABLE `issue_label` (
+  `issueId` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `labelid` int(11) NOT NULL,
+  PRIMARY KEY (`issueId`,`labelid`),
+  KEY `labelid` (`labelid`),
+  CONSTRAINT `issue_label_ibfk_1` FOREIGN KEY (`issueId`) REFERENCES `issue` (`issue_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `issue_label_ibfk_2` FOREIGN KEY (`labelid`) REFERENCES `label` (`labelid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of issue_label
+-- ----------------------------
+
 -- ----------------------------
 -- Table structure for label
 -- ----------------------------
@@ -118,7 +136,7 @@ CREATE TABLE `power` (
   PRIMARY KEY (`power_id`),
   UNIQUE KEY `unique_name` (`power_name`),
   KEY `unique_url` (`power_url`)
-) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of power
@@ -134,7 +152,7 @@ INSERT INTO `power` VALUES ('8', '查询单个角色', '/role/selectOneRoleInfo'
 INSERT INTO `power` VALUES ('9', '添加角色', '/role/insertRoleInfo');
 INSERT INTO `power` VALUES ('10', '查询用户列表', '/user/getUserInfoByPageLimit');
 INSERT INTO `power` VALUES ('11', '查询角色不包含的权限', '/role/notIncludePowersOfRole');
-INSERT INTO `power` VALUES ('12', '为角色赋予权限', '/role/insertPowerOfRole');
+INSERT INTO `power` VALUES ('12', '为角色添加权限', '/role/insertPowerOfRole');
 INSERT INTO `power` VALUES ('13', '删除角色权限映射', '/role/deletePowerOfRole');
 INSERT INTO `power` VALUES ('14', '查询角色包含的权限', '/role/includePowersOfRole');
 INSERT INTO `power` VALUES ('15', '查询单条权限', '/power/selectOnePowerInfo');
@@ -268,11 +286,12 @@ CREATE TABLE `role` (
   `role_name` varchar(255) NOT NULL,
   PRIMARY KEY (`role_id`),
   UNIQUE KEY `unique_name` (`role_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
+INSERT INTO `role` VALUES ('3', '一般人员');
 INSERT INTO `role` VALUES ('2', '管理员');
 INSERT INTO `role` VALUES ('1', '超级管理员');
 
@@ -289,226 +308,310 @@ CREATE TABLE `role_power` (
   KEY `index_power_id` (`power_id`),
   CONSTRAINT `rp_fk_power_id` FOREIGN KEY (`power_id`) REFERENCES `power` (`power_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `rp_fk_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=885 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role_power
 -- ----------------------------
-INSERT INTO `role_power` VALUES ('2309', '2', '1');
-INSERT INTO `role_power` VALUES ('2310', '2', '2');
-INSERT INTO `role_power` VALUES ('2311', '2', '3');
-INSERT INTO `role_power` VALUES ('2312', '2', '4');
-INSERT INTO `role_power` VALUES ('2313', '2', '5');
-INSERT INTO `role_power` VALUES ('2314', '2', '6');
-INSERT INTO `role_power` VALUES ('2315', '2', '7');
-INSERT INTO `role_power` VALUES ('2316', '2', '8');
-INSERT INTO `role_power` VALUES ('2317', '2', '9');
-INSERT INTO `role_power` VALUES ('2318', '2', '10');
-INSERT INTO `role_power` VALUES ('2319', '2', '12');
-INSERT INTO `role_power` VALUES ('2320', '2', '13');
-INSERT INTO `role_power` VALUES ('2321', '2', '14');
-INSERT INTO `role_power` VALUES ('2322', '2', '19');
-INSERT INTO `role_power` VALUES ('2323', '2', '20');
-INSERT INTO `role_power` VALUES ('2324', '2', '21');
-INSERT INTO `role_power` VALUES ('2325', '2', '22');
-INSERT INTO `role_power` VALUES ('2326', '2', '23');
-INSERT INTO `role_power` VALUES ('2327', '2', '24');
-INSERT INTO `role_power` VALUES ('2328', '2', '25');
-INSERT INTO `role_power` VALUES ('2329', '2', '26');
-INSERT INTO `role_power` VALUES ('2330', '2', '27');
-INSERT INTO `role_power` VALUES ('2331', '2', '28');
-INSERT INTO `role_power` VALUES ('2332', '2', '29');
-INSERT INTO `role_power` VALUES ('2333', '2', '30');
-INSERT INTO `role_power` VALUES ('2334', '2', '31');
-INSERT INTO `role_power` VALUES ('2335', '2', '32');
-INSERT INTO `role_power` VALUES ('2336', '2', '33');
-INSERT INTO `role_power` VALUES ('2337', '2', '34');
-INSERT INTO `role_power` VALUES ('2338', '2', '35');
-INSERT INTO `role_power` VALUES ('2339', '2', '36');
-INSERT INTO `role_power` VALUES ('2340', '2', '37');
-INSERT INTO `role_power` VALUES ('2341', '2', '38');
-INSERT INTO `role_power` VALUES ('2342', '2', '39');
-INSERT INTO `role_power` VALUES ('2343', '2', '40');
-INSERT INTO `role_power` VALUES ('2344', '2', '41');
-INSERT INTO `role_power` VALUES ('2345', '2', '42');
-INSERT INTO `role_power` VALUES ('2346', '2', '43');
-INSERT INTO `role_power` VALUES ('2347', '2', '44');
-INSERT INTO `role_power` VALUES ('2348', '2', '45');
-INSERT INTO `role_power` VALUES ('2349', '2', '46');
-INSERT INTO `role_power` VALUES ('2350', '2', '47');
-INSERT INTO `role_power` VALUES ('2351', '2', '48');
-INSERT INTO `role_power` VALUES ('2352', '2', '49');
-INSERT INTO `role_power` VALUES ('2353', '2', '50');
-INSERT INTO `role_power` VALUES ('2354', '2', '51');
-INSERT INTO `role_power` VALUES ('2355', '2', '52');
-INSERT INTO `role_power` VALUES ('2356', '2', '53');
-INSERT INTO `role_power` VALUES ('2357', '2', '54');
-INSERT INTO `role_power` VALUES ('2358', '2', '55');
-INSERT INTO `role_power` VALUES ('2359', '2', '56');
-INSERT INTO `role_power` VALUES ('2360', '2', '57');
-INSERT INTO `role_power` VALUES ('2361', '2', '58');
-INSERT INTO `role_power` VALUES ('2362', '2', '59');
-INSERT INTO `role_power` VALUES ('2363', '2', '60');
-INSERT INTO `role_power` VALUES ('2364', '2', '61');
-INSERT INTO `role_power` VALUES ('2365', '2', '62');
-INSERT INTO `role_power` VALUES ('2366', '2', '63');
-INSERT INTO `role_power` VALUES ('2367', '2', '64');
-INSERT INTO `role_power` VALUES ('2368', '2', '65');
-INSERT INTO `role_power` VALUES ('2369', '2', '66');
-INSERT INTO `role_power` VALUES ('2370', '2', '67');
-INSERT INTO `role_power` VALUES ('2371', '2', '69');
-INSERT INTO `role_power` VALUES ('2372', '2', '71');
-INSERT INTO `role_power` VALUES ('2373', '2', '72');
-INSERT INTO `role_power` VALUES ('2374', '2', '73');
-INSERT INTO `role_power` VALUES ('2375', '2', '74');
-INSERT INTO `role_power` VALUES ('2376', '2', '75');
-INSERT INTO `role_power` VALUES ('2377', '2', '76');
-INSERT INTO `role_power` VALUES ('2378', '2', '77');
-INSERT INTO `role_power` VALUES ('2379', '2', '78');
-INSERT INTO `role_power` VALUES ('2380', '2', '79');
-INSERT INTO `role_power` VALUES ('2381', '2', '80');
-INSERT INTO `role_power` VALUES ('2382', '2', '82');
-INSERT INTO `role_power` VALUES ('2383', '2', '83');
-INSERT INTO `role_power` VALUES ('2384', '2', '84');
-INSERT INTO `role_power` VALUES ('2385', '2', '85');
-INSERT INTO `role_power` VALUES ('2387', '2', '87');
-INSERT INTO `role_power` VALUES ('2388', '2', '88');
-INSERT INTO `role_power` VALUES ('2389', '2', '89');
-INSERT INTO `role_power` VALUES ('2390', '2', '90');
-INSERT INTO `role_power` VALUES ('2391', '2', '91');
-INSERT INTO `role_power` VALUES ('2392', '2', '92');
-INSERT INTO `role_power` VALUES ('2393', '2', '93');
-INSERT INTO `role_power` VALUES ('2394', '2', '94');
-INSERT INTO `role_power` VALUES ('2395', '2', '95');
-INSERT INTO `role_power` VALUES ('2396', '2', '96');
-INSERT INTO `role_power` VALUES ('2397', '2', '97');
-INSERT INTO `role_power` VALUES ('2398', '2', '98');
-INSERT INTO `role_power` VALUES ('2399', '2', '99');
-INSERT INTO `role_power` VALUES ('2400', '2', '100');
-INSERT INTO `role_power` VALUES ('2401', '2', '101');
-INSERT INTO `role_power` VALUES ('2402', '2', '102');
-INSERT INTO `role_power` VALUES ('2403', '2', '103');
-INSERT INTO `role_power` VALUES ('2404', '2', '104');
-INSERT INTO `role_power` VALUES ('2405', '2', '105');
-INSERT INTO `role_power` VALUES ('2406', '2', '106');
-INSERT INTO `role_power` VALUES ('2407', '2', '11');
-INSERT INTO `role_power` VALUES ('2632', '1', '1');
-INSERT INTO `role_power` VALUES ('2633', '1', '2');
-INSERT INTO `role_power` VALUES ('2634', '1', '3');
-INSERT INTO `role_power` VALUES ('2635', '1', '4');
-INSERT INTO `role_power` VALUES ('2636', '1', '5');
-INSERT INTO `role_power` VALUES ('2637', '1', '6');
-INSERT INTO `role_power` VALUES ('2638', '1', '7');
-INSERT INTO `role_power` VALUES ('2639', '1', '8');
-INSERT INTO `role_power` VALUES ('2640', '1', '9');
-INSERT INTO `role_power` VALUES ('2641', '1', '10');
-INSERT INTO `role_power` VALUES ('2642', '1', '11');
-INSERT INTO `role_power` VALUES ('2643', '1', '12');
-INSERT INTO `role_power` VALUES ('2644', '1', '13');
-INSERT INTO `role_power` VALUES ('2645', '1', '14');
-INSERT INTO `role_power` VALUES ('2646', '1', '15');
-INSERT INTO `role_power` VALUES ('2647', '1', '16');
-INSERT INTO `role_power` VALUES ('2648', '1', '17');
-INSERT INTO `role_power` VALUES ('2649', '1', '18');
-INSERT INTO `role_power` VALUES ('2650', '1', '19');
-INSERT INTO `role_power` VALUES ('2651', '1', '20');
-INSERT INTO `role_power` VALUES ('2652', '1', '21');
-INSERT INTO `role_power` VALUES ('2653', '1', '22');
-INSERT INTO `role_power` VALUES ('2654', '1', '23');
-INSERT INTO `role_power` VALUES ('2655', '1', '24');
-INSERT INTO `role_power` VALUES ('2656', '1', '25');
-INSERT INTO `role_power` VALUES ('2657', '1', '26');
-INSERT INTO `role_power` VALUES ('2658', '1', '27');
-INSERT INTO `role_power` VALUES ('2659', '1', '28');
-INSERT INTO `role_power` VALUES ('2660', '1', '29');
-INSERT INTO `role_power` VALUES ('2661', '1', '30');
-INSERT INTO `role_power` VALUES ('2662', '1', '31');
-INSERT INTO `role_power` VALUES ('2663', '1', '32');
-INSERT INTO `role_power` VALUES ('2664', '1', '33');
-INSERT INTO `role_power` VALUES ('2665', '1', '34');
-INSERT INTO `role_power` VALUES ('2666', '1', '35');
-INSERT INTO `role_power` VALUES ('2667', '1', '36');
-INSERT INTO `role_power` VALUES ('2668', '1', '37');
-INSERT INTO `role_power` VALUES ('2669', '1', '38');
-INSERT INTO `role_power` VALUES ('2670', '1', '39');
-INSERT INTO `role_power` VALUES ('2671', '1', '40');
-INSERT INTO `role_power` VALUES ('2672', '1', '41');
-INSERT INTO `role_power` VALUES ('2673', '1', '42');
-INSERT INTO `role_power` VALUES ('2674', '1', '43');
-INSERT INTO `role_power` VALUES ('2675', '1', '44');
-INSERT INTO `role_power` VALUES ('2676', '1', '45');
-INSERT INTO `role_power` VALUES ('2677', '1', '46');
-INSERT INTO `role_power` VALUES ('2678', '1', '47');
-INSERT INTO `role_power` VALUES ('2679', '1', '48');
-INSERT INTO `role_power` VALUES ('2680', '1', '49');
-INSERT INTO `role_power` VALUES ('2681', '1', '50');
-INSERT INTO `role_power` VALUES ('2682', '1', '51');
-INSERT INTO `role_power` VALUES ('2683', '1', '52');
-INSERT INTO `role_power` VALUES ('2684', '1', '53');
-INSERT INTO `role_power` VALUES ('2685', '1', '54');
-INSERT INTO `role_power` VALUES ('2686', '1', '55');
-INSERT INTO `role_power` VALUES ('2687', '1', '56');
-INSERT INTO `role_power` VALUES ('2688', '1', '57');
-INSERT INTO `role_power` VALUES ('2689', '1', '58');
-INSERT INTO `role_power` VALUES ('2690', '1', '59');
-INSERT INTO `role_power` VALUES ('2691', '1', '60');
-INSERT INTO `role_power` VALUES ('2692', '1', '61');
-INSERT INTO `role_power` VALUES ('2693', '1', '62');
-INSERT INTO `role_power` VALUES ('2694', '1', '63');
-INSERT INTO `role_power` VALUES ('2695', '1', '64');
-INSERT INTO `role_power` VALUES ('2696', '1', '65');
-INSERT INTO `role_power` VALUES ('2697', '1', '66');
-INSERT INTO `role_power` VALUES ('2698', '1', '67');
-INSERT INTO `role_power` VALUES ('2699', '1', '68');
-INSERT INTO `role_power` VALUES ('2700', '1', '69');
-INSERT INTO `role_power` VALUES ('2701', '1', '70');
-INSERT INTO `role_power` VALUES ('2702', '1', '71');
-INSERT INTO `role_power` VALUES ('2703', '1', '72');
-INSERT INTO `role_power` VALUES ('2704', '1', '73');
-INSERT INTO `role_power` VALUES ('2705', '1', '74');
-INSERT INTO `role_power` VALUES ('2706', '1', '75');
-INSERT INTO `role_power` VALUES ('2707', '1', '76');
-INSERT INTO `role_power` VALUES ('2708', '1', '77');
-INSERT INTO `role_power` VALUES ('2709', '1', '78');
-INSERT INTO `role_power` VALUES ('2710', '1', '79');
-INSERT INTO `role_power` VALUES ('2711', '1', '80');
-INSERT INTO `role_power` VALUES ('2712', '1', '81');
-INSERT INTO `role_power` VALUES ('2713', '1', '82');
-INSERT INTO `role_power` VALUES ('2714', '1', '83');
-INSERT INTO `role_power` VALUES ('2715', '1', '84');
-INSERT INTO `role_power` VALUES ('2716', '1', '85');
-INSERT INTO `role_power` VALUES ('2717', '1', '87');
-INSERT INTO `role_power` VALUES ('2718', '1', '88');
-INSERT INTO `role_power` VALUES ('2719', '1', '89');
-INSERT INTO `role_power` VALUES ('2720', '1', '90');
-INSERT INTO `role_power` VALUES ('2721', '1', '91');
-INSERT INTO `role_power` VALUES ('2722', '1', '92');
-INSERT INTO `role_power` VALUES ('2723', '1', '93');
-INSERT INTO `role_power` VALUES ('2724', '1', '94');
-INSERT INTO `role_power` VALUES ('2725', '1', '95');
-INSERT INTO `role_power` VALUES ('2726', '1', '96');
-INSERT INTO `role_power` VALUES ('2727', '1', '97');
-INSERT INTO `role_power` VALUES ('2728', '1', '98');
-INSERT INTO `role_power` VALUES ('2729', '1', '99');
-INSERT INTO `role_power` VALUES ('2730', '1', '100');
-INSERT INTO `role_power` VALUES ('2731', '1', '101');
-INSERT INTO `role_power` VALUES ('2732', '1', '102');
-INSERT INTO `role_power` VALUES ('2733', '1', '103');
-INSERT INTO `role_power` VALUES ('2734', '1', '104');
-INSERT INTO `role_power` VALUES ('2735', '1', '105');
-INSERT INTO `role_power` VALUES ('2736', '1', '106');
-INSERT INTO `role_power` VALUES ('2737', '1', '107');
-INSERT INTO `role_power` VALUES ('2738', '1', '108');
-INSERT INTO `role_power` VALUES ('2739', '1', '109');
-INSERT INTO `role_power` VALUES ('2740', '1', '110');
-INSERT INTO `role_power` VALUES ('2741', '1', '111');
-INSERT INTO `role_power` VALUES ('2742', '1', '112');
-INSERT INTO `role_power` VALUES ('2743', '1', '113');
-INSERT INTO `role_power` VALUES ('2744', '1', '114');
-INSERT INTO `role_power` VALUES ('2745', '1', '115');
-INSERT INTO `role_power` VALUES ('2746', '1', '116');
-INSERT INTO `role_power` VALUES ('2747', '1', '117');
-
+INSERT INTO `role_power` VALUES ('1', '1', '1');
+INSERT INTO `role_power` VALUES ('2', '1', '2');
+INSERT INTO `role_power` VALUES ('3', '1', '3');
+INSERT INTO `role_power` VALUES ('4', '1', '4');
+INSERT INTO `role_power` VALUES ('5', '1', '5');
+INSERT INTO `role_power` VALUES ('6', '1', '6');
+INSERT INTO `role_power` VALUES ('7', '1', '7');
+INSERT INTO `role_power` VALUES ('8', '1', '8');
+INSERT INTO `role_power` VALUES ('9', '1', '9');
+INSERT INTO `role_power` VALUES ('10', '1', '10');
+INSERT INTO `role_power` VALUES ('11', '1', '11');
+INSERT INTO `role_power` VALUES ('12', '1', '12');
+INSERT INTO `role_power` VALUES ('13', '1', '13');
+INSERT INTO `role_power` VALUES ('14', '1', '14');
+INSERT INTO `role_power` VALUES ('15', '1', '15');
+INSERT INTO `role_power` VALUES ('16', '1', '16');
+INSERT INTO `role_power` VALUES ('17', '1', '17');
+INSERT INTO `role_power` VALUES ('18', '1', '18');
+INSERT INTO `role_power` VALUES ('19', '1', '19');
+INSERT INTO `role_power` VALUES ('20', '1', '20');
+INSERT INTO `role_power` VALUES ('21', '1', '21');
+INSERT INTO `role_power` VALUES ('22', '1', '22');
+INSERT INTO `role_power` VALUES ('23', '1', '23');
+INSERT INTO `role_power` VALUES ('24', '1', '24');
+INSERT INTO `role_power` VALUES ('25', '1', '25');
+INSERT INTO `role_power` VALUES ('26', '1', '26');
+INSERT INTO `role_power` VALUES ('27', '1', '27');
+INSERT INTO `role_power` VALUES ('28', '1', '28');
+INSERT INTO `role_power` VALUES ('29', '1', '29');
+INSERT INTO `role_power` VALUES ('30', '1', '30');
+INSERT INTO `role_power` VALUES ('31', '1', '31');
+INSERT INTO `role_power` VALUES ('32', '1', '32');
+INSERT INTO `role_power` VALUES ('33', '1', '33');
+INSERT INTO `role_power` VALUES ('34', '1', '34');
+INSERT INTO `role_power` VALUES ('35', '1', '35');
+INSERT INTO `role_power` VALUES ('36', '1', '36');
+INSERT INTO `role_power` VALUES ('37', '1', '37');
+INSERT INTO `role_power` VALUES ('38', '1', '38');
+INSERT INTO `role_power` VALUES ('39', '1', '39');
+INSERT INTO `role_power` VALUES ('40', '1', '40');
+INSERT INTO `role_power` VALUES ('41', '1', '41');
+INSERT INTO `role_power` VALUES ('42', '1', '42');
+INSERT INTO `role_power` VALUES ('43', '1', '43');
+INSERT INTO `role_power` VALUES ('44', '1', '44');
+INSERT INTO `role_power` VALUES ('45', '1', '45');
+INSERT INTO `role_power` VALUES ('46', '1', '46');
+INSERT INTO `role_power` VALUES ('47', '1', '47');
+INSERT INTO `role_power` VALUES ('48', '1', '48');
+INSERT INTO `role_power` VALUES ('49', '1', '49');
+INSERT INTO `role_power` VALUES ('50', '1', '50');
+INSERT INTO `role_power` VALUES ('51', '1', '51');
+INSERT INTO `role_power` VALUES ('52', '1', '52');
+INSERT INTO `role_power` VALUES ('53', '1', '53');
+INSERT INTO `role_power` VALUES ('54', '1', '54');
+INSERT INTO `role_power` VALUES ('55', '1', '55');
+INSERT INTO `role_power` VALUES ('56', '1', '56');
+INSERT INTO `role_power` VALUES ('57', '1', '57');
+INSERT INTO `role_power` VALUES ('58', '1', '58');
+INSERT INTO `role_power` VALUES ('59', '1', '59');
+INSERT INTO `role_power` VALUES ('60', '1', '60');
+INSERT INTO `role_power` VALUES ('61', '1', '61');
+INSERT INTO `role_power` VALUES ('62', '1', '62');
+INSERT INTO `role_power` VALUES ('63', '1', '63');
+INSERT INTO `role_power` VALUES ('64', '1', '64');
+INSERT INTO `role_power` VALUES ('65', '1', '65');
+INSERT INTO `role_power` VALUES ('66', '1', '66');
+INSERT INTO `role_power` VALUES ('67', '1', '67');
+INSERT INTO `role_power` VALUES ('68', '1', '68');
+INSERT INTO `role_power` VALUES ('69', '1', '69');
+INSERT INTO `role_power` VALUES ('70', '1', '70');
+INSERT INTO `role_power` VALUES ('71', '1', '71');
+INSERT INTO `role_power` VALUES ('72', '1', '72');
+INSERT INTO `role_power` VALUES ('73', '1', '73');
+INSERT INTO `role_power` VALUES ('74', '1', '74');
+INSERT INTO `role_power` VALUES ('75', '1', '75');
+INSERT INTO `role_power` VALUES ('76', '1', '76');
+INSERT INTO `role_power` VALUES ('77', '1', '77');
+INSERT INTO `role_power` VALUES ('78', '1', '78');
+INSERT INTO `role_power` VALUES ('79', '1', '79');
+INSERT INTO `role_power` VALUES ('80', '1', '80');
+INSERT INTO `role_power` VALUES ('81', '1', '81');
+INSERT INTO `role_power` VALUES ('82', '1', '82');
+INSERT INTO `role_power` VALUES ('83', '1', '83');
+INSERT INTO `role_power` VALUES ('84', '1', '84');
+INSERT INTO `role_power` VALUES ('85', '1', '85');
+INSERT INTO `role_power` VALUES ('86', '1', '87');
+INSERT INTO `role_power` VALUES ('87', '1', '88');
+INSERT INTO `role_power` VALUES ('88', '1', '89');
+INSERT INTO `role_power` VALUES ('89', '1', '90');
+INSERT INTO `role_power` VALUES ('90', '1', '91');
+INSERT INTO `role_power` VALUES ('91', '1', '92');
+INSERT INTO `role_power` VALUES ('92', '1', '93');
+INSERT INTO `role_power` VALUES ('93', '1', '94');
+INSERT INTO `role_power` VALUES ('94', '1', '95');
+INSERT INTO `role_power` VALUES ('95', '1', '96');
+INSERT INTO `role_power` VALUES ('96', '1', '97');
+INSERT INTO `role_power` VALUES ('97', '1', '98');
+INSERT INTO `role_power` VALUES ('98', '1', '99');
+INSERT INTO `role_power` VALUES ('99', '1', '100');
+INSERT INTO `role_power` VALUES ('100', '1', '101');
+INSERT INTO `role_power` VALUES ('101', '1', '102');
+INSERT INTO `role_power` VALUES ('102', '1', '103');
+INSERT INTO `role_power` VALUES ('103', '1', '104');
+INSERT INTO `role_power` VALUES ('104', '1', '105');
+INSERT INTO `role_power` VALUES ('105', '1', '106');
+INSERT INTO `role_power` VALUES ('106', '1', '107');
+INSERT INTO `role_power` VALUES ('107', '1', '108');
+INSERT INTO `role_power` VALUES ('108', '1', '109');
+INSERT INTO `role_power` VALUES ('109', '1', '110');
+INSERT INTO `role_power` VALUES ('110', '1', '111');
+INSERT INTO `role_power` VALUES ('111', '1', '112');
+INSERT INTO `role_power` VALUES ('112', '1', '113');
+INSERT INTO `role_power` VALUES ('113', '1', '114');
+INSERT INTO `role_power` VALUES ('114', '1', '115');
+INSERT INTO `role_power` VALUES ('115', '1', '116');
+INSERT INTO `role_power` VALUES ('116', '1', '117');
+INSERT INTO `role_power` VALUES ('117', '2', '1');
+INSERT INTO `role_power` VALUES ('118', '2', '2');
+INSERT INTO `role_power` VALUES ('119', '2', '4');
+INSERT INTO `role_power` VALUES ('120', '2', '5');
+INSERT INTO `role_power` VALUES ('121', '2', '6');
+INSERT INTO `role_power` VALUES ('122', '2', '7');
+INSERT INTO `role_power` VALUES ('123', '2', '10');
+INSERT INTO `role_power` VALUES ('124', '2', '11');
+INSERT INTO `role_power` VALUES ('125', '2', '14');
+INSERT INTO `role_power` VALUES ('126', '2', '19');
+INSERT INTO `role_power` VALUES ('127', '2', '20');
+INSERT INTO `role_power` VALUES ('128', '2', '21');
+INSERT INTO `role_power` VALUES ('129', '2', '22');
+INSERT INTO `role_power` VALUES ('130', '2', '23');
+INSERT INTO `role_power` VALUES ('131', '2', '24');
+INSERT INTO `role_power` VALUES ('132', '2', '25');
+INSERT INTO `role_power` VALUES ('133', '2', '26');
+INSERT INTO `role_power` VALUES ('134', '2', '27');
+INSERT INTO `role_power` VALUES ('135', '2', '28');
+INSERT INTO `role_power` VALUES ('136', '2', '29');
+INSERT INTO `role_power` VALUES ('137', '2', '30');
+INSERT INTO `role_power` VALUES ('138', '2', '31');
+INSERT INTO `role_power` VALUES ('139', '2', '32');
+INSERT INTO `role_power` VALUES ('140', '2', '33');
+INSERT INTO `role_power` VALUES ('141', '2', '34');
+INSERT INTO `role_power` VALUES ('142', '2', '35');
+INSERT INTO `role_power` VALUES ('143', '2', '36');
+INSERT INTO `role_power` VALUES ('144', '2', '37');
+INSERT INTO `role_power` VALUES ('145', '2', '38');
+INSERT INTO `role_power` VALUES ('146', '2', '39');
+INSERT INTO `role_power` VALUES ('147', '2', '40');
+INSERT INTO `role_power` VALUES ('148', '2', '41');
+INSERT INTO `role_power` VALUES ('149', '2', '42');
+INSERT INTO `role_power` VALUES ('150', '2', '43');
+INSERT INTO `role_power` VALUES ('151', '2', '44');
+INSERT INTO `role_power` VALUES ('152', '2', '45');
+INSERT INTO `role_power` VALUES ('153', '2', '46');
+INSERT INTO `role_power` VALUES ('154', '2', '47');
+INSERT INTO `role_power` VALUES ('155', '2', '48');
+INSERT INTO `role_power` VALUES ('156', '2', '49');
+INSERT INTO `role_power` VALUES ('157', '2', '50');
+INSERT INTO `role_power` VALUES ('158', '2', '51');
+INSERT INTO `role_power` VALUES ('159', '2', '52');
+INSERT INTO `role_power` VALUES ('160', '2', '53');
+INSERT INTO `role_power` VALUES ('161', '2', '54');
+INSERT INTO `role_power` VALUES ('162', '2', '55');
+INSERT INTO `role_power` VALUES ('163', '2', '56');
+INSERT INTO `role_power` VALUES ('164', '2', '57');
+INSERT INTO `role_power` VALUES ('165', '2', '58');
+INSERT INTO `role_power` VALUES ('166', '2', '59');
+INSERT INTO `role_power` VALUES ('167', '2', '60');
+INSERT INTO `role_power` VALUES ('168', '2', '61');
+INSERT INTO `role_power` VALUES ('169', '2', '62');
+INSERT INTO `role_power` VALUES ('170', '2', '63');
+INSERT INTO `role_power` VALUES ('171', '2', '64');
+INSERT INTO `role_power` VALUES ('172', '2', '65');
+INSERT INTO `role_power` VALUES ('173', '2', '66');
+INSERT INTO `role_power` VALUES ('174', '2', '67');
+INSERT INTO `role_power` VALUES ('175', '2', '68');
+INSERT INTO `role_power` VALUES ('176', '2', '71');
+INSERT INTO `role_power` VALUES ('177', '2', '72');
+INSERT INTO `role_power` VALUES ('178', '2', '73');
+INSERT INTO `role_power` VALUES ('179', '2', '74');
+INSERT INTO `role_power` VALUES ('180', '2', '75');
+INSERT INTO `role_power` VALUES ('181', '2', '76');
+INSERT INTO `role_power` VALUES ('182', '2', '77');
+INSERT INTO `role_power` VALUES ('183', '2', '78');
+INSERT INTO `role_power` VALUES ('184', '2', '79');
+INSERT INTO `role_power` VALUES ('185', '2', '80');
+INSERT INTO `role_power` VALUES ('186', '2', '81');
+INSERT INTO `role_power` VALUES ('187', '2', '82');
+INSERT INTO `role_power` VALUES ('188', '2', '83');
+INSERT INTO `role_power` VALUES ('189', '2', '84');
+INSERT INTO `role_power` VALUES ('190', '2', '85');
+INSERT INTO `role_power` VALUES ('191', '2', '87');
+INSERT INTO `role_power` VALUES ('192', '2', '88');
+INSERT INTO `role_power` VALUES ('193', '2', '89');
+INSERT INTO `role_power` VALUES ('194', '2', '90');
+INSERT INTO `role_power` VALUES ('195', '2', '91');
+INSERT INTO `role_power` VALUES ('196', '2', '92');
+INSERT INTO `role_power` VALUES ('197', '2', '93');
+INSERT INTO `role_power` VALUES ('198', '2', '94');
+INSERT INTO `role_power` VALUES ('199', '2', '95');
+INSERT INTO `role_power` VALUES ('200', '2', '96');
+INSERT INTO `role_power` VALUES ('201', '2', '97');
+INSERT INTO `role_power` VALUES ('202', '2', '98');
+INSERT INTO `role_power` VALUES ('203', '2', '99');
+INSERT INTO `role_power` VALUES ('204', '2', '100');
+INSERT INTO `role_power` VALUES ('205', '2', '101');
+INSERT INTO `role_power` VALUES ('206', '2', '102');
+INSERT INTO `role_power` VALUES ('207', '2', '103');
+INSERT INTO `role_power` VALUES ('208', '2', '104');
+INSERT INTO `role_power` VALUES ('209', '2', '105');
+INSERT INTO `role_power` VALUES ('210', '2', '106');
+INSERT INTO `role_power` VALUES ('211', '2', '107');
+INSERT INTO `role_power` VALUES ('212', '2', '108');
+INSERT INTO `role_power` VALUES ('213', '2', '109');
+INSERT INTO `role_power` VALUES ('214', '2', '110');
+INSERT INTO `role_power` VALUES ('215', '2', '111');
+INSERT INTO `role_power` VALUES ('216', '2', '112');
+INSERT INTO `role_power` VALUES ('217', '2', '113');
+INSERT INTO `role_power` VALUES ('218', '2', '114');
+INSERT INTO `role_power` VALUES ('219', '2', '115');
+INSERT INTO `role_power` VALUES ('220', '2', '116');
+INSERT INTO `role_power` VALUES ('221', '2', '117');
+INSERT INTO `role_power` VALUES ('222', '3', '20');
+INSERT INTO `role_power` VALUES ('223', '3', '21');
+INSERT INTO `role_power` VALUES ('224', '3', '22');
+INSERT INTO `role_power` VALUES ('225', '3', '23');
+INSERT INTO `role_power` VALUES ('226', '3', '24');
+INSERT INTO `role_power` VALUES ('227', '3', '25');
+INSERT INTO `role_power` VALUES ('228', '3', '26');
+INSERT INTO `role_power` VALUES ('229', '3', '27');
+INSERT INTO `role_power` VALUES ('230', '3', '28');
+INSERT INTO `role_power` VALUES ('231', '3', '29');
+INSERT INTO `role_power` VALUES ('232', '3', '30');
+INSERT INTO `role_power` VALUES ('233', '3', '31');
+INSERT INTO `role_power` VALUES ('234', '3', '32');
+INSERT INTO `role_power` VALUES ('235', '3', '33');
+INSERT INTO `role_power` VALUES ('236', '3', '34');
+INSERT INTO `role_power` VALUES ('237', '3', '35');
+INSERT INTO `role_power` VALUES ('238', '3', '36');
+INSERT INTO `role_power` VALUES ('239', '3', '37');
+INSERT INTO `role_power` VALUES ('240', '3', '38');
+INSERT INTO `role_power` VALUES ('241', '3', '39');
+INSERT INTO `role_power` VALUES ('242', '3', '40');
+INSERT INTO `role_power` VALUES ('243', '3', '41');
+INSERT INTO `role_power` VALUES ('244', '3', '42');
+INSERT INTO `role_power` VALUES ('245', '3', '43');
+INSERT INTO `role_power` VALUES ('246', '3', '44');
+INSERT INTO `role_power` VALUES ('247', '3', '45');
+INSERT INTO `role_power` VALUES ('248', '3', '46');
+INSERT INTO `role_power` VALUES ('249', '3', '47');
+INSERT INTO `role_power` VALUES ('250', '3', '48');
+INSERT INTO `role_power` VALUES ('251', '3', '49');
+INSERT INTO `role_power` VALUES ('252', '3', '50');
+INSERT INTO `role_power` VALUES ('253', '3', '51');
+INSERT INTO `role_power` VALUES ('254', '3', '52');
+INSERT INTO `role_power` VALUES ('255', '3', '53');
+INSERT INTO `role_power` VALUES ('256', '3', '54');
+INSERT INTO `role_power` VALUES ('257', '3', '55');
+INSERT INTO `role_power` VALUES ('258', '3', '56');
+INSERT INTO `role_power` VALUES ('259', '3', '57');
+INSERT INTO `role_power` VALUES ('260', '3', '58');
+INSERT INTO `role_power` VALUES ('261', '3', '59');
+INSERT INTO `role_power` VALUES ('262', '3', '60');
+INSERT INTO `role_power` VALUES ('263', '3', '61');
+INSERT INTO `role_power` VALUES ('264', '3', '62');
+INSERT INTO `role_power` VALUES ('265', '3', '63');
+INSERT INTO `role_power` VALUES ('266', '3', '64');
+INSERT INTO `role_power` VALUES ('267', '3', '65');
+INSERT INTO `role_power` VALUES ('268', '3', '66');
+INSERT INTO `role_power` VALUES ('269', '3', '67');
+INSERT INTO `role_power` VALUES ('270', '3', '71');
+INSERT INTO `role_power` VALUES ('271', '3', '72');
+INSERT INTO `role_power` VALUES ('272', '3', '74');
+INSERT INTO `role_power` VALUES ('273', '3', '75');
+INSERT INTO `role_power` VALUES ('274', '3', '76');
+INSERT INTO `role_power` VALUES ('275', '3', '77');
+INSERT INTO `role_power` VALUES ('276', '3', '78');
+INSERT INTO `role_power` VALUES ('277', '3', '82');
+INSERT INTO `role_power` VALUES ('278', '3', '83');
+INSERT INTO `role_power` VALUES ('279', '3', '84');
+INSERT INTO `role_power` VALUES ('280', '3', '85');
+INSERT INTO `role_power` VALUES ('281', '3', '87');
+INSERT INTO `role_power` VALUES ('282', '3', '88');
+INSERT INTO `role_power` VALUES ('283', '3', '89');
+INSERT INTO `role_power` VALUES ('284', '3', '90');
+INSERT INTO `role_power` VALUES ('285', '3', '91');
+INSERT INTO `role_power` VALUES ('286', '3', '92');
+INSERT INTO `role_power` VALUES ('287', '3', '99');
+INSERT INTO `role_power` VALUES ('288', '3', '106');
+INSERT INTO `role_power` VALUES ('289', '3', '107');
+INSERT INTO `role_power` VALUES ('290', '3', '108');
+INSERT INTO `role_power` VALUES ('291', '3', '109');
+INSERT INTO `role_power` VALUES ('292', '3', '110');
+INSERT INTO `role_power` VALUES ('293', '3', '111');
+INSERT INTO `role_power` VALUES ('294', '3', '112');
+INSERT INTO `role_power` VALUES ('295', '3', '113');
+INSERT INTO `role_power` VALUES ('296', '3', '114');
+INSERT INTO `role_power` VALUES ('297', '3', '115');
+INSERT INTO `role_power` VALUES ('298', '3', '116');
+INSERT INTO `role_power` VALUES ('299', '3', '117');
 
 -- ----------------------------
 -- Table structure for source_type
@@ -600,13 +703,15 @@ CREATE TABLE `user` (
   `granularity` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `unique_username` (`user_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 INSERT INTO `user` VALUES ('1', 'superman', 'superman', 'superman@qq.com', '17762617653', '超级管理员', '2017-06-21', '1', '1');
 INSERT INTO `user` VALUES ('2', 'jingjing', 'jingjing', 'jingjing@qq.com', '15395795687', '汪静远', '2017-06-21', '1', '1');
+INSERT INTO `user` VALUES ('3', 'tankai', 'tankai', '1043595701@qq.com', '17762617656', '谈凯', '2017-06-26', '1', '1');
+INSERT INTO `user` VALUES ('4', 'chenghu', 'chenghu', '1043595701@qq.com', '17762617656', '程虎', '2017-06-26', '1', '1');
 
 -- ----------------------------
 -- Table structure for user_role
@@ -621,13 +726,15 @@ CREATE TABLE `user_role` (
   KEY `index_role_id` (`role_id`),
   CONSTRAINT `ur_fk_role_id` FOREIGN KEY (`role_id`) REFERENCES `role` (`role_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `ur_fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
 INSERT INTO `user_role` VALUES ('1', '1', '1');
 INSERT INTO `user_role` VALUES ('2', '2', '2');
+INSERT INTO `user_role` VALUES ('3', '3', '3');
+INSERT INTO `user_role` VALUES ('9', '4', '2');
 
 -- ----------------------------
 -- Table structure for website
