@@ -30,9 +30,9 @@ function roleInforShow(page){
 		complete : function(){
 		//	console.log("all")
         },
-		error: function(){
-			alert("请求失败");
-		}
+        error: function(msg){
+			alert(eval('(' + msg.responseText + ')').result);
+        },
 	})	
 }
 function initShowPage(currenPage){
@@ -53,9 +53,9 @@ function initShowPage(currenPage){
                 alert(msg.result);
             }
         },
-        error: function () {
-            alert("数据请求失败");
-        }})
+        error: function(msg){
+			alert(eval('(' + msg.responseText + ')').result);
+        },})
 }
 
 initShowPage(1)
@@ -82,9 +82,9 @@ function initSearchPage(currenPage){
                 alert(msg.result);
             }
         },
-        error: function () {
-            alert("数据请求失败");
-        }})
+        error: function(msg){
+			alert(eval('(' + msg.responseText + ')').result);
+        },})
 }
 function setCookie(value1,value2){
 	// alert(name+value);
@@ -99,10 +99,10 @@ function setCookie(value1,value2){
 //		alert("对不起，不能修改超级管理员信息");
 //		return;
 //	}else 
-		if(value2 == '管理员'){
-		alert("对不起，不能修改管理员信息");
-		return;
-	}
+//		if(value2 == '管理员'){
+//		alert("对不起，不能修改管理员信息");
+//		return;
+//	}
 	baseAjax("role_change");
 }
 
@@ -143,9 +143,9 @@ function roleInforSearch(page){
 		//	console.log("one")
            // stop();
         },
-		error: function(){
-			alert("请求失败");
-		}
+        error: function(msg){
+			alert(eval('(' + msg.responseText + ')').result);
+        },
 	})	
 }
 
@@ -177,9 +177,9 @@ function addRoleInfo(){
 		complete:function(){
             stop();
         },
-		error: function(){
-		    alert("数据请求失败");
-		}
+        error: function(msg){
+			alert(eval('(' + msg.responseText + ')').result);
+        },
 	})
 }
 
@@ -230,7 +230,7 @@ $(function(){
 					}
 				},
 				error: function(msg){
-		            alert(msg.result);
+					alert(eval('(' + msg.responseText + ')').result);
 		        }
 			});
 		}

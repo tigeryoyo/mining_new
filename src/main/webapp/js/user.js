@@ -40,8 +40,8 @@ function userInforShow(page){
 				 alert(msg.result);
 			}
 		},
-		error: function(){
-            alert("数据请求失败");
+		error: function(msg){
+			alert(eval('(' + msg.responseText + ')').result);
         },
 	})	
 }
@@ -63,9 +63,9 @@ function initShowPage(currenPage){
                 alert(msg.result);
             }
         },
-        error: function () {
-            alert("数据请求失败");
-        }})
+        error: function(msg){
+			alert(eval('(' + msg.responseText + ')').result);
+        },})
 }
 
 initShowPage(1)
@@ -100,9 +100,9 @@ function initSearchPage(currenPage){
                 alert(msg.result);
             }
         },
-        error: function () {
-            alert("数据请求失败");
-        }})
+        error: function(msg){
+			alert(eval('(' + msg.responseText + ')').result);
+        },})
 }
 function getRoleName(userId,array_userRole,array_role){
 	var name=null;
@@ -165,60 +165,6 @@ function setCookie(value1,value2,value3,value4,value5,value6,value7){
 	baseAjax("user_change");
 }
 
-/*
- * 
- * /!** 根据页码加载数据
- * 
- * @param {整型} page 页码 !/ var search_click; function setViewForPage(page){
- * 
- * if(search_click){ userInforSearch(page); }else{ userInforShow(page); } }
- * 
- * /!** 省略号点击 !/ function setPageChangeView(){ var
- * bt_name=parseInt($("#other").attr('name'))+3; updatePageValue(bt_name);
- * setViewForPage(bt_name); setFirstSelected(); updateNowPage(bt_name); } /!**
- * 更新页码数据
- * 
- * @param {Object} base_num !/ function updatePageValue(base_num){ var
- * p1=parseInt(base_num); var p2=parseInt(base_num)+1; var
- * p3=parseInt(base_num)+2; $("#p_1").val(p1); $("#p_2").val(p2);
- * $("#p_3").val(p3); $("#other").attr('name',p1); } /!** 页码点击
- * 
- * @param {Object} p_id 页码 !/ function pageNumClick(p_id){ // background:
- * #0e63ab; // color: #fff; var button=document.getElementById(p_id); var
- * page=button.value; if(page!=undefined&&page.length>0){ setViewForPage(page);
- * updateNowPage(page); //
- * $(this).addClass("cur").siblings().removeClass("cur"); cleanAllSelected();
- * button.style.background='#0e63ab'; button.style.color='#FFFFFF'; } } /!**
- * 设置第一个页码按钮为选中状态 !/ function setFirstSelected(){ cleanAllSelected();
- * $("#p_1").css("background","#0e63ab"); $("#p_1").css("color","#FFFFFF"); }
- * function setSecondSelected(){ cleanAllSelected();
- * $("#p_2").css("background","#0e63ab"); $("#p_2").css("color","#FFFFFF"); }
- * function setThirdSelected(){ cleanAllSelected();
- * $("#p_3").css("background","#0e63ab"); $("#p_3").css("color","#FFFFFF"); }
- * /!** 清除所有的选中状态 !/ function cleanAllSelected(){
- * $("#p_1").css("background","#CCCCCC"); $("#p_1").css("color","buttontext");
- * $("#p_2").css("background","#CCCCCC"); $("#p_2").css("color","buttontext");
- * $("#p_3").css("background","#CCCCCC"); $("#p_3").css("color","buttontext"); }
- * /!** 上一页，下一页点击
- * 
- * @param {Object} action -1上一页，1下一页 !/ function changPageOne(action){ var
- * now_page=parseInt($("#down_page").attr('name')); var page=now_page+action;
- * if(page>0){ updateAllStyleAndData(page,action); } } /!** 跳zhuan !/ function
- * changePage(){ var page=$(".go_num").val();
- * if(page!=undefined&&page.length>0){ updateAllStyleAndData(page); } } function
- * updateAllStyleAndData(page,action){ updateNowPage(page);
- * setViewForPage(page); if((page-1)%3==0){// 位置：第一个按钮 123 456 789
- * setFirstSelected(); if(action==1||action==undefined){// 点击下一页
- * updatePageValue(page); } }else if(page%3==0){// 位置：第三个按钮 setThirdSelected();
- * if (action==-1||action==undefined) {// 点击上一页 updatePageValue(page-2); }
- * }else{// 位置：第二个按钮 setSecondSelected(); if(action==undefined){
- * updatePageValue(page-1); } } } /!** 更新当前页码
- * 
- * @param {Object} page 当前页 !/ function updateNowPage(page){
- * $("#down_page").attr('name',page); }
- */
-
-
 
 // 信息搜索
 function userInforSearch(page){
@@ -271,8 +217,8 @@ function userInforSearch(page){
 				 alert(msg.result);
 			}
 		},
-		error: function(){
-            alert("数据请求失败");
+		error: function(msg){
+			alert(eval('(' + msg.responseText + ')').result);
         },
 	})	
 }
@@ -312,8 +258,8 @@ function addUser(){
         return;
     }
 	var rolename = $("#select_roleName option:selected").val();
-	if(rolename===undefined||rolename==''){
-        alert('角色为空');
+	if(rolename===undefined||rolename == null ||rolename=='null'||rolename==''||rolename=='请选择角色'){
+        alert('角色为空，请重新选择');
         return;
     }
 	$.ajax({
@@ -337,7 +283,7 @@ function addUser(){
 			}
 		},
 		error: function(msg){
-            alert(msg.result);
+			alert(eval('(' + msg.responseText + ')').result);
         },
 	})	
 }
@@ -374,8 +320,9 @@ function userInforChange(){
 		return false; 
 	}
 	var rolename = $("#select_roleName option:selected").val();
-	if(rolename===undefined||rolename==''){
-        alert('角色为空');
+	
+	if(rolename===undefined||rolename == null ||rolename=='null'||rolename==''||rolename=='请选择角色'){
+        alert('角色为空，请重新选择');
         return;
     }
 	var newRole=getCookie("roleName");
@@ -405,7 +352,7 @@ function userInforChange(){
 			}
 		},
 		error: function(msg){
-            alert(msg.result);
+			alert(eval('(' + msg.responseText + ')').result);
         },
 	})	
 }
@@ -431,7 +378,7 @@ function CurrentUserId() {
            }
        },
        error : function(msg) {
-    	   alert(msg);
+    	   alert(eval('(' + msg.responseText + ')').result);
         }
     });
     return userId;
@@ -474,7 +421,7 @@ function userInforDel(user_id){
 
 		} ,
 		error: function(msg){
-            alert(msg.result);
+			alert(eval('(' + msg.responseText + ')').result);
         },
 	});
 }

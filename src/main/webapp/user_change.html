@@ -93,11 +93,11 @@
 				}
 			},
 			complete : function() {
-				console.log("all")
+				//console.log("all")
 				stop();
 			},
 			error : function(msg) {
-				alert(msg.result);
+				alert(eval('(' + msg.responseText + ')').result);
 			}
 		})
 	}
@@ -106,10 +106,7 @@
 	var newtelphone = getCookie("telphone");
 	var newemail = getCookie("email");
 	var newRole = getCookie("roleName");
-	console.log(newuserName);
-	console.log(newtrueName);
-	console.log(newtelphone);
-	console.log(newemail);
+	
 	var a_cookie = document.getElementById("new_user_type");
 	var b_cookie = document.getElementById("new_true_type");
 	var c_cookie = document.getElementById("new_telphone_type");
