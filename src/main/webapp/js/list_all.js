@@ -96,7 +96,7 @@ function initShowPage(currenPage){
             }
         },
         error: function () {
-            alert("数据请求失败");
+            alert("非常抱歉，您没有权限访问该资源，请联系管理员");
         }})
 }
 
@@ -121,7 +121,7 @@ function initSearchPage(currenPage){
             }
         },
         error: function () {
-            alert("数据请求失败");
+            alert("非常抱歉，您没有权限访问该资源，请联系管理员");
         }})
 }
 
