@@ -109,7 +109,7 @@ public class IssueDao {
         Criteria cri = example.createCriteria();
         //System.out.println("删除的数据为"+issueId);
         cri.andIssueIdEqualTo(issueId);
-        cri.andCreatorEqualTo(user);
+        //cri.andCreatorEqualTo(user);
         return issueMapper.deleteByExample(example);
     }
 }

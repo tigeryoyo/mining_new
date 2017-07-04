@@ -36,7 +36,6 @@ $(function() {
 
 function submit(fd) {
 	$.ajax({
-		async : false,
 		crossDomain : true,
 		url : "/website/importMapUrl",
 		method : "POST",
@@ -45,10 +44,14 @@ function submit(fd) {
 		dataType : "json",
 		mimeType : "multipart/form-data",
 		data : fd,
+		beforeSend : function() {
+			begin();
+			},
 		success : function(msg) {
 			alert(msg.result);
 		},
 		complete : function() {
+			stop();
 			box.innerHTML="将文件拖拽到此处";
 		},
 		error : function() {
