@@ -10,14 +10,12 @@
 	<div class="s_nav">
 		当前位置： <a href="javascript:;" onclick="baseAjax('topic_list')">任务管理</a>
 		<span>>>任务详情 </span><span style="color: red; font-weight: bold;">（准数据）</span>
-		<span style="float: right; text-align: right">查看该任务对应的：<a
-			href="javascript:;"
-			style="font-weight: bold; text-decoration: underline"
-			onclick="queryLinkedIssue('extensive')">泛数据</a>&nbsp;&nbsp;&nbsp;<a
-			href="javascript:;"
-			style="font-weight: bold; text-decoration: underline"
-			onclick="queryLinkedIssue('core')">核心数据</a>&nbsp;&nbsp;
-		</span>
+		<div class="btn-group" role="group" aria-label="..." style="float:right;">
+  			<button type="button" class="btn btn-default" onclick="baseAjax('topic_details_extensive')">原始数据</button>
+  			<button type="button" class="btn btn-default" onclick="baseAjax('history')">泛数据</button>
+ 			<button type="button" class="btn btn-default" onclick="baseAjax('topic_details_standard')">准数据</button>
+		    <button type="button" class="btn btn-default">待定</button>
+		</div>
 	</div>
 	<div class="ckht">
 		<ul class="ckht_list">
