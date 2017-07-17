@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpRequest;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.StandardResultDao;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.Label;
 import com.hust.mining.model.StandardResult;
+import com.hust.mining.model.Website;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.LabelService;
 import com.hust.mining.service.RedisService;
@@ -68,6 +71,36 @@ public class StandardResultController {
         json.put("stdResList", stdResList);
         return ResultUtil.success(json);
     }
+    
+    /**
+     * //从上传的准数据文件生成准数据 
+     * @param file
+     * @return
+     */
+    @ResponseBody
+	@RequestMapping("/createResWithFile")
+	public Object createResWithFile(@RequestParam(value = "file", required = true) MultipartFile file,HttpRequest request) {
+		if (file.isEmpty()) {
+			return ResultUtil.errorWithMsg("准数据文件内容为空!");
+		}
+		try {
+			//System.out.println(file.getOriginalFilename());
+			List<String[]> list = ExcelUtil.read(file.getOriginalFilename(), file.getInputStream(), 1);
+			if (null == list || 0 == list.size()) {
+				return ResultUtil.errorWithMsg("准数据文件内容为空!");
+			}
+			
+//			for (String[] strs : list) {
+//			
+//			}
+
+			return ResultUtil.success("上传准数据，生成准数据成功！");
+		} catch (Exception e) {
+
+		}
+		return ResultUtil.errorWithMsg("生成准数据失败!");
+	}
+
     
     @SuppressWarnings("unchecked")
     @ResponseBody
