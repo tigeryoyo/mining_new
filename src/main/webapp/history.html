@@ -12,6 +12,7 @@
 <script type="text/javascript" src="js/dateformat.js"></script>
 <script type="text/javascript" src="js/cookie.js"></script>
 <script type="text/javascript" src="js/scxsj.js"></script>
+<script type="text/javascript" src="js/tuozhuai.js"></script>
 </head>
 <body>
 
@@ -78,12 +79,22 @@
 					<button type="button"  class="btn btn-primary" style=" float:left;margin-top:16px;margin-left:20px;" onclick="addLayData()">合并</button>
 					<button type="button"  class="btn btn-danger" style=" float:left;margin-top:16px;margin-left:20px;" onclick="deleteLayData()">删除</button>
 					
-					<button type="button"  class="btn btn-info" style="float: right;margin-top:16px; margin-right: 0px;" onclick="sczsj()">生成准数据</button>
-					<button type="button"  class="btn btn-info" style="float: right;margin-top:16px; margin-right: 0px;" onclick="download()">下载准数据</button>
+					
+					<button type="button"  class="btn btn-info" style="float: right;margin-top:16px; margin-right: 0px;" onclick="download()">下载泛数据</button>
 					<div class="clear"></div>
 					
 				</div>
 			</div>
+		</div>
+		
+		<li>新增文件：
+				<div class="files_add" id="drop_area">将文件拖拽到此处</div>
+		</li>
+		</ul>
+		<div class="up_del">
+			<ul id="file_ul">
+			</ul>
+			<button type="button"  class="btn btn-info" style="float: right;" onclick="sczsj()">生成准数据</button>
 		</div>
 	</div>
 
