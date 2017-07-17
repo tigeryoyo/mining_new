@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -98,6 +99,46 @@ public class FileController {
 		}
 		return ResultUtil.success("上传成功");
 	}
+	
+	//下载聚类结果，即下载泛数据
+	@SuppressWarnings("unchecked")
+    @RequestMapping("/download")
+    public void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String issueId = issueService.getCurrentIssueId(request);
+        if (StringUtils.isBlank(issueId)) {
+            response.sendError(404, "未找到当前处理事件，请先创建或者选择某一事件");
+            logger.info("从session中无法s获得任务的任务id");
+            return;
+        }
+        String resultId = resultService.getCurrentResultId(request);
+        if (StringUtils.isBlank(resultId)) {
+            response.sendError(404, "未找到当前处理记录，请先创建或者选择某一记录");
+            logger.info("从session中无法s获得记录的记录id");
+            return;
+        }
+        OutputStream outputStream = null;
+        try {
+            List<String[]> cluster = resultService.exportService(issueId, resultId, request);
+            if (cluster == null) {
+                response.sendError(404, "导出错误");
+                return;
+            }
+            outputStream = response.getOutputStream();
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition", "attachment;fileName=result.xls");
+            HSSFWorkbook workbook = ExcelUtil.exportToExcel(cluster);
+            workbook.write(outputStream);
+        } catch (Exception e) {
+            logger.info("excel 导出失败\t" + e.toString());
+        } finally {
+            try {
+                outputStream.close();
+            } catch (Exception e) {
+                logger.info("导出excel时，关闭outputstream失败");
+            }
+        }
+    }
 
 	@SuppressWarnings("unchecked")
 	@ResponseBody

@@ -3,6 +3,7 @@
  */
 // document.write('<script type="text/javascript"
 // src="js/cluster_details.js"></script>');
+//显示聚类的结果表
 function historyRecord() {
 	$.ajax({
 		type : "post",
@@ -12,6 +13,12 @@ function historyRecord() {
 			if (msg.status === 'OK') {
 				var items = msg.result;
 				$.each(items, function(i, item) {
+					if(i==0)
+					{
+						historyData(item.rid);
+						var issueId = getCookie("issueId");
+						showExtensiveIssueName(issueId);
+					}
 					rows = '<tr><td height="32" align="center"><a href="javascript:;" onclick="historyData(\'' + item.rid + '\')">' + item.comment + '</a></td><td height="32" align="center">'
 						+ item.creator + '</td><td height="32" align="center">' + new Date(item.createTime.time).format('yyyy-MM-dd hh:mm:ss')
 						+ '</td><td height="32" align="center"><button type="button" class="btn btn-primary" id="' + item.rid + '" onclick="historyReset()">重置</button> <button type="button" class="btn btn-danger" id="' + item.rid
@@ -27,6 +34,30 @@ function historyRecord() {
 }
 historyRecord();
 
+function showExtensiveIssueName(issueId) {
+	$.ajax({
+		type : "post",
+		url : "/file/queryIssueFiles",
+		data : {
+			issueId : issueId
+		},
+		dataType : "json",
+		success : function(msg) {
+			if (msg.status == "OK") {
+				var items = msg.result.issue;
+				$('.issueName').text("任务名称：" + items.issueName);
+			} else {
+				alert(msg.result);
+			}
+
+		},
+		error : function() {
+			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
+		}
+	});
+}
+
+//显示聚类结果
 function historyData(rid) {
 	$.ajax({
 		type : "post",
@@ -104,6 +135,14 @@ function historyDel() {
 			})
 		}
 	})
+}
+
+//下载准数据
+function download(){
+	alert("s");
+	var form = $('<form method="POST" action="/file/download">');
+	$('body').append(form);
+	form.submit(); // 自动提交
 }
 
 function toPaint(currentSet, title) {
