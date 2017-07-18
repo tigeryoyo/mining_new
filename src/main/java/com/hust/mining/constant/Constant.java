@@ -64,6 +64,20 @@ public class Constant {
         public static final int COUNT_ITEM_INDEX = 0;
         public static final int COUNT_ITEM_AMOUNT = 1;
     }
+    /**
+     * 域名文件的基本属性列下标
+     * @author Jack
+     *
+     */
+    public static class DomainExcelAttr{
+    	public static final int URL_INDEX = 0;
+    	public static final int NAME_INDEX = 1;
+    	public static final int COLUMN_INDEX = 2;
+    	public static final int TYPE_INDEX = 3;
+    	public static final int RANK_INDEX = 4;
+    	public static final int INCIDENCE_INDEX = 5;
+    	public static final int WEIGHT_INDEX = 6;
+    }
 
     // 情感
     public static class Emotion {

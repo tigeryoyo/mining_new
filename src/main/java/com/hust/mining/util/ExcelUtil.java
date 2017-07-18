@@ -95,6 +95,69 @@ public class ExcelUtil {
 		inputStream.close();
 		return list;
 	}
+	/**
+	 * 允许有空表格的excel读取
+	 * @param filename
+	 * @param inputStream
+	 * @param start 为负数代表从开始读取
+	 * @param rows 为负数代表读取到最后一行
+	 * @param indexes 要读取列下标，null代表读取全部列
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 */
+	public static List<String[]> readWithNull(String filename, InputStream inputStream, int start, int rows, Integer... indexes)
+			throws FileNotFoundException, IOException {
+
+		List<String[]> list = new ArrayList<String[]>();
+		Workbook workbook;
+		if (filename.endsWith("xls")) {
+			workbook = new HSSFWorkbook(inputStream);
+		} else {
+			workbook = new XSSFWorkbook(inputStream);
+		}
+		Sheet sheet = workbook.getSheetAt(0);
+		int rowNum = sheet.getLastRowNum(); // 行数
+		int colNum = sheet.getRow(0).getLastCellNum(); // 列数
+		if (null == indexes || indexes.length == 0) {
+			indexes = new Integer[colNum];
+			for (int i = 0; i < colNum; i++) {
+				indexes[i] = i;
+			}
+		}
+		if (rows >= 0) {
+			rowNum = rows > rowNum ? rowNum : rows;
+		}
+		start = start > rowNum ? rowNum : start;
+		List<String> exitUrls = new ArrayList<String>();
+		for (int i = start, x = 1; x <= rowNum; i++, x++) {
+			String[] rowStr = new String[indexes.length];
+			for (int j = 0; j < indexes.length; j++) {
+				try {
+					Cell cell = sheet.getRow(i).getCell(indexes[j]);
+					if (cell.getCellType() == 0) {
+						rowStr[j] = TimeUtil.convert(cell);
+					} else {
+						rowStr[j] = cell.toString();
+					}
+				} catch (Exception e) {
+					rowStr[j] = "";
+				}
+				rowStr[j] = rowStr[j].replaceAll("\n", "");
+				rowStr[j] = rowStr[j].replaceAll("\t", "");
+				rowStr[j] = rowStr[j].replaceAll("\r", "");
+				rowStr[j] = rowStr[j].replaceAll("\b", "");
+				rowStr[j] = rowStr[j].replaceAll("\f", "");
+			}
+			int exitIndex = exitUrls.indexOf(rowStr[Index.URL_INDEX]);
+			if (exitIndex == -1) {
+				list.add(rowStr);
+				exitUrls.add(rowStr[Index.URL_INDEX]);
+			}
+		}
+		inputStream.close();
+		return list;
+	}
 
 	public static HSSFWorkbook exportToExcel(@SuppressWarnings("unchecked") List<String[]>... lists) {
 		HSSFWorkbook workbook = new HSSFWorkbook();
