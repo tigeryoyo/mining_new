@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50718
 File Encoding         : 65001
 
-Date: 2017-06-14 13:53:38
+Date: 2017/7/10 20:55:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -786,3 +786,86 @@ INSERT INTO `weight` VALUES ('10', '微博', '1');
 INSERT INTO `weight` VALUES ('11', '微信', '5');
 INSERT INTO `weight` VALUES ('12', '贴吧', '1');
 INSERT INTO `weight` VALUES ('14', '手机', '5');
+
+-- ----------------------------
+-- Table structure for domain_one
+-- ----------------------------
+DROP TABLE IF EXISTS `domain_one`;
+CREATE TABLE `domain_one` (
+  `uuid` varchar(64) NOT NULL,
+  `url` varchar(64) NOT NULL,
+  `name` varchar(32) NOT NULL default '其他',
+  `column` varchar(32) NOT NULL default '其他',
+  `type` varchar(32) NOT NULL default '其他',
+  `rank` varchar(32) NOT NULL default '其他',
+  `incidence` varchar(32) NOT NULL default '其他',
+  `weight` int(11) NOT NULL default '0',
+  `is_father` tinyint(1) NOT NULL default '0',
+  `update_time` datetime NOT NULL,
+  PRIMARY KEY  (`uuid`),
+  UNIQUE KEY `url` (`url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records 
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for domain_two
+-- ----------------------------
+DROP TABLE IF EXISTS `domain_two`;
+CREATE TABLE `domain_two` (
+  `uuid` varchar(64) NOT NULL,
+  `url` varchar(64) NOT NULL,
+  `name` varchar(32) NOT NULL default '其他',
+  `column` varchar(32) NOT NULL default '其他',
+  `type` varchar(32) NOT NULL default '其他',
+  `rank` varchar(32) NOT NULL default '其他',
+  `incidence` varchar(32) NOT NULL default '其他',
+  `weight` int(11) NOT NULL default '0',
+  `father_uuid` varchar(64) NOT NULL,
+  `update_time` datetime NOT NULL,
+  PRIMARY KEY  (`uuid`),
+  UNIQUE KEY `url` (`url`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records 
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for extra_property
+-- ----------------------------
+DROP TABLE IF EXISTS `extra_property`;
+CREATE TABLE `extra_property` (
+  `id` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL default '未知',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records 
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for domain_property
+-- ----------------------------
+DROP TABLE IF EXISTS `domain_property`;
+CREATE TABLE `domain_property` (
+  `id` int(11) NOT NULL,
+  `domain_id` varchar(64) NOT NULL,
+  `property_id` int(11) NOT NULL,
+  `property_value` varchar(32) NOT NULL default '其他',
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `domain_property` (`domain_id`,`property_id`),
+  KEY `domain_id` (`domain_id`),
+  KEY `property_id` (`property_id`),
+  CONSTRAINT `domain_id` FOREIGN KEY (`domain_id`) REFERENCES `domain_two` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `domian_id` FOREIGN KEY (`domain_id`) REFERENCES `domain_one` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `property_id` FOREIGN KEY (`property_id`) REFERENCES `extra_property` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records 
+-- ----------------------------

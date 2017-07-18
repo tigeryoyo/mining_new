@@ -33,6 +33,7 @@ import com.hust.mining.model.Issue;
 import com.hust.mining.model.IssueFile;
 import com.hust.mining.model.StandardResult;
 import com.hust.mining.model.params.Condition;
+import com.hust.mining.service.DomainService;
 import com.hust.mining.service.FileService;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.RedisService;
@@ -61,6 +62,8 @@ public class FileController {
 	private UserService userService;
 	@Autowired
 	private RedisService redisService;
+	@Autowired
+	private DomainService domainService;
 
 	/**
 	 * 上传文件
@@ -254,7 +257,26 @@ public class FileController {
 		}
 		return ResultUtil.errorWithMsg("文件预浏览失败!");
 	}
+	/**
+	 * 上传域名信息excel文件
+	 * @param file
+	 * @return
+	 */
+	@RequestMapping("/uploadDomainExcel")
+	public Object uploadDomainExcel(@RequestParam(value = "file", required = true) MultipartFile file){
+		if (file.isEmpty()) {
+			return ResultUtil.errorWithMsg("文件为空");
+		}
+		if(!domainService.addUrlFromFile(file)){
+			return ResultUtil.errorWithMsg("文件格式错误导致添加域名信息失败！");
+		}
+		return ResultUtil.success("添加信息成功！");
+	}
 
+	public Object getUnknowUrl(){
+		return null;
+	}
+	
 	@ResponseBody
 	@RequestMapping("/searchFileByCon")
 	public Object searchFileByCon(@RequestParam(value = "startTime", required = true) Date startTime,
