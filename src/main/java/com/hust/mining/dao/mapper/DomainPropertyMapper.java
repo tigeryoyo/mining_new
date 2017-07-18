@@ -16,6 +16,8 @@ public interface DomainPropertyMapper {
 
     int insertBatch(List<DomainProperty> list);
     
+    int insertIgnore(List<DomainProperty> list);
+    
     int insertSelective(DomainProperty record);
 
     List<DomainProperty> selectByExample(DomainPropertyExample example);

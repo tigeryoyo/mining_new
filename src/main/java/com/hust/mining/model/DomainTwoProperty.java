@@ -2,6 +2,7 @@ package com.hust.mining.model;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 public class DomainTwoProperty {
     private String uuid;
@@ -126,6 +127,59 @@ public class DomainTwoProperty {
 		this.setUrl(domainTwo.getUrl());
 		this.setUuid(domainTwo.getUuid());
 		this.setWeight(domainTwo.getWeight());
+	}
+	
+	/**
+	 * 生成对应的带扩展属性的二级域名
+	 * @param domain 基本域名信息
+	 * @param fatherUuid 父级id
+	 */
+	public void setDomain(Domain domain,String fatherUuid){
+		this.setUuid(UUID.randomUUID().toString());
+		this.setColumn(domain.getColumn());
+		this.setIncidence(domain.getIncidence());
+		this.setFatherUuid(fatherUuid);
+		this.setName(domain.getName());
+		this.setRank(domain.getRank());
+		this.setType(domain.getType());
+		this.setUrl(domain.getUrl());	
+		this.setWeight(domain.getWeight());
+		this.setUpdateTime(new Date());
+	}
+	/**
+	 * 获取与之对应的域名信息不包括uuid和更新时间
+	 * @return
+	 */
+	public Domain getDomain(){
+		Domain domain = new Domain();
+		domain.setUrl(url);
+		domain.setName(name);
+		domain.setColumn(column);
+		domain.setType(type);
+		domain.setRank(rank);
+		domain.setIncidence(incidence);
+		domain.setWeight(weight);
+		domain.setExtraProperty(extraProperty);
+		return domain;
+	}
+
+	public DomainTwo getDomainTwo() {
+		// TODO Auto-generated method stub
+		DomainTwo domain = new DomainTwo();
+		if(uuid == null){
+			return null;
+		}
+		domain.setUuid(uuid);
+		domain.setUrl(url);
+		domain.setName(name);
+		domain.setColumn(column);
+		domain.setType(type);
+		domain.setRank(rank);
+		domain.setIncidence(incidence);
+		domain.setWeight(weight);
+		domain.setFatherUuid(fatherUuid);
+		domain.setUpdateTime(updateTime);
+		return domain;
 	}
     
 }

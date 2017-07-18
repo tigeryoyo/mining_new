@@ -149,6 +149,42 @@
 		</foreach>
 	</insert>
 
+	<insert id="insertIgnore" parameterType="java.util.List">
+		insert ignore into domain_property
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="domainId != null">
+				domain_id,
+			</if>
+			<if test="propertyId != null">
+				property_id,
+			</if>
+			<if test="propertyValue != null">
+				property_value,
+			</if>
+		</trim>
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{item.id,jdbcType=INTEGER},
+			</if>
+			<if test="domainId != null">
+				#{item.domainId,jdbcType=VARCHAR},
+			</if>
+			<if test="propertyId != null">
+				#{item.propertyId,jdbcType=INTEGER},
+			</if>
+			<if test="propertyValue != null">
+				#{item.propertyValue,jdbcType=VARCHAR},
+			</if>
+		</trim>
+		</foreach>
+	</insert>
+
 	<insert id="insertSelective" parameterType="com.hust.mining.model.DomainProperty">
 		insert into domain_property
 		<trim prefix="(" suffix=")" suffixOverrides=",">

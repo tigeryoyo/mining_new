@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    uuid, url, name, column, type, rank, incidence, weight, father_uuid, update_time
+    uuid, url, name, domain_two.column, type, rank, incidence, weight, father_uuid, update_time
   </sql>
   <select id="selectByExample" parameterType="com.hust.mining.model.DomainTwoExample" resultMap="BaseResultMap">
     select
@@ -106,7 +106,7 @@
   </delete>
   <insert id="insert" parameterType="com.hust.mining.model.DomainTwo">
     insert into domain_two (uuid, url, name, 
-      column, type, rank, 
+      domain_two.column, type, rank, 
       incidence, weight, father_uuid, 
       update_time)
     values (#{uuid,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
@@ -128,7 +128,78 @@
         name,
       </if>
       <if test="column != null">
-        column,
+        domain_two.column,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="rank != null">
+        rank,
+      </if>
+      <if test="incidence != null">
+        incidence,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="fatherUuid != null">
+        father_uuid,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    values 
+    <foreach collection="list" item="item" index="index" separator=",">
+       <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{item.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{item.url,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{item.name,jdbcType=VARCHAR},
+      </if>
+      <if test="column != null">
+        #{item.column,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{item.type,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        #{item.rank,jdbcType=VARCHAR},
+      </if>
+      <if test="incidence != null">
+        #{item.incidence,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        #{item.weight,jdbcType=INTEGER},
+      </if>
+      <if test="fatherUuid != null">
+        #{item.fatherUuid,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        #{item.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+    </foreach>
+  </insert>
+  
+  <insert id="insertIgnore" parameterType="java.util.List">
+    insert ignore into domain_two 
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="column != null">
+        domain_two.column,
       </if>
       <if test="type != null">
         type,
@@ -199,7 +270,7 @@
         name,
       </if>
       <if test="column != null">
-        column,
+        domain_two.column,
       </if>
       <if test="type != null">
         type,
@@ -272,7 +343,7 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.column != null">
-        column = #{record.column,jdbcType=VARCHAR},
+        domain_two.column = #{record.column,jdbcType=VARCHAR},
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=VARCHAR},
@@ -302,7 +373,7 @@
     set uuid = #{record.uuid,jdbcType=VARCHAR},
       url = #{record.url,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
-      column = #{record.column,jdbcType=VARCHAR},
+      domain_two.column = #{record.column,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=VARCHAR},
       rank = #{record.rank,jdbcType=VARCHAR},
       incidence = #{record.incidence,jdbcType=VARCHAR},
@@ -323,7 +394,7 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="column != null">
-        column = #{column,jdbcType=VARCHAR},
+        domain_two.column = #{column,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=VARCHAR},
@@ -350,7 +421,7 @@
     update domain_two
     set url = #{url,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
-      column = #{column,jdbcType=VARCHAR},
+      domain_two.column = #{column,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       rank = #{rank,jdbcType=VARCHAR},
       incidence = #{incidence,jdbcType=VARCHAR},

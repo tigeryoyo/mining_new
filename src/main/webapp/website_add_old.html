@@ -14,38 +14,23 @@
 		<form>
 			<table width="450" border="0" class="change_tab">
 				<tr>
-					<td width="117" height="50">域名：</td>
-					<td width="323" height="50"><input type="text" class="form-control" id="url" /></td>
+					<td width="117" height="50">网站URL：</td>
+					<td width="323" height="50"><input type="text" class="form-control" id="urlWebsite" /></td>
 				</tr>
 				<tr>
-					<td width="117" height="50">名称：</td>
+					<td width="117" height="50">网站名称：</td>
 					<td width="323" height="50"><input type="text" class="form-control"
-						id="name" /></td>
+						id="nameWibsite" /></td>
 				</tr>
 				<tr>
-					<td width="117" height="50">栏目：</td>
+					<td width="117" height="50">网站级别：</td>
 					<td width="323" height="50"><input type="text" class="form-control"
-													   id="column" /></td>
+						id="levelWebsite" /></td>
 				</tr>
 				<tr>
-					<td width="117" height="50">类型：</td>
+					<td width="117" height="50">网站类型：</td>
 					<td width="323" height="50"><input type="text" class="form-control"
-						id="type" /></td>
-				</tr>
-				<tr>
-					<td width="117" height="50">级别：</td>
-					<td width="323" height="50"><input type="text" class="form-control"
-						id="rank" /></td>
-				</tr>
-				<tr>
-					<td width="117" height="50">影响范围：</td>
-					<td width="323" height="50"><input type="text" class="form-control"
-													   id="incidence" /></td>
-				</tr>
-				<tr>
-					<td width="117" height="50">权重：</td>
-					<td width="323" height="50"><input type="text" class="form-control"
-													   id="weight" /></td>
+						id="typeWebsite" /></td>
 				</tr>
 				<tr>
 					<td width="117" height="70">
@@ -72,12 +57,4 @@
 <script type="text/javascript" src="js/waiting.js"></script>
 <script type="text/javascript" src="js/addWebsite.js"></script>
 <script type="text/javascript" src="js/mapurl_add.js"></script>
-
-<script type="text/javascript">
-	$("#weight").keyup(function () {
-        $(this).val($(this).val().replace(/[^0-9]/g,''));
-    }).bind("paste",function() {  //CTR+V事件处理
-        $(this).val($(this).val().replace(/[^0-9]/g, ''));
-    })
-</script>
 </html>

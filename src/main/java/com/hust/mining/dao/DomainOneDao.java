@@ -17,7 +17,7 @@ import com.hust.mining.model.params.DomainOneQueryCondition;
 
 @Repository
 public class DomainOneDao {
-	private static final Logger logger = LoggerFactory.getLogger(CoreResultDao.class);
+	private static final Logger logger = LoggerFactory.getLogger(DomainOneDao.class);
 
 	@Autowired
 	private DomainOneMapper domainOneMapper;
@@ -42,18 +42,19 @@ public class DomainOneDao {
 		list = domainOneMapper.selectByExample(example);
 		return list;
 	}
-	
+
 	/**
 	 * 根据uuid查找一级域名
+	 * 
 	 * @param uuid
 	 * @return
 	 */
-	public DomainOne getDomainOneById(String uuid){
+	public DomainOne getDomainOneById(String uuid) {
 		return domainOneMapper.selectByPrimaryKey(uuid);
 	}
 
 	/**
-	 * 按权重大小顺序查询所有权重非0的一级域名
+	 * 按权重大小顺序查询所有的一级域名,权重大小相同时按时间先后排序
 	 * 
 	 * @return
 	 */
@@ -63,7 +64,7 @@ public class DomainOneDao {
 		Criteria criteria = example.createCriteria();
 		criteria.andUuidIsNotNull();
 		criteria.andWeightNotEqualTo(0);
-		example.setOrderByClause("weight desc");
+		example.setOrderByClause("weight desc,update_time desc");
 		example.setStart(0);
 		example.setLimit(0);
 		list = domainOneMapper.selectByExample(example);
@@ -115,6 +116,18 @@ public class DomainOneDao {
 	}
 
 	/**
+	 * 按url搜索一级域名
+	 * @param url
+	 * @return
+	 */
+	public List<DomainOne> getDomainOneByUrl(String url) {
+		DomainOneExample example = new DomainOneExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andUrlEqualTo(url);
+		return domainOneMapper.selectByExample(example);
+	}
+	
+	/**
 	 * 按时间顺序和条件分页查找一级域名，当start、limit均为0时，为查询所有符合条件的一级域名
 	 * 
 	 * @param condition
@@ -124,7 +137,7 @@ public class DomainOneDao {
 		DomainOneExample example = new DomainOneExample();
 		Criteria criteria = example.createCriteria();
 		if (!StringUtils.isBlank(condition.getName())) {
-			criteria.andNameLike("%"+condition.getName()+"%");
+			criteria.andNameLike("%" + condition.getName() + "%");
 		}
 		if (!StringUtils.isBlank(condition.getUrl())) {
 			criteria.andUrlEqualTo(condition.getUrl());
@@ -161,6 +174,35 @@ public class DomainOneDao {
 
 		return domainOneMapper.selectByExample(example);
 	}
+	/**
+	 * 分页查询已知域名信息，即name列不为null
+	 * @param start
+	 * @param limit
+	 * @return
+	 */
+	public List<DomainOne> getKnowDomainOne(int start, int limit){
+		DomainOneExample example = new DomainOneExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andNameIsNotNull();
+		example.setStart(start);
+		example.setLimit(limit);
+		return domainOneMapper.selectByExample(example);
+	}
+	
+	/**
+	 * 分页查询所有未知域名信息，即name列为null
+	 * @param start
+	 * @param limit
+	 * @return
+	 */
+	public List<DomainOne> getUnKnowDomainOne(int start, int limit){
+		DomainOneExample example = new DomainOneExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andNameIsNull();
+		example.setStart(start);
+		example.setLimit(limit);
+		return domainOneMapper.selectByExample(example);
+	}
 
 	/**
 	 * 查询所有一级域名的数目
@@ -171,6 +213,36 @@ public class DomainOneDao {
 		DomainOneExample example = new DomainOneExample();
 		Criteria criteria = example.createCriteria();
 		criteria.andUuidIsNotNull();
+		example.setStart(0);
+		example.setLimit(0);
+		return domainOneMapper.countByExample(example);
+	}
+	
+	/**
+	 * 查询已知域名信息的数量，即name列不为null
+	 * @param start
+	 * @param limit
+	 * @return
+	 */
+	public long getKnowDomainOneCount(){
+		DomainOneExample example = new DomainOneExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andNameIsNotNull();
+		example.setStart(0);
+		example.setLimit(0);
+		return domainOneMapper.countByExample(example);
+	}
+	
+	/**
+	 * 查询未知域名信息的数量，即name列不为null
+	 * @param start
+	 * @param limit
+	 * @return
+	 */
+	public long getUnKnowDomainOneCount(){
+		DomainOneExample example = new DomainOneExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andNameIsNull();
 		example.setStart(0);
 		example.setLimit(0);
 		return domainOneMapper.countByExample(example);
@@ -186,7 +258,7 @@ public class DomainOneDao {
 		DomainOneExample example = new DomainOneExample();
 		Criteria criteria = example.createCriteria();
 		if (!StringUtils.isBlank(condition.getName())) {
-			criteria.andNameLike("%"+condition.getName()+"%");
+			criteria.andNameLike("%" + condition.getName() + "%");
 		}
 		if (!StringUtils.isBlank(condition.getUrl())) {
 			criteria.andUrlEqualTo(condition.getUrl());
@@ -232,7 +304,7 @@ public class DomainOneDao {
 		DomainOneExample example = new DomainOneExample();
 		Criteria criteria = example.createCriteria();
 		if (!StringUtils.isBlank(condition.getName())) {
-			criteria.andNameLike("%"+condition.getName()+"%");
+			criteria.andNameLike("%" + condition.getName() + "%");
 		}
 		if (!StringUtils.isBlank(condition.getUrl())) {
 			criteria.andUrlEqualTo(condition.getUrl());
@@ -274,8 +346,11 @@ public class DomainOneDao {
 	 * @param id
 	 * @return
 	 */
-	public int delelteDomainOneById(String id) {
-		return domainOneMapper.deleteByPrimaryKey(id);
+	public boolean delelteDomainOneById(String id) {
+		if (0 < domainOneMapper.deleteByPrimaryKey(id))
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -285,8 +360,11 @@ public class DomainOneDao {
 	 *            存放id和要修改的信息
 	 * @return
 	 */
-	public int updateDomainOneInfo(DomainOne domainOne) {
-		return domainOneMapper.updateByPrimaryKeySelective(domainOne);
+	public boolean updateDomainOneInfo(DomainOne domainOne) {
+		if (0 < domainOneMapper.updateByPrimaryKeySelective(domainOne))
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -298,11 +376,11 @@ public class DomainOneDao {
 	 *            给定条件用来锁定要修改的域名
 	 * @return
 	 */
-	public int updateDomainOneInfo(DomainOne domainOne, DomainOneQueryCondition condition) {
+	public boolean updateDomainOneInfo(DomainOne domainOne, DomainOneQueryCondition condition) {
 		DomainOneExample example = new DomainOneExample();
 		Criteria criteria = example.createCriteria();
 		if (!StringUtils.isBlank(condition.getName())) {
-			criteria.andNameLike("%"+condition.getName()+"%");
+			criteria.andNameLike("%" + condition.getName() + "%");
 		}
 		if (!StringUtils.isBlank(condition.getUrl())) {
 			criteria.andUrlEqualTo(condition.getUrl());
@@ -335,7 +413,10 @@ public class DomainOneDao {
 		} else {
 			example.setLimit(0);
 		}
-		return domainOneMapper.updateByExampleSelective(domainOne, example);
+		if (0 < domainOneMapper.updateByExampleSelective(domainOne, example))
+			return true;
+		else
+			return false;
 
 	}
 
@@ -345,8 +426,24 @@ public class DomainOneDao {
 	 * @param domainOnes
 	 * @return
 	 */
-	public int insertDomain(List<DomainOne> domainOnes) {
-		return domainOneMapper.insertBatch(domainOnes);
+	public boolean insertDomain(List<DomainOne> domainOnes) {
+		if (0 < domainOneMapper.insertBatch(domainOnes))
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	 * 批量插入一级域名，url重复的数据不予处理
+	 * 
+	 * @param domianOnes
+	 * @return
+	 */
+	public boolean insertIgnore(List<DomainOne> domianOnes) {
+		if (0 < domainOneMapper.insertIgnore(domianOnes))
+			return true;
+		else
+			return false;
 	}
 
 	/**
@@ -355,8 +452,11 @@ public class DomainOneDao {
 	 * @param domainOne
 	 * @return 插入失败则返回0
 	 */
-	public int insertDomain(DomainOne domainOne) {
-		return domainOneMapper.insertSelective(domainOne);
+	public boolean insertDomain(DomainOne domainOne) {
+		if (0 < domainOneMapper.insertSelective(domainOne))
+			return true;
+		else
+			return false;
 	}
 
 }

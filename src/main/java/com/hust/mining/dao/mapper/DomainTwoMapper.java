@@ -15,6 +15,8 @@ public interface DomainTwoMapper {
     int insert(DomainTwo record);
     
     int insertBatch(List<DomainTwo> list);
+    
+    int insertIgnore(List<DomainTwo> list);
 
     int insertSelective(DomainTwo record);
 

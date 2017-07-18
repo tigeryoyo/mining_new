@@ -9,7 +9,7 @@
     <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="rank" jdbcType="VARCHAR" property="rank" />
     <result column="incidence" jdbcType="VARCHAR" property="incidence" />
-    <result column="weight" jdbcType="VARCHAR" property="weight" />
+    <result column="weight" jdbcType="INTEGER" property="weight" />
     <result column="is_father" jdbcType="BIT" property="isFather" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
@@ -72,7 +72,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    uuid, url, name, column, type, rank, incidence, weight, is_father, update_time
+    uuid, url, name, domain_one.column, type, rank, incidence, weight, is_father, update_time
   </sql>
   <select id="selectByExample" parameterType="com.hust.mining.model.DomainOneExample" resultMap="BaseResultMap">
     select
@@ -80,7 +80,7 @@
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from domain_one
+    from domain_one 
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -109,12 +109,12 @@
   </delete>
   <insert id="insert" parameterType="com.hust.mining.model.DomainOne">
     insert into domain_one (uuid, url, name, 
-      column, type, rank, 
+      domain_one.column, type, rank, 
       incidence, weight, is_father, 
       update_time)
     values (#{uuid,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{column,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{rank,jdbcType=VARCHAR}, 
-      #{incidence,jdbcType=VARCHAR}, #{weight,jdbcType=VARCHAR}, #{isFather,jdbcType=BIT}, 
+      #{incidence,jdbcType=VARCHAR}, #{weight,jdbcType=INTEGER}, #{isFather,jdbcType=BIT}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   
@@ -131,7 +131,7 @@
         name,
       </if>
       <if test="column != null">
-        column,
+        domain_one.column,
       </if>
       <if test="type != null">
         type,
@@ -177,7 +177,7 @@
         #{item.incidence,jdbcType=VARCHAR},
       </if>
       <if test="weight != null">
-        #{item.weight,jdbcType=VARCHAR},
+        #{item.weight,jdbcType=INTEGER},
       </if>
       <if test="isFather != null">
         #{item.isFather,jdbcType=BIT},
@@ -188,7 +188,76 @@
     </trim>
     </foreach>
   </insert>
-  
+  <insert id="insertIgnore" parameterType="java.util.List">
+    insert ignore into domain_one 
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        uuid,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="column != null">
+        domain_one.column,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="rank != null">
+        rank,
+      </if>
+      <if test="incidence != null">
+        incidence,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="isFather != null">
+        is_father,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    values 
+    <foreach collection="list" item="item" index="index" separator=",">
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uuid != null">
+        #{item.uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{item.url,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{item.name,jdbcType=VARCHAR},
+      </if>
+      <if test="column != null">
+        #{item.column,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{item.type,jdbcType=VARCHAR},
+      </if>
+      <if test="rank != null">
+        #{item.rank,jdbcType=VARCHAR},
+      </if>
+      <if test="incidence != null">
+        #{item.incidence,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        #{item.weight,jdbcType=INTEGER},
+      </if>
+      <if test="isFather != null">
+        #{item.isFather,jdbcType=BIT},
+      </if>
+      <if test="updateTime != null">
+        #{item.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+    </foreach>
+  </insert>
   <insert id="insertSelective" parameterType="com.hust.mining.model.DomainOne">
     insert into domain_one
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -202,7 +271,7 @@
         name,
       </if>
       <if test="column != null">
-        column,
+        domain_one.column,
       </if>
       <if test="type != null">
         type,
@@ -246,7 +315,7 @@
         #{incidence,jdbcType=VARCHAR},
       </if>
       <if test="weight != null">
-        #{weight,jdbcType=VARCHAR},
+        #{weight,jdbcType=INTEGER},
       </if>
       <if test="isFather != null">
         #{isFather,jdbcType=BIT},
@@ -275,7 +344,7 @@
         name = #{record.name,jdbcType=VARCHAR},
       </if>
       <if test="record.column != null">
-        column = #{record.column,jdbcType=VARCHAR},
+        domain_one.column = #{record.column,jdbcType=VARCHAR},
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=VARCHAR},
@@ -287,7 +356,7 @@
         incidence = #{record.incidence,jdbcType=VARCHAR},
       </if>
       <if test="record.weight != null">
-        weight = #{record.weight,jdbcType=VARCHAR},
+        weight = #{record.weight,jdbcType=INTEGER},
       </if>
       <if test="record.isFather != null">
         is_father = #{record.isFather,jdbcType=BIT},
@@ -305,11 +374,11 @@
     set uuid = #{record.uuid,jdbcType=VARCHAR},
       url = #{record.url,jdbcType=VARCHAR},
       name = #{record.name,jdbcType=VARCHAR},
-      column = #{record.column,jdbcType=VARCHAR},
+      domain_one.column = #{record.column,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=VARCHAR},
       rank = #{record.rank,jdbcType=VARCHAR},
       incidence = #{record.incidence,jdbcType=VARCHAR},
-      weight = #{record.weight,jdbcType=VARCHAR},
+      weight = #{record.weight,jdbcType=INTEGER},
       is_father = #{record.isFather,jdbcType=BIT},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -326,7 +395,7 @@
         name = #{name,jdbcType=VARCHAR},
       </if>
       <if test="column != null">
-        column = #{column,jdbcType=VARCHAR},
+        domain_one.column = #{column,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=VARCHAR},
@@ -338,7 +407,7 @@
         incidence = #{incidence,jdbcType=VARCHAR},
       </if>
       <if test="weight != null">
-        weight = #{weight,jdbcType=VARCHAR},
+        weight = #{weight,jdbcType=INTEGER},
       </if>
       <if test="isFather != null">
         is_father = #{isFather,jdbcType=BIT},
@@ -353,11 +422,11 @@
     update domain_one
     set url = #{url,jdbcType=VARCHAR},
       name = #{name,jdbcType=VARCHAR},
-      column = #{column,jdbcType=VARCHAR},
+      domain_one.column = #{column,jdbcType=VARCHAR},
       type = #{type,jdbcType=VARCHAR},
       rank = #{rank,jdbcType=VARCHAR},
       incidence = #{incidence,jdbcType=VARCHAR},
-      weight = #{weight,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=INTEGER},
       is_father = #{isFather,jdbcType=BIT},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where uuid = #{uuid,jdbcType=VARCHAR}

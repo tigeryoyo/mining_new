@@ -2,6 +2,7 @@ package com.hust.mining.model;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 public class DomainOneProperty {
 	private String uuid;
@@ -125,6 +126,63 @@ public class DomainOneProperty {
 		this.setUrl(one.getUrl());
 		this.setUuid(one.getUuid());
 		this.setWeight(one.getWeight());
+	}
+	
+	/**
+	 * 生成对应的带扩展属性的一级域名,会生成uuid和update_time
+	 * @param domain 基本域名信息
+	 * @param isFather 是否含有子域名，true为有，false为无
+	 */
+	public void setDomain(Domain domain,Boolean isFather){
+		this.setUuid(UUID.randomUUID().toString());
+		this.setColumn(domain.getColumn());
+		this.setIncidence(domain.getIncidence());
+		this.setIsFather(isFather);
+		this.setName(domain.getName());
+		this.setRank(domain.getRank());
+		this.setType(domain.getType());
+		this.setUrl(domain.getUrl());	
+		this.setWeight(domain.getWeight());
+		this.setUpdateTime(new Date());
+	}
+	
+	/**
+	 * 获取与之对应的域名信息不包括uuid和更新时间
+	 * @return
+	 */
+	public Domain getDomain(){
+		Domain domain = new Domain();
+		domain.setUrl(url);
+		domain.setName(name);
+		domain.setColumn(column);
+		domain.setType(type);
+		domain.setRank(rank);
+		domain.setIncidence(incidence);
+		domain.setWeight(weight);
+		domain.setExtraProperty(extraProperty);
+		return domain;
+	}
+	
+	/**
+	 * 获取一级域名基本信息，
+	 * @return 如果uuid属性为空返回null
+	 */
+	public DomainOne getDomainOne(){
+		DomainOne domain = new DomainOne();
+		if(uuid == null){
+			return null;
+		}
+		domain.setUuid(uuid);
+		domain.setUrl(url);
+		domain.setName(name);
+		domain.setColumn(column);
+		domain.setType(type);
+		domain.setRank(rank);
+		domain.setIncidence(incidence);
+		domain.setWeight(weight);
+		domain.setIsFather(isFather);
+		domain.setUpdateTime(updateTime);
+		return domain;
 	}
     
     

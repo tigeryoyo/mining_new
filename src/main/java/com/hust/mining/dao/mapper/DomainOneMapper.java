@@ -16,6 +16,8 @@ public interface DomainOneMapper {
     int insert(DomainOne record);
     
     int insertBatch(List<DomainOne> list);
+    
+    int insertIgnore(List<DomainOne> list);
 
     int insertSelective(DomainOne record);
 

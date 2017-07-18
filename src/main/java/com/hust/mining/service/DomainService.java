@@ -3,6 +3,9 @@ package com.hust.mining.service;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import com.hust.mining.model.Domain;
 import com.hust.mining.model.DomainOne;
 import com.hust.mining.model.DomainOneProperty;
 import com.hust.mining.model.DomainTwo;
@@ -12,38 +15,46 @@ import com.hust.mining.model.params.DomainTwoQueryCondition;
 
 public interface DomainService {
 	//一级域名start
-	/**
-	 * 单个添加一级域名 不用包含uuid
-	 * @param domainOne
-	 * @return 添加成功返回ture，失败返回false
-	 */
-	boolean addDomainOne(DomainOne domainOne);
-	/**
-	 * 批量添加一级域名
-	 * @param list
-	 * @return 全部失败返回false，否则返回true
-	 */
-	boolean addDomainOne(List<DomainOne> list);
+	
 	/**
 	 * 根据uuid删除一级域名
 	 * @param uuid
 	 * @return 删除成功返回true，失败返回false
 	 */
 	boolean deleteDomainOneById(String uuid);
-	/**
-	 * 根据uuid，更新一级域名
-	 * @param domainone  必须包含uuid
-	 * @return 更新成功返回true，失败返回false
-	 */
-	boolean updateDomainOne(DomainOne domainOne);
+
 	/**
 	 * 根据指定条件查询一级域名,为null则查询所有
 	 * @param condition 如需分页，请在condition中设置start,limit
 	 * @return 
 	 */
 	List<DomainOne> getDomainOne(DomainOneQueryCondition condition);
+/*	*//**
+	 * 分页查找所有已知的域名，即name不为null
+	 * @param start
+	 * @param limit
+	 * @return
+	 *//*
+	List<DomainOne> getKnowDomainOne(int start,int limit);
+	*//**
+	 * 查询所有已知域名的数量
+	 * @return
+	 *//*
+	long getKnowDomainOneCount();
+	*//**
+	 * 分页查找所有未知域名信息，即name为null
+	 * @param start
+	 * @param limit
+	 * @return
+	 *//*
+	List<DomainOne> getUnknowDomainOne(int start,int limit);
+	*//**
+	 * 查询所有未知域名的数量
+	 * @return
+	 *//*
+	long getUnknowDomainOneCount();*/
 	/**
-	 * 按权重大小排序获取权重不为0的所有一级域名
+	 * 按权重大小排序获取所有一级域名，权重相同时按时间先后排序
 	 * @return
 	 */
 	List<DomainOne> getDomainOne();
@@ -58,29 +69,11 @@ public interface DomainService {
 	 * 二级域名start
 	 */
 	/**
-	 * 添加单个二级域名，不用包含uuid
-	 * @param domainTwo
-	 * @return 添加成功返回true，失败返回false
-	 */
-	boolean addDomainTwo(DomainTwo domainTwo);
-	/**
-	 * 批量添加二级域名
-	 * @param list
-	 * @return 全部失败返回false，否则返回true
-	 */
-	boolean addDomainTwo(List<DomainTwo> list);
-	/**
 	 * 根据id删除二级域名
 	 * @param uuid
 	 * @return 删除成功返回true，失败返回false
 	 */
 	boolean deleteDomainTwoById(String uuid);
-	/**
-	 * 根据id更新二级域名
-	 * @param domainTwo 必须包含uuid
-	 * @return 更新成功返回true,失败返回false
-	 */
-	boolean updateDomainTwo(DomainTwo domainTwo);
 	/**
 	 * 根据条件查询二级域名，null则查询所有
 	 * @param condition
@@ -100,7 +93,6 @@ public interface DomainService {
 	/**
 	 * 二级域名end
 	 */
-	
 	/**
 	 * 域名综合start
 	 */
@@ -131,4 +123,77 @@ public interface DomainService {
 	/**
 	 * 域名综合end
 	 */
+	
+	//对应controller的业务逻辑处理
+/*	*//**
+	 * 将给定的未知网址集合做清洗分级后插入数据库，对已经存在的域名不做处理
+	 * @param urlList
+	 * @return 添加失败返回false
+	 *//*
+	boolean addUnknowUrl(List<String> urlList);
+	*//**
+	 * 将给定的未知网址做清洗域名分级后插入数据库
+	 * @param url
+	 * @return 若url已经存在则返回false
+	 *//*
+	boolean addUnknowUrl(String url);*/
+	
+	/**
+	 * 处理来自于泛数据的域名信息
+	 * 先清洗出完整域名，在做域名分级处理
+	 * 若存在则不做处理返回false
+	 * @param domian 未知来源的域名信息，必须包含url属性
+	 * @return 对数据库影响行数大于0返回true
+	 */
+	boolean addUnknowDomain(Domain domain);
+	
+	/**
+	 * 处理来自于泛数据的域名信息
+	 * 从上往下的处理流程
+	 * 先清洗出完整域名，在做域名分级处理
+	 * @param domianList 未知来源的域名信息，必须包含url属性，其他属性可以不设置
+	 * @return 对数据库影响行数大于0返回true
+	 */
+	boolean addUnknowDomain(List<Domain> domainList);
+	
+	/**
+	 * 处理来源于人工修改后的excel文件的域名信息
+	 * 从下往上的处理流程
+	 * 先判断域名等级，在处理其父级域名信息
+	 * @param domain 人工处理后的域名信息，必须包含url属性，同时其他属性基本健全
+	 * @return 对数据库影响行数大于0返回true
+	 */
+	boolean addDomain(Domain domain);
+	/**
+	 * 从泛数据文件中读取url，将其中的未知url添加到数据库，只添加url，其他基本属性均设为null
+	 * @param file
+	 * @return
+	 */
+	boolean addUnknowUrlFromFile(MultipartFile file);
+	
+	/**
+	 * 从url表中读取url基本信息和扩展信息，并做分级处理后添加到数据库中，已有的url信息直接覆盖
+	 * @param file
+	 * @return 若文件格式不正确读取错误或添加失败返回false
+	 */
+	boolean addUrlFromFile(MultipartFile file);
+	
+	boolean addDomainProperty(String uuid,Map<String,String> map);
+	
+	boolean updateDomainTwoProperty(DomainTwoProperty dtp);
+	
+	boolean updateDomainOneProperty(DomainOneProperty dop);
+	
+	boolean insertDomainTwoProperty(DomainTwoProperty dtp);
+	
+	boolean insertDomainOneProperty(DomainOneProperty dop);
+	
+	List<Domain> getDomain();
+	
+	DomainOne getDomainOneById(String uuid);
+	
+	DomainOne getDomainOneByUrl(String url);
+	
+	DomainTwo getDomainTwoById(String uuid);
+	
 }
