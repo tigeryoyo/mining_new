@@ -1,10 +1,10 @@
 //生成x数据，x=“准数据or核心数据”
 
-//生成准数据
-function sczsj() {
-	var issueType = "standard";
-	scxsj(issueType);
-}
+//生成准数据 旧版本，新的生成准数据在create_std_result.js
+//function sczsj() {
+//	var issueType = "standard";
+//	scxsj(issueType);
+//}
 
 //生成核心数据
 function schxsj(stdResId){
