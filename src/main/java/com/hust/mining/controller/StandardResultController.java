@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.http.HttpRequest;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,15 +19,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.StandardResultDao;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.Label;
 import com.hust.mining.model.StandardResult;
+import com.hust.mining.model.Website;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.LabelService;
 import com.hust.mining.service.RedisService;
+import com.hust.mining.service.ResultService;
 import com.hust.mining.service.StandardResultService;
 import com.hust.mining.service.StandardResult_labelService;
 import com.hust.mining.urltags.URLTool;
@@ -52,6 +56,8 @@ public class StandardResultController {
     private StandardResult_labelService stand_label;
     @Autowired
     private LabelService labelservice;
+    @Autowired
+	private ResultService resultService;
     
     @ResponseBody
     @RequestMapping(value = "/queryStandardResults")
@@ -68,6 +74,76 @@ public class StandardResultController {
         json.put("stdResList", stdResList);
         return ResultUtil.success(json);
     }
+    
+    /**
+     * //从上传的准数据文件生成准数据 
+     * @param file
+     * @return
+     */
+    @ResponseBody
+	@RequestMapping("/createResWithFile")
+	public Object createResWithFile(@RequestParam(value = "file", required = true) MultipartFile file,HttpServletRequest request) {
+    	if (issueService.getCurrentIssueId(request) == null) {
+			return ResultUtil.errorWithMsg("请选择或者创建一个任务");
+		}
+		// 数组之间必须是一一对应关系
+		if (file.isEmpty()) {
+			logger.info(file.getName() + "is empty");
+			return ResultUtil.errorWithMsg("文件为空");
+		}
+		try {
+			//System.out.println(file.getOriginalFilename());
+			List<String[]> list = ExcelUtil.readWithNullRow(file.getOriginalFilename(), file.getInputStream(), 0, -1, null);
+			if (null == list || 0 == list.size()) {
+				return ResultUtil.errorWithMsg("准数据文件内容为空!");
+			}
+			int create = standardResultService.createStandResult(list,request);
+			if(create > 0){
+				return ResultUtil.success("上传准数据，生成准数据成功！");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResultUtil.errorWithMsg("生成准数据失败!");
+		}
+		return ResultUtil.errorWithMsg("生成准数据失败!");
+	}
+    /**
+     * //从已有的泛数据生成准数据 
+     * @param file
+     * @return
+     */
+    @ResponseBody
+	@RequestMapping("/createResWithoutFile")
+	public Object createResWithFile(HttpServletRequest request) {
+    	  String issueId = issueService.getCurrentIssueId(request);
+          if (StringUtils.isBlank(issueId)) {
+              logger.info("从session中无法s获得任务的任务id");
+              return ResultUtil.errorWithMsg("未找到当前处理事件，请先创建或者选择某一事件");
+          }
+          String resultId = resultService.getCurrentResultId(request);
+          if (StringUtils.isBlank(resultId)) {
+              logger.info("从session中无法s获得记录的记录id");
+              return ResultUtil.errorWithMsg("未找到当前处理记录，请先创建或者选择某一记录");
+          }
+         
+          try {
+              List<String[]> list = resultService.exportService(issueId, resultId, request);
+         
+			if (null == list || 0 == list.size()) {
+				return ResultUtil.errorWithMsg("请重新选择泛数据!");
+			}
+			int create = standardResultService.createStandResult(list,request);
+			if(create > 0){
+				return ResultUtil.success("上传准数据，生成准数据成功！");
+			}
+
+			return ResultUtil.success("上传准数据，生成准数据成功！");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResultUtil.errorWithMsg("生成准数据失败!");
+	}
     
     @SuppressWarnings("unchecked")
     @ResponseBody

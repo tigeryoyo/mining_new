@@ -28,4 +28,6 @@ public interface StandardResultService {
     String getDateCount(List<String[]> cluster);
     
     String getSourceCount(List<String[]> cluster);
+
+	int createStandResult(List<String[]> list, HttpServletRequest request);
 }
