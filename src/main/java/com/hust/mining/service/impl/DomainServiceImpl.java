@@ -155,7 +155,7 @@ public class DomainServiceImpl implements DomainService {
 		try {
 			InputStream input = file.getInputStream();
 			String fileName = file.getOriginalFilename();
-			List<String[]> content = ExcelUtil.read(fileName, input, -1, -1, null);
+			List<String[]> content = ExcelUtil.readWithNull(fileName, input, -1, -1, null);
 			if (content == null || content.size() <= 1) {
 				logger.info("文件读取错误！");
 				return false;
@@ -182,7 +182,7 @@ public class DomainServiceImpl implements DomainService {
 		try {
 			InputStream input = file.getInputStream();
 			String fileName = file.getOriginalFilename();
-			List<String[]> content = ExcelUtil.readWithNull(fileName, input, -1, -1, null);
+			List<String[]> content = ExcelUtil.readWithNull(fileName, input, 0, -1, null);
 			if (content == null || content.size() <= 1) {
 				logger.info("文件读取错误！");
 				return false;
@@ -203,26 +203,18 @@ public class DomainServiceImpl implements DomainService {
 			if (baseProperty.size() == 0) {
 				for (int i = 1; i < content.size(); i++) {
 					String[] info = content.get(i);
-					Domain domain = new Domain();
-					domain.setUrl(info[DomainExcelAttr.URL_INDEX]);
-					domain.setName(info[DomainExcelAttr.NAME_INDEX]);
-					domain.setColumn(info[DomainExcelAttr.COLUMN_INDEX]);
-					domain.setType(info[DomainExcelAttr.TYPE_INDEX]);
-					domain.setRank(info[DomainExcelAttr.RANK_INDEX]);
-					domain.setWeight(Integer.getInteger(info[DomainExcelAttr.WEIGHT_INDEX]));
+					Domain domain = Array2Domain(info);
+					if(domain == null)
+						continue;
 					list.add(domain);
 				}
 			} else {
 				// 有扩展属性列
 				for (int i = 1; i < content.size(); i++) {
 					String[] info = content.get(i);
-					Domain domain = new Domain();
-					domain.setUrl(info[DomainExcelAttr.URL_INDEX]);
-					domain.setName(info[DomainExcelAttr.NAME_INDEX]);
-					domain.setColumn(info[DomainExcelAttr.COLUMN_INDEX]);
-					domain.setType(info[DomainExcelAttr.TYPE_INDEX]);
-					domain.setRank(info[DomainExcelAttr.RANK_INDEX]);
-					domain.setWeight(Integer.getInteger(info[DomainExcelAttr.WEIGHT_INDEX]));
+					Domain domain = Array2Domain(info);
+					if(domain == null)
+						continue;
 					// 获取扩展属性
 					Map<String, String> extraProperty = new HashMap<String, String>();
 					for (int j = 0; j < baseProperty.size(); j++) {
@@ -313,6 +305,10 @@ public class DomainServiceImpl implements DomainService {
 		String url = UrlUtils.getUrl(domain.getUrl());
 		if (null != url) {
 			String one = UrlUtils.getDomainOne(url);
+			if(null == one){
+				System.out.println("-------------one==null-----------"+url);
+				one = url;
+			}
 			String two = UrlUtils.getDomainTwo(url);
 			if (null != two) {
 				String fatherUuid = "";
@@ -321,6 +317,7 @@ public class DomainServiceImpl implements DomainService {
 				if (oneList == null || oneList.size() == 0) {
 					DomainOneProperty dop = new DomainOneProperty();
 					dop.setDomain(domain, !(null == two));
+					dop.setUrl(one);
 					fatherUuid = dop.getUuid();
 					if (insertDomainOneProperty(dop))
 						flag++;
@@ -328,13 +325,13 @@ public class DomainServiceImpl implements DomainService {
 					fatherUuid = oneList.get(0).getUuid();
 				}
 				List<DomainTwo> twoList = domainTwoDao.getDomainTwoByUrl(two);
-				DomainTwoProperty dtp = new DomainTwoProperty();
-				dtp.setDomain(domain, fatherUuid);
-				dtp.setUrl(two);
+				DomainTwoProperty dtp = new DomainTwoProperty();				
 				// 不存在则插入，存在则更新
 				if (twoList == null || twoList.size() == 0) {
+					dtp.setDomain(domain, fatherUuid);
+					dtp.setUrl(two);
 					if (insertDomainTwoProperty(dtp)) {
-						if (!oneList.get(0).getIsFather()) {
+						if (!domainOneDao.getDomainOneByUrl(one).get(0).getIsFather()) {
 							DomainOne dm = new DomainOne();
 							dm.setIsFather(true);
 							dm.setUuid(fatherUuid);
@@ -345,6 +342,9 @@ public class DomainServiceImpl implements DomainService {
 						return false;
 					}
 				} else {
+					dtp.setDomain(domain, fatherUuid);
+					dtp.setUrl(two);
+					dtp.setUuid(twoList.get(0).getUuid());
 					if (updateDomainTwoProperty(dtp))
 						flag++;
 				}
@@ -355,11 +355,14 @@ public class DomainServiceImpl implements DomainService {
 				if (oneList == null || oneList.size() == 0) {
 					DomainOneProperty dop = new DomainOneProperty();
 					dop.setDomain(domain, false);
+					dop.setUrl(one);
 					if (insertDomainOneProperty(dop))
 						flag++;
 				} else {
 					DomainOneProperty dop = new DomainOneProperty();
 					dop.setDomain(domain, null);
+					dop.setUrl(one);
+					dop.setUuid(oneList.get(0).getUuid());
 					if (updateDomainOneProperty(dop))
 						flag++;
 				}
@@ -623,5 +626,38 @@ public class DomainServiceImpl implements DomainService {
 	public DomainTwo getDomainTwoById(String uuid) {
 		// TODO Auto-generated method stub
 		return domainTwoDao.getDomainTwoById(uuid);
+	}
+	
+	private Domain Array2Domain(String[] baseInfo){
+		Domain domain = new Domain();
+		String url  = baseInfo[DomainExcelAttr.URL_INDEX].trim();
+		if(StringUtils.isBlank(url))
+			return null;
+		String name = baseInfo[DomainExcelAttr.NAME_INDEX].trim();
+		if(StringUtils.isBlank(name))
+			name = null;
+		String column = baseInfo[DomainExcelAttr.COLUMN_INDEX].trim();
+		if(StringUtils.isBlank(column))
+			column = null;
+		String type = baseInfo[DomainExcelAttr.TYPE_INDEX].trim();
+		if(StringUtils.isBlank(type))
+			type = null;
+		String rank = baseInfo[DomainExcelAttr.RANK_INDEX].trim();
+		if(StringUtils.isBlank(rank))
+			rank = null;
+		String incidence = baseInfo[DomainExcelAttr.INCIDENCE_INDEX].trim();
+		if(StringUtils.isBlank(incidence))
+			incidence = null;
+		String weight = baseInfo[DomainExcelAttr.WEIGHT_INDEX].trim();
+		if(StringUtils.isBlank(weight) || !StringUtils.isNumeric(weight))
+			weight="0";
+		domain.setUrl(url);
+		domain.setName(name);
+		domain.setColumn(column);
+		domain.setType(type);
+		domain.setRank(rank);
+		domain.setIncidence(incidence);
+		domain.setWeight(Integer.parseInt(weight));
+		return domain;
 	}
 }

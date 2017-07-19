@@ -187,7 +187,11 @@ public interface DomainService {
 	boolean insertDomainTwoProperty(DomainTwoProperty dtp);
 	
 	boolean insertDomainOneProperty(DomainOneProperty dop);
-	
+	/**
+	 * 按权重顺序获取所有域名信息,不包含uuid和时间信息
+	 * 
+	 * @return
+	 */
 	List<Domain> getDomain();
 	
 	DomainOne getDomainOneById(String uuid);

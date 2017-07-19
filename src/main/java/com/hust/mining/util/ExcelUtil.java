@@ -130,7 +130,7 @@ public class ExcelUtil {
 		}
 		start = start > rowNum ? rowNum : start;
 		List<String> exitUrls = new ArrayList<String>();
-		for (int i = start, x = 1; x <= rowNum; i++, x++) {
+		for (int i = start, x = 1; x <= rowNum+1; i++, x++) {
 			String[] rowStr = new String[indexes.length];
 			for (int j = 0; j < indexes.length; j++) {
 				try {

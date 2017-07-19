@@ -37,7 +37,7 @@ $(function() {
 function submit(fd) {
 	$.ajax({
 		crossDomain : true,
-		url : "/website/importMapUrl",
+		url : "/file/uploadDomainExcel",
 		method : "POST",
 		processData : false,
 		contentType : false,
@@ -49,6 +49,7 @@ function submit(fd) {
 			},
 		success : function(msg) {
 			alert(msg.result);
+			baseAjax("website_infor");
 		},
 		complete : function() {
 			stop();

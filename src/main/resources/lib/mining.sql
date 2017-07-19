@@ -826,7 +826,9 @@ CREATE TABLE `domain_two` (
   `father_uuid` varchar(64) NOT NULL,
   `update_time` datetime NOT NULL,
   PRIMARY KEY  (`uuid`),
-  UNIQUE KEY `url` (`url`)
+  UNIQUE KEY `url` (`url`),
+  KEY `father_uuid` (`father_uuid`),
+  CONSTRAINT `father_uuid` FOREIGN KEY (`father_uuid`) REFERENCES `domain_one` (`uuid`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
