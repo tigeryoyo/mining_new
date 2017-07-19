@@ -97,9 +97,9 @@ public class StandardResultController {
 			if (null == list || 0 == list.size()) {
 				return ResultUtil.errorWithMsg("准数据文件内容为空!");
 			}
-			int create = standardResultService.createStandResult(list,request);
-			if(create > 0){
-				return ResultUtil.success("上传准数据，生成准数据成功！");
+			String resid = standardResultService.createStandResult(list,request);
+			if(!resid.equals("") && resid != null){
+				return ResultUtil.success(resid);
 			}
 			
 		} catch (Exception e) {
@@ -133,9 +133,9 @@ public class StandardResultController {
 			if (null == list || 0 == list.size()) {
 				return ResultUtil.errorWithMsg("请重新选择泛数据!");
 			}
-			int create = standardResultService.createStandResult(list,request);
-			if(create > 0){
-				return ResultUtil.success("上传准数据，生成准数据成功！");
+			String resid = standardResultService.createStandResult(list,request);
+			if(!resid.equals("") && resid != null){
+				return ResultUtil.success(resid);
 			}
 
 			return ResultUtil.success("上传准数据，生成准数据成功！");
@@ -144,6 +144,34 @@ public class StandardResultController {
 		}
 		return ResultUtil.errorWithMsg("生成准数据失败!");
 	}
+    
+    /**
+     * 得到准数据聚类结果：类簇第一个标题、时间、数量
+     * @param resultId
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/getCountResult")
+    public Object getCountResult(@RequestParam(value = "resultId", required = false) String resultId,
+            HttpServletRequest request) {
+        
+        if (StringUtils.isBlank(resultId)) {
+            resultId = resultService.getCurrentResultId(request);
+        }
+        if (StringUtils.isBlank(resultId)) {
+            return ResultUtil.errorWithMsg("不存在记录");
+        }
+        //System.out.println(resultId+"--REusltc-"+issueId);
+        List<String[]> list = standardResultService.getCountResultById(resultId);
+
+        if (null == list || list.size() == 0) {
+            return ResultUtil.errorWithMsg("不存在记录");
+        }
+//        redisService.setString(KEY.RESULT_ID, resultId, request);
+        return ResultUtil.success(list);
+    }
+
     
     @SuppressWarnings("unchecked")
     @ResponseBody

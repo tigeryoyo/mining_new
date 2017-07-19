@@ -29,5 +29,7 @@ public interface StandardResultService {
     
     String getSourceCount(List<String[]> cluster);
 
-	int createStandResult(List<String[]> list, HttpServletRequest request);
+	String createStandResult(List<String[]> list, HttpServletRequest request);
+
+	List<String[]> getCountResultById(String resultId);
 }

@@ -153,17 +153,15 @@ public class StandardResultServiceImpl implements StandardResultService {
 	 * 从存放聚类好的内容list生成准数据，并保存到文件系统和数据库
 	 */
 	@Override
-	public int createStandResult(List<String[]> list, HttpServletRequest request) {
-		for(String s:list.get(0)){
-			System.out.print(s+ " ");
-		}
+	public String createStandResult(List<String[]> list, HttpServletRequest request) {
+	
 		String issueid = issueService.getCurrentIssueId(request);
 		String user = userService.getCurrentUser(request);
 		
 		//当前泛数据issue
 		Issue issue = issueService.queryIssueById(issueid);
 		if(issue == null){
-			return 0;
+			return "";
 		}
 		Issue stdissue = null;
 		StandardResult stdres = null;
@@ -181,13 +179,13 @@ public class StandardResultServiceImpl implements StandardResultService {
 			//将创建的准数据issue添加到数据库
 			int insert = issueDao.insert(stdissue);
 			if(insert <= 0){
-				return 0;
+				return "";
 			}
 			//更新准数据对应的泛数据信息
 			issue.setIssueHold(stdissue.getIssueId());
 			int upd = issueDao.updateIssueInfo(issue);
 			if(upd <= 0){
-				return 0;
+				return "";
 			}
 			stdres = new StandardResult();
 			stdres.setStdRid(UUID.randomUUID().toString());
@@ -195,7 +193,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 			stdres.setContentName(contentName);
 			boolean w = FileUtil.write(DIRECTORY.STDRES_CONTENT+contentName, list);
 			if(!w){
-				return 0;
+				return "";
 			}
 			stdres.setDateCount(getDateCount(list));
 			stdres.setSourceCount(getSourceCount(list));
@@ -203,7 +201,12 @@ public class StandardResultServiceImpl implements StandardResultService {
 			stdres.setCreateTime(new Date());
 			stdres.setIssueId(stdissue.getIssueId());
 			stdres.setResName(stdissue.getIssueName());
-			return standardResultDao.insert(stdres);
+			insert = standardResultDao.insert(stdres);
+			
+			if(insert <= 0){
+				return "";
+			}
+			return stdres.getStdRid();
 		}
 		
 		//准数据issue
@@ -214,7 +217,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 		stdissue.setLastUpdateTime(new Date());
 		int update = issueDao.updateIssueInfo(stdissue);
 		if(update <= 0){
-			return 0;
+			return "";
 		}
 		List<StandardResult> stdress = standardResultDao.queryStdRessByIssueId(issue.getIssueHold());
 		if(stdress != null && !stdress.isEmpty()){
@@ -228,7 +231,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 			}
 			boolean w = FileUtil.write(DIRECTORY.STDRES_CONTENT+contentName, list);
 			if(!w){
-				return 0;
+				return "";
 			}
 			stdres.setDateCount(getDateCount(list));
 			stdres.setSourceCount(getSourceCount(list));
@@ -236,10 +239,76 @@ public class StandardResultServiceImpl implements StandardResultService {
 			stdres.setCreateTime(new Date());
 			stdres.setIssueId(stdissue.getIssueId());
 			stdres.setResName(stdissue.getIssueName());
-			return standardResultDao.updateByPrimaryKey(stdres);
+			int up = standardResultDao.updateByPrimaryKey(stdres);
+			if(up <= 0){
+				return "";
+			}
+			return stdres.getStdRid();
 		}
 		
-		return 0;		
+		return "";		
+	}
+
+	/**
+	 * 准数据聚类结果每类第一条，类中元素数量
+	 */
+	@Override
+	public List<String[]> getCountResultById(String resultId) {
+		// 
+		List<String[]> content = new ArrayList<>();
+		List<String[]> list = new ArrayList<>();
+		StandardResult stdRes = standardResultDao.queryStdResById(resultId);
+		if(stdRes == null){
+			return list;
+		}
+		//保存的准数据内容，已经聚类好的数据，以空行区分
+		content = FileUtil.read(DIRECTORY.STDRES_CONTENT+stdRes.getContentName());
+		System.out.println("------------zhunshujushuliang---"+content.size());
+		if(content == null || content.isEmpty()){
+			return list;
+		}
+		list.add(AttrUtil.findEssentialIndex(content.get(0)));
+		
+		ArrayList<ArrayList<String[]>> clusters = new ArrayList<>();
+		//是否为一个新类的第一个
+		boolean isNew = true;
+		ArrayList<String[]> cluster = null;
+		for(int i = 1 ; i < content.size();i++ ){
+			if(isNew){
+				cluster = new ArrayList<>();
+				cluster.add(content.get(i));
+				isNew = false;
+			}
+			if(isBlankRow(content.get(i))){
+				isNew = true;
+				continue;
+			}
+			cluster.add(content.get(i));
+		}
+		for(ArrayList<String[]> c : clusters ){			
+			String[] old = c.get(0);
+	        String[] ne = new String[old.length + 1];
+	        System.arraycopy(old, 0, ne, 1, old.length);
+	        ne[0] = c.size() + "";
+	        list.add(ne);		
+        }
+		System.out.println("------------zhunshujushuliang---"+list.size());
+		return list;
+	}
+
+	/**
+	 * 判断一个字符串数组是否全为空
+	 * @param strs
+	 * @return
+	 */
+	private boolean isBlankRow(String[] strs) {
+		// TODO Auto-generated method stub
+		for(String s : strs){
+			if(!s.equals("")){
+				return false;
+			}
+		}
+		return true;
 	}
 
 }
