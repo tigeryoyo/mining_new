@@ -30,6 +30,7 @@ import com.hust.mining.model.Website;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.LabelService;
 import com.hust.mining.service.RedisService;
+import com.hust.mining.service.ResultService;
 import com.hust.mining.service.StandardResultService;
 import com.hust.mining.service.StandardResult_labelService;
 import com.hust.mining.urltags.URLTool;
@@ -55,6 +56,8 @@ public class StandardResultController {
     private StandardResult_labelService stand_label;
     @Autowired
     private LabelService labelservice;
+    @Autowired
+	private ResultService resultService;
     
     @ResponseBody
     @RequestMapping(value = "/queryStandardResults")
@@ -79,28 +82,68 @@ public class StandardResultController {
      */
     @ResponseBody
 	@RequestMapping("/createResWithFile")
-	public Object createResWithFile(@RequestParam(value = "file", required = true) MultipartFile file,HttpRequest request) {
+	public Object createResWithFile(@RequestParam(value = "file", required = true) MultipartFile file,HttpServletRequest request) {
+    	if (issueService.getCurrentIssueId(request) == null) {
+			return ResultUtil.errorWithMsg("请选择或者创建一个任务");
+		}
+		// 数组之间必须是一一对应关系
 		if (file.isEmpty()) {
-			return ResultUtil.errorWithMsg("准数据文件内容为空!");
+			logger.info(file.getName() + "is empty");
+			return ResultUtil.errorWithMsg("文件为空");
 		}
 		try {
 			//System.out.println(file.getOriginalFilename());
-			List<String[]> list = ExcelUtil.read(file.getOriginalFilename(), file.getInputStream(), 1);
+			List<String[]> list = ExcelUtil.readWithNullRow(file.getOriginalFilename(), file.getInputStream(), 0, -1, null);
 			if (null == list || 0 == list.size()) {
 				return ResultUtil.errorWithMsg("准数据文件内容为空!");
 			}
+			int create = standardResultService.createStandResult(list,request);
+			if(create > 0){
+				return ResultUtil.success("上传准数据，生成准数据成功！");
+			}
 			
-//			for (String[] strs : list) {
-//			
-//			}
-
-			return ResultUtil.success("上传准数据，生成准数据成功！");
 		} catch (Exception e) {
-
+			e.printStackTrace();
+			return ResultUtil.errorWithMsg("生成准数据失败!");
 		}
 		return ResultUtil.errorWithMsg("生成准数据失败!");
 	}
+    /**
+     * //从已有的泛数据生成准数据 
+     * @param file
+     * @return
+     */
+    @ResponseBody
+	@RequestMapping("/createResWithoutFile")
+	public Object createResWithFile(HttpServletRequest request) {
+    	  String issueId = issueService.getCurrentIssueId(request);
+          if (StringUtils.isBlank(issueId)) {
+              logger.info("从session中无法s获得任务的任务id");
+              return ResultUtil.errorWithMsg("未找到当前处理事件，请先创建或者选择某一事件");
+          }
+          String resultId = resultService.getCurrentResultId(request);
+          if (StringUtils.isBlank(resultId)) {
+              logger.info("从session中无法s获得记录的记录id");
+              return ResultUtil.errorWithMsg("未找到当前处理记录，请先创建或者选择某一记录");
+          }
+         
+          try {
+              List<String[]> list = resultService.exportService(issueId, resultId, request);
+         
+			if (null == list || 0 == list.size()) {
+				return ResultUtil.errorWithMsg("请重新选择泛数据!");
+			}
+			int create = standardResultService.createStandResult(list,request);
+			if(create > 0){
+				return ResultUtil.success("上传准数据，生成准数据成功！");
+			}
 
+			return ResultUtil.success("上传准数据，生成准数据成功！");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResultUtil.errorWithMsg("生成准数据失败!");
+	}
     
     @SuppressWarnings("unchecked")
     @ResponseBody

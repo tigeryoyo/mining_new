@@ -1,3 +1,6 @@
+//
+var fd = new FormData();
+
 $(function() {
 	// 阻止浏览器默认行。
 	$(document).on({
@@ -15,6 +18,7 @@ $(function() {
 		}
 	});
 	box = document.getElementById('drop_area'); // 拖拽区域
+	
 	box.addEventListener("drop", function(e) {
 		e.preventDefault(); // 取消默认浏览器拖拽效果
 //		console.log("before");
@@ -24,23 +28,23 @@ $(function() {
 		if (file.name.lastIndexOf("xls") !== -1
 				|| file.name.lastIndexOf("xlsx") !== -1) {
 			box.innerHTML=file.name;
-			var fd = new FormData();
+			
 			fd.append("file", file);
-			$("#create_std_result").one("click",function() {				
-				createWithFile(fd);
-			});
+			console.log(fd.get("file"));
 		} else {
 			alert(file.name + " 不是Excel文件");
 		}
 	}, false);
-	
-	$("#create_std_result").one("click",function() {	
-		alert("您没有上传准数据文件，将从上述泛数据生成准数据！");
-		createWithoutFile();
-	});
-	
 });
 
+$("#create_std_result").click(function() {	
+		if(fd.get("file") != null){
+			createWithFile(fd);
+		}else{
+			alert("您没有上传准数据文件，将从上述泛数据生成准数据！");
+			createWithoutFile();
+		}
+	});
 //从上传的准数据文件生成准数据 
 function createWithFile(fd) {
 	$.ajax({
@@ -60,7 +64,8 @@ function createWithFile(fd) {
 		},
 		complete : function() {
 			stop();
-			box.innerHTML="将文件拖拽到此处";
+			fd.delete("file");
+			box.innerHTML="将准数据文件拖拽到此处";
 		},
 		error : function() {
 			alert("数据请求失败");
@@ -84,7 +89,8 @@ function createWithoutFile() {
 		},
 		complete : function() {
 			stop();
-			box.innerHTML="将文件拖拽到此处";
+			fd.delete("file");
+			box.innerHTML="将准数据文件拖拽到此处";
 		},
 		error : function() {
 			alert("数据请求失败");
