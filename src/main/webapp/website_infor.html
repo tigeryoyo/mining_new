@@ -21,7 +21,7 @@
                                    id="web_level"></td>
             <td height="50" colspan="2"/>
             <td height="50" colspan="2">
-                <form action="/website/downloadKnownUrl" method="POST">
+                <form action="/file/exportDomain?flag=0" method="POST">
                     <button type="submit" class="btn btn-success">导出映射表</button>
                 </form>
             </td>
@@ -30,9 +30,9 @@
             <td width="85" height="50">网站名称：</td>
             <td height="50"><input type="text" class="form-control"
                                    id="web_name"></td>
-            <td width="85" height="50">网站类型：</td>
+            <td width="85" height="50">网站权重：</td>
             <td height="50"><input type="text" class="form-control"
-                                   id="web_type"></td>
+                                   id="web_weight"></td>
             <td height="50" colspan="2">
                 <button type="button" class="btn btn-primary"
                         onclick="initSearchPage(1)">搜 索
@@ -90,5 +90,11 @@
     </div>
 </div>
 </body>
-
+<script type="text/javascript">
+    $("#web_weight").keyup(function () {
+        $(this).val($(this).val().replace(/[^0-9]/g,''));
+    }).bind("paste",function() {  //CTR+V事件处理
+        $(this).val($(this).val().replace(/[^0-9]/g, ''));
+    })
+</script>
 </html>

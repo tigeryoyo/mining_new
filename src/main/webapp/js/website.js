@@ -1,7 +1,6 @@
 // JavaScript Document
 //用户信息展示
 function websiteInforShow(page) {
-    search_click = false;
     $.ajax({
         type: "post",
         url: "/domain/selectDomain",
@@ -11,14 +10,14 @@ function websiteInforShow(page) {
         },
         dataType: "json",
         success: function (msg) {
-            $('#domain_content').html("");
-            if (msg.status == "OK") {
+        	$('#domain_content').html("");
+            if (msg.status == "OK") {                
                 // alert("success");
                 var result = msg.result;
                 var one = result.one;
                 var two = result.two;
                 $.each(one, function (idx, item) {
-                    row = '<summary style="margin-bottom:10px;">'
+                    row = '<summary style="margin-bottom:10px;" onclick="pullDown(this)">'
                         + '<p data-id="'+item.uuid+'">'
                         + '<span style="width: 220px; min-height: 10px; display: inline; float: left;">'
                         + '<span class="glyphicon glyphicon-chevron-right" aria-label="true" style="float: left; padding: 1px 3px;"></span>'
@@ -86,16 +85,15 @@ function initSearchPage(currenPage) {
     }
     var obj2 = $("#web_name").val();
     var obj3 = $("#web_level").val();
-    var obj4 = $("#web_type").val();
+    var obj4 = $("#web_weight").val();
     $.ajax({
         type: "post",
-        url: "/website/selectWebsiteCount",
+        url: "/domain/searchDomainOneCount",
         data: {
             url: $("#web_url").val(),
             name: obj2,
-            // level:obj3,
-            levle: obj3,
-            type: obj4
+            rank: obj3,
+            weight: obj4
         },
         dataType: "json",
         success: function (msg) {
@@ -137,44 +135,57 @@ function websiteInforSearch(page) {
     // var obj1 = $("#web_url").val();
     var obj2 = $("#web_name").val();
     var obj3 = $("#web_level").val();
-    var obj4 = $("#web_type").val();
-    setFirstSelected();
+    var obj4 = $("#web_weight").val();
     $.ajax({
         type: "post",
-        url: "/website/selectByCondition",
+        url: "/domain/searchDomainOne",
         data: {
             url: $("#web_url").val(),
             name: obj2,
             // level:obj3,
-            levle: obj3,
-            type: obj4,
+            rank: obj3,
+            weight: obj4,
             start: (parseInt(10 * page - 10)),
             limit: 10
         },
         dataType: "json",
         success: function (msg) {
-            if (msg.status == "OK") {
+        	$('#domain_content').html("");
+            if (msg.status == "OK") {                
                 // alert("success");
-                $('.infor_tab02 tr:not(:first)').html("");
-                var items = msg.result;
-                var cookie_value1;
-                var cookie_value2;
-                var cookie_value3;
-                var cookie_value4;
-                var cookie_value5;
-                $.each(items, function (idx, item) {
-                    // alert(msg.tagName);
-                    cookie_value1 = "'" + item.id + "'";
-                    cookie_value2 = "'" + item.name + "'";
-                    cookie_value3 = "'" + item.type + "'";
-                    cookie_value4 = "'" + item.url + "'";
-                    cookie_value5 = "'" + item.level + "'";
-                    row = '<tr><td width="42" height="40" align="center" bgcolor="#ffffff">' + ((page - 1) * 10 + idx + 1) + '</td><td width="238" height="40" align="center" bgcolor="#ffffff"><div class="tab_url">' + item.url + '</div></td><td width="83" height="40" align="center" bgcolor="#ffffff">' + item.name + '</td><td width="76" height="40" align="center" bgcolor="#ffffff">' + item.level + '</td><td width="77" height="40" align="center" bgcolor="#ffffff">' + item.type + '</td><td width="150" height="40" align="center" bgcolor="#ffffff"><button type="button" class="btn btn-primary" onClick="setCookie(' + cookie_value1 + ',' + cookie_value2 + ',' + cookie_value3 + ',' + cookie_value4 + ',' + cookie_value5 + ')" >编辑</button>&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-danger delWebsite" id="' + item.id + '">删除</button></td></tr>';
-                    $('.infor_tab02').append(row);
+                var result = msg.result;
+                var one = result.one;
+                var two = result.two;
+                $.each(one, function (idx, item) {
+                    row = '<summary style="margin-bottom:10px;" onclick="pullDown(this)">'
+                        + '<p data-id="'+item.uuid+'">'
+                        + '<span style="width: 220px; min-height: 10px; display: inline; float: left;">'
+                        + '<span class="glyphicon glyphicon-chevron-right" aria-label="true" style="float: left; padding: 1px 3px;"></span>'
+                        + '<a href="http://'+item.url+'" target="_blank">'+item.url+'</a>'
+                        + '</span>'
+                        + '<span style="width: 170px;min-height: 10px; display: inline; float: left;">'+item.name+'</span>'
+                        + '<span style="width: 110px;min-height: 10px; display: inline; float: left">'+item.rank+'</span>'
+                        + '<span style="width: 100px;min-height: 10px; display: inline; float: left">'+item.weight+'</span>'
+                        + '<span><a href="javascript:" style="margin: 2px 0px; text-decoration:underline" onclick="showOneDetails(this)">详情</a> <a href="javascript:" style="margin: 2px 0px;text-decoration:underline" onclick="delDomainOne(this)">删除</a></span>'
+                        + '</p>'
+                        + '</summary>';
+                    $.each(two[idx],function(idx,item){
+                        row +='<p data-id="'+item.uuid+'">'
+                            + '<span style="width: 220px; min-height: 10px; display: inline; float: left;">'
+                            + '<a href="http://'+item.url+'" target="_blank">----'+item.url+'</a>'
+                            + '</span>'
+                            + '<span style="width: 170px;min-height: 10px; display: inline; float: left;">'+item.name+'</span>'
+                            + '<span style="width: 110px;min-height: 10px; display: inline; float: left">'+item.rank+'</span>'
+                            + '<span style="width: 100px;min-height: 10px; display: inline; float: left">'+item.weight+'</span>'
+                            + '<span><a href="javascript:" style="margin: 2px 0px; text-decoration:underline" onclick="showTwoDetails(this)">详情</a> <a href="javascript:" style="margin: 2px 0px;text-decoration:underline" onclick="delDomainTwo(this)">删除</a></span>'
+                            + '</p>'
+                    })
+                    row = '<details style="font-size: 16px">'+row+'</details>';
+                    $('#domain_content').append(row);
                 });
             } else {
-                $('.infor_tab02 tr:not(:first)').html("");
                 alert(msg.result);
+                $('#domain_content').html("");
             }
         },
         error: function () {
@@ -220,6 +231,8 @@ function showTwoDetails(e){
 
 //删除一级域名
 function delDomainOne(e) {
+	if(!confirm("该删除操作会连同二级域名一起删除！\n\n                 确定删除吗？"))
+		return ;
 	var uuid = $(e).parent().parent("p").attr("data-id");
     $.ajax({
         type:"post",
@@ -267,32 +280,18 @@ function delDomainTwo(e) {
 }
 
 
-// 用户删除
-$(function () {
-    $(".infor_tab02").on("click", ".delWebsite", function () {
-        var website_id = $(this).attr("id");
-//		console.log(website_id);
-        websiteInforDel(website_id);
-        function websiteInforDel(website_id) {
-            $.ajax({
-                type: "post",
-                url: "/website/deleteWebsite",
-                data: {
-                    websiteId: website_id,
-                },
-                dataType: "json",
-                success: function (msg) {
-                    // alert("lll");
-                    if (msg.status == "OK") {
-                        baseAjax("website_infor");
-                    } else {
-                        alert(msg.result);
-                    }
-                },
-                error: function () {
-                    alert("数据请求失败");
-                },
-            });
-        }
-    })
-})
+function pullDown(th){
+  //  console.log($(th).parent("details").attr("open"));
+	if($(th).parent("details").attr("open")=="open"){
+        $(th).parent("details").attr("open","");
+        $(th).find(".glyphicon").removeClass("glyphicon-chevron-down");
+        $(th).find(".glyphicon").addClass("glyphicon-chevron-right");
+    }else {
+        $("details").removeAttr("open");
+        $(".glyphicon").removeClass("glyphicon-chevron-down");
+        $(".glyphicon").addClass("glyphicon-chevron-right");
+        $(th).parent("details").attr("open");
+        $(th).find(".glyphicon").removeClass("glyphicon-chevron-right");
+        $(th).find(".glyphicon").addClass("glyphicon-chevron-down");
+    }
+}
