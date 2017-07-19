@@ -61,6 +61,7 @@ function createWithFile(fd) {
 			},
 		success : function(msg) {
 			alert(msg.result);
+			baseAjax("topic_details_standard");
 		},
 		complete : function() {
 			stop();
@@ -74,6 +75,7 @@ function createWithFile(fd) {
 }
 //没有上传准数据，对聚类后的数据生成准数据
 function createWithoutFile() {
+	alert("aa");
 	$.ajax({
 		crossDomain : true,
 		url : "/standardResult/createResWithoutFile",
@@ -86,6 +88,7 @@ function createWithoutFile() {
 			},
 		success : function(msg) {
 			alert(msg.result);
+			baseAjax("topic_details_standard");
 		},
 		complete : function() {
 			stop();
