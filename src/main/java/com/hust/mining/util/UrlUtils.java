@@ -24,10 +24,10 @@ public class UrlUtils {
 			+ "com|cn|net|edu|xyz|xin|club|vip|top|red|org|wang|gov|edu|mil|co|biz|name|info|mobi|pro|travel|museum|int|aero|post|rec|asia|arts|firm|nom|store|web|cc|tv|coop|arpa|wiki|games|science|gift|help|hk|news|me|la"
 			+ ")(:[0-9]{1,})?$";
 	// 一级域名提取
-	private static final String RE_TOP = "(\\w*\\.){1}" + RE;
+	private static final String RE_TOP = "([\\w-]*\\.){1}" + RE;
 
 	// 二级域名提取
-	private static final String RE_SEC = "(\\w*\\.){2,}";
+	private static final String RE_SEC = "([\\w-]*\\.){2,}";
 
 	// 三级域名提取
 //	private static final String RE_THI = "(\\w*\\.){3,}";

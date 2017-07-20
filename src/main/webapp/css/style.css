@@ -201,7 +201,18 @@ a:hover { color:#000000; text-decoration:none; }
 /*映射表管理*/
 .infor_tab02 .tab_url{ width:238px;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
-
+details span{
+	overflow:hidden;
+	max-height: 23px;
+	display: inline;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+　　overflow:-webkit-marquee;
+　　-webkit-marquee-direction:left;
+　　-webkit-marquee-speed:normal;
+　　-webkit-marquee-style:scroll;
+　　-webkit-marquee-repetition:1;
+}
 
 
 
