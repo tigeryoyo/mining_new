@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,18 +16,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.hust.mining.constant.Constant;
 import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.StandardResultDao;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.Label;
 import com.hust.mining.model.StandardResult;
 import com.hust.mining.model.Website;
+import com.hust.mining.model.params.StatisticParams;
 import com.hust.mining.service.IssueService;
 import com.hust.mining.service.LabelService;
 import com.hust.mining.service.RedisService;
@@ -75,6 +79,27 @@ public class StandardResultController {
         return ResultUtil.success(json);
     }
     
+    @ResponseBody
+    @RequestMapping(value = "/queryIssueName")
+    public Object queryIssueName(@RequestParam(value = "issueId", required = false) String issueId,
+            HttpServletRequest request){
+    	if(StringUtils.isEmpty(issueId)){
+    		issueId = issueService.getCurrentIssueId(request);
+    	}
+    	
+    	String stdIssueId = issueService.queryLinkedIssue(issueId, Constant.ISSUETYPE_STANDARD);
+    	
+    	Issue issue = issueService.queryIssueById(stdIssueId);
+    	if (issue == null) {
+            return ResultUtil.errorWithMsg("查询任务名称失败");
+        }
+    	List<StandardResult> stdResList = standardResultService.queryStdRessByIssueId(stdIssueId);
+    	redisService.setString(KEY.ISSUE_ID, issueId, request);
+    	JSONObject json = new JSONObject();
+        json.put("issue", issue);
+        json.put("stdRes", stdResList != null && !stdResList.isEmpty() ?stdResList.get(0):"");
+        return ResultUtil.success(json);
+    }
     /**
      * //从上传的准数据文件生成准数据 
      * @param file
@@ -163,15 +188,34 @@ public class StandardResultController {
             return ResultUtil.errorWithMsg("不存在记录");
         }
         //System.out.println(resultId+"--REusltc-"+issueId);
-        List<String[]> list = standardResultService.getCountResultById(resultId);
+        List<String[]> list = standardResultService.getCountResultById(resultId, request);
 
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("不存在记录");
         }
-//        redisService.setString(KEY.RESULT_ID, resultId, request);
+        redisService.setString(KEY.STD_RESULT_ID, resultId, request);
         return ResultUtil.success(list);
     }
 
+    /**
+     * 对准数据一个类统计出图
+     * @param params
+     * @param request
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/statisticSingleSet")
+    public Object statistic(@RequestBody StatisticParams params, HttpServletRequest request) {
+        String stdResId = redisService.getString(KEY.STD_RESULT_ID, request);
+        if (StringUtils.isBlank(stdResId)) {
+            return ResultUtil.errorWithMsg("请重新选择准数据任务");
+        }
+        Map<String, Object> map = standardResultService.statistic(stdResId,params, request);
+        if (null == map || map.isEmpty()) {
+            return ResultUtil.errorWithMsg("统计失败");
+        }
+        return ResultUtil.success(map);
+    }
     
     @SuppressWarnings("unchecked")
     @ResponseBody

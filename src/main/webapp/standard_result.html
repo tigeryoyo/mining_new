@@ -3,15 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>文件汇总</title>
-<link rel="stylesheet" href="css/history_clusterdetails.css">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/page.css">
 <link rel="stylesheet" href="css/loading.css">
 <script type="text/javascript" src="js/standard_result.js"></script>
-<script type="text/javascript" src="js/cluster_details.js"></script>
 <script type="text/javascript" src="js/dateformat.js"></script>
 <script type="text/javascript" src="js/cookie.js"></script>
-<script type="text/javascript" src="js/scxsj.js"></script>
 <script type="text/javascript" src="js/create_std_result.js"></script>
 </head>
 <body>
@@ -57,28 +54,17 @@
 			</div>
 			 -->
 			<div class="summary_cont">
-				<div class="summary_tab">
+				<div class="summary_tab" style="height: 500px;">
 					<table width="730" border="0">
 						<tr>
-							<td width="60" height="36" align="center" bgcolor="#86c6ea">选择</td>
+							<td width="60" height="36" align="center" bgcolor="#86c6ea">序号</td>
 							<td width="320" height="36" align="center" bgcolor="#86c6ea">标题</td>
 							<td width="150" height="36" align="center" bgcolor="#86c6ea">时间</td>
 							<td width="60" height="36" align="center" bgcolor="#86c6ea">数量</td>
 						</tr>
 					</table>
 				</div>
-				<div class="table_clear">
-					<label class="clear_choose"> <input type="checkbox"
-						style="width: 20px; height: 20px; float: left; margin-left: 24px;"
-						id="historyAll" /> <span>全选</span>
-					</label>
-					<div class="select_clusters" style=" width:140px; float:left; margin-top:16px;margin-left:20px;display: inline;">
-						<input style="width: 80px;" type="text" value="1" placeholder="请输入数量" class="form-control" id="clusternum_input" />
-                        <button type="button"  class="btn btn-primary" onclick="selectClusters()">选中</button> 
-					</div>
-					<button type="button"  class="btn btn-primary" style=" float:left;margin-top:16px;margin-left:20px;" onclick="addLayData()">合并</button>
-					<button type="button"  class="btn btn-danger" style=" float:left;margin-top:16px;margin-left:20px;" onclick="deleteLayData()">删除</button>
-					
+				<div class="table_clear">		
 					
 					<button type="button"  class="btn btn-info" style="float: right;margin-top:16px; margin-right: 0px;" onclick="download()">下载结果数据</button>
 					<div class="clear"></div>
@@ -87,40 +73,6 @@
 			</div>
 		</div>
 		
-	</div>
-
-	<!-- 遮罩div -->
-	<div id="goodcover"></div>
-	<div id="code">
-		<div class="close1">
-			<a href="javascript:void(0)" id="closebt"><img
-				src="images/close.gif"></a>
-		</div>
-		<div class="clusterInfoList">
-			<div class="resetButton">
-				<input type="checkbox"
-					style="width: 20px; height: 20px; float: left; display: inline-block; vertical-align: middle;"
-					id="clusterItemAll">&nbsp;<span
-					style="font-size: 18px; vertical-align: top;">全选</span></input>&nbsp;&nbsp;
-				<button type="button"  class="btn btn-danger" onclick="deleteClusterItem(-1)">删除</button>
-				<button type="button"  class="btn btn-primary" onclick="clusterItemsReset()" >重置</button>
-				&nbsp;
-			</div>
-			<div class="details_tab">
-				<table width="780" border="0">
-					<tr class="fixedHead">
-						<th width="60" height="36" align="center" bgcolor="#86c6ea">选择</th>
-						<th width="450" height="36" align="center" bgcolor="#86c6ea">标题</th>
-						<th width="200" height="36" align="center" bgcolor="#86c6ea">时间</th>
-						<th width="70" height="36" align="center" bgcolor="#86c6ea">操作</th>
-					</tr>
-
-				</table>
-
-			</div>
-
-		</div>
-
 	</div>
 
 </body>

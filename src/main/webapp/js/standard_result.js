@@ -1,14 +1,14 @@
 /**
- * Created by Administrator on 2016/12/18.
+ * 准数据结果js
  */
 // document.write('<script type="text/javascript"
 // src="js/cluster_details.js"></script>');
 
-function setCookie_stdResId(value){
+function setCookie(key,value){
 	var Days = 1; // 此 cookie 将被保存 1 天
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
-	document.cookie = "stdResId="+ escape (value) + ";expires=" + exp.toGMTString();
+	document.cookie = key+"="+ escape (value) + ";expires=" + exp.toGMTString();
 }
 
 function getCookie(name) {
@@ -19,30 +19,34 @@ function getCookie(name) {
 }
 
 //显示当前任务名字
-function showExtensiveIssueName(issueId) {
+function showStdIssueName(issueId) {
 	$.ajax({
 		type : "post",
-		url : "/file/queryIssueFiles",
+		url : "/standardResult/queryIssueName",
 		data : {
 			issueId : issueId
 		},
 		dataType : "json",
 		success : function(msg) {
 			if (msg.status == "OK") {
-				var items = msg.result.issue;
-				$('.issueName').text("任务名称：" + items.issueName);
+				var items = msg.result;
+				$('.issueName').text("任务名称：" + items.issue.issueName);
+				setCookie("stdResId",items.stdRes.stdRid);
+			
+				stdResData(getCookie("stdResId"));
 			} else {
 				alert(msg.result);
 			}
 
 		},
-		error : function() {
-			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
+		error : function(msg) {
+			alert(eval('(' + msg.responseText + ')').result);
 		}
 	});
 }
 
-stdResData(getCookie("stdResId"));
+showStdIssueName(getCookie("issueId"));
+
 //显示准数据聚类结果
 function stdResData(rid) {
 	$.ajax({
@@ -57,22 +61,21 @@ function stdResData(rid) {
 			if (msg.status == "OK") {
 				
 				var items = msg.result;
-				alert(items.length);
+				
 				var indexOfTitle = parseInt(items[0][0]) + 1;
 				var indexOfUrl = parseInt(items[0][1]) + 1;
 				var indexOfTime = parseInt(items[0][2]) + 1;
 				for (var i = 0; i < items.length - 1; i++) {
 					// items第一行存储index，故从i+1读起
 					item = items[i + 1];
-					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
-						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
-						// + item[indexOfUrl]
-						// + '
-						+ i + ',\''
-						// + item[indexOfUrl]
-						+ rid + '\',' + item[0] + ')">' + item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">'
-						//添加画图的代码为：'<a href="javascript:;" onclick="toPaint(' + i + ',\'' + item[indexOfTitle].replace(/\"/g, " ").replace(/\'/g, " ") + '\')">' + item[0] + '</a>'
-						+  item[0]  + '</td></tr>';
+					
+					rows = '<tr><td height="32" align="center">'
+						+(i+1)+'</td><td height="32" align="center"><a href="javascript:;">' 
+						+ item[indexOfTitle] + '</a></td><td height="32" align="center">' 
+						+ item[indexOfTime] + '</td><td height="32" align="center">'
+						//添加画图的代码为：
+						+ '<a href="javascript:;" onclick="toPaint(' + i + ',\'' + item[indexOfTitle].replace(/\"/g, " ").replace(/\'/g, " ") + '\')">' + item[0] + '</a>'
+						+ '</td></tr>';
 					$('.summary_tab table').append(rows);
 
 				}

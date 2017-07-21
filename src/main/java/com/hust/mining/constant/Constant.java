@@ -46,6 +46,8 @@ public class Constant {
         public final static String SESSION_ID = "JSESSIONID";
         public final static String ISSUE_ID = "issueId";
         public final static String RESULT_ID = "resultId";
+		public static final String STD_RESULT_ID = "stdResId";
+		public static final String STD_RESULT_CONTENT = "std_res_content";
         public static final String USER_NAME = "username";
         public static final String REDIS_CLUSTER_RESULT = "redis_cluster_result";
         public static final String REDIS_COUNT_RESULT = "redis_count_result";

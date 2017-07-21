@@ -70,12 +70,13 @@ function createWithFile(fd) {
 //			alert('生成准数据成功');
 			var resid = msg.result;
 			setCookie_stdResId(resid);
-			baseAjax("standard_result");
+			
 		},
 		complete : function() {
 			stop();
 			fd.delete("file");
-			box.innerHTML="将准数据文件拖拽到此处";
+			baseAjax("standard_result");
+//			box.innerHTML="将准数据文件拖拽到此处";
 		},
 		error : function() {
 			alert(eval('(' + msg.responseText + ')').result);
@@ -97,12 +98,13 @@ function createWithoutFile() {
 		success : function(msg) {
 //			alert();
 			setCookie_stdResId(msg.result);
-			baseAjax("standard_result");
+			
 		},
 		complete : function() {
 			stop();
-			fd.delete("file");
-			box.innerHTML="将准数据文件拖拽到此处";
+			//fd.delete("file");
+			baseAjax("standard_result");
+//			box.innerHTML="将准数据文件拖拽到此处";
 		},
 		error : function() {
 			alert(eval('(' + msg.responseText + ')').result);

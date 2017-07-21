@@ -4,8 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,16 +20,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Maps;
 import com.hust.mining.constant.Constant;
 import com.hust.mining.constant.Constant.DIRECTORY;
 import com.hust.mining.constant.Constant.Index;
+import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.IssueDao;
 import com.hust.mining.dao.StandardResultDao;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.StandardResult;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.model.params.StandardResultQueryCondition;
+import com.hust.mining.model.params.StatisticParams;
 import com.hust.mining.service.IssueService;
+import com.hust.mining.service.MiningService;
+import com.hust.mining.service.RedisService;
 import com.hust.mining.service.StandardResultService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.AttrUtil;
@@ -46,6 +54,10 @@ public class StandardResultServiceImpl implements StandardResultService {
 	private IssueService issueService;
 	@Autowired
 	private IssueDao issueDao;
+	@Autowired
+	private MiningService miningService;
+	@Autowired
+	private RedisService redisService;
 
 	@Override
 	public int insert(StandardResultQueryCondition con, HttpServletRequest request) {
@@ -253,7 +265,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 	 * 准数据聚类结果每类第一条，类中元素数量
 	 */
 	@Override
-	public List<String[]> getCountResultById(String resultId) {
+	public List<String[]> getCountResultById(String resultId, HttpServletRequest request) {
 		// 
 		List<String[]> content = new ArrayList<>();
 		List<String[]> list = new ArrayList<>();
@@ -261,54 +273,77 @@ public class StandardResultServiceImpl implements StandardResultService {
 		if(stdRes == null){
 			return list;
 		}
-		//保存的准数据内容，已经聚类好的数据，以空行区分
-		content = FileUtil.read(DIRECTORY.STDRES_CONTENT+stdRes.getContentName());
-		System.out.println("------------zhunshujushuliang---"+content.size());
-		if(content == null || content.isEmpty()){
+		//保存的准数据内容，已经聚类好的数据
+		List<List<String[]>> clusters = new ArrayList<>();
+		try {
+			clusters = FileUtil.readwithNullRow(DIRECTORY.STDRES_CONTENT+stdRes.getContentName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 			return list;
 		}
-		list.add(AttrUtil.findEssentialIndex(content.get(0)));
-		
-		ArrayList<ArrayList<String[]>> clusters = new ArrayList<>();
-		//是否为一个新类的第一个
-		boolean isNew = true;
-		ArrayList<String[]> cluster = null;
-		for(int i = 1 ; i < content.size();i++ ){
-			if(isNew){
-				cluster = new ArrayList<>();
-				cluster.add(content.get(i));
-				isNew = false;
-			}
-			if(isBlankRow(content.get(i))){
-				isNew = true;
-				continue;
-			}
-			cluster.add(content.get(i));
+		if(clusters == null || clusters.isEmpty()){
+			return list;
 		}
-		for(ArrayList<String[]> c : clusters ){			
+		list.add(AttrUtil.findEssentialIndex(clusters.get(0).get(0)));
+		
+		clusters.get(0).remove(0);
+		
+		//按类中元素个数排序：从大到小
+		Collections.sort(clusters, new Comparator<List<String[]>>() {
+			@Override
+			public int compare(List<String[]> o1, List<String[]> o2) {
+				// TODO Auto-generated method stub
+				return o2.size() - o1.size();
+			}
+		});
+
+		for(List<String[]> c : clusters ){			
 			String[] old = c.get(0);
 	        String[] ne = new String[old.length + 1];
 	        System.arraycopy(old, 0, ne, 1, old.length);
 	        ne[0] = c.size() + "";
-	        list.add(ne);		
+	        list.add(ne);	        
         }
-		System.out.println("------------zhunshujushuliang---"+list.size());
+		redisService.setObject(KEY.STD_RESULT_CONTENT, clusters, request);
 		return list;
 	}
-
+	
 	/**
-	 * 判断一个字符串数组是否全为空
-	 * @param strs
-	 * @return
+	 * 出图----统计准数据
 	 */
-	private boolean isBlankRow(String[] strs) {
-		// TODO Auto-generated method stub
-		for(String s : strs){
-			if(!s.equals("")){
-				return false;
-			}
-		}
-		return true;
-	}
-
+	@SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Object> statistic(String stdResId, StatisticParams params, HttpServletRequest request) {
+        // TODO Auto-generated method stub
+        try {
+        	//准数据
+        	List<List<String[]>> clusters =  (ArrayList<List<String[]>>) redisService.getObject(KEY.REDIS_CONTENT, request);
+            if(clusters == null || clusters.isEmpty()){
+            	StandardResult stdres = standardResultDao.queryStdResById(stdResId);
+            	clusters = FileUtil.readwithNullRow(DIRECTORY.STDRES_CONTENT+stdres.getContentName());
+            }
+            //属性行
+            String[] attrs = clusters.get(0).remove(0);
+            List<String[]> cluster = clusters.get(params.getCurrentSet());
+            cluster.add(0, attrs);
+            //
+            Map<String, Map<String, Map<String, Integer>>> timeMap =
+                    miningService.statisticStdRes(cluster, params.getInterval());
+            Map<String, Object> reMap = miningService.getAmount(timeMap);
+            Map<String, Integer> levelMap = (Map<String, Integer>) reMap.get(KEY.MINING_AMOUNT_MEDIA);
+            Map<String, Integer> typeMap = (Map<String, Integer>) reMap.get(KEY.MINING_AMOUNT_TYPE);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("time", timeMap);
+            Map<String, Object> countMap = Maps.newHashMap();
+            countMap.put("type", typeMap);
+            countMap.put("level", levelMap);
+            map.put("count", countMap);
+            return map;
+        } catch (Exception e) {
+            logger.error("exception occur when statistic:{}", e.toString());
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
