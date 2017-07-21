@@ -302,7 +302,7 @@ function setCookie(value1){
 	if(issueType=="extensive"){
 		baseAjax("topic_details_extensive");
 	}else if(issueType=="standard"){
-		baseAjax("topic_details_standard");
+		baseAjax("standard_result");//baseAjax("topic_details_standard");
 	}else if(issueType=="core"){
 		baseAjax("topic_details_core");
 	}

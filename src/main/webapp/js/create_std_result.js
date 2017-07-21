@@ -1,4 +1,12 @@
 //
+function setCookie_stdResId(value){
+	var Days = 1; // 此 cookie 将被保存 1 天
+	var exp　= new Date();
+	exp.setTime(exp.getTime() +Days*24*60*60*1000);
+	document.cookie = "stdResId="+ escape (value) + ";expires=" + exp.toGMTString();
+}
+
+//
 var fd = new FormData();
 
 $(function() {
@@ -30,7 +38,6 @@ $(function() {
 			box.innerHTML=file.name;
 			
 			fd.append("file", file);
-			console.log(fd.get("file"));
 		} else {
 			alert(file.name + " 不是Excel文件");
 		}
@@ -60,22 +67,24 @@ function createWithFile(fd) {
 			begin();
 			},
 		success : function(msg) {
-			alert(msg.result);
-			baseAjax("topic_details_standard");
+//			alert('生成准数据成功');
+			var resid = msg.result;
+			setCookie_stdResId(resid);
+			
 		},
 		complete : function() {
 			stop();
 			fd.delete("file");
-			box.innerHTML="将准数据文件拖拽到此处";
+			baseAjax("standard_result");
+//			box.innerHTML="将准数据文件拖拽到此处";
 		},
 		error : function() {
-			alert("数据请求失败");
+			alert(eval('(' + msg.responseText + ')').result);
 		}
 	});
 }
 //没有上传准数据，对聚类后的数据生成准数据
 function createWithoutFile() {
-	alert("aa");
 	$.ajax({
 		crossDomain : true,
 		url : "/standardResult/createResWithoutFile",
@@ -87,16 +96,18 @@ function createWithoutFile() {
 			begin();
 			},
 		success : function(msg) {
-			alert(msg.result);
-			baseAjax("topic_details_standard");
+//			alert();
+			setCookie_stdResId(msg.result);
+			
 		},
 		complete : function() {
 			stop();
-			fd.delete("file");
-			box.innerHTML="将准数据文件拖拽到此处";
+			//fd.delete("file");
+			baseAjax("standard_result");
+//			box.innerHTML="将准数据文件拖拽到此处";
 		},
 		error : function() {
-			alert("数据请求失败");
+			alert(eval('(' + msg.responseText + ')').result);
 		}
 	});
 }

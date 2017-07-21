@@ -4,8 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,16 +20,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Maps;
 import com.hust.mining.constant.Constant;
 import com.hust.mining.constant.Constant.DIRECTORY;
 import com.hust.mining.constant.Constant.Index;
+import com.hust.mining.constant.Constant.KEY;
 import com.hust.mining.dao.IssueDao;
 import com.hust.mining.dao.StandardResultDao;
 import com.hust.mining.model.Issue;
 import com.hust.mining.model.StandardResult;
 import com.hust.mining.model.params.IssueQueryCondition;
 import com.hust.mining.model.params.StandardResultQueryCondition;
+import com.hust.mining.model.params.StatisticParams;
 import com.hust.mining.service.IssueService;
+import com.hust.mining.service.MiningService;
+import com.hust.mining.service.RedisService;
 import com.hust.mining.service.StandardResultService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.AttrUtil;
@@ -46,6 +54,10 @@ public class StandardResultServiceImpl implements StandardResultService {
 	private IssueService issueService;
 	@Autowired
 	private IssueDao issueDao;
+	@Autowired
+	private MiningService miningService;
+	@Autowired
+	private RedisService redisService;
 
 	@Override
 	public int insert(StandardResultQueryCondition con, HttpServletRequest request) {
@@ -153,17 +165,15 @@ public class StandardResultServiceImpl implements StandardResultService {
 	 * 从存放聚类好的内容list生成准数据，并保存到文件系统和数据库
 	 */
 	@Override
-	public int createStandResult(List<String[]> list, HttpServletRequest request) {
-		for(String s:list.get(0)){
-			System.out.print(s+ " ");
-		}
+	public String createStandResult(List<String[]> list, HttpServletRequest request) {
+	
 		String issueid = issueService.getCurrentIssueId(request);
 		String user = userService.getCurrentUser(request);
 		
 		//当前泛数据issue
 		Issue issue = issueService.queryIssueById(issueid);
 		if(issue == null){
-			return 0;
+			return "";
 		}
 		Issue stdissue = null;
 		StandardResult stdres = null;
@@ -181,13 +191,13 @@ public class StandardResultServiceImpl implements StandardResultService {
 			//将创建的准数据issue添加到数据库
 			int insert = issueDao.insert(stdissue);
 			if(insert <= 0){
-				return 0;
+				return "";
 			}
 			//更新准数据对应的泛数据信息
 			issue.setIssueHold(stdissue.getIssueId());
 			int upd = issueDao.updateIssueInfo(issue);
 			if(upd <= 0){
-				return 0;
+				return "";
 			}
 			stdres = new StandardResult();
 			stdres.setStdRid(UUID.randomUUID().toString());
@@ -195,7 +205,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 			stdres.setContentName(contentName);
 			boolean w = FileUtil.write(DIRECTORY.STDRES_CONTENT+contentName, list);
 			if(!w){
-				return 0;
+				return "";
 			}
 			stdres.setDateCount(getDateCount(list));
 			stdres.setSourceCount(getSourceCount(list));
@@ -203,7 +213,12 @@ public class StandardResultServiceImpl implements StandardResultService {
 			stdres.setCreateTime(new Date());
 			stdres.setIssueId(stdissue.getIssueId());
 			stdres.setResName(stdissue.getIssueName());
-			return standardResultDao.insert(stdres);
+			insert = standardResultDao.insert(stdres);
+			
+			if(insert <= 0){
+				return "";
+			}
+			return stdres.getStdRid();
 		}
 		
 		//准数据issue
@@ -214,7 +229,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 		stdissue.setLastUpdateTime(new Date());
 		int update = issueDao.updateIssueInfo(stdissue);
 		if(update <= 0){
-			return 0;
+			return "";
 		}
 		List<StandardResult> stdress = standardResultDao.queryStdRessByIssueId(issue.getIssueHold());
 		if(stdress != null && !stdress.isEmpty()){
@@ -228,7 +243,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 			}
 			boolean w = FileUtil.write(DIRECTORY.STDRES_CONTENT+contentName, list);
 			if(!w){
-				return 0;
+				return "";
 			}
 			stdres.setDateCount(getDateCount(list));
 			stdres.setSourceCount(getSourceCount(list));
@@ -236,10 +251,99 @@ public class StandardResultServiceImpl implements StandardResultService {
 			stdres.setCreateTime(new Date());
 			stdres.setIssueId(stdissue.getIssueId());
 			stdres.setResName(stdissue.getIssueName());
-			return standardResultDao.updateByPrimaryKey(stdres);
+			int up = standardResultDao.updateByPrimaryKey(stdres);
+			if(up <= 0){
+				return "";
+			}
+			return stdres.getStdRid();
 		}
 		
-		return 0;		
+		return "";		
 	}
 
+	/**
+	 * 准数据聚类结果每类第一条，类中元素数量
+	 */
+	@Override
+	public List<String[]> getCountResultById(String resultId, HttpServletRequest request) {
+		// 
+		List<String[]> content = new ArrayList<>();
+		List<String[]> list = new ArrayList<>();
+		StandardResult stdRes = standardResultDao.queryStdResById(resultId);
+		if(stdRes == null){
+			return list;
+		}
+		//保存的准数据内容，已经聚类好的数据
+		List<List<String[]>> clusters = new ArrayList<>();
+		try {
+			clusters = FileUtil.readwithNullRow(DIRECTORY.STDRES_CONTENT+stdRes.getContentName());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return list;
+		}
+		if(clusters == null || clusters.isEmpty()){
+			return list;
+		}
+		list.add(AttrUtil.findEssentialIndex(clusters.get(0).get(0)));
+		
+		clusters.get(0).remove(0);
+		
+		//按类中元素个数排序：从大到小
+		Collections.sort(clusters, new Comparator<List<String[]>>() {
+			@Override
+			public int compare(List<String[]> o1, List<String[]> o2) {
+				// TODO Auto-generated method stub
+				return o2.size() - o1.size();
+			}
+		});
+
+		for(List<String[]> c : clusters ){			
+			String[] old = c.get(0);
+	        String[] ne = new String[old.length + 1];
+	        System.arraycopy(old, 0, ne, 1, old.length);
+	        ne[0] = c.size() + "";
+	        list.add(ne);	        
+        }
+		redisService.setObject(KEY.STD_RESULT_CONTENT, clusters, request);
+		return list;
+	}
+	
+	/**
+	 * 出图----统计准数据
+	 */
+	@SuppressWarnings("unchecked")
+    @Override
+    public Map<String, Object> statistic(String stdResId, StatisticParams params, HttpServletRequest request) {
+        // TODO Auto-generated method stub
+        try {
+        	//准数据
+        	List<List<String[]>> clusters =  (ArrayList<List<String[]>>) redisService.getObject(KEY.REDIS_CONTENT, request);
+            if(clusters == null || clusters.isEmpty()){
+            	StandardResult stdres = standardResultDao.queryStdResById(stdResId);
+            	clusters = FileUtil.readwithNullRow(DIRECTORY.STDRES_CONTENT+stdres.getContentName());
+            }
+            //属性行
+            String[] attrs = clusters.get(0).remove(0);
+            List<String[]> cluster = clusters.get(params.getCurrentSet());
+            cluster.add(0, attrs);
+            //
+            Map<String, Map<String, Map<String, Integer>>> timeMap =
+                    miningService.statisticStdRes(cluster, params.getInterval());
+            Map<String, Object> reMap = miningService.getAmount(timeMap);
+            Map<String, Integer> levelMap = (Map<String, Integer>) reMap.get(KEY.MINING_AMOUNT_MEDIA);
+            Map<String, Integer> typeMap = (Map<String, Integer>) reMap.get(KEY.MINING_AMOUNT_TYPE);
+            Map<String, Object> map = Maps.newHashMap();
+            map.put("time", timeMap);
+            Map<String, Object> countMap = Maps.newHashMap();
+            countMap.put("type", typeMap);
+            countMap.put("level", levelMap);
+            map.put("count", countMap);
+            return map;
+        } catch (Exception e) {
+            logger.error("exception occur when statistic:{}", e.toString());
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

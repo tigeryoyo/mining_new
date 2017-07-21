@@ -19,7 +19,7 @@ function paint() {
     };
     $.ajax({
         type : "post",
-        url : "/result/statisticSingleSet",
+        url : "/standardResult/statisticSingleSet",
         data : JSON.stringify(json),
         dataType : "json",
         contentType : "application/json",
