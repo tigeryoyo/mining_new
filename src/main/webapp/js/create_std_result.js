@@ -44,6 +44,7 @@ $(function() {
 	}, false);
 });
 
+
 $("#create_std_result").click(function() {	
 		if(fd.get("file") != null){
 			createWithFile(fd);
