@@ -287,6 +287,8 @@ public class StandardResultServiceImpl implements StandardResultService {
 		}
 		list.add(AttrUtil.findEssentialIndex(clusters.get(0).get(0)));
 		
+		redisService.setObject(KEY.STD_RESULT_CONTENT, clusters, request);
+		
 		clusters.get(0).remove(0);
 		
 		//按类中元素个数排序：从大到小
@@ -305,7 +307,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 	        ne[0] = c.size() + "";
 	        list.add(ne);	        
         }
-		redisService.setObject(KEY.STD_RESULT_CONTENT, clusters, request);
+		
 		return list;
 	}
 	
@@ -318,13 +320,19 @@ public class StandardResultServiceImpl implements StandardResultService {
         // TODO Auto-generated method stub
         try {
         	//准数据
-        	List<List<String[]>> clusters =  (ArrayList<List<String[]>>) redisService.getObject(KEY.REDIS_CONTENT, request);
+        	List<List<String[]>> clusters =  (ArrayList<List<String[]>>) redisService.getObject(KEY.STD_RESULT_CONTENT, request);
             if(clusters == null || clusters.isEmpty()){
             	StandardResult stdres = standardResultDao.queryStdResById(stdResId);
             	clusters = FileUtil.readwithNullRow(DIRECTORY.STDRES_CONTENT+stdres.getContentName());
             }
+            if(clusters == null || clusters.isEmpty()){
+            	return null;
+            }
             //属性行
             String[] attrs = clusters.get(0).remove(0);
+            for(String s :attrs){
+            	System.out.print(s+"\t");
+            }
             List<String[]> cluster = clusters.get(params.getCurrentSet());
             cluster.add(0, attrs);
             //
