@@ -95,7 +95,8 @@ function historyData(rid) {
 					// items第一行存储index，故从i+1读起
 					item = items[i + 1];
 					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
-						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
+						+ '"/>&nbsp;'
+						+(i+1)+'</td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails('
 						// + item[indexOfUrl]
 						// + '
 						+ i + ',\''
@@ -135,7 +136,8 @@ function freshData() {
 					item = items[i + 1];
 					//console.log(item);
 					rows = '<tr><td height="32" align="center"><input type="checkbox" style="width:20px;height:20px" class="' + i
-						+ '"/></td><td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails(' + i + ',\'' + rid + '\',' + item[0] + ')">'
+						+ '"/></td>&nbsp;'
+						+(i+1)+'<td height="32" align="center"><a href="javascript:;" onclick="showClusterDetails(' + i + ',\'' + rid + '\',' + item[0] + ')">'
 						+ item[indexOfTitle] + '</a></td><td height="32" align="center">' + item[indexOfTime] + '</td><td height="32" align="center">' + item[0] + '</td></tr>';
 					$('.summary_tab table').append(rows);
 
@@ -298,7 +300,7 @@ $(function() {
 function selectClusters(){	
 	var num = $("#clusternum_input").val();
 	$(".summary_tab tr").each(function(){
-		var clusterNum = $(this).find('a:not(:first)').text();
+		var clusterNum = $(this).find('td:last').text();
 	//	console.log(num+'--');
 	//	console.log(clusterNum);
 		if(num == clusterNum){
