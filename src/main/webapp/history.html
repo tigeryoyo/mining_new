@@ -30,9 +30,9 @@
 	 -->
 	 <div class="ckht">
 	 	<div class="btn-group" role="group" aria-label="..." style="float:right;">
-  			<button type="button" class="btn btn-default" id="d1" onclick="baseAjax('topic_details_extensive')">原始数据</button>
-  			<button type="button" class="btn btn-default" id="d2" onclick="baseAjax('history')">泛数据</button>
- 			<button type="button" class="btn btn-default" id="d3"onclick="baseAjax('standard_result')">准数据</button>
+  			<button type="button" class="btn btn-default"  onclick="baseAjax('topic_details_extensive')">原始数据</button>
+  			<button type="button" class="btn btn-default active" style="color:red" onclick="baseAjax('history')">泛数据</button>
+ 			<button type="button" class="btn btn-default" onclick="baseAjax('standard_result')">准数据</button>
 		</div>
 		<ul class="ckht_list">
 			 <li class="issueName">任务名称：</li>
@@ -129,9 +129,5 @@
 
 	</div>
 </body>
-<script> 
-var div = document.getElementById('d2'); 
-div.setAttribute("class", "btn-group btn btn-default active"); 
-div.style.color='red';
-</script> 
+
 </html>
