@@ -13,19 +13,16 @@
 	<div class="s_nav">
 		当前位置： <a href="javascript:;" onclick="baseAjax('topic_list')">任务管理</a>
 		<span>>>任务详情 </span>
-		
-		<div class="btn-group" role="group" aria-label="..." style="float:right;">
-  			<button type="button" class="btn btn-default" onclick="baseAjax('topic_details_extensive')">原始数据</button>
-  			<button type="button" class="btn btn-default" onclick="baseAjax('history')">泛数据</button>
- 			<button type="button" class="btn btn-default" onclick="baseAjax('standard_result')">准数据</button>
-		    <button type="button" class="btn btn-default">待定</button>
-		</div>
 	</div>
 	
 	<div class="ckht">
 		<ul class="ckht_list">
+			<div class="btn-group" role="group" aria-label="..." style="float:right;float:top;">
+	  			<button type="button" class="btn btn-default" id="d1" onclick="baseAjax('topic_details_extensive')">原始数据</button>
+	  			<button type="button" class="btn btn-default" id="d2" onclick="baseAjax('history')">泛数据</button>
+	 			<button type="button" class="btn btn-default" id="d3"onclick="baseAjax('standard_result')">准数据</button>
+			</div>
 			<li class="issueName">任务名称：</li>
-			<li >数据类型：<span style="color: red; font-weight: bold;">原始数据</span></li>
 			<li class="files_list">文件列表：</li>
 			    <label style="float: left;font-size: 16px;margin-top:10px;margin-left:15px;"> <input type="checkbox"
 						style="width: 20px; height: 20px; float: left; margin-right:5px;"
@@ -37,7 +34,7 @@
 				<button type="button"  class="btn btn-primary" style="float:right; margin-right: 10px;" onclick="baseAjax('history')">历史记录</button>  -->	
 			<li class="files_list">					
 				<div class="up_list_wrap">
-					<table border="0" class="up_list">
+					<table border="1" class="up_list">
 						<tr class="d_blue">
 							<td width="50" align="center" valign="middle" bgcolor="#86c6ea" class="d_blue">选择</td>
 							<td width="235" align="center" valign="middle" bgcolor="#86c6ea" class="d_blue">文件名称</td>
@@ -48,7 +45,7 @@
 					</table>
 				</div>
 			</li>
-			<li>新增文件：
+			<li style="margin-top:20px;">新增文件：
 				<div class="files_add" id="drop_area">将文件拖拽到此处</div>
 			</li>
 		</ul>
@@ -60,4 +57,10 @@
 		</div>
 	</div>
 </body>
+<script> 
+var div = document.getElementById('d1'); 
+div.setAttribute("class", "btn-group btn btn-default active"); 
+div.style.color='red';
+</script> 
+
 </html>
