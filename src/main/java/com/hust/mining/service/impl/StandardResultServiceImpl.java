@@ -218,6 +218,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 			if(insert <= 0){
 				return "";
 			}
+			redisService.setObject(KEY.STANDARD_ISSUE_ID, stdissue.getIssueId(), request);
 			return stdres.getStdRid();
 		}
 		
@@ -255,6 +256,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 			if(up <= 0){
 				return "";
 			}
+			redisService.setObject(KEY.STANDARD_ISSUE_ID, stdissue.getIssueId(), request);
 			return stdres.getStdRid();
 		}
 		
