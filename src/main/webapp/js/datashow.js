@@ -264,7 +264,7 @@ function fileSummary() {
 						// console.log(msg);
 						if (msg.status == "OK") {
 							if (msg.status == "OK") {
-								baseAjax("history");
+								baseAjax("extensive_result");
 							} else {
 								alert(msg.result);
 							}
@@ -299,7 +299,7 @@ function clusterSingleFile(id) {
 		success : function(msg) {
 //			console.log(msg);
 			if (msg.status == "OK") {
-				baseAjax("history");
+				baseAjax("extensive_result");
 			} else {
 				alert(msg.result);
 			}
