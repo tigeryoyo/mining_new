@@ -205,29 +205,26 @@ function toPaint(currentSet, title) {
 }
 */
 
-//重置结果
-function historyReset() {
-	$(".summary_up table tr").unbind('click').on("click", "button", function() {
-		var result_id = $(this).attr("id");
-		
-		$.ajax({
-			type : "post",
-			url : "/result/resetResultById",
-			data : {
-				resultId : result_id
-			},
-			dataType : "json",
-			success : function(msg) {
-				if (msg.status == "OK") {
-					freshData();
-				} else {
-					alert("合并失败");
-				}
-			},
-			error : function(msg) {
-				alert(msg.result);
+//聚类结果重置
+function Reset() {
+	var result_id  = getCookie("resultId");
+	$.ajax({
+		type : "post",
+		url : "/result/resetResultById",
+		data : {
+			resultId : result_id
+		},
+		dataType : "json",
+		success : function(msg) {
+			if (msg.status == "OK") {
+				freshData();
+			} else {
+				alert("重置失败");
 			}
-		})
+		},
+		error : function(msg) {
+			alert(msg.result);
+		}
 	})
 }
 
