@@ -297,8 +297,7 @@ function setCookie(value1){
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-	
-	baseAjax("topic_details_"+issueType);
+	baseAjax("original_data");
 }
 
 function getCookie(name) {

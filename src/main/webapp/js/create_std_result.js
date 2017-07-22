@@ -1,4 +1,3 @@
-//
 function setCookie_stdResId(value){
 	var Days = 1; // 此 cookie 将被保存 1 天
 	var exp　= new Date();

@@ -9,10 +9,10 @@ $(document).ready(function(){
     	issueType = r;
     }
     setCookie_issueType(issueType);
-    var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
+    /*var choosenLabel = $("input[name='issueType'][value="+issueType+"]");
     choosenLabel.parent().css("color","red");
     choosenLabel.parent().siblings('label').css("color","black");
-    choosenLabel.attr("checked",true);
+    choosenLabel.attr("checked",true);*/
     
     initShowPage(1);
 });
@@ -300,7 +300,8 @@ function setCookie(value1){
 	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
 //	console.log("setCookie="+issueType);
 	if(issueType=="extensive"){
-		baseAjax("topic_details_extensive");
+		alert(issueType);
+		baseAjax("original_data");
 	}else if(issueType=="standard"){
 		baseAjax("standard_result");//baseAjax("topic_details_standard");
 	}else if(issueType=="core"){
