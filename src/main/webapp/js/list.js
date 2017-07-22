@@ -300,7 +300,6 @@ function setCookie(value1){
 	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
 //	console.log("setCookie="+issueType);
 	if(issueType=="extensive"){
-		alert(issueType);
 		baseAjax("original_data");
 	}else if(issueType=="standard"){
 		baseAjax("standard_result");//baseAjax("topic_details_standard");

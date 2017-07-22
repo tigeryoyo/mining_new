@@ -22,6 +22,7 @@ import org.apache.tools.ant.types.resources.selectors.Compare;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.hust.mining.constant.Constant;
 import com.hust.mining.constant.Constant.CONVERTERTYPE;
 import com.hust.mining.constant.Constant.DIRECTORY;
@@ -473,18 +474,34 @@ public class IssueServiceImpl implements IssueService {
 			}
 		}
 		Result result = new Result();
-		result.setRid(UUID.randomUUID().toString());
 		result.setIssueId(issueId);
 		result.setCreator(user);
+		//寻找数据库中同一个人创建的任务是否有过聚类记录
+		List<Result> resultslist= resultDao.selectByissueIdAndUser(issueId, user);
+		//如果有记录，则rid不变；否则，生成新的
+		if (resultslist==null) {
+			result.setRid(UUID.randomUUID().toString());
+		} else {
+			result.setRid(resultslist.get(0).getRid());
+		}
 		result.setCreateTime(new Date());
 		result.setComment(comment);
+		//以上是数据库的记录，以下是聚类的结果
 		ResultWithContent rc = new ResultWithContent();
 		rc.setResult(result);
 		rc.setContent(contentWithAttr);
 		rc.setOrigCluster(ConvertUtil.toStringListB(cluster));
 		rc.setOrigCount(ConvertUtil.toStringList(count));
-		int update = resultDao.insert(rc);
-		if (update <= 0) {
+		int operateResult = 0;
+		if (resultslist==null) { //没有查找到记录
+			System.out.println("*********数据中没有");
+			operateResult = resultDao.insert(rc);
+		} 
+		else {
+			System.out.println("***************有");
+			operateResult = resultDao.update(rc);
+		}
+		if (operateResult <= 0) {
 			return null;
 		}
 		// 插入数据库完成
