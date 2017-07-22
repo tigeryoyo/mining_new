@@ -139,14 +139,26 @@ public class FileController {
                 response.sendError(404, "导出错误");
                 return;
             }
+            Issue issue = issueService.queryIssueById(issueId);
+            String filename = issue.getIssueName()+"_泛数据.xls";
+            if(issue == null){
+            	 response.sendError(404, "未找到当前处理记录，请先创建或者选择某一记录");
+                 logger.info("从session中无法获得记录的记录id");
+                 return;
+            }
+            //下载前将泛数据标红；报纸优先、其次原创优先（按时间排序，时间最前为首发，即原创）
+            //得到待标红的新闻id集合
+            List<Integer> marked = resultService.getMarked(cluster);
+            
             outputStream = response.getOutputStream();
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
-            response.setHeader("Content-Disposition", "attachment;fileName=result.xls");
-            HSSFWorkbook workbook = ExcelUtil.exportToExcel(cluster);
+            response.setHeader("Content-Disposition", "attachment;fileName="+new String(filename.getBytes("gbk"),"iso-8859-1"));
+            HSSFWorkbook workbook = ExcelUtil.exportToExcelMarked(cluster,marked);
             workbook.write(outputStream);
         } catch (Exception e) {
             logger.info("excel 导出失败\t" + e.toString());
+            e.printStackTrace();
         } finally {
             try {
                 outputStream.close();

@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -373,6 +376,61 @@ public class ExcelUtil {
 		}
 		inputStream.close();
 		return list;
+	}
+
+	/**
+	 * 将带标记的信息导出到Excel文件中
+	 * 带标记的行字体样式为红色
+	 * @param cluster	要导出的内容
+	 * @param marked	待标记的id集合（每个类中的下标） 
+	 * @return
+	 */
+	public static HSSFWorkbook exportToExcelMarked(List<String[]> cluster, List<Integer> marked) {
+		HSSFWorkbook workbook = new HSSFWorkbook();
+		//生成单元格样式
+        HSSFCellStyle markedrowStyle = workbook.createCellStyle();
+        //新建font实体
+        HSSFFont hssfFont = workbook.createFont();
+        //设置字体颜色 ----红色标红
+        hssfFont.setColor(HSSFColor.RED.index);
+		markedrowStyle.setFont(hssfFont);
+		
+		Sheet sheet = workbook.createSheet("泛数据" );
+		String[] rowList = cluster.get(0);
+		Row row = sheet.createRow(0);
+		for (int j = 0; j < rowList.length; j++) {
+			Cell cell = row.createCell(j);
+			cell.setCellValue(rowList[j]);
+		}
+		
+//		cluster.remove(0);
+		int index = 0 ;
+		int count = 0;
+		for (int i = 1; i < cluster.size(); i++) {			
+			rowList = cluster.get(i);
+			if(CommonUtil.isEmptyArray(rowList)){				
+				index = 0;
+				count++;
+				continue;
+			}
+			row = sheet.createRow(i);
+			if(index == marked.get(count)){
+				for (int j = 0; j < rowList.length; j++) {
+					Cell cell = row.createCell(j);
+					cell.setCellValue(rowList[j]);
+					cell.setCellStyle(markedrowStyle);
+				}
+			}else{
+				for (int j = 0; j < rowList.length; j++) {
+					Cell cell = row.createCell(j);
+					cell.setCellValue(rowList[j]);
+				}
+			}
+			
+			++index;
+		}
+		
+		return workbook;
 	}
 
 }

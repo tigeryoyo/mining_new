@@ -45,6 +45,7 @@ public class Constant {
     public static class KEY {
         public final static String SESSION_ID = "JSESSIONID";
         public final static String ISSUE_ID = "issueId";
+        public final static String STANDARD_ISSUE_ID = "stdIssueId";
         public final static String RESULT_ID = "resultId";
 		public static final String STD_RESULT_ID = "stdResId";
 		public static final String STD_RESULT_CONTENT = "std_res_content";
