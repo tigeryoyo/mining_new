@@ -119,14 +119,23 @@ public class StandardResultController {
 		try {
 			//System.out.println(file.getOriginalFilename());
 			List<String[]> list = ExcelUtil.readWithNullRow(file.getOriginalFilename(), file.getInputStream(), 0, -1, null);
+						
 			if (null == list || 0 == list.size()) {
 				return ResultUtil.errorWithMsg("准数据文件内容为空!");
 			}
 			String resid = standardResultService.createStandResult(list,request);
-			if(!resid.equals("") && resid != null){
-				return ResultUtil.success(resid);
+			StandardResult stdRes = standardResultService.queryStdResById(resid);
+			String issueid = "";
+			if(stdRes != null){
+				issueid = stdRes.getIssueId();
 			}
-			
+			JSONObject json = new JSONObject();
+			if(resid != null && !resid.equals("") && issueid != ""){
+				json.put("stdResId", resid);
+				json.put("stdIssueId", issueid);
+				return ResultUtil.success(json);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			return ResultUtil.errorWithMsg("生成准数据失败!");
@@ -159,11 +168,18 @@ public class StandardResultController {
 				return ResultUtil.errorWithMsg("请重新选择泛数据!");
 			}
 			String resid = standardResultService.createStandResult(list,request);
-			if(!resid.equals("") && resid != null){
-				return ResultUtil.success(resid);
+			StandardResult stdRes = standardResultService.queryStdResById(resid);
+			String issueid = "";
+			if(stdRes != null){
+				issueid = stdRes.getIssueId();
 			}
-
-			return ResultUtil.success("上传准数据，生成准数据成功！");
+			JSONObject json = new JSONObject();
+			if(resid != null && !resid.equals("") && issueid != ""){
+				json.put("stdResId", resid);
+				json.put("stdIssueId", issueid);
+				return ResultUtil.success(json);
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -189,7 +205,12 @@ public class StandardResultController {
         }
         //System.out.println(resultId+"--REusltc-"+issueId);
         List<String[]> list = standardResultService.getCountResultById(resultId, request);
-
+        for(String[] s : list){
+			for(String ss : s){
+				System.out.print(ss+"\t");
+			}
+			System.out.println();
+		}
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("不存在记录");
         }
