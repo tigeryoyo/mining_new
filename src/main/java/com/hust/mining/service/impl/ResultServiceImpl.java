@@ -544,7 +544,8 @@ public class ResultServiceImpl implements ResultService {
 			}
 			String type = "";
 			if(item.length >= indexOfUrl){
-				 type = websiteDao.queryTypeByUrl(item[indexOfUrl]);
+				//获取url前缀，并在数据库中查询该URL类型
+				 type = websiteDao.queryTypeByUrl(CommonUtil.getPrefixUrl(item[indexOfUrl]));
 			}
 			
 			if(StringUtils.isEmpty(type)){

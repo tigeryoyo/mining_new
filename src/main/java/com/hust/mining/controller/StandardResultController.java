@@ -119,7 +119,9 @@ public class StandardResultController {
 		try {
 			//System.out.println(file.getOriginalFilename());
 			List<String[]> list = ExcelUtil.readWithNullRow(file.getOriginalFilename(), file.getInputStream(), 0, -1, null);
-						
+			for(String t :list.get(list.size()-1)){
+				System.out.print(t+"\t");
+			}
 			if (null == list || 0 == list.size()) {
 				return ResultUtil.errorWithMsg("准数据文件内容为空!");
 			}
@@ -205,12 +207,7 @@ public class StandardResultController {
         }
         //System.out.println(resultId+"--REusltc-"+issueId);
         List<String[]> list = standardResultService.getCountResultById(resultId, request);
-        for(String[] s : list){
-			for(String ss : s){
-				System.out.print(ss+"\t");
-			}
-			System.out.println();
-		}
+        
         if (null == list || list.size() == 0) {
             return ResultUtil.errorWithMsg("不存在记录");
         }
