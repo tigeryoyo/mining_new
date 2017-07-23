@@ -371,7 +371,7 @@ function SearchJsonData(page) {
 function deleteData(issueId){
 	$.ajax({
 		type:"post",
-		url:"/issue/delete",
+		url:"/issue/deleteAll",
 		data:{
 			issueId:issueId,
 			issueType:issueType,
