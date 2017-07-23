@@ -78,7 +78,9 @@ public class PermissionInterceptor implements HandlerInterceptor {
                 } else {
                     LOG.warn("{} did not login, please login", request.getRequestedSessionId());
                     //System.out.println("进入方法了");
-                    response.sendRedirect("/index.html");
+                  //  response.sendRedirect("/index.html");
+                    response.getWriter().write("error");
+                    
                 }
             }
         } catch (Exception e) {
