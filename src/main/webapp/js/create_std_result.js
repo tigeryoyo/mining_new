@@ -1,8 +1,8 @@
-function setCookie_stdResId(value){
+function setCookie(key,value){
 	var Days = 1; // 此 cookie 将被保存 1 天
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
-	document.cookie = "stdResId="+ escape (value) + ";expires=" + exp.toGMTString();
+	document.cookie = key + "="+ escape (value) + ";expires=" + exp.toGMTString();
 }
 
 //
@@ -68,9 +68,10 @@ function createWithFile(fd) {
 			},
 		success : function(msg) {
 //			alert('生成准数据成功');
-			var resid = msg.result;
-			setCookie_stdResId(resid);
-			
+			var json = msg.result;
+			var resid = json.stdResId;
+			setCookie("stdResId", resid);
+			setCookie("stdIssueId",json.stdIssueId);
 		},
 		complete : function() {
 			stop();
@@ -97,8 +98,9 @@ function createWithoutFile() {
 			},
 		success : function(msg) {
 //			alert();
-			setCookie_stdResId(msg.result);
-			
+			var json = msg.result;			
+			setCookie("stdResId", json.stdResId);
+			setCookie("stdIssueId",json.stdIssueId);
 		},
 		complete : function() {
 			stop();
