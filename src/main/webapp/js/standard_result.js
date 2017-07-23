@@ -11,13 +11,6 @@ function setCookie(key,value){
 	document.cookie = key+"="+ escape (value) + ";expires=" + exp.toGMTString();
 }
 
-function getCookie(name) {
-	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
-	if(arr !=null) 
-		return unescape(arr[2]); 
-	return null;
-}
-
 //显示当前任务名字
 function showStdIssueName(issueId) {
 	$.ajax({
@@ -87,6 +80,53 @@ function stdResData(rid) {
 			alert(eval('(' + msg.responseText + ')').result);
 		}
 	})
+}
+
+//生成核心任务、结果数据
+$("#create_core_result").click(function() {
+	$.ajax({
+		type : "post",
+		url : "/issue/createCore",
+		data : {
+			linkedIssueId: getCookie("stdIssueId"),
+			stdResId : getCookie("stdResId")
+		},
+		dataType : "json",
+		beforeSend : function() {
+			begin();
+		},
+		success : function(msg) {
+			if (msg.status == "OK") {
+				download(msg.result.coreResId);
+			} else {
+				alert(msg.result);
+			}
+		},
+		complete : function() {
+			stop();
+		},
+		error : function() {
+			alert("数据请求失败！");
+		//	console.log("ERROR");
+		}
+	});
+});
+
+
+function download(coreResId){
+	$(function() {
+		var form = $('<form method="POST" action="/coreResult/download">');
+		form.append($('<input type="hidden" name="coreResId" value="' + coreResId + '"/>'));
+		$('body').append(form);
+		form.submit(); // 自动提交
+	});
+}
+
+function getCookie(name) {
+	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
+	if(arr !=null) 
+		return unescape(arr[2]); 
+	return null;
 }
 
 function freshData() {
