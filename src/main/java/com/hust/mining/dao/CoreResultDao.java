@@ -310,7 +310,7 @@ public class CoreResultDao {
 			wu.addParaText("舆情聚焦", titleEnv);
 			// List<标题，摘要内容，发布媒体>
 			List<String[]> summary = new ArrayList<>();
-			summary = generateSummary(attrs, content, clusterCount);
+//			summary = generateSummary(attrs, content, clusterCount);
 			int num = 1;
 			for (String[] strings : summary) {
 				wu.addParaText((num++) + ". " + strings[0], mainBEnv);
@@ -339,7 +339,7 @@ public class CoreResultDao {
 	public void generateWordResReport(String filename, String reportName, String stdResId,
 			List<List<String[]>> allContent) {
 		String[] essentialIndexs = AttrUtil.findEssentialIndex(allContent.get(0).get(0));
-		allContent.get(0).remove(0);
+		String[] attrs = allContent.get(0).remove(0);
 		try {
 			WordUtil wu = new WordUtil();
 			wu.addParaText("(四川省戒毒管理局专供)", new Env().bold(true).fontType(FONT.KAITI));
@@ -434,8 +434,8 @@ public class CoreResultDao {
 			// 舆情聚焦(摘要部分，陈杰)
 			wu.addParaText("舆情聚焦", titleEnv);
 			// List<标题，摘要内容，发布媒体>
-			/*List<String[]> summary = new ArrayList<>();
-			summary = generateSummary(attrs, content, clusterCount);
+			List<String[]> summary = new ArrayList<>();
+			summary = generateSummary(attrs, allContent);
 			int num = 1;
 			for (String[] strings : summary) {
 				wu.addParaText((num++) + ". " + strings[0], mainBEnv);
@@ -452,7 +452,7 @@ public class CoreResultDao {
 			wu.addParaText("声明：", env3);
 			wu.appendParaText(
 					"以上舆情信息仅供参考，用户对于舆情信息所反映出的问题或状况的处理，应综合其他信息加以判断和利用，仅凭以上舆情信息做出判断、进行决策等处理措施造成不利后果及损失的，我单位不承担任何责任。",
-					env1);*/
+					env1);
 
 			wu.write(filename);
 		} catch (Exception e) {
@@ -596,35 +596,88 @@ public class CoreResultDao {
 	 *            聚类结果（一行为一个类（每个数字为content内容的index+1））
 	 * @return 返回摘要（List<标题，摘要，发布机构>）
 	 */
-	private List<String[]> generateSummary(String[] attrs, List<String[]> content, List<int[]> clusterCount) {
+//	private List<String[]> generateSummary(String[] attrs, List<String[]> content, List<int[]> clusterCount) {
+//		List<String[]> summary = new ArrayList<>();
+//		for (String string : attrs) {
+//			// System.out.print(string + " ");
+//		}
+//		// System.out.println();
+//		int titleIndex = AttrUtil.findIndexOfTitle(attrs);
+//		int urlIndex = AttrUtil.findIndexOfUrl(attrs);
+//		int organizationIndex = AttrUtil.findIndexOfSth(attrs, "网站|媒体名称");
+//		for (int[] index : clusterCount) {
+//			String title = null;
+//			List<String> sentence = null;
+//			Set<String> organization = new HashSet<>();
+//			// 是否找到了要摘要的文章
+//			boolean flag = false;
+//			// 找到可以爬的sentence
+//			for (int i : index) {
+//				if (!flag) {
+//					sentence = crawler.getSummary(content.get(i)[urlIndex]);
+//					if (null != sentence) {
+//						flag = true;
+//						title = content.get(i)[titleIndex];
+//						sentence.add(0, title);
+//						Summary s = new Summary(sentence);
+//						s.summary();
+//						sentence = s.getSummary(null);
+//					}
+//				}
+//				organization.add(content.get(i)[organizationIndex]);
+//			}
+//			String str_organization = "（";
+//			if (organization.size() == 0) {
+//				str_organization = "（四川戒毒所）";
+//			} else {
+//				for (String string : organization) {
+//					str_organization += string + "、";
+//				}
+//				str_organization = str_organization.substring(0, str_organization.length() - 1) + "）";
+//			}
+//			String str_sentence = "";
+//			if (flag) {
+//				for (String string : sentence) {
+//					str_sentence += string + "。";
+//				}
+//			} else {
+//				title = content.get(index[0])[titleIndex];
+//				str_sentence = "由于该类新闻没有合适的网站来获取新闻内容，故无法获得摘要。该类新闻的第一条新闻来源于：" + content.get(index[0])[urlIndex];
+//			}
+//			summary.add(new String[] { title, str_sentence, str_organization });
+//		}
+//		return summary;
+//	}
+	
+	private List<String[]> generateSummary(String[] attrs, List<List<String[]>> allContent) {
 		List<String[]> summary = new ArrayList<>();
-		for (String string : attrs) {
+	/*	for (String string : attrs) {
 			// System.out.print(string + " ");
-		}
+		}*/
 		// System.out.println();
 		int titleIndex = AttrUtil.findIndexOfTitle(attrs);
 		int urlIndex = AttrUtil.findIndexOfUrl(attrs);
 		int organizationIndex = AttrUtil.findIndexOfSth(attrs, "网站|媒体名称");
-		for (int[] index : clusterCount) {
+		for (List<String[]> content : allContent) {
 			String title = null;
 			List<String> sentence = null;
 			Set<String> organization = new HashSet<>();
 			// 是否找到了要摘要的文章
 			boolean flag = false;
 			// 找到可以爬的sentence
-			for (int i : index) {
+			for (String[] str : content) {
 				if (!flag) {
-					sentence = crawler.getSummary(content.get(i)[urlIndex]);
+					sentence = crawler.getSummary(str[urlIndex]);
 					if (null != sentence) {
 						flag = true;
-						title = content.get(i)[titleIndex];
+						title = str[titleIndex];
 						sentence.add(0, title);
 						Summary s = new Summary(sentence);
 						s.summary();
 						sentence = s.getSummary(null);
 					}
 				}
-				organization.add(content.get(i)[organizationIndex]);
+				organization.add(str[organizationIndex]);
 			}
 			String str_organization = "（";
 			if (organization.size() == 0) {
@@ -641,8 +694,8 @@ public class CoreResultDao {
 					str_sentence += string + "。";
 				}
 			} else {
-				title = content.get(index[0])[titleIndex];
-				str_sentence = "由于该类新闻没有合适的网站来获取新闻内容，故无法获得摘要。该类新闻的第一条新闻来源于：" + content.get(index[0])[urlIndex];
+				title = content.get(0)[titleIndex];
+				str_sentence = "由于该类新闻没有合适的网站来获取新闻内容，故无法获得摘要。该类新闻的第一条新闻来源于：" + content.get(0)[urlIndex];
 			}
 			summary.add(new String[] { title, str_sentence, str_organization });
 		}
