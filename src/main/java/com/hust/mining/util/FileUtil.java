@@ -61,9 +61,10 @@ public class FileUtil {
 			String line;
 			while (true) {
 				line = br.readLine();
-				if (StringUtils.isEmpty(line)) {
+				if (StringUtils.isEmpty(line) || CommonUtil.isEmptyArray(line.split("\t"))) {
 					String nextline = br.readLine();
-					if(StringUtils.isEmpty(nextline)){
+					//判断是否为空行
+					if(StringUtils.isEmpty(nextline) || CommonUtil.isEmptyArray(nextline.split("\t"))){
 //						doc.add(line.split("\t"));
 						if(!doc.isEmpty()){
 							docs.add(doc);

@@ -139,16 +139,14 @@ public class FileController {
                 response.sendError(404, "导出错误");
                 return;
             }
+            String[] attrs =  cluster.get(0);
             Issue issue = issueService.queryIssueById(issueId);
             String filename = issue.getIssueName()+"_泛数据.xls";
-            if(issue == null){
-            	 response.sendError(404, "未找到当前处理记录，请先创建或者选择某一记录");
-                 logger.info("从session中无法获得记录的记录id");
-                 return;
-            }
             //下载前将泛数据标红；报纸优先、其次原创优先（按时间排序，时间最前为首发，即原创）
             //得到待标红的新闻id集合
+            //引用传递 getMarked()方法中删除了cluster第一行标题行 方法执行完要插入
             List<Integer> marked = resultService.getMarked(cluster);
+            cluster.add(0, attrs);
             
             outputStream = response.getOutputStream();
             response.setCharacterEncoding("utf-8");
