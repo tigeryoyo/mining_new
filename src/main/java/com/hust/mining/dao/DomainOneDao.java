@@ -170,7 +170,7 @@ public class DomainOneDao {
 		} else {
 			example.setLimit(0);
 		}
-		example.setOrderByClause("update_time desc");
+		example.setOrderByClause("update_time desc,url");
 
 		return domainOneMapper.selectByExample(example);
 	}
