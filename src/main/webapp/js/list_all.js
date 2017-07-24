@@ -117,6 +117,7 @@ function initSearchPage(currenPage){
                 listCount = msg.result;
                 $("#page").initPage(listCount,currenPage,searchData);
             } else {
+            	$('.ht_cont tr:not(:first)').html("");
                 alert(msg.result);
             }
         },
@@ -127,10 +128,12 @@ function initSearchPage(currenPage){
 
 
 function GetJsonData(page) {
-    var myDate=new Date();
-    end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + (myDate.getDate()+1);
-    start=myDate.getFullYear() + "-" + myDate.getMonth() + "-" + myDate.getDate();
-
+	var myDate=new Date();
+	var timeStamp = Date.parse(myDate)/1000;
+	myDate.setTime((timeStamp+24*60*60)*1000);
+	end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + (myDate.getDate());
+	myDate.setTime((timeStamp-90*24*60*60)+1000);
+	start=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
     var json = {
         "issueId":"",
         "issueName":"" ,
@@ -344,10 +347,22 @@ function SearchJsonData(page) {
 	// var obj = $('#ht_name').val();
 	var obj1 = $('#b_time').val();
 	var obj2 = $('#o_time').val();
+	if(!(obj2==""|| obj2=="null" || obj2=="undefined")){
+		var timestamp = Date.parse(new Date(obj2))/1000;
+		var endDate = new Date();
+		endDate.setTime((timestamp+24*60*60)*1000);
+		obj2 = endDate.getFullYear() + "-" + (endDate.getMonth()+1) + "-" + endDate.getDate();
+	}
 	var obj3 = $('#cj_name').val();
 	var obj4 = $('#lb_time').val();
 	var obj5 = $('#lo_time').val();
-    var json = {
+	if(!(obj5==""|| obj5=="null" || obj5=="undefined")){
+		var timestamp2 = Date.parse(new Date(obj5))/1000;
+		var endDate2 = new Date();
+		endDate2.setTime((timestamp2+24*60*60)*1000);
+		obj5 = endDate2.getFullYear() + "-" + (endDate2.getMonth()+1) + "-" + endDate2.getDate();	
+	}
+	var json = {
 		"issueId":"",
 		"issueName": $('#ht_name').val(),
 		"issueType": issueType,
@@ -379,7 +394,7 @@ function deleteData(issueId){
 		dataType:"json",
 		success:function(msg){
 			if(msg.status=="OK"){
-				searchData(1)
+				initShowPage(1)
 			}else{
 				alert("fail");
 			}

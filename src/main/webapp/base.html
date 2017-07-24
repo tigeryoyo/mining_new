@@ -152,7 +152,11 @@
 				dataType : "html",
 				data : '',
 				success : function(data) {
+					if(data=="error"){
+						window.parent.location.href = "/index.html";
+					}else{
 					$(".right").empty().html(data);
+					}
 				},
 				error : function() {
 					alert("ajax加载失败！");
@@ -242,7 +246,11 @@
 					dataType : "html",
 					data : '',
 					success : function(data) {
+						if(data=="error"){
+							window.parent.location.href = "/index.html";
+						}else{
 						$(".right").empty().html(data);
+						}
 					},
 					error : function() {
 						alert("ajax加载失败！");
