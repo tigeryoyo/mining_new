@@ -243,44 +243,60 @@ public class DomainServiceImpl implements DomainService {
 
 	@Override
 	public boolean addUnknowDomain(Domain domain) {
-		// 提取完整的域名
-		String url = UrlUtils.getUrl(domain.getUrl());
 		int flag = 0;
+		String url = UrlUtils.getUrl(domain.getUrl());
 		if (null != url) {
 			String one = UrlUtils.getDomainOne(url);
-			String two = UrlUtils.getDomainTwo(url);
-			String fatherUuid = "";
-			List<DomainOne> oneList = domainOneDao.getDomainOneByUrl(one);
-			// 一级域名存在就获取uuid，不存在就插入数据库并获取uuid
-			if (oneList == null || oneList.size() == 0) {
-				DomainOneProperty dop = new DomainOneProperty();
-				dop.setDomain(domain, !(null == two));
-				fatherUuid = dop.getUuid();
-				if (insertDomainOneProperty(dop))
-					flag++;
-			} else {
-				fatherUuid = oneList.get(0).getUuid();
+			if(null == one){
+				one = url;
 			}
-			// 是否有二级域名，如有则判断是否存在
+			String two = UrlUtils.getDomainTwo(url);
 			if (null != two) {
+				String fatherUuid = "";
+				List<DomainOne> oneList = domainOneDao.getDomainOneByUrl(one);
+				// 一级域名存在就获取uuid，不存在就插入数据库并获取uuid
+				if (oneList == null || oneList.size() == 0) {
+					DomainOneProperty dop = new DomainOneProperty();
+					dop.setDomain(domain, !(null == two));
+					dop.setUrl(one);
+					fatherUuid = dop.getUuid();
+					if (insertDomainOneProperty(dop))
+						flag++;
+				} else {
+					fatherUuid = oneList.get(0).getUuid();
+				}
 				List<DomainTwo> twoList = domainTwoDao.getDomainTwoByUrl(two);
-				// 不存在则插入，存在不予处理
+				DomainTwoProperty dtp = new DomainTwoProperty();				
+				// 不存在则插入，存在则更新
 				if (twoList == null || twoList.size() == 0) {
-					DomainTwoProperty dtp = new DomainTwoProperty();
 					dtp.setDomain(domain, fatherUuid);
 					dtp.setUrl(two);
 					if (insertDomainTwoProperty(dtp)) {
-						if (!oneList.get(0).getIsFather()) {
+						if (!domainOneDao.getDomainOneByUrl(one).get(0).getIsFather()) {
 							DomainOne dm = new DomainOne();
 							dm.setIsFather(true);
 							dm.setUuid(fatherUuid);
 							domainOneDao.updateDomainOneInfo(dm);
 						}
 						flag++;
+					} else {
+						return false;
 					}
+				}
+			} else {
+				// 不是二级域名，就一定是一级域名
+				List<DomainOne> oneList = domainOneDao.getDomainOneByUrl(one);
+				// 一级域名存在就获取uuid，不存在就插入数据库并获取uuid
+				if (oneList == null || oneList.size() == 0) {
+					DomainOneProperty dop = new DomainOneProperty();
+					dop.setDomain(domain, false);
+					dop.setUrl(one);
+					if (insertDomainOneProperty(dop))
+						flag++;
 				}
 			}
 		}
+		System.out.println("-------------addflag:" + flag);
 		if (flag > 0)
 			return true;
 		return false;
@@ -306,7 +322,6 @@ public class DomainServiceImpl implements DomainService {
 		if (null != url) {
 			String one = UrlUtils.getDomainOne(url);
 			if(null == one){
-				System.out.println("-------------one==null-----------"+url);
 				one = url;
 			}
 			String two = UrlUtils.getDomainTwo(url);

@@ -40,6 +40,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
 		try {
 			String url = request.getRequestURI();
 			String requestPath = request.getServletPath();
+			String requestType = request.getHeader("X-Requested-With");
 			// System.out.println(requestPath+"-----");
 			// 登陆成功以后 当数据库权限是一定的 但是你添加权限信息，程序缓存的还是以前的权限信息 ，更新的权限没有添加到里面
 			// 现在解决办法就是 在拦截器里面 可以重新获取权限信息
@@ -48,11 +49,12 @@ public class PermissionInterceptor implements HandlerInterceptor {
 				// System.out.println(requestPath+"=========1111111111111" +
 				// url);
 				if (null != redisService.getString(KEY.USER_NAME, request)) {
-					response.sendRedirect("/topic_list.html");
+					response.sendRedirect("/base.html?href=topic_list");
 				} else {
 					return true;
 				}
 			} else {
+				
 				// 请求页面的时候会判断 用户是否登录了，假如登陆了就再去判断权限，否则直接跳转到登录界面
 				if (redisService.getString(KEY.USER_NAME, request) != null) {
 					// 判断请求是html则返回true
@@ -81,8 +83,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
 				} else {
 					LOG.warn("{} did not login, please login", request.getRequestedSessionId());
 					// System.out.println("进入方法了");
-					//判断请求是来源与ajax还是传统的请求
-					String requestType = request.getHeader("X-Requested-With");
+					//判断请求是来源与ajax还是传统的请求					
 					if (null == requestType) {
 						response.sendRedirect("/index.html");
 					} else {
