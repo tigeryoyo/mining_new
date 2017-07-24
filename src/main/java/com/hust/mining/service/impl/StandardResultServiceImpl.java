@@ -303,6 +303,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 		if (clusters == null || clusters.isEmpty()) {
 			return list;
 		}
+		
 		list.add(AttrUtil.findEssentialIndex(clusters.get(0).get(0)));
 
 		redisService.setObject(KEY.STD_RESULT_CONTENT, clusters, request);

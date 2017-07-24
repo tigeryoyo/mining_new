@@ -13,6 +13,7 @@ function setCookie(key,value){
 
 //显示当前任务名字
 function showStdIssueName(issueId) {
+	console.log("id:"+issueId);
 	$.ajax({
 		type : "post",
 		url : "/standardResult/queryIssueName",

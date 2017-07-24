@@ -1,7 +1,7 @@
 // JavaScript Document
 //2.1任务列表显示
 
-issueType="extensive";
+issueType="original";
 // 选中全局任务时的数据类型
 $(document).ready(function(){
 	var r = getCookie("issueType");

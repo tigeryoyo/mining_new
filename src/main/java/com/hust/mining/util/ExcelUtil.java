@@ -183,7 +183,7 @@ public class ExcelUtil {
 			workbook = new XSSFWorkbook(inputStream);
 		}
 		Sheet sheet = workbook.getSheetAt(0);
-		int rowNum = sheet.getLastRowNum(); // 行数
+		int rowNum = sheet.getLastRowNum() + 1; // 行数
 		int colNum = sheet.getRow(0).getLastCellNum(); // 列数
 		if (null == indexes || indexes.length == 0) {
 			indexes = new Integer[colNum];
@@ -397,6 +397,9 @@ public class ExcelUtil {
 		
 		Sheet sheet = workbook.createSheet("泛数据" );
 		String[] rowList = cluster.get(0);
+		for(String t : rowList){
+			System.out.print(t+"\t");
+		}
 		Row row = sheet.createRow(0);
 		for (int j = 0; j < rowList.length; j++) {
 			Cell cell = row.createCell(j);
@@ -406,13 +409,23 @@ public class ExcelUtil {
 //		cluster.remove(0);
 		int index = 0 ;
 		int count = 0;
-		for (int i = 1; i < cluster.size(); i++) {			
+		for (int i = 0; i < cluster.size(); i++) {
+			
 			rowList = cluster.get(i);
+			if(i == 0){
+				row = sheet.createRow(i);
+				for (int j = 0; j < rowList.length; j++) {
+					Cell cell = row.createCell(j);
+					cell.setCellValue(rowList[j]);
+				}
+				continue;
+			}
 			if(CommonUtil.isEmptyArray(rowList)){				
 				index = 0;
 				count++;
 				continue;
 			}
+			//从2开始，否则第一行表头会被覆盖
 			row = sheet.createRow(i);
 			if(index == marked.get(count)){
 				for (int j = 0; j < rowList.length; j++) {

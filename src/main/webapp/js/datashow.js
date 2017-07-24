@@ -5,8 +5,8 @@ issueType = "";
 function dataShow() {
 	var issueId = getCookie("issueId");
 	issueType = getCookie("issueType");
-	if (issueType == "extensive") {
-		showExtensiveIssueDetails(issueId);
+	if (issueType == "original") {
+		showOriginalIssueDetails(issueId);
 	} else if (issueType == "standard") {
 		showStandardIssueDetails(issueId);
 	} else if (issueType == "core") {
@@ -17,7 +17,7 @@ function dataShow() {
 }
 dataShow();
 
-function showExtensiveIssueDetails(issueId) {
+function showOriginalIssueDetails(issueId) {
 	$.ajax({
 		type : "post",
 		url : "/file/queryIssueFiles",
@@ -33,7 +33,7 @@ function showExtensiveIssueDetails(issueId) {
 				$('.up_list tr:not(:first)').html("");
 				$.each(tabs, function(i, item) {
 					//增加了选择框
-					row = '<tr><td height="32" align="center"><input type="checkbox" style="width: 20px; height: 20px;" name="groupIds"  class="'
+					row = '<tr ><td height="50" align="center"><input type="checkbox" style="width: 20px; height: 20px;" name="groupIds"  class="'
 						+ item.fileId
 						+ '" /></td><td align="center" valign="middle">' + item.fileName + '</td><td align="center" valign="middle">'
 						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')
@@ -48,7 +48,7 @@ function showExtensiveIssueDetails(issueId) {
 
 		},
 		error : function() {
-			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
+			alert("error:datashow.js-->showOriginalIssueDetails(issueId)")
 		}
 	});
 }
@@ -91,15 +91,10 @@ function showStandardIssueDetails(issueId) {
 
 		},
 		error : function() {
-			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
+			alert("error:datashow.js-->showOriginalIssueDetails(issueId)")
 		}
 	});
 }
-
-/*function test(test)
-{
-	console.log("sss");
-	}*/
 
 function getCookie(name) {
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
@@ -137,7 +132,7 @@ function showCoreIssueDetails(issueId) {
 
 		},
 		error : function() {
-			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
+			alert("error:datashow.js-->showOriginalIssueDetails(issueId)")
 		}
 	});
 }
@@ -232,8 +227,8 @@ function hidelabel()
 
 function localRefresh() {
 	var newId = getCookie("issueId");
-	if (issueType == "extensive") {
-		showExtensiveIssueDetails(newId);
+	if (issueType == "original") {
+		showOriginalIssueDetails(newId);
 	} else if (issueType == "standard") {
 		showStandardIssueDetails(newId);
 	} else if (issueType == "core") {
