@@ -1,7 +1,7 @@
 // JavaScript Document
 //2.1任务列表显示
 //设置issueType
-issueType="extensive";
+issueType="original";
 // 选中创建任务时的数据类型
 $(document).ready(function(){
     var r = getCookie("issueType");
@@ -301,8 +301,9 @@ function setCookie(value1){
 	var exp　= new Date();
 	exp.setTime(exp.getTime() +Days*24*60*60*1000);
 	document.cookie = cookie_issueId +"="+ escape (value1) + ";expires=" + exp.toGMTString();
-//	console.log("setCookie="+issueType);
-	if(issueType=="extensive"){
+
+	if(issueType=="original"){
+		console.log("jjj");
 		baseAjax("original_data");
 	}else if(issueType=="standard"){
 		baseAjax("standard_result");//baseAjax("topic_details_standard");
