@@ -88,7 +88,9 @@ public class StandardResultController {
     	}
     	
     	String stdIssueId = issueService.queryLinkedIssue(issueId, Constant.ISSUETYPE_STANDARD);
-    	
+    	if(StringUtils.isEmpty(stdIssueId)){
+    		stdIssueId = (String) redisService.getObject(KEY.STANDARD_ISSUE_ID, request);
+    	}
     	Issue issue = issueService.queryIssueById(stdIssueId);
     	if (issue == null) {
             return ResultUtil.errorWithMsg("查询任务名称失败");

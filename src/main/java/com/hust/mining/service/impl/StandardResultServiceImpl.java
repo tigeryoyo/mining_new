@@ -40,6 +40,7 @@ import com.hust.mining.service.RedisService;
 import com.hust.mining.service.StandardResultService;
 import com.hust.mining.service.UserService;
 import com.hust.mining.util.AttrUtil;
+import com.hust.mining.util.CommonUtil;
 import com.hust.mining.util.ConvertUtil;
 import com.hust.mining.util.FileUtil;
 
@@ -215,7 +216,7 @@ public class StandardResultServiceImpl implements StandardResultService {
 			int urlIndex = AttrUtil.findIndexOfUrl(list.get(0));
 			System.out.println("----------------urlIndex---------------:" + urlIndex);
 			for (int i = 1; i < list.size(); i++) {
-				if (list.get(i) != null)
+				if (list.get(i) != null && !CommonUtil.isEmptyArray(list.get(i)))
 					if (!StringUtils.isBlank(list.get(i)[urlIndex])) {
 						Domain domain = new Domain();
 						domain.setUrl(list.get(i)[urlIndex]);

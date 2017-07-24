@@ -26,7 +26,7 @@ function showStdIssueName(issueId) {
 				var items = msg.result;
 				$('.issueName').text("任务名称：" + items.issue.issueName);
 				setCookie("stdResId",items.stdRes.stdRid);
-			
+				setCookie("stdIssueId",items.issue.issueId);
 				stdResData(getCookie("stdResId"));
 			} else {
 				alert(msg.result);
