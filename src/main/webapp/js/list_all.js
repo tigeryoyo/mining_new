@@ -129,10 +129,14 @@ function initSearchPage(currenPage){
 
 function GetJsonData(page) {
 	var myDate=new Date();
+	myDate.setHours(0);  
+	myDate.setMinutes(0);  
+	myDate.setSeconds(0);  
+	myDate.setMilliseconds(0); 
 	var timeStamp = Date.parse(myDate)/1000;
 	myDate.setTime((timeStamp+24*60*60)*1000);
 	end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + (myDate.getDate());
-	myDate.setTime((timeStamp-90*24*60*60)+1000);
+	myDate.setTime((timeStamp-90*24*60*60)*1000);
 	start=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
     var json = {
         "issueId":"",
