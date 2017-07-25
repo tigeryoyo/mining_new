@@ -5,8 +5,8 @@ issueType = "";
 function dataShow() {
 	var issueId = getCookie("issueId");
 	issueType = getCookie("issueType");
-	if (issueType == "extensive") {
-		showExtensiveIssueDetails(issueId);
+	if (issueType == "original") {
+		showOriginalIssueDetails(issueId);
 	} else if (issueType == "standard") {
 		showStandardIssueDetails(issueId);
 	} else if (issueType == "core") {
@@ -17,7 +17,7 @@ function dataShow() {
 }
 dataShow();
 
-function showExtensiveIssueDetails(issueId) {
+function showOriginalIssueDetails(issueId) {
 	$.ajax({
 		type : "post",
 		url : "/file/queryIssueFiles",
@@ -32,7 +32,10 @@ function showExtensiveIssueDetails(issueId) {
 				var tabs = msg.result.list;
 				$('.up_list tr:not(:first)').html("");
 				$.each(tabs, function(i, item) {
-					row = '<tr><td height="40" align="center" valign="middle">' + (i + 1) + '</td><td align="center" valign="middle">' + item.fileName + '</td><td align="center" valign="middle">'
+					//增加了选择框
+					row = '<tr ><td height="50" align="center"><input type="checkbox" style="width: 20px; height: 20px;" name="groupIds"  class="'
+						+ item.fileId
+						+ '" /></td><td align="center" valign="middle">' + item.fileName + '</td><td align="center" valign="middle">'
 						+ item.creator + '</td><td align="center" valign="middle">' + new Date(item.uploadTime.time).format('yyyy-MM-dd hh:mm:ss')
 						+ '</td><td align="center" valign="middle"><button type="button" class="btn btn-primary btn_sc" onClick="clusterSingleFile(\'' + item.fileId + '\')">聚类</button>'
 						+ '<button type="button" class="btn btn-success btn_sc" onclick="downloadExtFile(\''+item.fileId +'\',\''+item.fileName +'\')">下载</button><button type="button" class="btn btn-danger btn_jl" id="'
@@ -45,7 +48,7 @@ function showExtensiveIssueDetails(issueId) {
 
 		},
 		error : function() {
-			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
+			alert("error:datashow.js-->showOriginalIssueDetails(issueId)")
 		}
 	});
 }
@@ -88,15 +91,10 @@ function showStandardIssueDetails(issueId) {
 
 		},
 		error : function() {
-			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
+			alert("error:datashow.js-->showOriginalIssueDetails(issueId)")
 		}
 	});
 }
-
-/*function test(test)
-{
-	console.log("sss");
-	}*/
 
 function getCookie(name) {
 	var arr =document.cookie.match(new RegExp("(^|)"+name+"=([^;]*)(;|$)"));
@@ -134,7 +132,7 @@ function showCoreIssueDetails(issueId) {
 
 		},
 		error : function() {
-			alert("error:datashow.js-->showExtensiveIssueDetails(issueId)")
+			alert("error:datashow.js-->showOriginalIssueDetails(issueId)")
 		}
 	});
 }
@@ -202,12 +200,24 @@ function downloadStdRes(stdResId) {
 	form.submit(); // 自动提交
 }
 
+//下载
 function downloadCoreRes(coreResId) {
 	var form = $('<form method="POST" action="/coreResult/download">');
 	form.append($('<input type="hidden" name="coreResId" value="' + coreResId + '"/>'));
 	$('body').append(form);
 	form.submit(); // 自动提交
 }
+
+//全选所有文件
+$(function() {
+	$("#allfile").click(function() {
+		if (this.checked) {
+			$(".up_list_wrap tr :checkbox").prop("checked", true);
+		} else {
+			$(".up_list_wrap tr :checkbox").prop("checked", false);
+		}
+	})
+})
 
 //隐藏贴标签按钮
 function hidelabel()
@@ -217,8 +227,8 @@ function hidelabel()
 
 function localRefresh() {
 	var newId = getCookie("issueId");
-	if (issueType == "extensive") {
-		showExtensiveIssueDetails(newId);
+	if (issueType == "original") {
+		showOriginalIssueDetails(newId);
 	} else if (issueType == "standard") {
 		showStandardIssueDetails(newId);
 	} else if (issueType == "core") {
@@ -227,13 +237,48 @@ function localRefresh() {
 		alert("error:datashow.js-->localRefresh()")
 	}
 }
-/*
-function getCookie(name) {
-	var arr = document.cookie.match(new RegExp("(^|)" + name + "=([^;]*)(;|$)"));
-	if (arr != null)
-		return unescape(arr[2]);
-	return null;
-}*/
+//多文件汇总并聚类
+function fileSummary() {
+	
+	var fileIds = [];
+	$(".up_list_wrap input:checked").each(function(i) {
+		fileIds.push($(this).attr("class"));
+	});
+	console.log(fileIds);
+	if (fileIds.length != 0) {
+		$.ajax({
+					type : "post",
+					url : "/issue/miningByFile",
+					data : JSON.stringify(fileIds),
+					dataType : "json",
+					contentType : "application/json",
+					beforeSend : function() {
+						begin();
+					},
+					success : function(msg) {
+						// console.log(msg);
+						if (msg.status == "OK") {
+							if (msg.status == "OK") {
+								baseAjax("extensive_result");
+							} else {
+								alert(msg.result);
+							}
+						} else {
+							alert(msg.result);
+						}
+
+					},
+					complete : function() {
+						stop();
+					},
+					error : function(msg) {
+						alert(msg.result);
+					}
+				});
+	}else{
+		alert("请选择文件");
+	}
+}
 
 function clusterSingleFile(id) {
 	$.ajax({
@@ -249,7 +294,7 @@ function clusterSingleFile(id) {
 		success : function(msg) {
 //			console.log(msg);
 			if (msg.status == "OK") {
-				baseAjax("history");
+				baseAjax("extensive_result");
 			} else {
 				alert(msg.result);
 			}

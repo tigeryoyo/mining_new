@@ -38,6 +38,7 @@ import com.hust.mining.service.UserService;
 import com.hust.mining.util.AttrUtil;
 import com.hust.mining.util.CommonUtil;
 import com.hust.mining.util.ConvertUtil;
+import com.hust.mining.util.TimeUtil;
 
 @Service
 public class ResultServiceImpl implements ResultService {
@@ -495,6 +496,69 @@ public class ResultServiceImpl implements ResultService {
         issue.setLastUpdateTime(new Date());
         issueDao.updateIssueInfo(issue);
         return true;
+	}
+
+	@Override
+	public List<Integer> getMarked(List<String[]> cluster) {
+		// 返回待标记的id集合
+		if(cluster == null || cluster.isEmpty()){
+			return null;
+		}
+		List<Integer> set = new ArrayList<>();
+		String[] attrs = cluster.remove(0);		
+		
+        List<String[]> items = new ArrayList<>();
+        for(String[] item : cluster){
+        	if(CommonUtil.isEmptyArray(item)){
+        		if(items == null){
+        			continue;
+        		}if(items.size() == 1){
+        			set.add(0);
+        			continue;
+        		}
+        		int index = getMarkedIndex(items,attrs);
+        		if(index >= 0 ){
+        			set.add(index);        			
+        		}
+        		items = new ArrayList<>();
+        	}else{
+        		items.add(item);
+        	}
+        }
+        
+		return set;
+	}
+
+	private int getMarkedIndex(List<String[]> items, String[] attrs) {
+		// 返回待标记的id
+		int indexOfUrl = AttrUtil.findIndexOfUrl(attrs);
+        int indexOfTime = AttrUtil.findIndexOfTime(attrs);
+        int indexOfType = AttrUtil.findIndexOfWebName(attrs);
+        //最早的记录下标
+        int earliest = 0;
+		for(int i = 0 ; i < items.size() ; i++){
+			String[] item = items.get(i);
+			
+			if(TimeUtil.compare_date(item[indexOfTime], items.get(earliest)[indexOfTime]) < 0){
+				earliest = i;
+			}
+			String type = "";
+			if(item.length >= indexOfUrl){
+				//获取url前缀，并在数据库中查询该URL类型
+				 type = websiteDao.queryTypeByUrl(CommonUtil.getPrefixUrl(item[indexOfUrl]));
+			}
+			
+			if(StringUtils.isEmpty(type)){
+				;
+			}
+			if(type.equals("报纸")){
+				return i;
+			}
+			if(item[indexOfType] != null && item[indexOfType].equals("报纸")){
+				return i;
+			}
+		}
+		return earliest;
 	}
 
 }

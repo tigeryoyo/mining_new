@@ -23,9 +23,6 @@ a,img{border:0;}
 	-moz-opacity: 0.5;
 	opacity: 0.50;
 	filter: alpha(opacity=50);
-	_position: absolute;
- 	_top: expression_r(document . documentElement . clientHeight +   document .
-  documentElement . scrollTop -   this . offsetHeight);
 }
 #code {
 	width: 820px;
@@ -56,7 +53,8 @@ a,img{border:0;}
 .fixedHead { 
 	position: relative; 
 	top:expression(this.offsetParent.scrollTop-2); 
-} 
+}
+.fixedHead th{text-align:center; border-right:1px solid #999999;}
 .details_tab{width:800px; height:420px;;overflow-y:scroll; border:1px solid #0e63ab; text-align:center; }
 .details_tab tr{ border-bottom:1px solid #999999;}
 .details_tab table td{ border-right:1px solid #999999; border-bottom:1px solid #999999;}

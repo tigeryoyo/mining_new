@@ -1,10 +1,10 @@
 //生成x数据，x=“准数据or核心数据”
 
-//生成准数据
-function sczsj() {
-	var issueType = "standard";
-	scxsj(issueType);
-}
+//生成准数据 旧版本，新的生成准数据在create_std_result.js
+//function sczsj() {
+//	var issueType = "standard";
+//	scxsj(issueType);
+//}
 
 //生成核心数据
 function schxsj(stdResId){
@@ -29,7 +29,6 @@ function scxsj(issueType,stdResId){
 			if (msg.status == "OK") {
 				// var value = prompt("请输入准数据名：");
 				// return value;
-				setCookie_issueType(issueType);
 				baseAjax("topic_list");
 			} else {
 				alert(msg.result);
@@ -72,7 +71,7 @@ function queryLinkedIssue(issueType){
 		},
 		success : function(msg) {
 			if (msg.status == "OK") {
-				setCookie_issueType(issueType);
+			//	setCookie_issueType(issueType);
 				setCookie_issueId(msg.result.issueId);
 				baseAjax("topic_details_"+issueType);
 			} else {
