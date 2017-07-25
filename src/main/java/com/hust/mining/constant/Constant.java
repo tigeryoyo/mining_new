@@ -35,7 +35,9 @@ public class Constant {
     public final static String ORIG_COUNT_10ROW_EN = "origAndCount10row";
     public final static String TYPE_ORIG = "orig";
     public final static String TYPE_MODIFIED = "modified";
-    public final static String ISSUETYPE_EXTENSIVE = "extensive";
+    //原始数据ISSUE类型
+    public final static String ISSUETYPE_ORIGINAL = "original";
+    //准数据ISSUE类型
     public final static String ISSUETYPE_STANDARD = "standard";
     public final static String ISSUETYPE_CORE = "core";
     public final static String ISSUE_EXTENSIVE = "泛数据";
