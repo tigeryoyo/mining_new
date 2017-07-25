@@ -290,7 +290,7 @@ public class IssueServiceImpl implements IssueService {
 		String user = userService.getCurrentUser(request);
 
 		Issue issue = queryIssueById(issueId);
-		if (issueType.equals(Constant.ISSUETYPE_EXTENSIVE)) {
+		if (issueType.equals(Constant.ISSUETYPE_ORIGINAL)) {
 			deleteExtensiveIssue(issueId, issue.getIssueHold());
 		} else if (issueType.equals(Constant.ISSUETYPE_STANDARD)) {
 			deleteStandardIssue(issueId, issue.getIssueBelongTo(), issue.getIssueHold());
@@ -715,7 +715,7 @@ public class IssueServiceImpl implements IssueService {
 	@Override
 	public String queryLinkedIssue(String issueId, String issueType) {
 		Issue issue = queryIssueById(issueId);
-		if (issueType.equals(Constant.ISSUETYPE_EXTENSIVE)) {
+		if (issueType.equals(Constant.ISSUETYPE_ORIGINAL)) {
 			// 如果issue为核心数据
 			if (issue.getIssueType().equals(Constant.ISSUETYPE_CORE)) {
 				// 将issue变为该核心数据对应的准数据
@@ -726,14 +726,14 @@ public class IssueServiceImpl implements IssueService {
 			}
 			return issue.getIssueBelongTo();
 		} else if (issueType.equals(Constant.ISSUETYPE_STANDARD)) {
-			if (issue.getIssueType().equals(Constant.ISSUETYPE_EXTENSIVE)) {
+			if (issue.getIssueType().equals(Constant.ISSUETYPE_ORIGINAL)) {
 				return issue.getIssueHold();
 			} else {
 				return issue.getIssueBelongTo();
 			}
 		} else {
 			// 如果issue为泛数据
-			if (issue.getIssueType().equals(Constant.ISSUETYPE_EXTENSIVE)) {
+			if (issue.getIssueType().equals(Constant.ISSUETYPE_ORIGINAL)) {
 				// 将issue变为该泛数据对应的准数据
 				issue = queryIssueById(issue.getIssueHold());
 				if (issue == null) {
