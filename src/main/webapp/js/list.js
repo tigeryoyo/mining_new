@@ -130,12 +130,18 @@ function initSearchPage(currenPage){
 
 function GetJsonData(page) {
 	var myDate=new Date();
+	myDate.setHours(0);  
+	myDate.setMinutes(0);  
+	myDate.setSeconds(0);  
+	myDate.setMilliseconds(0); 
 	var timeStamp = Date.parse(myDate)/1000;
 	myDate.setTime((timeStamp+24*60*60)*1000);
 	end=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + (myDate.getDate());
-	myDate.setTime((timeStamp-90*24*60*60)+1000);
+	myDate.setTime((timeStamp-90*24*60*60)*1000);
 	start=myDate.getFullYear() + "-" + (myDate.getMonth()+1) + "-" + myDate.getDate();
-    var json = {
+    console.log("getlist:"+start)
+    console.log("getlist:"+end)
+	var json = {
 		"issueId":"",
 		"issueName":"" ,
 		"issueType":issueType ,
@@ -385,6 +391,10 @@ function SearchJsonData(page) {
 		endDate2.setTime((timestamp2+24*60*60)*1000);
 		obj5 = endDate2.getFullYear() + "-" + (endDate2.getMonth()+1) + "-" + endDate2.getDate();	
 	}
+	console.log("searchlist:"+obj1)
+    console.log("searchlist:"+obj2)
+    console.log("searchlist:"+obj4)
+    console.log("searchlist:"+obj5)
 	var json = {
 		"issueId":"",
 		"issueName": $('#ht_name').val(),
