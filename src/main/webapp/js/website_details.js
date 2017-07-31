@@ -33,6 +33,8 @@ function domainOneInfoChange() {
             if(msg.status == "OK"){
                 alert(msg.result);
                 baseAjax("website_one_details");
+            }else{
+            	alert(msg.result);
             }
         },
         error: function () {
@@ -42,7 +44,7 @@ function domainOneInfoChange() {
 }
 
 function domainTwoInfoChange() {
-    var uuid = getCookie("uuid");
+    var uuid = getCookie("domain_id");
     $.ajax({
         type:"post",
         url:"/domain/updateDomainTwo",
@@ -61,6 +63,8 @@ function domainTwoInfoChange() {
             if(msg.status == "OK"){
                 alert(msg.result);
                 baseAjax("website_two_details");
+            }else{
+            	alert(msg.result);
             }
         },
         error: function () {

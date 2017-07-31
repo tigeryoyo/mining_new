@@ -319,7 +319,7 @@ public class DomainController {
 		System.out.println(uuid);
 		one.setUuid(uuid);
 		one.setUrl(url);
-		;
+		one.setName(name);
 		one.setColumn(column);
 		one.setType(type);
 		one.setRank(rank);
@@ -346,7 +346,7 @@ public class DomainController {
 		DomainTwo two = new DomainTwo();
 		two.setUuid(uuid);
 		two.setUrl(url);
-		;
+		two.setName(name);
 		two.setColumn(column);
 		two.setType(type);
 		two.setRank(rank);
